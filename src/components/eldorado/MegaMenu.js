@@ -14,7 +14,6 @@ function GameRow({ game }) {
             alt={game.name}
             src={game.img}
             className="block h-7 w-7 object-cover align-middle"
-            loading="lazy"
           />
         </div>
         <span className="block overflow-hidden text-ellipsis">{game.name}</span>

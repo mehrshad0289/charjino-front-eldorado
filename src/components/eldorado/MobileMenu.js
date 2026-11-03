@@ -70,7 +70,6 @@ export default function MobileMenu({ onClose }) {
                 alt=""
                 width="32"
                 height="32"
-                loading="lazy"
                 className="h-8 w-8 shrink-0 rounded-sm object-cover"
               />
               <span className="min-w-0 flex-1 truncate">{g.name}</span>
