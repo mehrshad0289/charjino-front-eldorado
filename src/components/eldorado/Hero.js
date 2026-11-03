@@ -25,6 +25,13 @@ export default function Hero() {
         className="absolute inset-0 hidden h-full w-full object-cover md:block"
         style={{ objectPosition: "50% 15%" }}
       />
+      {/* characters layer — visible to the right of the Popular cards row */}
+      <img
+        src={`${CDN}/brainrot-hero.webp`}
+        alt=""
+        fetchPriority="high"
+        className="absolute bottom-[110px] left-[86%] hidden h-[280px] -translate-x-1/2 md:block"
+      />
       <div
         className="absolute inset-x-0 -bottom-px h-[140px] md:h-[340px]"
         style={{
