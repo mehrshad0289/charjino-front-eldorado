@@ -29,8 +29,8 @@ export default function SearchOverlay({ onClose }) {
     <div className="fixed inset-0 z-50" role="dialog" aria-modal="true">
       <div className="absolute inset-0 bg-[rgba(12,12,16,0.55)]" onClick={onClose} />
 
-      <div className="absolute inset-x-0 bottom-0 top-0 overflow-y-auto bg-white p-4 md:bottom-auto md:top-3 md:mx-auto md:h-fit md:max-h-[calc(100vh-24px)] md:w-[1160px] md:max-w-[calc(100vw-40px)] md:rounded-xl md:p-6">
-        <div className="flex items-center gap-4 md:hidden">
+      <div className="absolute inset-x-0 bottom-0 top-0 overflow-y-auto bg-white p-3 md:bottom-auto md:top-3 md:mx-auto md:h-fit md:max-h-[530px] md:w-[1160px] md:max-w-[calc(100vw-40px)] md:rounded-xl md:p-6">
+        <div className="flex items-center gap-3 md:hidden">
           <div className="relative flex-1">
             <input
               autoFocus

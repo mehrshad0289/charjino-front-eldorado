@@ -61,19 +61,19 @@ export default function HeaderBar() {
 
   return (
     <header className="relative z-40 bg-headerdark">
-      <div className="flex h-[60px] items-center px-4 pt-2.5 md:px-6 md:pt-0">
+      <div className="flex items-center px-4 pt-2.5 md:h-[60px] md:px-6 md:pt-0">
         <button
           type="button"
           aria-label="Open menu"
           onClick={() => setMenuOpen(true)}
-          className="-ml-2 mr-1 flex h-[42px] w-[42px] items-center justify-center text-white md:hidden"
+          className="mr-1 flex h-[42px] w-[42px] items-center justify-center text-white md:hidden"
         >
           <BurgerIcon />
         </button>
 
         <a href="/" aria-label="Eldorado logo" className="shrink-0">
           <Logo color="#FFFFFF" className="hidden md:block" />
-          <Logo iconOnly className="md:hidden" />
+          <Logo iconOnly size={42} className="md:hidden" />
         </a>
 
         <div className="hidden flex-1 justify-center pl-16 md:flex">
@@ -105,7 +105,7 @@ export default function HeaderBar() {
       </div>
 
       {/* mobile search row (inside the dark header) */}
-      <div className="px-4 pb-3 md:hidden">
+      <div className="mt-2 px-4 pb-3 md:hidden">
         <button
           type="button"
           onClick={() => setSearchOpen(true)}
