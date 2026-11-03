@@ -57,7 +57,7 @@ export default function AccountsPagination({ pages = [1, 2, 3, 4, 5], lastPage =
       >
         <ChevronRight />
       </button>
-      <div className="ml-2.5 flex h-[42px] items-center">
+      <div className="ml-2.5 hidden h-[42px] items-center md:flex">
         <label className="mr-[15px] text-[16px] leading-[19px]">Go to page:</label>
         <div
           role="combobox"

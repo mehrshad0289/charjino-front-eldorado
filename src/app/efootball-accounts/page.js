@@ -26,8 +26,12 @@ export default function EFootballAccountsPage() {
       <HeaderBar />
       <CategoryNav activeCategory="Accounts" />
       <main className="relative">
-        {/* game artwork backdrop, fading into the page background */}
-        <div className="absolute inset-x-0 top-0 z-0 h-[465px] overflow-hidden" aria-hidden="true">
+        {/* game artwork backdrop, fading into the page background.
+            Mobile (live reference @390): no backdrop — strip sits on plain bg */}
+        <div
+          className="absolute inset-x-0 top-0 z-0 hidden h-[465px] overflow-hidden md:block"
+          aria-hidden="true"
+        >
           <img
             alt=""
             src={BANNER_IMG}

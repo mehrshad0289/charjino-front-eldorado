@@ -26,14 +26,49 @@ function SortIcon() {
   );
 }
 
+function SlidersIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="9" cy="7" r="2" fill="currentColor" />
+      <circle cx="15" cy="12" r="2" fill="currentColor" />
+      <circle cx="8" cy="17" r="2" fill="currentColor" />
+    </svg>
+  );
+}
+
 /* Toolbar above the offers grid (shop_account.make reference):
-   3 filter dropdowns + Clear filters, quick-filter chips, text search,
-   results count left + sort dropdown right. Static closed states per capture. */
+   Desktop: 3 filter dropdowns + Clear filters, quick-filter chips, text
+   search, results count left + sort dropdown right. Static closed states per
+   capture.
+   Mobile (live eldorado.gg @390): one horizontally scrollable row of compact
+   filter pills (All filters / Price / Delivery Time / Game Series), no quick
+   chips, full-width search, compact count + sort row. */
 export default function AccountsToolbar({ resultCount }) {
   return (
-    <div className="mx-auto w-full max-w-[1208px] px-6">
-      {/* filters row */}
-      <div className="mx-auto flex max-w-[1140px] flex-wrap gap-2.5 py-4">
+    <div className="mx-auto w-full max-w-[1208px] px-4 md:px-6">
+      {/* mobile: horizontally scrollable filter pills (live reference @390) */}
+      <div className="flex gap-2 overflow-x-auto py-3 md:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <button
+          type="button"
+          className="flex h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-white px-3 text-[13px] font-bold text-ink outline outline-1 outline-cardborder"
+        >
+          <SlidersIcon />
+          All filters
+        </button>
+        {ACCOUNT_FILTERS.map((label) => (
+          <button
+            key={label}
+            type="button"
+            className="flex h-9 shrink-0 items-center whitespace-nowrap rounded-lg bg-white px-3 text-[13px] text-ink outline outline-1 outline-cardborder"
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* desktop filters row */}
+      <div className="mx-auto hidden max-w-[1140px] flex-wrap gap-2.5 py-4 md:flex">
         {ACCOUNT_FILTERS.map((label) => (
           <div key={label} className="w-[200px]">
             <div
@@ -58,8 +93,8 @@ export default function AccountsToolbar({ resultCount }) {
         </div>
       </div>
 
-      {/* quick filter chips */}
-      <div className="mb-5 flex flex-wrap gap-2">
+      {/* quick filter chips — desktop only (live mobile shows none) */}
+      <div className="mb-5 hidden flex-wrap gap-2 md:flex">
         {QUICK_FILTERS.map((chip) => (
           <div key={chip} className="whitespace-nowrap">
             <div
@@ -74,7 +109,7 @@ export default function AccountsToolbar({ resultCount }) {
       </div>
 
       {/* text search */}
-      <div className="mb-5 max-w-[340px]">
+      <div className="mb-4 max-w-[340px] md:mb-5">
         <div className="relative">
           <input
             type="text"
@@ -89,7 +124,7 @@ export default function AccountsToolbar({ resultCount }) {
       </div>
 
       {/* results count + sort */}
-      <div className="mb-2 flex h-10 items-center justify-between">
+      <div className="mb-2 flex min-h-10 items-center justify-between">
         <div className="text-[14px] leading-[14px] text-filtertext">{resultCount} accounts found</div>
         <div
           role="combobox"
