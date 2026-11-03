@@ -9,102 +9,109 @@ actual files and Git history — never trust previous AI claims.
 ## Current Checkpoint
 
 - Current page: Home
-- Current section: header system rebuilt for the NEW live design (dark header
-  on light theme) + mobile hamburger drawer + click-search overlay — verified
-- Reference file: NEW `ui ux/زمانی که اینپوت سرچ رامیزنسم در حالت موبایلو
-  دسکتاپ/www_eldorado_gg_1920w_390w_1536w_default_light_dark_click-search.make`
-  (uploaded by user 2026-11-03, commit c49727d; binary fig-make format, not
-  extractable — live site captures used as ground truth). Earlier:
-  `ui ux/www_eldorado_gg_1920w_390w_1536w_default_light_dark_home.make`
-- IMPORTANT design change discovered 2026-11-03: eldorado.gg now renders a
-  DARK header (#28272E, white wordmark) in the light theme on BOTH desktop and
-  mobile. The earlier white-header implementation (verified against captures
-  from earlier the same day) is superseded by commits a2d83d9+.
-- Implementation status (commit 8bc7649):
-  - `src/app/page.js`: composes real components (the 2.8 MB HTML snapshot was
-    replaced; preserved in git history at 9ea55d5)
-  - `src/app/globals.css`: clean Tailwind v4 tokens — Lato font, brand
-    #FFC950, ink #14131A, catnav #1E1F28, page #F6F6F6, guarantee #FCE7B6,
-    support #D1F08F, link blue #2D5EAD (all probed from live eldorado.gg)
-  - `src/app/layout.js`: Lato via next/font + real metadata (was "Create Next App")
-  - Components in `src/components/eldorado/`: Logo (SVG extracted from the
-    snapshot, icon-only variant for mobile), HeaderBar, CategoryNav, Hero,
-    CategoryCards, TradingSection, GuaranteeCards, Footer
-  - Assets are hotlinked from assetsdelivery.eldorado.gg (same URLs the live
-    site uses; all verified HTTP 200), incl. brainrot-red-carpet-banner
-    desktop/mobile, brainrot-hero.webp (transparent PNG characters layer),
-    safe-easy-trading, trade-shield.svg, chat-support.svg, icons/v30 game
-    icons, payments/v11 icons, google preferred-source badge
-- Header/search/menu status (verified 2026-11-03 vs live captures):
-  - HeaderBar (client): dark #28272E. Desktop: white-wordmark logo, centered
-    fake-search 1162×42 (border #323140), yellow Log in. Mobile = 114px block
-    (live: 114): row1 hamburger 42 @x16 + logo icon 42 @x62 (live x66) + Log in
-    + gear; row2 full-width dark search button.
-  - MobileMenu (client): full-screen white drawer — "Categories" + ×, 6 gray
-    rows with chevrons (matches live drawer capture).
-  - SearchOverlay (client): desktop white panel 1160×530 @y12 (live
-    [373,12,1160,530]), focus border #4783FF, "POPULAR CATEGORIES" #6A667B,
-    10-item list (28px icons, ink text, scrollable). Mobile full-screen p-3,
-    input + Cancel, 32px icons. Item hrefs extracted live (incl. Murder
-    Mystery 2, Arc Raiders, Razer Gold — absent from page cards).
-  - CategoryNav hidden on mobile (drawer replaces it); cart→moon icon (live
-    nav right = sun + moon).
+- Current section: ALL home sections implemented per the decoded
+  `ui ux/www_eldorado_gg_1920w_390w_1536w_default.make` reference (desktop
+  1920 code extracted to `ui ux/extracted/eldorado-home-reference-1920.tsx`,
+  982 lines) + responsive pass for 1536/390 — visually verified, build green,
+  deployed to Vercel
+- Reference file: `ui ux/www_eldorado_gg_1920w_390w_1536w_default.make`
+  (zip → canvas.fig → decoded; the authoritative design target per user
+  2026-11-03: "این فایل خیلی خیلی مهمه"). Live eldorado.gg used as secondary
+  reference for header/footer assets and mobile patterns.
+- Design decision of record: the .make capture is the USER'S live view of
+  eldorado.gg (contains personalized "Recently viewed"), which differs from
+  the variant served to this sandbox (old home with 4 white list cards + hero
+  text overlay). The .make structure is therefore the target:
+  image-only hero banner → Popular product cards → Roblox banner →
+  Recently viewed → How buying works → Roblox currencies → Popular games →
+  Safe and easy trading → guarantee cards → footer → chat bubble.
+  The 4 white CategoryCards and the hero h1/CTA are no longer composed on the
+  page (component files kept in repo; restorable via git history 9eb1918^).
+- Implementation status (commit adc87ca):
+  - `src/app/page.js`: full .make composition inside
+    `<main class="relative"><Hero/><div class="relative z-10">…</div></main>`
+  - `src/components/eldorado/`: HeaderBar (client), CategoryNav, Logo,
+    MobileMenu, SearchOverlay, Hero (image-only banner + fade + characters
+    layer), PopularCards, RobloxBanner, RecentlyViewed, HowBuyingWorks,
+    RobloxCurrencies, PopularGames, TradingSection, GuaranteeCards, Footer,
+    ChatBubble (fixed intercom-style bubble)
+  - Assets: live eldorado CDN (assetsdelivery) for banner/characters/icons/
+    payments/badge; GCS prd-storytodesign URLs (from the .make capture, all
+    verified HTTP 200 AND visually correct) for Popular card art, Roblox
+    banner, how-buying illustrations, currency/game icons, chat icon.
+    EXCEPTION: GCS banner asset 6f060924… serves WRONG content (a photo, not
+    the banner) — do not use it; the CDN banner + brainrot-hero.webp overlay
+    is used instead (verified rendering).
 - Visual comparison status:
-  - 1920: side-by-side vs live eldorado.gg — structure, palette, typography
-    and section geometry match (page 1920×2525 vs ref 1905×2536). Hero
-    characters layer positioned at 65% width / bottom 145px / h 280px; cards
-    overlap banner by 89px as on live site (cards top y≈476).
-  - 1536: matches (same section order/proportions).
-  - 390: matches (icon-only logo + full-width search row, scrollable category
-    strip, mobile hero with centered title, "#1 Roblox Marketplace" subtitle
-    and full-width Shop now, single-column cards with truncated lists 5/5/2/2,
-    stacked trading + phone image, row-layout guarantee cards, single-column
-    footer links). No horizontal overflow (page 390×3599 vs ref 375×3702).
-- Viewports verified: 1920, 1536, 390 (full-page screenshots against live site;
-  comparison composites in the session workspace, not committed)
-- Technical checks: `npm run build` — SUCCESS, static prerender, no errors
-- Known remaining differences (acceptable for current milestone):
-  - locale shows "EUR - €" (live is geo-dependent, e.g. "HKD · HK$")
-  - gear (mobile) and category rows are static links/buttons; category
-    mega-menus and theme toggle not implemented
-  - hero mobile banner asset differs slightly in composition from live crop
-- Next exact action: category mega-menu dropdowns on desktop nav, then
-  dark-theme tokens, then inner pages if requested
+  - 1920 (full-page screenshot `docs/ui-ux/screenshots/session4/charjino-1920-full.png`
+    vs `live-1920-full.png`): all 9 sections present and ordered like the
+    .make reference; header pixel-probed from live: bar #0E0E11, search field
+    #28272E, border #323140, catnav #1E1F28 — token `--color-headerdark`
+    corrected from the earlier wrong #28272E. Popular cards (272×320,
+    gradient rgba(30,31,40,0)→rgb(30,31,40) 92.5%, discount badge -76%* on
+    PokeCoins) overlap the banner; hero characters visible right of the cards
+    (left-86%, bottom-110, h-280).
+  - 1536: verified (`charjino-1536-full.png`), 4-col steps, 5/7 currencies
+    grid, 3-col games, no horizontal overflow.
+  - 390: verified (`charjino-390-full.png`), scrollWidth == 390 (no overflow).
+    Mobile: header 114px block, Popular = horizontal scroll row over the
+    mobile banner, stacked steps/currencies/games, mobile trading image
+    lazy-loads correctly (verified naturalWidth 984 after scroll).
+- Viewports verified: 1920, 1536, 390
+- Technical checks: `npm run build` — SUCCESS (static prerender, / only, no
+  errors); dev server renders all sections, no console errors
+- Deployment: Vercel serving the new build (HTTP 200; SSR HTML contains
+  Popular / Recently viewed / How buying / Roblox currencies / Popular games)
+- Known remaining differences (documented limitations):
+  - .make is desktop-only (single 1920 frame) — mobile layouts for the NEW
+    sections are inferred from eldorado patterns (scroll rows, stacked
+    grids); documented as assumption
+  - GCS hotlinks are Figma-capture mirrors; if eldorado moves the assets,
+    swap to first-party URLs (risk noted; contents verified today)
+  - "Popular" heading is ink-dark over the banner top band, exactly as the
+    .make structure implies
+  - search overlay/mega-menus unchanged from previous verified session
+- Next exact action: per user — dark-theme tokens, inner pages, or pixel
+  refinements on request; otherwise home is complete per the .make reference
 
 ## Section log (append one block per completed section)
 
+- 2026-11-03 (session 4) — Decoded the user-supplied
+  `www_eldorado_gg_1920w_390w_1536w_default.make` (zip → canvas.fig → TSX).
+  Implemented ALL missing home sections in the .make order, one commit+push
+  each: header token fixes (80358a0), image-only hero + Popular cards
+  (9eb1918), Roblox banner + Recently viewed (2a37d9c), How buying works +
+  Roblox currencies (4b09cde), Popular games + ChatBubble (7d0ebb6),
+  trading/guarantee/footer alignment to the 1208 container (b112d8e), hero
+  characters layer + screenshots (adc87ca). Every push verified on remote via
+  ls-remote. Visual checks at 1920/1536/390; `next build` green; Vercel
+  serving the new sections.
+
 - 2026-11-03 — Header/search/menu system rebuilt for the new live design
-  (commits a2d83d9 checkpoint → final verified commit): dark header both
-  breakpoints, mobile hamburger drawer, click-search overlay desktop+mobile,
-  mobile category strip removed, moon icon. Verified vs live captures at 1920
-  (closed + open) and 390 (closed + drawer + open): header block 114px = live,
-  panel [380,12,1160,530] vs live [373,12,1160,530], logo icon 42px = live.
-  `next build` green.
+  (commits a2d83d9 checkpoint → 520c5e0 final): dark header both breakpoints,
+  mobile hamburger drawer, click-search overlay desktop+mobile, mobile
+  category strip removed. Superseded detail: header bar color corrected to
+  #0E0E11 in this session (the old probe had mistaken the search field fill
+  for the bar color).
 
 - 2026-11-03 — Design tokens + layout/metadata + HeaderBar + CategoryNav +
   Hero + CategoryCards + TradingSection + GuaranteeCards + Footer (commit
-  981a896). Verified vs live at 1920 (side-by-side composite; hero characters
-  repositioned twice: centered → 65%/bottom-145/h-280 after pixel compare).
-- 2026-11-03 — Responsive pass 1536/390 (commit 8bc7649): mobile header/search,
-  scrollable nav, mobile hero variant with mobile banner asset, 1-col cards
-  with mobileCount truncation (5/5/2/2), row-layout info cards, fluid footer.
-  Verified vs live at 390 and 1536; no horizontal overflow.
-- 2026-11-03 — `next build` verified (static, no errors).
+  981a896); responsive pass 1536/390 (8bc7649); build verified (962cf86).
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-03 (session, using user-supplied PAT;
-  token used transiently in the remote URL and cleared immediately after every
-  push — never stored in .git/config or any file)
-- Last successfully pushed commit hash: `8bc7649`
-- Uncommitted changes: none at this checkpoint
-- Unpushed commits: none (`git log origin/main..main` empty at doc time)
-- Session 2026-11-03 (continued): fresh sandbox, repo re-cloned, local main ==
-  origin/main == ee16d03. Push auth verified with user-supplied PAT (transient
-  URL use only). Home completion task (desktop+mobile gaps vs the new
-  `ui ux/www_eldorado_gg_1920w_390w_1536w_default.make` reference + live site)
-  starting from "Next exact action" below.
+- Last successful push timestamp: 2026-11-03, session 4
+- Hash of last pushed commit: `adc87ca` (verified on origin/main via
+  ls-remote immediately after push)
+- Uncommitted changes: none
+- Unpushed commits: none (`git log origin/main..main` empty)
+- Push auth: user-supplied PAT used TRANSIENTLY in the push URL per push
+  (`git push https://<token>@github.com/…`), never stored in .git/config or
+  any file. If a future session has no token, ask the user for a fine-grained
+  PAT (Contents: read/write) — plain pushes fail with
+  "could not read Username for 'https://github.com'".
 - Recovery instructions:
   1. `git clone https://github.com/mehrshad0289/charjino-front-eldorado.git`
-  2. Read this file, verify state per the checklist in the protocol, continue
-     from "Next exact action".
+  2. Read this file; verify state per the protocol checklist (git status,
+     local vs origin, build)
+  3. Continue from "Next exact action"
