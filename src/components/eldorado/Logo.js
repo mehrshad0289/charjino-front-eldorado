@@ -1,10 +1,10 @@
-export default function Logo({ className = "", color = "#14131A", iconOnly = false }) {
+export default function Logo({ className = "", color = "#14131A", iconOnly = false, size = 34 }) {
   if (iconOnly) {
     return (
       <svg
-        height="34"
+        height={size}
         viewBox="0 0 40 40"
-        width="34"
+        width={size}
         xmlns="http://www.w3.org/2000/svg"
         className={className}
         aria-hidden="true"

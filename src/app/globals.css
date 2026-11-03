@@ -13,6 +13,10 @@
   --color-linkblue: #2d5ead; /* category card links */
   --color-secondary: #55555e; /* secondary paragraph text */
   --color-hairline: #dedee3; /* input borders */
+  --color-headerdark: #28272e; /* header bar (dark on light theme, probed 2026-11-03) */
+  --color-searchstroke: #323140; /* closed search input border on dark header */
+  --color-focusblue: #4783ff; /* search input focus ring in open overlay */
+  --color-labelgray: #6a667b; /* "Popular categories" overlay label */
 
   --font-sans: var(--font-lato), "Lato", sans-serif;
 }

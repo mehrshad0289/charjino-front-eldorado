@@ -9,12 +9,17 @@ actual files and Git history — never trust previous AI claims.
 ## Current Checkpoint
 
 - Current page: Home
-- Current section: home page fully rebuilt as components (sections 1–8 of the
-  rebuild list done, including responsive pass); interactions/theme not started
-- Reference file: `ui ux/www_eldorado_gg_1920w_390w_1536w_default_light_dark_home.make`
-  (binary ZIP containing `meta.json`, `thumbnail.png`, `canvas.fig` — a
-  Figma-style design file; primary visual reference is therefore the live
-  https://www.eldorado.gg/ plus full-page screenshots)
+- Current section: header system rebuilt for the NEW live design (dark header
+  on light theme) + mobile hamburger drawer + click-search overlay — verified
+- Reference file: NEW `ui ux/زمانی که اینپوت سرچ رامیزنسم در حالت موبایلو
+  دسکتاپ/www_eldorado_gg_1920w_390w_1536w_default_light_dark_click-search.make`
+  (uploaded by user 2026-11-03, commit c49727d; binary fig-make format, not
+  extractable — live site captures used as ground truth). Earlier:
+  `ui ux/www_eldorado_gg_1920w_390w_1536w_default_light_dark_home.make`
+- IMPORTANT design change discovered 2026-11-03: eldorado.gg now renders a
+  DARK header (#28272E, white wordmark) in the light theme on BOTH desktop and
+  mobile. The earlier white-header implementation (verified against captures
+  from earlier the same day) is superseded by commits a2d83d9+.
 - Implementation status (commit 8bc7649):
   - `src/app/page.js`: composes real components (the 2.8 MB HTML snapshot was
     replaced; preserved in git history at 9ea55d5)
@@ -30,6 +35,20 @@ actual files and Git history — never trust previous AI claims.
     desktop/mobile, brainrot-hero.webp (transparent PNG characters layer),
     safe-easy-trading, trade-shield.svg, chat-support.svg, icons/v30 game
     icons, payments/v11 icons, google preferred-source badge
+- Header/search/menu status (verified 2026-11-03 vs live captures):
+  - HeaderBar (client): dark #28272E. Desktop: white-wordmark logo, centered
+    fake-search 1162×42 (border #323140), yellow Log in. Mobile = 114px block
+    (live: 114): row1 hamburger 42 @x16 + logo icon 42 @x62 (live x66) + Log in
+    + gear; row2 full-width dark search button.
+  - MobileMenu (client): full-screen white drawer — "Categories" + ×, 6 gray
+    rows with chevrons (matches live drawer capture).
+  - SearchOverlay (client): desktop white panel 1160×530 @y12 (live
+    [373,12,1160,530]), focus border #4783FF, "POPULAR CATEGORIES" #6A667B,
+    10-item list (28px icons, ink text, scrollable). Mobile full-screen p-3,
+    input + Cancel, 32px icons. Item hrefs extracted live (incl. Murder
+    Mystery 2, Arc Raiders, Razer Gold — absent from page cards).
+  - CategoryNav hidden on mobile (drawer replaces it); cart→moon icon (live
+    nav right = sun + moon).
 - Visual comparison status:
   - 1920: side-by-side vs live eldorado.gg — structure, palette, typography
     and section geometry match (page 1920×2525 vs ref 1905×2536). Hero
@@ -45,15 +64,22 @@ actual files and Git history — never trust previous AI claims.
   comparison composites in the session workspace, not committed)
 - Technical checks: `npm run build` — SUCCESS, static prerender, no errors
 - Known remaining differences (acceptable for current milestone):
-  - mobile category strip shows text-only items (live shows small icons per
-    category — icon assets not yet mapped)
-  - interactions not implemented: search dropdown, category mega-menus,
-    theme toggle (light theme only), cart, login flows
+  - locale shows "EUR - €" (live is geo-dependent, e.g. "HKD · HK$")
+  - gear (mobile) and category rows are static links/buttons; category
+    mega-menus and theme toggle not implemented
   - hero mobile banner asset differs slightly in composition from live crop
-- Next exact action: interaction refinements (search dropdown, category
-  dropdowns), dark-theme tokens, then inner pages if requested
+- Next exact action: category mega-menu dropdowns on desktop nav, then
+  dark-theme tokens, then inner pages if requested
 
 ## Section log (append one block per completed section)
+
+- 2026-11-03 — Header/search/menu system rebuilt for the new live design
+  (commits a2d83d9 checkpoint → final verified commit): dark header both
+  breakpoints, mobile hamburger drawer, click-search overlay desktop+mobile,
+  mobile category strip removed, moon icon. Verified vs live captures at 1920
+  (closed + open) and 390 (closed + drawer + open): header block 114px = live,
+  panel [380,12,1160,530] vs live [373,12,1160,530], logo icon 42px = live.
+  `next build` green.
 
 - 2026-11-03 — Design tokens + layout/metadata + HeaderBar + CategoryNav +
   Hero + CategoryCards + TradingSection + GuaranteeCards + Footer (commit

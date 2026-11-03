@@ -43,25 +43,22 @@ function SunIcon() {
   );
 }
 
-function CartIcon() {
+function MoonIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
-        d="M2.5 3.5h2l2.2 11.2a1.6 1.6 0 0 0 1.6 1.3h8.6a1.6 1.6 0 0 0 1.6-1.2l1.7-7.3H6"
+        d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"
         stroke="currentColor"
         strokeWidth="2"
-        strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <circle cx="9.5" cy="20" r="1.6" fill="currentColor" />
-      <circle cx="16.5" cy="20" r="1.6" fill="currentColor" />
     </svg>
   );
 }
 
 export default function CategoryNav() {
   return (
-    <nav className="bg-catnav text-white">
+    <nav className="hidden bg-catnav text-white md:block">
       <div className="flex h-10 items-center justify-between px-4 md:px-6">
         <ul className="flex items-center gap-7 overflow-x-auto whitespace-nowrap">
           {CATEGORIES.map((c) => (
@@ -90,8 +87,8 @@ export default function CategoryNav() {
           <button type="button" aria-label="Toggle theme" className="hover:text-brand">
             <SunIcon />
           </button>
-          <button type="button" aria-label="Cart" className="hover:text-brand">
-            <CartIcon />
+          <button type="button" aria-label="Dark theme" className="hover:text-brand">
+            <MoonIcon />
           </button>
         </div>
       </div>
