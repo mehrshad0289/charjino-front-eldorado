@@ -20,7 +20,7 @@ export default function AccountsPagination({ pages = [1, 2, 3, 4, 5], lastPage =
   return (
     <nav
       aria-label="Pagination"
-      className="mt-[30px] flex items-center justify-center gap-1.5 pb-[15px] pt-5 text-center"
+      className="mt-[30px] flex flex-wrap items-center justify-center gap-1.5 pb-[15px] pt-5 text-center"
     >
       <button
         type="button"
