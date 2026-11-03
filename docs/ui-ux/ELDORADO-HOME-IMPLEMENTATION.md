@@ -99,6 +99,11 @@ actual files and Git history — never trust previous AI claims.
 - Last successfully pushed commit hash: `8bc7649`
 - Uncommitted changes: none at this checkpoint
 - Unpushed commits: none (`git log origin/main..main` empty at doc time)
+- Session 2026-11-03 (continued): fresh sandbox, repo re-cloned, local main ==
+  origin/main == ee16d03. Push auth verified with user-supplied PAT (transient
+  URL use only). Home completion task (desktop+mobile gaps vs the new
+  `ui ux/www_eldorado_gg_1920w_390w_1536w_default.make` reference + live site)
+  starting from "Next exact action" below.
 - Recovery instructions:
   1. `git clone https://github.com/mehrshad0289/charjino-front-eldorado.git`
   2. Read this file, verify state per the checklist in the protocol, continue
