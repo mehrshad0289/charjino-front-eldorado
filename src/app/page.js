@@ -22,12 +22,23 @@ export default function Home() {
         <div className="relative z-10">
           <PopularCards />
           <RobloxBanner />
-          <RecentlyViewed />
+          {/* live eldorado.gg @390 renders only Popular / banner / how-buying /
+              popular games / reviews / support / footer — the desktop-only
+              sections below are hidden on mobile to match the live flow */}
+          <div className="hidden md:block">
+            <RecentlyViewed />
+          </div>
           <HowBuyingWorks />
-          <RobloxCurrencies />
+          <div className="hidden md:block">
+            <RobloxCurrencies />
+          </div>
           <PopularGames />
-          <TradingSection />
-          <GuaranteeCards />
+          <div className="hidden md:block">
+            <TradingSection />
+          </div>
+          <div className="hidden md:block">
+            <GuaranteeCards />
+          </div>
         </div>
       </main>
       <Footer />

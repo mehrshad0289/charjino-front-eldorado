@@ -1,3 +1,7 @@
+"use client";
+
+import { useRef, useState } from "react";
+
 const CDN = "https://assetsdelivery.eldorado.gg/v7/_assets_";
 const GCS =
   "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F";
@@ -40,17 +44,33 @@ const CARDS = [
 ];
 
 export default function PopularCards() {
+  const trackRef = useRef(null);
+  const [active, setActive] = useState(0);
+
+  /* mobile dot indicators follow the swipe position (live reference @390) */
+  const onTrackScroll = () => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.querySelector("a");
+    const step = card ? card.offsetWidth + 24 : 1;
+    setActive(Math.min(CARDS.length - 1, Math.max(0, Math.round(el.scrollLeft / step))));
+  };
+
   return (
     <section className="relative z-10 mt-6 mb-12">
       <div className="mx-auto max-w-[1208px] px-4 md:px-6">
         <span className="block text-lg font-bold leading-[27px]">Popular</span>
         <div className="mt-4 flex overflow-hidden">
-          <div className="flex w-full overflow-x-auto overflow-y-hidden whitespace-nowrap">
+          <div
+            ref={trackRef}
+            onScroll={onTrackScroll}
+            className="flex w-full overflow-x-auto overflow-y-hidden whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
             {CARDS.map((c, i) => (
               <div key={c.item} className={`shrink-0 ${i > 0 ? "pl-6" : ""}`}>
                 <a
                   href={c.href}
-                  className="relative flex h-80 w-[272px] flex-col justify-end gap-2.5 overflow-hidden rounded-lg p-6 text-sm leading-[21px] text-white"
+                  className="relative flex h-[336px] w-[272px] flex-col justify-end gap-2.5 overflow-hidden rounded-lg p-6 text-sm leading-[21px] text-white md:h-80"
                 >
                   <img
                     src={c.img}
@@ -96,10 +116,25 @@ export default function PopularCards() {
                       <span className="block text-xl font-bold leading-[30px]">{c.price}</span>
                     )}
                   </div>
+                  {/* mobile-only CTA per the live @390 cards */}
+                  <div className="relative mt-1 md:hidden">
+                    <span className="flex h-9 items-center justify-center rounded-lg bg-brand text-sm font-bold text-ink">
+                      Buy now
+                    </span>
+                  </div>
                 </a>
               </div>
             ))}
           </div>
+        </div>
+        {/* mobile dot indicators */}
+        <div className="mt-3 flex justify-center gap-1.5 md:hidden">
+          {CARDS.map((c, i) => (
+            <span
+              key={c.item}
+              className={`h-1.5 w-1.5 rounded-full ${i === active ? "bg-ink" : "bg-cardborder"}`}
+            />
+          ))}
         </div>
       </div>
     </section>

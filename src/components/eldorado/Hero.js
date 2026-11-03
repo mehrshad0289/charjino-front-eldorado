@@ -10,19 +10,13 @@ export default function Hero() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[280px] overflow-hidden md:h-[465px]"
+      className="pointer-events-none absolute inset-x-0 top-0 z-0 hidden h-[465px] overflow-hidden md:block"
     >
-      <img
-        src={`${CDN}/brainrot-red-carpet-banner-mobile.webp`}
-        alt=""
-        fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover md:hidden"
-      />
       <img
         src={`${CDN}/brainrot-red-carpet-banner-desktop.webp`}
         alt="Homepage banner background image"
         fetchPriority="high"
-        className="absolute inset-0 hidden h-full w-full object-cover md:block"
+        className="absolute inset-0 h-full w-full object-cover"
         style={{ objectPosition: "50% 15%" }}
       />
       {/* characters layer — visible to the right of the Popular cards row */}

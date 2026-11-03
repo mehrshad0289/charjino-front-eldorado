@@ -2,15 +2,15 @@ const GCS =
   "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F";
 
 const GAMES = [
-  ["Fortnite V-Bucks", "Top ups", "00f8b44f1c2bc17588632c5e03b2931b09260f31.png?generation=1793718219774624", "https://www.eldorado.gg/fortnite-vbucks/t/16"],
-  ["Roblox Gift Cards", "Gift cards", "c82bd636225645fec5da6f7d27c7be1c4cdc9a60.png?generation=1793718219576813", "https://www.eldorado.gg/roblox-gift-card/v/70"],
-  ["EA Sports FC Coins", "Currency", "73b8c4a254b1b6b979e55799023bdc3300547a95.png?generation=1793718219747415", "https://www.eldorado.gg/ea-fc-coins/g/142-0-0"],
-  ["Steal a Brainrot", "Items", "c3ce0c829f2b9aad84c307ef212a77e4ce45a91a.png?generation=1793718219557258", "https://www.eldorado.gg/steal-a-brainrot-brainrots/i/259"],
-  ["Arc Raiders", "Items", "0d44076dcb95b12885a124aee2342330e295fbc9.png?generation=1793718219760760", "https://www.eldorado.gg/arc-raiders-items/i/319"],
-  ["DonutSMP Money", "Currency", "519d9508c64bcd17f2f4e894550b4ed22e73a66a.png?generation=1793718219787497", "https://www.eldorado.gg/donutsmp-money/g/278"],
-  ["Pokemon Go Top Ups", "Top ups", "ce4f2653e0bdd8cc343a4a49d5e8747cea6eeb54.png?generation=1793718219806421", "https://www.eldorado.gg/pokemon-go-pokecoins/t/57"],
-  ["Valorant", "Accounts", "4184f9315f15f88edb02e55fef3afb0ae45c04f1.png?generation=1793718219793600", "https://www.eldorado.gg/valorant-accounts/a/32-1-0"],
-  ["Murder Mystery 2", "Items", "c0ba43b727684b6b08614ea7ffe7502039d5d099.png?generation=1793718219930605", "https://www.eldorado.gg/mm2-shop/i/204-2-0"],
+  ["Fortnite V-Bucks", "Top ups", "00f8b44f1c2bc17588632c5e03b2931b09260f31.png?generation=1793718219774624", "/efootball-accounts"],
+  ["Roblox Gift Cards", "Gift cards", "c82bd636225645fec5da6f7d27c7be1c4cdc9a60.png?generation=1793718219576813", "/efootball-accounts"],
+  ["EA Sports FC Coins", "Currency", "73b8c4a254b1b6b979e55799023bdc3300547a95.png?generation=1793718219747415", "/efootball-accounts"],
+  ["Steal a Brainrot", "Items", "c3ce0c829f2b9aad84c307ef212a77e4ce45a91a.png?generation=1793718219557258", "/efootball-accounts"],
+  ["Arc Raiders", "Items", "0d44076dcb95b12885a124aee2342330e295fbc9.png?generation=1793718219760760", "/efootball-accounts"],
+  ["DonutSMP Money", "Currency", "519d9508c64bcd17f2f4e894550b4ed22e73a66a.png?generation=1793718219787497", "/efootball-accounts"],
+  ["Pokemon Go Top Ups", "Top ups", "ce4f2653e0bdd8cc343a4a49d5e8747cea6eeb54.png?generation=1793718219806421", "/efootball-accounts"],
+  ["Valorant", "Accounts", "4184f9315f15f88edb02e55fef3afb0ae45c04f1.png?generation=1793718219793600", "/efootball-accounts"],
+  ["Murder Mystery 2", "Items", "c0ba43b727684b6b08614ea7ffe7502039d5d099.png?generation=1793718219930605", "/efootball-accounts"],
 ];
 
 const SHADOW =

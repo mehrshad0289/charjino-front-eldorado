@@ -59,9 +59,12 @@ function MoonIcon() {
   );
 }
 
-const CATEGORY_PAGES = {
-  Accounts: "/efootball-accounts",
-};
+/* WIRING (user request: «روی هر کدام زد دسته اکانت همین باز شود»): every
+   category routes to the accounts shop page — the shop_account capture is the
+   template for all categories until their own captures exist. */
+const SHOP_ACCOUNTS = "/efootball-accounts";
+
+const CATEGORIES = ["Currency", "Accounts", "Top ups", "Items", "Boosting", "Gift cards"];
 
 export default function CategoryNav({ activeCategory = null }) {
   const [openCategory, setOpenCategory] = useState(null);
@@ -88,17 +91,18 @@ export default function CategoryNav({ activeCategory = null }) {
     >
       <div className="flex h-10 items-center justify-between md:px-6">
         <ul className="ml-3 flex items-center overflow-x-auto whitespace-nowrap">
-          {["Currency", "Accounts", "Top ups", "Items", "Boosting", "Gift cards"].map((c) => {
+          {CATEGORIES.map((c) => {
             const active = openCategory === c || activeCategory === c;
+            const isAccounts = c === "Accounts";
             return (
               <li key={c}>
                 <a
-                  href={CATEGORY_PAGES[c] || "#"}
-                  aria-expanded={c === "Accounts" ? openCategory === "Accounts" : undefined}
-                  aria-haspopup={c === "Accounts" ? "true" : undefined}
+                  href={SHOP_ACCOUNTS}
+                  aria-expanded={isAccounts ? openCategory === "Accounts" : undefined}
+                  aria-haspopup={isAccounts ? "true" : undefined}
                   onMouseEnter={() => openMenu(c)}
                   onClick={(e) => {
-                    if (c === "Accounts") {
+                    if (isAccounts) {
                       e.preventDefault();
                       setOpenCategory("Accounts");
                       setPinned(true);

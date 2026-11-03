@@ -2,17 +2,21 @@
 
 const CDN = "https://assetsdelivery.eldorado.gg/v7/_assets_";
 
+/* WIRING per user request: every suggestion routes to the accounts shop page
+   /efootball-accounts (shop_account capture = the template for all targets). */
+const SHOP_ACCOUNTS = "/efootball-accounts";
+
 const ITEMS = [
-  ["EA Sports FC Coins", 142, "/ea-fc-coins/g/142-0-0"],
-  ["Fortnite V-Bucks", 16, "/fortnite-vbucks/t/16"],
-  ["Steal a Brainrot Items", 259, "/steal-a-brainrot-brainrots/i/259"],
-  ["Aion 2 Kinah", 360, "/aion-2-kinah/g/360"],
-  ["Pokemon Go Top Ups", 57, "/pokemon-go-pokecoins/t/57"],
-  ["DonutSMP Money", 278, "/donutsmp-money/g/278"],
-  ["Murder Mystery 2 Items", 204, "/mm2-shop/i/204-2-0"],
-  ["Arc Raiders Items", 319, "/arc-raiders-items/i/319"],
-  ["Valorant Accounts", 32, "/valorant-accounts/a/32-1-0"],
-  ["Razer Gold", 260, "/razer-gold/v/260"],
+  ["EA Sports FC Coins", 142],
+  ["Fortnite V-Bucks", 16],
+  ["Steal a Brainrot Items", 259],
+  ["Aion 2 Kinah", 360],
+  ["Pokemon Go Top Ups", 57],
+  ["DonutSMP Money", 278],
+  ["Murder Mystery 2 Items", 204],
+  ["Arc Raiders Items", 319],
+  ["Valorant Accounts", 32],
+  ["Razer Gold", 260],
 ];
 
 function DarkSearchIcon() {
@@ -64,9 +68,9 @@ export default function SearchOverlay({ onClose }) {
         </p>
 
         <ul>
-          {ITEMS.map(([name, n, href]) => (
+          {ITEMS.map(([name, n]) => (
             <li key={name}>
-              <a href={href} className="flex items-center gap-4 py-[11px] md:gap-3 md:py-[9px]">
+              <a href={SHOP_ACCOUNTS} className="flex items-center gap-4 py-[11px] md:gap-3 md:py-[9px]">
                 <img
                   src={`${CDN}/icons/v30/${n}.png`}
                   alt=""
