@@ -61,7 +61,7 @@ function CartIcon() {
 
 export default function CategoryNav() {
   return (
-    <nav className="bg-catnav text-white">
+    <nav className="hidden bg-catnav text-white md:block">
       <div className="flex h-10 items-center justify-between px-4 md:px-6">
         <ul className="flex items-center gap-7 overflow-x-auto whitespace-nowrap">
           {CATEGORIES.map((c) => (
