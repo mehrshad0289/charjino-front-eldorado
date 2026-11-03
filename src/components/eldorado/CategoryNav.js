@@ -1,4 +1,7 @@
-const CATEGORIES = ["Currency", "Accounts", "Top ups", "Items", "Boosting", "Gift cards"];
+"use client";
+
+import { useState } from "react";
+import MegaMenu from "./MegaMenu";
 
 function HeadsetIcon() {
   return (
@@ -56,24 +59,76 @@ function MoonIcon() {
   );
 }
 
-export default function CategoryNav() {
+const CATEGORY_PAGES = {
+  Accounts: "/efootball-accounts",
+};
+
+export default function CategoryNav({ activeCategory = null }) {
+  const [openCategory, setOpenCategory] = useState(null);
+  const [pinned, setPinned] = useState(false);
+
+  const openMenu = (name) => {
+    if (name === "Accounts") {
+      setOpenCategory("Accounts");
+    }
+  };
+  const closeMenu = () => {
+    setOpenCategory(null);
+    setPinned(false);
+  };
+
   return (
-    <nav className="hidden bg-catnav text-white md:block">
+    <nav
+      className={`relative hidden bg-catnav text-white md:block ${
+        openCategory ? "z-[1001]" : "z-30"
+      }`}
+      onMouseLeave={() => {
+        if (!pinned) closeMenu();
+      }}
+    >
       <div className="flex h-10 items-center justify-between md:px-6">
         <ul className="ml-3 flex items-center overflow-x-auto whitespace-nowrap">
-          {CATEGORIES.map((c) => (
-            <li key={c}>
-              <a
-                href="#"
-                className="flex h-10 items-center gap-1 px-3 pb-0.5 text-sm font-bold tracking-[0.48px] hover:text-brand"
-              >
-                {c}
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" className="mt-1 text-navgray">
-                  <path d="m2.5 4.5 3.5 3 3.5-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
-            </li>
-          ))}
+          {["Currency", "Accounts", "Top ups", "Items", "Boosting", "Gift cards"].map((c) => {
+            const active = openCategory === c || activeCategory === c;
+            return (
+              <li key={c}>
+                <a
+                  href={CATEGORY_PAGES[c] || "#"}
+                  aria-expanded={c === "Accounts" ? openCategory === "Accounts" : undefined}
+                  aria-haspopup={c === "Accounts" ? "true" : undefined}
+                  onMouseEnter={() => openMenu(c)}
+                  onClick={(e) => {
+                    if (c === "Accounts") {
+                      e.preventDefault();
+                      setOpenCategory("Accounts");
+                      setPinned(true);
+                    }
+                  }}
+                  className={`flex h-10 items-center gap-1 px-3 pb-0.5 text-sm font-bold tracking-[0.48px] ${
+                    active ? "rounded-t-sm bg-catactive text-white" : "text-white hover:text-brand"
+                  }`}
+                >
+                  {c}
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    aria-hidden="true"
+                    className={`mt-1 text-navgray ${active ? "rotate-180" : ""}`}
+                  >
+                    <path
+                      d="m2.5 4.5 3.5 3 3.5-3"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </a>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="hidden items-center gap-2 text-sm md:flex">
@@ -99,6 +154,8 @@ export default function CategoryNav() {
           </button>
         </div>
       </div>
+
+      {openCategory === "Accounts" && <MegaMenu onClose={closeMenu} />}
     </nav>
   );
 }

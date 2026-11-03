@@ -26,6 +26,9 @@
   --color-footlink: #898a93; /* rgb(137,138,147) footer link gray */
   --color-focusblue: #4783ff; /* search input focus ring in open overlay */
   --color-labelgray: #6a667b; /* "Popular categories" overlay label */
+  --color-inputgray: #efeff1; /* rgb(239,239,241) light gray input/dropdown fill + border (menu search, shop filters) */
+  --color-catactive: #282836; /* rgb(40,40,54) active catnav item fill (mega menu open / category page) */
+  --color-metaicon: #00e4c9; /* rgb(0,228,201) seller verified badge green */
 
   --font-sans: var(--font-lato), "Lato", sans-serif;
 }
