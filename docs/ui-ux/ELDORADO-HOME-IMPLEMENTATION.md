@@ -11,7 +11,7 @@ actual files and Git history — never trust previous AI claims.
 - Current page: Home (complete) + NEW desktop mega menu + NEW shop accounts
   page `/efootball-accounts` (session 5)
 - Current section: shop accounts page — implemented, visually compared,
-  build green, pushed (eceacfd); Vercel deploy pending check
+  build green, pushed (eceacfd); Vercel verified serving it
 - Reference files:
   - Menu: `ui ux/Menu_desktop/www_eldorado_gg_1920w_390w_1366w_default_menu_desktop.make`
     → decoded full-page snapshot saved to
@@ -72,9 +72,10 @@ actual files and Git history — never trust previous AI claims.
     (pre-existing from session 4, untouched this session)
 - Technical checks: `npm run build` SUCCESS (/, /efootball-accounts,
   /_not-found); navigation + mega-menu interactions verified headless
-- Deployment: Vercel auto-deploys from main — verify
-  https://charjino-front-eldorado.vercel.app/efootball-accounts (see Backup
-  Status for the commit that should be live)
+- Deployment: VERIFIED — Vercel serves `/efootball-accounts` with the new
+  shop page (4953 accounts found, filters, offer cards, SEO block, HTTP 200)
+  and `/` home sections unchanged; deployment corresponds to the session-5
+  code pushes (eceacfd)
 - Next exact action: per user request — more category pages (Coins/Items/
   Boosting/Top ups/Gift cards) using this shop page as the template, offer
   detail page, or interactive filter/sort dropdowns on request
