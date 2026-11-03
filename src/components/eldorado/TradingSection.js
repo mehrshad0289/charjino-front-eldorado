@@ -2,11 +2,11 @@ const CDN = "https://assetsdelivery.eldorado.gg/v7/_assets_/home-page/v4";
 
 export default function TradingSection() {
   return (
-    <section className="bg-white">
-      <div className="mx-auto flex max-w-[1160px] flex-col items-center justify-center gap-12 overflow-hidden px-4 py-10 md:flex-row md:gap-16 md:px-0 md:py-8">
+    <section className="mb-16 bg-white">
+      <div className="mx-auto flex max-w-[1208px] flex-col items-center justify-center gap-12 overflow-hidden px-4 py-10 md:flex-row md:gap-16 md:px-6 md:py-0">
         <div className="w-full md:w-1/2">
           <h2 className="mb-6 text-3xl font-bold text-ink">Safe and easy trading</h2>
-          <div className="flex flex-col gap-4 text-base text-secondary md:text-xl">
+          <div className="flex flex-col gap-4 text-base text-graytext md:text-xl">
             <span>
               Trade without fear - Eldorado guarantees that all trades are legit
               and keeps you safe from scammers.

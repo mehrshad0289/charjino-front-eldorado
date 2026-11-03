@@ -1,23 +1,25 @@
 const CDN = "https://assetsdelivery.eldorado.gg/v7/_assets_/home-page/v4";
 
-function Card({ bg, image, imageAlt, title, text, buttonText, href }) {
+function Card({ bg, image, imageAlt, title, text, buttonText, href, imgClass }) {
   return (
     <div
-      className="flex items-center gap-5 rounded-lg p-5 md:h-[226px] md:justify-between md:gap-6 md:px-8"
+      className="flex items-center rounded-lg p-6 md:p-9"
       style={{ backgroundColor: bg }}
     >
       <img
         src={`${CDN}/${image}`}
         alt={imageAlt}
         loading="lazy"
-        className="h-20 w-auto shrink-0 md:h-[154px]"
+        className={`h-28 w-auto shrink-0 md:h-[154px] ${imgClass || ""}`}
       />
-      <div className="md:max-w-[300px]">
-        <h3 className="text-xl font-bold text-ink">{title}</h3>
-        <p className="mt-2 text-sm text-ink/80">{text}</p>
+      <div className="ml-5 md:ml-[43px]">
+        <div className="mb-6">
+          <h3 className="mb-3.5 text-2xl font-bold text-ink">{title}</h3>
+          <p className="leading-[21px] text-ink">{text}</p>
+        </div>
         <a
           href={href}
-          className="mt-4 inline-flex h-10 items-center justify-center rounded-lg bg-ink px-4 text-sm font-bold text-white"
+          className="inline-flex min-h-[42px] w-fit items-center justify-center rounded-lg bg-darkbtn px-4 text-sm font-bold leading-[16.8px] text-white"
         >
           {buttonText}
         </a>
@@ -28,26 +30,33 @@ function Card({ bg, image, imageAlt, title, text, buttonText, href }) {
 
 export default function GuaranteeCards() {
   return (
-    <section className="mx-auto max-w-[1160px] px-4 pb-16 pt-4 md:px-0">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Card
-          bg="var(--color-guarantee)"
-          image="trade-shield.svg?q=40"
-          imageAlt="Trade shield"
-          title="Money-back guarantee"
-          text="Receive your order or get a refund. Feel safe with full trading protection."
-          buttonText="Learn more"
-          href="#"
-        />
-        <Card
-          bg="var(--color-support)"
-          image="chat-support.svg"
-          imageAlt="24/7 live support"
-          title="24/7 live support"
-          text="Eldorado support works around the clock. Contact us at any time."
-          buttonText="Chat now"
-          href="#"
-        />
+    <section className="mb-16">
+      <div className="mx-auto max-w-[1208px] px-4 md:px-6">
+        <div className="flex flex-col gap-6 md:flex-row">
+          <div className="w-full">
+            <Card
+              bg="var(--color-guarantee)"
+              image="trade-shield.svg?q=40"
+              imageAlt="Trade shield"
+              title="Money-back guarantee"
+              text="Receive your order or get a refund. Feel safe with full trading protection."
+              buttonText="Learn more"
+              href="https://support.eldorado.gg/en/articles/8408994-tradeshield-buying"
+            />
+          </div>
+          <div className="w-full">
+            <Card
+              bg="var(--color-support)"
+              image="chat-support.svg"
+              imageAlt="24/7 live support"
+              title="24/7 live support"
+              text="Eldorado support works around the clock. Contact us at any time."
+              buttonText="Chat now"
+              href="#"
+              imgClass="md:h-36"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
