@@ -5,9 +5,9 @@ import Logo from "./Logo";
 import SearchOverlay from "./SearchOverlay";
 import MobileMenu from "./MobileMenu";
 
-function SearchIcon({ className = "", stroke = "#a0a0aa" }) {
+function SearchIcon({ className = "", stroke = "#ffffff", size = 24 }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
       <circle cx="11" cy="11" r="7" stroke={stroke} strokeWidth="2" />
       <path d="m20 20-3.5-3.5" stroke={stroke} strokeWidth="2" strokeLinecap="round" />
     </svg>
@@ -76,21 +76,21 @@ export default function HeaderBar() {
           <Logo iconOnly size={42} className="md:hidden" />
         </a>
 
-        <div className="hidden flex-1 justify-center pl-16 md:flex">
+        <div className="hidden flex-1 justify-center px-2 md:flex">
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            className="flex h-10 w-full max-w-[1162px] items-center gap-2.5 rounded-lg border-2 border-searchstroke px-3.5 text-left text-sm text-secondary"
+            className="flex h-[42px] w-full max-w-[1178px] items-center gap-2 rounded-lg border-2 border-searchstroke bg-searchbg px-3 text-left text-sm"
           >
             <SearchIcon />
-            <span className="truncate">Search for games, keywords, sellers...</span>
+            <span className="truncate text-placehold">Search for games, keywords, sellers...</span>
           </button>
         </div>
 
         <div className="ml-auto flex shrink-0 items-center gap-1">
           <button
             type="button"
-            className="h-[42px] rounded-lg bg-brand px-4 text-sm font-bold text-ink"
+            className="h-[42px] min-w-[70px] rounded-lg bg-brand px-4 text-sm font-bold text-ink"
           >
             Log in
           </button>
@@ -109,9 +109,9 @@ export default function HeaderBar() {
         <button
           type="button"
           onClick={() => setSearchOpen(true)}
-          className="flex h-[42px] w-full items-center gap-2.5 rounded-lg border-2 border-searchstroke px-3 text-left text-sm"
+          className="flex h-[42px] w-full items-center gap-2.5 rounded-lg border-2 border-searchstroke bg-searchbg px-3 text-left text-sm"
         >
-          <SearchIcon />
+          <SearchIcon stroke="#a0a0aa" size={20} />
           <span className="truncate text-white/60">Search for games, keywords, sellers...</span>
         </button>
       </div>

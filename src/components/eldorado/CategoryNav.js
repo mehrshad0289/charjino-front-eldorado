@@ -31,7 +31,7 @@ function GlobeIcon() {
 
 function SunIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="2" />
       <path
         d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M18.7 5.3l-1.8 1.8M7.1 16.9l-1.8 1.8"
@@ -45,7 +45,7 @@ function SunIcon() {
 
 function MoonIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"
         stroke="currentColor"
@@ -59,13 +59,16 @@ function MoonIcon() {
 export default function CategoryNav() {
   return (
     <nav className="hidden bg-catnav text-white md:block">
-      <div className="flex h-10 items-center justify-between px-4 md:px-6">
-        <ul className="flex items-center gap-7 overflow-x-auto whitespace-nowrap">
+      <div className="flex h-10 items-center justify-between md:px-6">
+        <ul className="ml-3 flex items-center overflow-x-auto whitespace-nowrap">
           {CATEGORIES.map((c) => (
             <li key={c}>
-              <a href="#" className="flex items-center gap-1 text-sm hover:text-brand">
+              <a
+                href="#"
+                className="flex h-10 items-center gap-1 px-3 pb-0.5 text-sm font-bold tracking-[0.48px] hover:text-brand"
+              >
                 {c}
-                <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" className="mt-1 text-navgray">
                   <path d="m2.5 4.5 3.5 3 3.5-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </a>
@@ -73,21 +76,25 @@ export default function CategoryNav() {
           ))}
         </ul>
 
-        <div className="hidden items-center gap-5 text-sm md:flex">
-          <a href="#" className="flex items-center gap-1.5 hover:text-brand">
+        <div className="hidden items-center gap-2 text-sm md:flex">
+          <a href="#" className="flex h-10 items-center gap-2 px-[14px] text-navgray hover:text-brand">
             <HeadsetIcon />
             24/7 live support
           </a>
-          <button type="button" className="flex items-center gap-1.5 hover:text-brand">
+          <button type="button" className="flex h-10 items-center gap-2 px-1.5 text-navgray hover:text-brand">
             <GlobeIcon />
             <span>
               English <span className="opacity-60">|</span> EUR - €
             </span>
           </button>
-          <button type="button" aria-label="Toggle theme" className="hover:text-brand">
+          <button
+            type="button"
+            aria-label="Toggle theme"
+            className="rounded-sm bg-searchstroke p-1 text-white hover:text-brand"
+          >
             <SunIcon />
           </button>
-          <button type="button" aria-label="Dark theme" className="hover:text-brand">
+          <button type="button" aria-label="Dark theme" className="p-1 text-white hover:text-brand">
             <MoonIcon />
           </button>
         </div>

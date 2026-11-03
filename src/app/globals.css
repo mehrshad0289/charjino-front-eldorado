@@ -13,8 +13,17 @@
   --color-linkblue: #2d5ead; /* category card links */
   --color-secondary: #55555e; /* secondary paragraph text */
   --color-hairline: #dedee3; /* input borders */
-  --color-headerdark: #28272e; /* header bar (dark on light theme, probed 2026-11-03) */
+  --color-headerdark: #0e0e11; /* header bar (probed live 2026-11-03: bar #0E0E11, search field #28272E; matches .make reference) */
+  --color-searchbg: #28272e; /* closed search input fill on dark header */
   --color-searchstroke: #323140; /* closed search input border on dark header */
+  --color-placehold: #c6c6cc; /* search placeholder rgb(198,198,204) */
+  --color-navgray: #a8aab3; /* rgb(168,170,179) catnav right-side text/icons */
+  --color-graytext: #6a667b; /* rgb(106,102,123) muted paragraph text */
+  --color-pricegreen: #d1f08f; /* discounted price green */
+  --color-darkbtn: #222127; /* rgb(34,33,39) dark buttons (footer lang, guarantee) */
+  --color-cardborder: #e7e7e7; /* hairline card borders rgb(231,231,231) */
+  --color-badgebg: #f4f4f4; /* gray badge / card header fill rgb(244,244,244) */
+  --color-footlink: #898a93; /* rgb(137,138,147) footer link gray */
   --color-focusblue: #4783ff; /* search input focus ring in open overlay */
   --color-labelgray: #6a667b; /* "Popular categories" overlay label */
 
