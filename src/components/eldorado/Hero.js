@@ -1,64 +1,37 @@
 const CDN = "https://assetsdelivery.eldorado.gg/v7/_assets_/home-page/v4";
 
+/*
+ * Image-only banner from the .make reference: 465px tall on desktop, bottom
+ * 340px fades into the page background; the "Popular" cards row overlaps it.
+ * No text overlay or CTA — the .make capture of eldorado.gg shows the banner
+ * alone (verified against live pixel probe 2026-11-03).
+ */
 export default function Hero() {
   return (
-    <section className="relative h-[280px] overflow-hidden md:h-[465px]">
-      {/* mobile banner (includes characters) */}
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[280px] overflow-hidden md:h-[465px]"
+    >
       <img
         src={`${CDN}/brainrot-red-carpet-banner-mobile.webp`}
-        alt="Homepage banner background image"
+        alt=""
         fetchPriority="high"
         className="absolute inset-0 h-full w-full object-cover md:hidden"
       />
-      {/* desktop banner + characters layer */}
       <img
         src={`${CDN}/brainrot-red-carpet-banner-desktop.webp`}
         alt="Homepage banner background image"
         fetchPriority="high"
         className="absolute inset-0 hidden h-full w-full object-cover md:block"
+        style={{ objectPosition: "50% 15%" }}
       />
-      <img
-        src={`${CDN}/brainrot-hero.webp`}
-        alt=""
-        fetchPriority="high"
-        className="absolute bottom-[145px] left-[65%] hidden h-[280px] -translate-x-1/2 md:block"
+      <div
+        className="absolute inset-x-0 -bottom-px h-[140px] md:h-[340px]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(246, 246, 246, 0) 0%, rgb(246, 246, 246) 100%)",
+        }}
       />
-
-      {/* desktop content: left aligned */}
-      <div className="relative mx-auto hidden max-w-[1160px] md:block">
-        <div className="max-w-[440px] pt-[72px]">
-          <h1 className="hero-text-shadow text-[48px] font-bold leading-[1.1] text-white">
-            Complete your Brainrot set
-          </h1>
-          <p className="hero-text-shadow mt-4 text-xl text-white">
-            The largest Steal a Brainrot marketplace
-          </p>
-          <a
-            href="/steal-a-brainrot-brainrots/i/259"
-            aria-label="Shop now"
-            className="mt-6 flex h-14 w-[175px] items-center justify-center rounded-lg bg-brand text-base font-bold text-ink"
-          >
-            Shop now
-          </a>
-        </div>
-      </div>
-
-      {/* mobile content: centered bottom */}
-      <div className="relative flex h-full flex-col items-center justify-end px-4 pb-5 text-center md:hidden">
-        <h1 className="hero-text-shadow text-[26px] font-bold leading-[1.15] text-white">
-          Complete your Brainrot set
-        </h1>
-        <p className="hero-text-shadow mt-1 text-base text-white">
-          #1 Roblox Marketplace
-        </p>
-        <a
-          href="/steal-a-brainrot-brainrots/i/259"
-          aria-label="Shop now"
-          className="mt-3 flex h-12 w-full items-center justify-center rounded-lg bg-brand text-base font-bold text-ink"
-        >
-          Shop now
-        </a>
-      </div>
-    </section>
+    </div>
   );
 }
