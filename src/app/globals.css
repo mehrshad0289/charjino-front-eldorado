@@ -29,6 +29,8 @@
   --color-inputgray: #efeff1; /* rgb(239,239,241) light gray input/dropdown fill + border (menu search, shop filters) */
   --color-catactive: #282836; /* rgb(40,40,54) active catnav item fill (mega menu open / category page) */
   --color-metaicon: #00e4c9; /* rgb(0,228,201) seller verified badge green */
+  --color-filtertext: #626362; /* rgb(98,99,98) shop filter/count text */
+  --color-glowyellow: #fea900; /* rgb(254,169,0) active tab glow gradient base */
 
   --font-sans: var(--font-lato), "Lato", sans-serif;
 }
