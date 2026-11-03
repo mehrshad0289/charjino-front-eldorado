@@ -62,8 +62,8 @@ function CartIcon() {
 export default function CategoryNav() {
   return (
     <nav className="bg-catnav text-white">
-      <div className="flex h-10 items-center justify-between px-6">
-        <ul className="flex items-center gap-7">
+      <div className="flex h-10 items-center justify-between px-4 md:px-6">
+        <ul className="flex items-center gap-7 overflow-x-auto whitespace-nowrap">
           {CATEGORIES.map((c) => (
             <li key={c}>
               <a href="#" className="flex items-center gap-1 text-sm hover:text-brand">
@@ -76,7 +76,7 @@ export default function CategoryNav() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-5 text-sm">
+        <div className="hidden items-center gap-5 text-sm md:flex">
           <a href="#" className="flex items-center gap-1.5 hover:text-brand">
             <HeadsetIcon />
             24/7 live support

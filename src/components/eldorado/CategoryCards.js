@@ -5,8 +5,8 @@ const icon = (n) => `${CDN}/icons/v30/${n}.png`;
 const CARDS = [
   {
     title: "Popular accounts",
-    wide: true,
     cols: 2,
+    mobileCount: 5,
     items: [
       ["Fortnite", 16, "/fortnite-accounts/a/85"],
       ["Rainbow Six Siege X", 48, "/rainbow-six-accounts/a/34"],
@@ -22,8 +22,8 @@ const CARDS = [
   },
   {
     title: "Popular currencies",
-    wide: false,
     cols: 1,
+    mobileCount: 5,
     items: [
       ["EA Sports FC Coins", 142, "/ea-fc-coins/g/142-0-0"],
       ["Aion 2 Kinah", 360, "/aion-2-kinah/g/360"],
@@ -34,8 +34,8 @@ const CARDS = [
   },
   {
     title: "Popular boosting services",
-    wide: true,
     cols: 2,
+    mobileCount: 2,
     items: [
       ["EA Sports FC", 142, "/ea-fc-boosting/b/142"],
       ["Call of Duty", 35, "/call-of-duty-boosting/b/35"],
@@ -45,8 +45,8 @@ const CARDS = [
   },
   {
     title: "Popular items",
-    wide: false,
     cols: 1,
+    mobileCount: 2,
     items: [
       ["Anime Adventures", 229, "/anime-adventures-items/t/229"],
       ["Steal a Brainrot", 259, "/steal-a-brainrot-brainrots/i/259"],
@@ -54,16 +54,13 @@ const CARDS = [
   },
 ];
 
-function Card({ title, cols, items }) {
+function Card({ title, cols, mobileCount, items }) {
   return (
-    <div className="h-[325px] rounded-lg bg-card p-6">
+    <div className="rounded-lg bg-card p-6 md:h-[325px]">
       <h3 className="mb-5 text-xl font-bold text-ink">{title}</h3>
-      <ul
-        className="grid gap-x-6 gap-y-3.5"
-        style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
-      >
-        {items.map(([name, n, href]) => (
-          <li key={name}>
+      <ul className={`grid gap-x-6 gap-y-3.5 ${cols === 2 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"}`}>
+        {items.map(([name, n, href], i) => (
+          <li key={name} className={i >= mobileCount ? "hidden md:block" : ""}>
             <a
               href={href}
               className="flex h-6 items-center gap-2 text-sm text-linkblue hover:underline"
@@ -87,9 +84,9 @@ function Card({ title, cols, items }) {
 
 export default function CategoryCards() {
   return (
-    <section className="relative z-10 -mt-[89px] bg-page">
-      <div className="mx-auto max-w-[1160px]">
-        <div className="grid grid-cols-[765px_1fr] gap-4">
+    <section className="relative z-10 bg-page md:-mt-[89px]">
+      <div className="mx-auto max-w-[1160px] px-4 md:px-0">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-[765px_1fr]">
           <Card {...CARDS[0]} />
           <Card {...CARDS[1]} />
           <Card {...CARDS[2]} />

@@ -97,10 +97,10 @@ function GlobeIcon() {
 export default function Footer() {
   return (
     <footer className="bg-ink text-white">
-      <div className="mx-auto max-w-[1857px] px-6">
+      <div className="mx-auto max-w-[1857px] px-4 md:px-6">
         {/* payments + language */}
         <div className="flex flex-col items-start gap-6 pt-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2.5">
             {PAYMENTS.map(([alt, slug]) => (
               <img
                 key={slug}
@@ -152,7 +152,7 @@ export default function Footer() {
             </a>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-16 gap-y-8 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 md:grid-cols-3 md:gap-x-16">
             {LINK_COLS.map((col, i) => (
               <ul key={i} className="flex flex-col gap-3">
                 {col.map(([label, href]) => (

@@ -3,7 +3,7 @@ const CDN = "https://assetsdelivery.eldorado.gg/v7/_assets_/home-page/v4";
 export default function TradingSection() {
   return (
     <section className="bg-white">
-      <div className="mx-auto flex max-w-[1160px] flex-col items-center justify-center gap-12 overflow-hidden pt-8 md:flex-row md:gap-16">
+      <div className="mx-auto flex max-w-[1160px] flex-col items-center justify-center gap-12 overflow-hidden px-4 py-10 md:flex-row md:gap-16 md:px-0 md:py-8">
         <div className="w-full md:w-1/2">
           <h2 className="mb-6 text-3xl font-bold text-ink">Safe and easy trading</h2>
           <div className="flex flex-col gap-4 text-base text-secondary md:text-xl">
