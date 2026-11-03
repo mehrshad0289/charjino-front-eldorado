@@ -8,79 +8,85 @@ actual files and Git history — never trust previous AI claims.
 
 ## Current Checkpoint
 
-- Current page: Home (complete) + NEW desktop mega menu + NEW shop accounts
-  page `/efootball-accounts` (session 5)
-- Current section: shop accounts page — implemented, visually compared,
-  build green, pushed (eceacfd); Vercel verified serving it
+- Current page: Home (desktop per .make 1920 capture, mobile per LIVE
+  eldorado.gg @390) + desktop mega menu + shop accounts page
+  `/efootball-accounts` (desktop per capture, mobile per live reference)
+- Current section: session 6 — mobile rebuild + category routing COMPLETE;
+  desktop verified against live Eldorado; all pushed; Vercel serving
 - Reference files:
-  - Menu: `ui ux/Menu_desktop/www_eldorado_gg_1920w_390w_1366w_default_menu_desktop.make`
-    → decoded full-page snapshot saved to
-    `ui ux/extracted/eldorado-menu-desktop-reference-1920.tsx`
-  - Shop: `ui ux/shop_account/www_eldorado_gg_efootball-accounts_a_183-1-0_pageSize_24_1920w_390w_1366w_default_shop_accounts.make`
-    → decoded snapshot saved to
-    `ui ux/extracted/eldorado-efootball-accounts-reference-1920.tsx`
-  - Decode method (session 5): `.make` zip → 16-byte `fig-make` header →
-    sequential raw-deflate streams (schema chunk + document chunk) → embedded
-    html.to.design TSX snapshots recovered as printable-string runs
-    (scripts kept in sandbox `/home/z/my-project/scripts/fig_*.py`).
-- Implementation status:
-  - `src/components/eldorado/MegaMenu.js` — Accounts mega dropdown per menu
-    reference: left 63% (Recently viewed 2 + Popular games 10), right 37%
-    `#F4F4F4` scrollable All games list (13 captured) with live search filter;
-    panel `max-w-[1070px]`, mx-5, rounded-10, layered shadow; opens on hover,
-    click pins; closes on outside click / Escape / mouse-leave (unless pinned)
-  - `src/components/eldorado/CategoryNav.js` — client component now; hover
-    opens Accounts panel; active item styling `#282836` + chevron up (token
-    `--color-catactive`); other categories have no panels yet
-  - `src/app/efootball-accounts/page.js` + GameBanner, AccountsToolbar,
-    AccountCard, AccountOffersGrid, AccountsPagination, ShopSeoText —
-    full shop layout: dark strip `#282836` (icon+«eFootball 2027», active
-    Accounts tab underline+glow, Coins tab), artwork backdrop h-465 with
-    bottom fade to `#F6F6F6`, 3 filter dropdowns (Game Series/Price/Delivery
-    Time) + Clear filters, 10 quick chips, account search, «4953 accounts
-    found» + Recommended sort, 24 offer cards (3-col grid, gap-24, h-48,
-    title/desc/58px art/seller+verified/rating/price/delivery), pagination
-    (page 1 brand-yellow, ..., 207, Go to page), SEO h1 + 4.9 rating badge +
-    paragraphs + 5-step how-to list, shared Footer + ChatBubble
-  - Data: `src/components/eldorado/data/referenceData.js` — all game rows,
-    chips, filters and 24 offers extracted verbatim from the captures
-  - WIRING per user request («روی هر کدام زد دسته اکانت همین باز شود»): every
-    game row in the mega menu links to `/efootball-accounts`; catnav Accounts
-    opens the panel (hover) / pins it (click); verified click-through in
-    headless browser (home → panel → Valorant row → `/efootball-accounts`, h1
-    «eFootball Accounts For Sale»)
+  - Desktop captures: the four `.make` files under `ui ux/` — decoded
+    snapshots in `ui ux/extracted/snapshots/` (session 6 re-decode with the
+    reusable `fig_reassemble.py`; IMPORTANT: the .make files contain ONLY
+    1920px snapshots despite "390w" in their filenames — verified across all
+    four captures, `"width":"1920px"` is the only width present)
+  - Mobile reference: LIVE eldorado.gg captured headless at 390/1920
+    (home + shop). The captured shop URL 404s live; the working URL is
+    `https://www.eldorado.gg/efootball-accounts/a/183-1-0` (per sitemap)
+  - Shop banner artwork: the "dark orb" 4-percent-city image IS what the live
+    Eldorado page itself renders today (same asset URL, verified in the live
+    HTML srcset) — NOT a broken mirror; deviation note from session 5 updated
+- Implementation status (session 6 changes):
+  - Mobile SHOP (`/efootball-accounts`): GameBanner stacks on mobile (game
+    row, then tabs row — was wrapping/broken); toolbar shows a horizontally
+    scrollable filter-pill row (All filters/Price/Delivery Time/Game Series)
+    per live; quick chips, artwork backdrop and "Go to page" hidden on
+    mobile; SortIcon viewBox typo repaired (icon had been invisible)
+  - Mobile HOME: Popular carousel gained a Buy now CTA + scroll-synced dot
+    indicators (live has both); CategoryCards rows show name + category label
+    like the live "Popular games" list; hero, Recently viewed, Roblox
+    currencies, Safe-trading and Guarantee sections hidden on mobile to match
+    the live flow exactly (all still present on desktop)
+  - ROUTING (user request «روی هر کدام زد دسته اکانت همین باز شود»): every
+    category now opens `/efootball-accounts` — catnav items (incl. Currency/
+    Top ups/Items/Boosting/Gift cards), mobile menu categories, mobile menu
+    popular games, search-overlay suggestions, CategoryCards links,
+    PopularGames links; mega-menu game rows kept from session 5
+  - MobileMenu rebuilt: dark header bar with close, real category links
+    (were dead `#`), popular-games rows with icons; menu icons eager-loaded
+    (lazy rows rendered blank in the mega menu + mobile menu)
 - Visual comparison status:
-  - 1920: mega menu panel and shop page compared against decoded snapshots
-    section by section (strip/toolbar/chips/search/count+sort/grid cards/
-    pagination/SEO all match structure, spacing, colors)
-  - 1536 + 390: no horizontal overflow (scrollWidth == viewport, all three)
-  - Mobile layouts are INFERRED (captures are desktop-only) — documented
-    assumption, same as home session
+  - Desktop 1920 shop vs live `/efootball-accounts/a/183-1-0`: header/catnav/
+    game strip/filters/chips/search/count+sort/cards all match structure,
+    spacing and colors
+  - Desktop mega menu verified open (Recently viewed + Popular games 63% /
+    All games search list 37%) and click-through to shop verified headless
+  - Mobile 390 home + shop verified against live collages section by section
+  - No horizontal overflow: scrollWidth == viewport at 1920 / 1536 / 390 on
+    both pages (headless check)
+  - Interaction checks: mega-menu game row click → /efootball-accounts; catnav
+    Currency click → /efootball-accounts; mobile-menu Currency tap →
+    /efootball-accounts (all verified in headless browser)
 - Known deviations / documented limitations:
-  - Banner artwork: the capture's GCS mirror (`3dc1f3ac…`) serves WRONG
-    content (dark fantasy orb — same failure class as the home banner);
-    replaced with the live first-party asset actually rendered in that slot:
-    `assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v8/4-percent-city-banner-desktop.png`
-  - Prices rendered without currency symbol, exactly as captured
-    (`aria-label="amount-price"` contains bare numbers in the reference)
-  - Filter dropdowns, sort, chips, search, pagination buttons and Clear
-    filters are static (closed states) — the capture contains no open-state
-    designs for them
-  - Mega menu «All games» list contains the 13 games visible in the capture
-    (the real page renders hundreds; the capture stores only rendered rows)
-  - Home «Popular games» cards still link to external eldorado.gg URLs
-    (pre-existing from session 4, untouched this session)
+  - Prices without currency symbol, exactly as captured (session 5 note
+    stands); live site geo-localizes to HK$
+  - Filter pills, sort, chips, search, pagination and Clear filters remain
+    static closed states (no open-state designs exist in any capture)
+  - Mobile: live flow does not render Recently viewed / Roblox currencies /
+    trading / guarantee / hero — hidden on mobile, documented here; restore
+    with `hidden md:block` wrappers removal if the user wants them back
+  - Home Popular/Recently-viewed cards still link to external eldorado.gg
+    item pages (per-item pages, not category shops)
 - Technical checks: `npm run build` SUCCESS (/, /efootball-accounts,
-  /_not-found); navigation + mega-menu interactions verified headless
-- Deployment: VERIFIED — Vercel serves `/efootball-accounts` with the new
-  shop page (4953 accounts found, filters, offer cards, SEO block, HTTP 200)
-  and `/` home sections unchanged; deployment corresponds to the session-5
-  code pushes (eceacfd)
-- Next exact action: per user request — more category pages (Coins/Items/
-  Boosting/Top ups/Gift cards) using this shop page as the template, offer
-  detail page, or interactive filter/sort dropdowns on request
+  /_not-found); interactions verified headless (see above)
+- Deployment: VERIFIED — Vercel serves the session-6 build (home HTML
+  contains the new "Buy now" CTA; shop HTML contains the new "All filters"
+  pill row), corresponding to pushes 4313d28 / 16a882d / 1f9ed2a
+- Next exact action: on request — interactive dropdown/chip states, offer
+  detail page, or per-category shop pages using /efootball-accounts as the
+  template (Coins/Items/Boosting/Top ups/Gift cards)
+
 
 ## Section log (append one block per completed section)
+
+- 2026-11-03 (session 6) — Mobile rebuild + routing, driven by the user's
+  report that mobile and desktop looked bad. Established that the .make
+  captures contain no mobile reference (1920-only, verified by re-decoding
+  all four files with the reusable `ui ux/extracted/fig_reassemble.py`), so
+  the live site was captured headless at 390/1920 as the mobile reference
+  (shop needs the `/a/183-1-0` suffix — bare slug 404s). Shipped in three
+  verified pushes: mobile shop fixes (4313d28), mobile home rebuild +
+  full category routing to /efootball-accounts (16a882d), eager menu icons
+  (1f9ed2a). Progress doc updated in the same final push.
 
 - 2026-11-03 (session 5) — Decoded the two new .make captures and shipped two
   sections, one commit+push each: (1) desktop mega menu per
@@ -116,17 +122,16 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-03, session 5
-- Hash of last pushed commit: `eceacfd` (verified on origin/main via
-  ls-remote immediately after push; session 5 chain: ecce185 → 851c67d →
-  e4dbf00 → eceacfd)
-- Uncommitted changes: none (progress doc update committed in the same push)
-- Unpushed commits: none (`git log origin/main..main` empty)
-- Push auth: this session used the user-supplied PAT embedded in the clone
-  URL (transient sandbox only; never committed to the repo). If a future
-  session has no token, ask the user for a fine-grained PAT (Contents:
-  read/write) — plain pushes fail with "could not read Username for
-  'https://github.com'".
+- Last successful push timestamp: 2026-11-03, session 6
+- Hash of last pushed commit: `1f9ed2a` (chain this session: b8c5c3c →
+  4313d28 → 16a882d → 1f9ed2a; every push verified by empty
+  `git log origin/main..HEAD`)
+- Uncommitted changes: none (this doc update ships in the final commit)
+- Unpushed commits: none
+- Push auth: session 6 used the user-supplied PAT embedded in the clone URL
+  (transient sandbox only; never committed to the repo). Future sessions
+  without a token need a fine-grained PAT (Contents: read/write) or pushes
+  fail with "could not read Username for 'https://github.com'".
 - Recovery instructions:
   1. `git clone https://github.com/mehrshad0289/charjino-front-eldorado.git`
   2. Read this file; verify state per the protocol checklist (git status,
