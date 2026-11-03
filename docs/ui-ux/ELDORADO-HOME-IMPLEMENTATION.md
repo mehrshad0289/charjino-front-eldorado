@@ -8,73 +8,88 @@ actual files and Git history — never trust previous AI claims.
 
 ## Current Checkpoint
 
-- Current page: Home
-- Current section: ALL home sections implemented per the decoded
-  `ui ux/www_eldorado_gg_1920w_390w_1536w_default.make` reference (desktop
-  1920 code extracted to `ui ux/extracted/eldorado-home-reference-1920.tsx`,
-  982 lines) + responsive pass for 1536/390 — visually verified, build green,
-  deployed to Vercel
-- Reference file: `ui ux/www_eldorado_gg_1920w_390w_1536w_default.make`
-  (zip → canvas.fig → decoded; the authoritative design target per user
-  2026-11-03: "این فایل خیلی خیلی مهمه"). Live eldorado.gg used as secondary
-  reference for header/footer assets and mobile patterns.
-- Design decision of record: the .make capture is the USER'S live view of
-  eldorado.gg (contains personalized "Recently viewed"), which differs from
-  the variant served to this sandbox (old home with 4 white list cards + hero
-  text overlay). The .make structure is therefore the target:
-  image-only hero banner → Popular product cards → Roblox banner →
-  Recently viewed → How buying works → Roblox currencies → Popular games →
-  Safe and easy trading → guarantee cards → footer → chat bubble.
-  The 4 white CategoryCards and the hero h1/CTA are no longer composed on the
-  page (component files kept in repo; restorable via git history 9eb1918^).
-- Implementation status (commit adc87ca):
-  - `src/app/page.js`: full .make composition inside
-    `<main class="relative"><Hero/><div class="relative z-10">…</div></main>`
-  - `src/components/eldorado/`: HeaderBar (client), CategoryNav, Logo,
-    MobileMenu, SearchOverlay, Hero (image-only banner + fade + characters
-    layer), PopularCards, RobloxBanner, RecentlyViewed, HowBuyingWorks,
-    RobloxCurrencies, PopularGames, TradingSection, GuaranteeCards, Footer,
-    ChatBubble (fixed intercom-style bubble)
-  - Assets: live eldorado CDN (assetsdelivery) for banner/characters/icons/
-    payments/badge; GCS prd-storytodesign URLs (from the .make capture, all
-    verified HTTP 200 AND visually correct) for Popular card art, Roblox
-    banner, how-buying illustrations, currency/game icons, chat icon.
-    EXCEPTION: GCS banner asset 6f060924… serves WRONG content (a photo, not
-    the banner) — do not use it; the CDN banner + brainrot-hero.webp overlay
-    is used instead (verified rendering).
+- Current page: Home (complete) + NEW desktop mega menu + NEW shop accounts
+  page `/efootball-accounts` (session 5)
+- Current section: shop accounts page — implemented, visually compared,
+  build green, pushed (eceacfd); Vercel deploy pending check
+- Reference files:
+  - Menu: `ui ux/Menu_desktop/www_eldorado_gg_1920w_390w_1366w_default_menu_desktop.make`
+    → decoded full-page snapshot saved to
+    `ui ux/extracted/eldorado-menu-desktop-reference-1920.tsx`
+  - Shop: `ui ux/shop_account/www_eldorado_gg_efootball-accounts_a_183-1-0_pageSize_24_1920w_390w_1366w_default_shop_accounts.make`
+    → decoded snapshot saved to
+    `ui ux/extracted/eldorado-efootball-accounts-reference-1920.tsx`
+  - Decode method (session 5): `.make` zip → 16-byte `fig-make` header →
+    sequential raw-deflate streams (schema chunk + document chunk) → embedded
+    html.to.design TSX snapshots recovered as printable-string runs
+    (scripts kept in sandbox `/home/z/my-project/scripts/fig_*.py`).
+- Implementation status:
+  - `src/components/eldorado/MegaMenu.js` — Accounts mega dropdown per menu
+    reference: left 63% (Recently viewed 2 + Popular games 10), right 37%
+    `#F4F4F4` scrollable All games list (13 captured) with live search filter;
+    panel `max-w-[1070px]`, mx-5, rounded-10, layered shadow; opens on hover,
+    click pins; closes on outside click / Escape / mouse-leave (unless pinned)
+  - `src/components/eldorado/CategoryNav.js` — client component now; hover
+    opens Accounts panel; active item styling `#282836` + chevron up (token
+    `--color-catactive`); other categories have no panels yet
+  - `src/app/efootball-accounts/page.js` + GameBanner, AccountsToolbar,
+    AccountCard, AccountOffersGrid, AccountsPagination, ShopSeoText —
+    full shop layout: dark strip `#282836` (icon+«eFootball 2027», active
+    Accounts tab underline+glow, Coins tab), artwork backdrop h-465 with
+    bottom fade to `#F6F6F6`, 3 filter dropdowns (Game Series/Price/Delivery
+    Time) + Clear filters, 10 quick chips, account search, «4953 accounts
+    found» + Recommended sort, 24 offer cards (3-col grid, gap-24, h-48,
+    title/desc/58px art/seller+verified/rating/price/delivery), pagination
+    (page 1 brand-yellow, ..., 207, Go to page), SEO h1 + 4.9 rating badge +
+    paragraphs + 5-step how-to list, shared Footer + ChatBubble
+  - Data: `src/components/eldorado/data/referenceData.js` — all game rows,
+    chips, filters and 24 offers extracted verbatim from the captures
+  - WIRING per user request («روی هر کدام زد دسته اکانت همین باز شود»): every
+    game row in the mega menu links to `/efootball-accounts`; catnav Accounts
+    opens the panel (hover) / pins it (click); verified click-through in
+    headless browser (home → panel → Valorant row → `/efootball-accounts`, h1
+    «eFootball Accounts For Sale»)
 - Visual comparison status:
-  - 1920 (full-page screenshot `docs/ui-ux/screenshots/session4/charjino-1920-full.png`
-    vs `live-1920-full.png`): all 9 sections present and ordered like the
-    .make reference; header pixel-probed from live: bar #0E0E11, search field
-    #28272E, border #323140, catnav #1E1F28 — token `--color-headerdark`
-    corrected from the earlier wrong #28272E. Popular cards (272×320,
-    gradient rgba(30,31,40,0)→rgb(30,31,40) 92.5%, discount badge -76%* on
-    PokeCoins) overlap the banner; hero characters visible right of the cards
-    (left-86%, bottom-110, h-280).
-  - 1536: verified (`charjino-1536-full.png`), 4-col steps, 5/7 currencies
-    grid, 3-col games, no horizontal overflow.
-  - 390: verified (`charjino-390-full.png`), scrollWidth == 390 (no overflow).
-    Mobile: header 114px block, Popular = horizontal scroll row over the
-    mobile banner, stacked steps/currencies/games, mobile trading image
-    lazy-loads correctly (verified naturalWidth 984 after scroll).
-- Viewports verified: 1920, 1536, 390
-- Technical checks: `npm run build` — SUCCESS (static prerender, / only, no
-  errors); dev server renders all sections, no console errors
-- Deployment: Vercel serving the new build (HTTP 200; SSR HTML contains
-  Popular / Recently viewed / How buying / Roblox currencies / Popular games)
-- Known remaining differences (documented limitations):
-  - .make is desktop-only (single 1920 frame) — mobile layouts for the NEW
-    sections are inferred from eldorado patterns (scroll rows, stacked
-    grids); documented as assumption
-  - GCS hotlinks are Figma-capture mirrors; if eldorado moves the assets,
-    swap to first-party URLs (risk noted; contents verified today)
-  - "Popular" heading is ink-dark over the banner top band, exactly as the
-    .make structure implies
-  - search overlay/mega-menus unchanged from previous verified session
-- Next exact action: per user — dark-theme tokens, inner pages, or pixel
-  refinements on request; otherwise home is complete per the .make reference
+  - 1920: mega menu panel and shop page compared against decoded snapshots
+    section by section (strip/toolbar/chips/search/count+sort/grid cards/
+    pagination/SEO all match structure, spacing, colors)
+  - 1536 + 390: no horizontal overflow (scrollWidth == viewport, all three)
+  - Mobile layouts are INFERRED (captures are desktop-only) — documented
+    assumption, same as home session
+- Known deviations / documented limitations:
+  - Banner artwork: the capture's GCS mirror (`3dc1f3ac…`) serves WRONG
+    content (dark fantasy orb — same failure class as the home banner);
+    replaced with the live first-party asset actually rendered in that slot:
+    `assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v8/4-percent-city-banner-desktop.png`
+  - Prices rendered without currency symbol, exactly as captured
+    (`aria-label="amount-price"` contains bare numbers in the reference)
+  - Filter dropdowns, sort, chips, search, pagination buttons and Clear
+    filters are static (closed states) — the capture contains no open-state
+    designs for them
+  - Mega menu «All games» list contains the 13 games visible in the capture
+    (the real page renders hundreds; the capture stores only rendered rows)
+  - Home «Popular games» cards still link to external eldorado.gg URLs
+    (pre-existing from session 4, untouched this session)
+- Technical checks: `npm run build` SUCCESS (/, /efootball-accounts,
+  /_not-found); navigation + mega-menu interactions verified headless
+- Deployment: Vercel auto-deploys from main — verify
+  https://charjino-front-eldorado.vercel.app/efootball-accounts (see Backup
+  Status for the commit that should be live)
+- Next exact action: per user request — more category pages (Coins/Items/
+  Boosting/Top ups/Gift cards) using this shop page as the template, offer
+  detail page, or interactive filter/sort dropdowns on request
 
 ## Section log (append one block per completed section)
+
+- 2026-11-03 (session 5) — Decoded the two new .make captures and shipped two
+  sections, one commit+push each: (1) desktop mega menu per
+  Menu_desktop.make (851c67d) — hover/pinned open, active catnav state,
+  text-ink fix after first screenshot showed white-on-white; (2) shop
+  accounts page per shop_account.make (e4dbf00) — full layout + 24 real
+  offer cards from the capture + wiring of all mega-menu game rows to
+  `/efootball-accounts`; then pagination flex-wrap fix for 390 overflow
+  (eceacfd). Every push verified on remote via ls-remote. Visual checks at
+  1920/1536/390; `next build` green; navigation verified headless.
 
 - 2026-11-03 (session 4) — Decoded the user-supplied
   `www_eldorado_gg_1920w_390w_1536w_default.make` (zip → canvas.fig → TSX).
@@ -100,16 +115,17 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-03, session 4
-- Hash of last pushed commit: `adc87ca` (verified on origin/main via
-  ls-remote immediately after push)
-- Uncommitted changes: none
+- Last successful push timestamp: 2026-11-03, session 5
+- Hash of last pushed commit: `eceacfd` (verified on origin/main via
+  ls-remote immediately after push; session 5 chain: ecce185 → 851c67d →
+  e4dbf00 → eceacfd)
+- Uncommitted changes: none (progress doc update committed in the same push)
 - Unpushed commits: none (`git log origin/main..main` empty)
-- Push auth: user-supplied PAT used TRANSIENTLY in the push URL per push
-  (`git push https://<token>@github.com/…`), never stored in .git/config or
-  any file. If a future session has no token, ask the user for a fine-grained
-  PAT (Contents: read/write) — plain pushes fail with
-  "could not read Username for 'https://github.com'".
+- Push auth: this session used the user-supplied PAT embedded in the clone
+  URL (transient sandbox only; never committed to the repo). If a future
+  session has no token, ask the user for a fine-grained PAT (Contents:
+  read/write) — plain pushes fail with "could not read Username for
+  'https://github.com'".
 - Recovery instructions:
   1. `git clone https://github.com/mehrshad0289/charjino-front-eldorado.git`
   2. Read this file; verify state per the protocol checklist (git status,
