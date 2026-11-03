@@ -4,6 +4,8 @@ import Hero from "../components/eldorado/Hero";
 import PopularCards from "../components/eldorado/PopularCards";
 import RobloxBanner from "../components/eldorado/RobloxBanner";
 import RecentlyViewed from "../components/eldorado/RecentlyViewed";
+import HowBuyingWorks from "../components/eldorado/HowBuyingWorks";
+import RobloxCurrencies from "../components/eldorado/RobloxCurrencies";
 import TradingSection from "../components/eldorado/TradingSection";
 import GuaranteeCards from "../components/eldorado/GuaranteeCards";
 import Footer from "../components/eldorado/Footer";
@@ -19,6 +21,8 @@ export default function Home() {
           <PopularCards />
           <RobloxBanner />
           <RecentlyViewed />
+          <HowBuyingWorks />
+          <RobloxCurrencies />
           <TradingSection />
           <GuaranteeCards />
         </div>
