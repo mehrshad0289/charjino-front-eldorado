@@ -64,12 +64,10 @@ export default function XboxGamePassPage() {
                   <div className="hidden rounded-b-lg bg-white px-6 pb-5 lg:block">
                     <Disclaimer />
                   </div>
-                  {/* mobile: featured offer + disclaimer continue the white flow (live @390) */}
+                  {/* mobile: the white flow ends with the featured card; the
+                      disclaimer renders on the page background (live @390) */}
                   <div className="lg:hidden">
                     <GamePassFeaturedOffer />
-                    <div className="rounded-b-lg bg-white px-4 pb-4">
-                      <Disclaimer />
-                    </div>
                   </div>
                 </div>
                 {/* desktop sidebar: featured offer + seller card */}
@@ -78,9 +76,11 @@ export default function XboxGamePassPage() {
                   <GamePassSellerCard />
                 </aside>
               </div>
-              {/* mobile: seller card + other sellers below the white flow
-                  (live @390 shows the Seller heading on the page background) */}
+              {/* mobile: page-background disclaimer + seller card + other
+                  sellers below the white flow (live @390 shows the Seller
+                  heading on the page background) */}
               <div className="mt-6 flex flex-col gap-6 lg:hidden">
+                <Disclaimer className="px-4" />
                 <div>
                   <div className="mb-3 text-[16px] font-bold leading-[24px]">Seller</div>
                   <GamePassSellerCard />

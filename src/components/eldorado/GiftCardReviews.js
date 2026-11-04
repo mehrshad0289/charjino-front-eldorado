@@ -17,7 +17,7 @@ export default function GiftCardReviews() {
   return (
     <div className="w-full">
       <div className="flex w-full justify-center text-center">
-        <span className="block text-center text-[24px] font-bold leading-[36px] lg:text-[30px]">
+        <span className="block text-center text-[20px] font-bold leading-[29px] lg:text-[30px] lg:leading-[36px]">
           Trusted by thousands of players worldwide
         </span>
       </div>

@@ -16,9 +16,13 @@ export default function GamePassRegionChips() {
       aria-label="Game trade environment chips"
       className="rounded-t-lg bg-white px-4 pb-4 pt-4 lg:rounded-tr-lg lg:px-6"
     >
-      <div className="mb-2 text-[16px] leading-[24px]">
-        <span className="font-bold">Game region: </span>
-        <span>{region}</span>
+      <div className="mb-2 flex items-baseline justify-between gap-2 text-[16px] leading-[24px]">
+        <span className="block font-bold">Game region</span>
+        {/* capture: gray "Your region:" hint + current region on the right */}
+        <span className="flex gap-1 text-[14px] leading-[19.6px]">
+          <span className="block text-graytext">Your region:</span>
+          <span className="block">{region}</span>
+        </span>
       </div>
       <div className="flex flex-wrap items-center gap-4">
         {GAME_PASS_REGIONS.map((r) => {

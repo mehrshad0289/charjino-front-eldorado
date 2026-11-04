@@ -36,15 +36,11 @@ export default function GamePassSellerCard({ seller }) {
             </div>
             <div className="flex min-h-[18px] items-center gap-1.5 text-[14px] leading-[17px] text-graytext">
               <span className="flex items-center gap-1 text-[rgb(0,_228,_201)]">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
                   <path
-                    d="M12 1.8 14.7 4l3.4-.4 1 3.3 2.9 1.9-1.3 3.2 1.3 3.2-2.9 1.9-1 3.3-3.4-.4L12 22.2 9.3 20l-3.4.4-1-3.3L2 15.2l1.3-3.2L2 8.8l2.9-1.9 1-3.3L9.3 4 12 1.8Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="m8.4 12.2 2.4 2.4 4.8-5"
-                    stroke="#14131a"
-                    strokeWidth="1.8"
+                    d="M7 10.5v9M7 19.5H4.8A1.8 1.8 0 0 1 3 17.7v-5.4c0-1 .8-1.8 1.8-1.8H7m0 0 4.2-6.3a1.9 1.9 0 0 1 3.4 1.3l-.5 3.8h4.2c1.2 0 2.1 1.1 1.9 2.2l-1.1 5.6a2 2 0 0 1-2 1.6H7m0-9h3"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />

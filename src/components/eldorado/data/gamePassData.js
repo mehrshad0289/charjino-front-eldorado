@@ -31,9 +31,12 @@ export const GAME_PASS_DEFAULT_REGION = "Europe";
 
 // 19 subscription variants, capture order (alphabetical). price/discount/was
 // verbatim EUR values from the capture; trial rows show a plain price.
+// bestValue: live 2026-11-04 shows a "Best Value" chip on Essential 12
+// Months (not present in the capture — live addition, same chip style as
+// the Popular ribbon).
 export const GAME_PASS_VARIANTS = [
   { label: "Xbox Essential - 1 Month", price: "6.79", discount: "-25%*", was: "8.99", img: IMG_ESSENTIAL },
-  { label: "Xbox Essential - 12 Months", price: "35.28", discount: "-65%*", was: "99.96", img: IMG_ESSENTIAL },
+  { label: "Xbox Essential - 12 Months", price: "35.28", discount: "-65%*", was: "99.96", img: IMG_ESSENTIAL, bestValue: true },
   { label: "Xbox Essential - 3 Months", price: "16.06", discount: "-36%*", was: "24.99", img: IMG_ESSENTIAL },
   { label: "Xbox Essential - 6 Months", price: "20.17", discount: "-60%*", was: "49.98", img: IMG_ESSENTIAL },
   { label: "Xbox Game Pass - PC - 1 Month", price: "8.25", discount: "-37%*", was: "12.99", img: IMG_PC },

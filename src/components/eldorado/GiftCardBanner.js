@@ -8,8 +8,10 @@ import { GIFT_CARD_IMAGES } from "./data/giftCardData";
    logo asset and the same three tabs).
    Deviation from the shop_account capture: on the live reference the ACTIVE
    tab underline is brand yellow (not white) — followed here.
-   Desktop: 3-col grid per the 1920 capture. Mobile (live @390): stacked
-   rows — game name row, then tabs row below. */
+   Desktop: 3-col grid per the 1920 capture. Mobile (live re-capture
+   2026-11-04): the SAME single-row layout — game name left, tabs
+   right-aligned (the previously probed stacked rows no longer render on
+   live @390). */
 
 function ActiveTab({ href, children }) {
   return (
@@ -63,17 +65,17 @@ const TABS = [
 export default function GiftCardBanner({ active = "Gift cards", iconAlt = "xbox gift card" }) {
   return (
     <div className="w-full bg-catactive shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]">
-      {/* mobile: stacked — game row, tabs row (live reference @390; live
-          keeps this stacked style through the tablet band up to ~1024) */}
-      <div className="lg:hidden">
-        <div className="flex h-11 items-center px-4">
+      {/* mobile: single row — game name left, tabs right (live @390
+          re-capture 2026-11-04; same bar as desktop, tighter paddings) */}
+      <div className="flex h-11 items-center justify-between lg:hidden">
+        <div className="flex min-w-0 items-center pl-4">
           <BannerIcon alt={iconAlt} />
           <div className="ml-2 truncate font-bold leading-[20px] text-white">Xbox</div>
         </div>
-        <nav className="flex items-center px-1 pb-1.5">
-          <div className="flex items-center overflow-x-auto text-[13px] leading-none">
+        <nav className="flex items-center pr-1">
+          <div className="flex items-center text-[13px] leading-none">
             {TABS.map((t) => (
-              <span key={t.key} className="flex items-center px-2">
+              <span key={t.key} className="flex items-center px-1.5">
                 {t.key === active ? (
                   <ActiveTab href={t.href}>{t.key}</ActiveTab>
                 ) : (
