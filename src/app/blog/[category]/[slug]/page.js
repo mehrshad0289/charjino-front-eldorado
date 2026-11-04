@@ -59,9 +59,10 @@ export async function generateMetadata({ params }) {
 /* Live eldorado.gg wraps every .entry table in a div.table-scroll
    (block, overflow-x: auto) so wide tables scroll instead of blowing out
    the viewport (verified live @390: wrapper 326px, overflow-x auto).
-   Idempotent: the WP theme already emits div.table-scroll around all 108
-   scraped tables — only tables NOT preceded by one get wrapped here, so
-   re-scrapes without the WP wrapper are covered too (no double wrap). */
+   Idempotent (session-14 merge): the WP theme already emits
+   div.table-scroll around all 108 scraped tables — only tables NOT
+   preceded by one get wrapped here, so re-scrapes without the WP wrapper
+   are covered too (no double wrap). */
 function withTableScroll(html) {
   return html.replace(/<table[^>]*>[\s\S]*?<\/table>/g, (m, offset, s) => {
     const before = s.slice(Math.max(0, offset - 60), offset);
@@ -72,10 +73,14 @@ function withTableScroll(html) {
 }
 
 function BreadChevron() {
+  /* live chevron box = 28px total (li w 66 = "Home" 38 + chevron 28;
+     mid "…" li 38 = 10 + 28). Ours: 8.5px glyph + 10 + 9.5 margins.
+     This width decides the @390 wrap: Home(65.4) + …(38) leaves 254.6px
+     for the 259px title → wraps to 2 lines exactly like live (h 48). */
   return (
     <span
       aria-hidden="true"
-      className="ml-[8px] mr-[8px] inline-block h-[8.5px] w-[8.5px] rotate-45 border-r-[1.2px] border-t-[1.2px] border-[rgb(138,134,157)]"
+      className="ml-[10px] mr-[9.5px] inline-block h-[8.5px] w-[8.5px] rotate-45 border-r-[1.2px] border-t-[1.2px] border-[rgb(138,134,157)]"
     />
   );
 }
@@ -105,27 +110,39 @@ export default async function BlogArticlePage({ params }) {
       </div>
 
       <main className="pt-[30px]">
-        <section className="pb-[30px] pt-[60px] max-lg:pt-0">
-          <div className="relative z-[10] mx-auto w-full max-w-[1136px] px-6">
-            {/* breadcrumb — inline flow so a long current title wraps
-                mid-text like live @390 (Home > … > Title line 1, rest line 2) */}
-            <div className="mb-[8px] pb-[60px] text-[14px] leading-[19.6px]">
-              <span className="text-[rgb(138,134,157)]">
-                <a href="/blog/" className="block sm:inline">
-                  Home
-                </a>
-              </span>
-              <BreadChevron />
-              <span className="text-[rgb(138,134,157)] max-sm:hidden">
-                <a href={article.url} className="block sm:inline">{article.category}</a>
-              </span>
-              <span className="sm:hidden text-[rgb(138,134,157)]">…</span>
-              <BreadChevron />
-              <span>{article.title}</span>
+        {/* live: section pt 108px <1024 (60 @lg+), container padding 16px <640
+            (24 @640+); probed live @390/768/1024/1536/1920 */}
+        <section className="pb-[30px] pt-[60px] max-lg:pt-[108px]">
+          <div className="relative z-[10] mx-auto w-full max-w-[1136px] px-4 sm:px-6">
+            {/* breadcrumb */}
+            <div className="mb-[8px] pb-[60px] max-lg:pt-6">
+              {/* live @390: ul display block, li inline — the title text
+                  wraps mid-item across 2 lines (h 48px); flex @640+ */}
+              <ul className="flex flex-wrap max-sm:block max-sm:leading-[24px]">
+                <li className="flex items-center text-[14px] leading-[19.6px] text-[rgb(138,134,157)] max-sm:inline">
+                  <a href="/blog/" className="block max-sm:inline">
+                    Home
+                  </a>
+                  <BreadChevron />
+                </li>
+                <li className="flex items-center text-[14px] leading-[19.6px] text-[rgb(138,134,157)] max-sm:hidden">
+                  <a href={article.categoryHref} className="block max-sm:inline">
+                    {article.category}
+                  </a>
+                  <BreadChevron />
+                </li>
+                <li className="flex items-center text-[14px] leading-[19.6px] max-sm:inline sm:hidden">
+                  …
+                  <BreadChevron />
+                </li>
+                <li className="flex items-center text-[14px] leading-[19.6px] max-sm:inline">
+                  {article.title}
+                </li>
+              </ul>
             </div>
 
             {/* stretch (default) so the sticky TOC column spans the row —
-                live .single-content-split dflex behaves the same */ }
+                live .single-content-split dflex behaves the same */}
             <div className="flex flex-wrap">
               {/* left column (75%) */}
               <div className="w-full lg:w-3/4 lg:pr-[7px]">

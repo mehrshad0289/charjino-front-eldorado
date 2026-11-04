@@ -64,6 +64,19 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Blog pages render the LIVE Google Lato. Verified on live /blog AND the
+   article page: computed body/breadcrumb/lede/entry font = "Lato" and the
+   woff requests are fonts.gstatic.com Lato v25 (blog is a separate
+   WordPress subsite; the marketplace pages self-host a DIFFERENT Lato cut
+   — the capture's "Lato Eldorado", kept for those pages). Metrics differ:
+   breadcrumb title renders 296px live (Google Lato) vs 259px
+   (Lato Eldorado), which flipped the @390 breadcrumb wrap.
+   var(--font-lato) = next/font Google Lato (same Google files). */
+.blog-lato,
+.blog-article-page {
+  font-family: var(--font-lato), "Lato", sans-serif;
+}
+
 /* Lato Eldorado — Lato 400/700/900 woff2 URLs VERBATIM from the blog
    capture's font-face appendix (the exact files eldorado.gg serves).
    Needed because Google's Lato (next/font) renders ~3% wider than
@@ -281,7 +294,8 @@ body {
 }
 .entry table {
   width: 100%;
-  table-layout: fixed;
+  /* table-layout: auto — live computes "auto" (probed @390/@768); the
+     session-14 draft's "fixed" contradicted that and skewed column widths */
   border-collapse: separate;
   border-spacing: 0;
   overflow: hidden;
@@ -309,6 +323,8 @@ body {
   color: #fff;
   border-right: 2px solid rgb(50, 49, 65);
   border-bottom: 2px solid rgb(50, 49, 65);
+  /* live header cells never wrap ("How to get" fits one line @390) */
+  white-space: nowrap;
 }
 .entry td {
   background: rgb(30, 31, 40);
@@ -324,6 +340,19 @@ body {
 .entry th:last-child,
 .entry td:last-child {
   border-right: 0;
+}
+/* Live @390: compact table cells — th 14px/8px, td 10px/8px, font 14px
+   (probed live; @768+ the 16px/14-20/10-16 desktop values apply, so the
+   whole 4-column table fits the 358px content width without scrolling) */
+@media (max-width: 639px) {
+  .entry th {
+    padding: 14px 8px;
+    font-size: 14px;
+  }
+  .entry td {
+    padding: 10px 8px;
+    font-size: 14px;
+  }
 }
 .entry tr:last-child td {
   border-bottom: 0;

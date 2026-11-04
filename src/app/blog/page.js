@@ -39,7 +39,9 @@ export const metadata = {
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-blogpage leading-[24px] text-white">
+    <div className="blog-lato min-h-screen bg-blogpage leading-[24px] text-white">
+      {/* blog-lato: live /blog renders Google Lato (fonts.gstatic v25), not
+          the marketplace's self-hosted Lato cut — see globals.css note */}
       <BlogHeader />
       <main className="pt-[30px]">
         <section className="pb-14 max-sm:pt-[147px] sm:pt-20 lg:pt-[90px]">
