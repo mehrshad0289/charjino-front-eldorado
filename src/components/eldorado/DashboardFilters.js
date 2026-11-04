@@ -2,7 +2,10 @@
    "Search offers" input (200px) and the right-aligned sort combobox
    ("Recommended", transparent). No menu content exists in any reference,
    so the comboboxes are static buttons (no invented dropdowns); the input
-   is a real text field. Config passed via props for reuse. */
+   is a real text field. Config passed via props for reuse.
+   The CustomItem capture (session 15) swaps the search input for a
+   "Delivery method" combobox (180px, same closed style) — pass
+   deliveryLabel to render it instead of the search field. */
 
 function ChevronDown() {
   return (
@@ -30,7 +33,7 @@ function SortIcon() {
   );
 }
 
-export default function DashboardFilters({ gamePlaceholder, searchPlaceholder, sortLabel }) {
+export default function DashboardFilters({ gamePlaceholder, searchPlaceholder, deliveryLabel, sortLabel }) {
   return (
     <div className="mb-[10px] flex flex-wrap">
       <div>
@@ -52,20 +55,36 @@ export default function DashboardFilters({ gamePlaceholder, searchPlaceholder, s
           </form>
         </div>
       </div>
-      <div>
-        <div className="w-[200px]">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder={searchPlaceholder}
-              className="block h-[42px] w-full overflow-clip rounded-lg border-2 border-[rgb(239,_239,_241)] bg-[rgb(239,_239,_241)] pb-[7px] pl-3 pr-9 pt-[5px] leading-[19.2px] outline-none placeholder:text-placehold"
-            />
-            <div className="absolute right-2 top-1/2 -translate-y-1/2">
-              <SearchIcon />
+      {deliveryLabel ? (
+        <div className="mr-[10px] w-[180px]">
+          <button
+            type="button"
+            aria-label="Delivery method filter"
+            aria-haspopup="listbox"
+            className="flex min-h-[42px] w-full items-center justify-between overflow-hidden rounded-lg bg-[rgb(239,_239,_241)] px-[14px] py-2 leading-[19.6px]"
+          >
+            <span className="block grow truncate text-[rgb(98,_99,_98)]">{deliveryLabel}</span>
+            <span className="block text-[rgb(98,_99,_98)]">
+              <ChevronDown />
+            </span>
+          </button>
+        </div>
+      ) : (
+        <div>
+          <div className="w-[200px]">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder={searchPlaceholder}
+                className="block h-[42px] w-full overflow-clip rounded-lg border-2 border-[rgb(239,_239,_241)] bg-[rgb(239,_239,_241)] pb-[7px] pl-3 pr-9 pt-[5px] leading-[19.2px] outline-none placeholder:text-placehold"
+              />
+              <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                <SearchIcon />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
       <div className="ml-auto">
         <button
           type="button"
