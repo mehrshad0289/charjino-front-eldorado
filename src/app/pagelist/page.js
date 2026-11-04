@@ -12,7 +12,10 @@ import { PRODUCT_ID } from "../../components/eldorado/data/productData";
    the list never drifts from the data file. Session 15: + 6 category
    archive rows from BLOG_CATEGORIES. Session 15b: + CustomItem offers.
    Session 16: + dashboard Currency / Top Up / Purchased / Sold / Loyalty
-   rows (5 new routes). */
+   rows (5 new routes). Session 26: + 14 game shop pages (the live-site
+   routes the clone's own links pointed at) + dashboard Notifications +
+   Boosting my-requests rows — user request: every implemented page
+   listed here. */
 
 export const metadata = {
   title: "Page List - Eldorado",
@@ -43,6 +46,23 @@ const GROUPS = [
       { title: "PlayStation Plus (no-offers state)", href: "/playstation-plus" },
       { title: "CoD Points (top-up)", href: "/cod-points" },
       { title: "Product single (eFootball offer)", href: PRODUCT_HREF },
+      /* Session 26: the game routes the clone's own links pointed at
+         (SearchOverlay + related content) — template instances of the
+         capture-built shop page, see GameShopPage.js. */
+      { title: "Aion 2 — Kinah (currency)", href: "/aion-2-kinah/g/360", meta: "Template" },
+      { title: "ARC Raiders — Items", href: "/arc-raiders-items/i/319", meta: "Template" },
+      { title: "Buy Robux", href: "/buy-robux", meta: "Template" },
+      { title: "DonutSMP — Money (currency)", href: "/donutsmp-money/g/278", meta: "Template" },
+      { title: "EA FC 27 — Coins", href: "/ea-fc-coins/g/142-0-0", meta: "Template" },
+      { title: "Fortnite — V-Bucks (top-up)", href: "/fortnite-vbucks/t/16", meta: "Template" },
+      { title: "Murder Mystery 2 — Items", href: "/mm2-shop/i/204-2-0", meta: "Template" },
+      { title: "Pokémon GO — PokéCoins (top-up)", href: "/pokemon-go-pokecoins/t/57", meta: "Template" },
+      { title: "Razer Gold — Pins", href: "/razer-gold/v/260", meta: "Template" },
+      { title: "Roblox — Accounts for sale", href: "/roblox-accounts-for-sale", meta: "Template" },
+      { title: "Roblox — Boosting services", href: "/roblox-boosting", meta: "Template" },
+      { title: "Roblox — Gift card", href: "/roblox-gift-card", meta: "Template" },
+      { title: "Steal a Brainrot — Brainrots", href: "/steal-a-brainrot-brainrots/i/259", meta: "Template" },
+      { title: "Roblox — Top up (Robux)", href: "/top-up-roblox", meta: "Template" },
     ],
   },
   {
@@ -88,6 +108,8 @@ const GROUPS = [
       { title: "Dashboard — Loyalty", href: "/dashboard/loyalty" },
       { title: "Dashboard — Wallet", href: "/dashboard/wallet" },
       { title: "Dashboard — Messages", href: "/dashboard/messages" },
+      { title: "Dashboard — Notifications", href: "/dashboard/notifications" },
+      { title: "Dashboard — Boosting (My requests)", href: "/dashboard/boosting/my-requests" },
       { title: "Dashboard — Feedback", href: "/dashboard/feedback" },
       { title: "Dashboard — Settings", href: "/dashboard/settings" },
       { title: "User profile — Shop", href: "/users/NewFloat-0una/shop" },

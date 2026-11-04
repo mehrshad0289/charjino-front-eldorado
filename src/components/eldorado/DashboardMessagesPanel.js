@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import MessagesChat from "./MessagesChat";
 
 /* Session 22 — /dashboard/messages content per the user-pushed
    "messages-notempty" capture (ui ux/messages-notempty/, decoded with
@@ -66,8 +67,14 @@ export default function DashboardMessagesPanel({ chips, unreadToggleLabel }) {
         </div>
       </div>
       <div className="flex grow basis-[0%] flex-col">
-        <div className="h-full">
-          <div aria-label="Chat" className="size-full overflow-clip" />
+        <div className="h-full min-h-0">
+          {/* Session 26: the capture leaves this container empty (the real
+              chat is a client-rendered app) — the user asked for the chat
+              page to be built, so it now renders MessagesChat (content
+              provenance: messagesChatData.js). */}
+          <div aria-label="Chat" className="size-full min-h-0 overflow-hidden">
+            <MessagesChat />
+          </div>
         </div>
       </div>
     </div>
