@@ -1386,6 +1386,16 @@ actual files and Git history — never trust previous AI claims.
   scripts/decode_session22_messages.py (add to CAPTURES) or
   decode_session24_captures.py, and expect rebase conflicts.
 
+  CLAIMED (session 25): `ui ux/Seller rules/
+  support_eldorado_gg_en_articles_8408997-seller-rules_…make` (origin
+  8d5dd29) — the support.eldorado.gg Help Center article page (Lato,
+  black fixed 60px header, docs sidebar tree, article + right TOC).
+  Decoded via scripts/decode_session25_sellerrules.py →
+  snapshots/sellerrules-1920px-light-{1,2}.tsx (2nd = font-face
+  appendix only). Anatomy fully extracted; implementation NEXT
+  (session 25). Route decision: /support/articles/8408997-seller-rules
+  (mirrors the live URL minus domain).
+
 ## Backup Status
 
 - Last successful push timestamp: 2026-11-05, session 23 (both
