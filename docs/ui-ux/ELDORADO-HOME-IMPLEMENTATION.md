@@ -11,10 +11,12 @@ actual files and Git history — never trust previous AI claims.
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
   `/xbox-game-pass` + `/xbox-gift-card` + product-single
   `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
-  + `/login` + `/blog` (NEW session 12 — blog landing per the blog .make
-  capture; 1920 capture + live responsive references)
-- Current section: session 12 — blog landing COMPLETE (decode → data → 6
-  new components + page → live compare fixes → verified and pushed)
+  + `/login` + `/blog` (session 12, user's own commits) + `/about-us` +
+  `/contact-us` + `/bug-bounty` (NEW session 12b — static content pages
+  per the user-pushed captures; verified and pushed)
+- Current section: session 12b — about-us / contact-us / bug-bounty
+  COMPLETE (decoded snapshots + live hero probe + visual self-review;
+  all three captures are 1920-only with no rendered thumbnail)
 - Reference files:
   - Blog capture (session 12, user-pushed):
     `ui ux/blog/www_eldorado_gg_blog_1920w_390w_1536w_default.make`
@@ -23,6 +25,21 @@ actual files and Git history — never trust previous AI claims.
   - Live references captured @390/768/1024/1536/1920:
     `snapshots/live-blog-*.png` (the capture is 1920-only; live site is
     the responsive source of truth per project convention)
+  - Session-12b captures (user commits 1d4ab0c + 590903b, all
+    1920-only): `ui ux/About-us/…about-us…make` →
+    `snapshots/about-1920px-light-{1,2}.tsx` and
+    `ui ux/bug-bounty/…make` → `snapshots/bugbounty-1920px-light-{1,2}.tsx`
+    (html.to.design zlib path); `ui ux/contact-us/…make` →
+    `snapshots/contact-1920px-light-{1,2}.tsx` (NATIVE fig-make file —
+    decoded by scripts/decode_contact_capture.py reusing the blog
+    decoder's scene-graph walker). Second snapshot of each = font-face
+    appendix. No rendered thumbnails exist (68-byte placeholders)
+  - CAPTURE QUIRK (about): html.to.design flattened the live custom
+    elements and HOISTED all content sections into the hero wrapper;
+    live eldorado.gg keeps the hero BOUNDED (~444px: pt-8 + breadcrumb
+    + min-h-80 H1 + pb-16, banner img 1905x444 absolute inside it) with
+    the sections as a SIBLING container — implemented the live way
+    (the literal capture nesting paints the banner over the whole page)
   - Product/gamepass/giftcard/dashboard/login references: see session
     7-11 log entries below
 - Implementation status (session 12 — data + 6 new components + page):
@@ -112,6 +129,103 @@ actual files and Git history — never trust previous AI claims.
   yet), or the remaining static pages (About us / Contact us / Bug
   bounty captures already pushed in session 11), or more dashboard
   sections reusing DashboardShell/sidebar
+
+- Implementation status (session 12b — 2 data files + 5 components + 3 pages):
+  - `data/aboutData.js` + `data/staticPagesData.js` — verbatim capture
+    copy for /about-us, /contact-us, /bug-bounty (the capture's dropped
+    apostrophes kept: "Lets team up", "Theyre", "Its a safe place");
+    every new asset URL verified HTTP 200
+    (scripts/verify_session12_assets.py): shared banner, ninja, El
+    Drago, bubble tail arrow, 2 founder portraits, 3 team photos, 4
+    purple "Own" icons
+  - `PageHero.js` — shared hero: full-width banner image (object-top) +
+    bottom-half fade gradient to page bg + optional breadcrumb +
+    centered H1; /about-us (breadcrumb + 72px H1) and /contact-us
+    (banner at 50% opacity + 48px H1 + the two help cards INSIDE the
+    hero, per the capture)
+  - `TrustpilotStars.js` (+ TrustpilotLogo) — star squares with white
+    star cutout: header row rgb(33,150,83), review stars rgb(0,182,122)
+    with halves via 50/50 linear-gradient (capture pattern);
+    `ReviewCard.js` — initials avatar (rgb(199,242,217) fill /
+    rgb(18,101,53) text), name + relative date, stars, title, body — 4
+    cards (the 4th repeats Triczyz per the capture) in the
+    overflow-x-auto row (min-w-248, h-296, soft shadow)
+  - `FaqAccordion.js` — about FAQ: ONLY "How to find the best deal on
+    Eldorado.gg?" carries an answer in the capture (expanded by
+    default, chevron rotate-180, clickable toggle); the other 12 rows
+    are static — no answers exist in any reference, nothing invented.
+    Bug-bounty Known Issues = static mode (6 collapsed rows, no bodies
+    in the capture)
+  - `TeamUpSection.js` — speech bubble (bold 14px; tail-arrow SVG sits
+    62px OUTSIDE the bubble per the capture, lg-only — below lg it
+    overflowed the viewport by exactly 22px) + El Drago mascot absolute
+    over the CTA grid's top-right cell (capture gridArea 1/2, painted
+    above the static card — quirky but verbatim) + 4 gradient CTA
+    cards with capture hrefs (careers.eldorado.gg / become-seller /
+    affiliates.eldorado.gg / influencer-program)
+  - `/about-us` — hero + "What is Eldorado.gg?" (mission/vision split
+    with hairline divider + 4 stats, border-r separators), "Shape the
+    way you play" (5 gradient cards in ONE row — grow basis-0, colored
+    icon tiles, one item each per capture), "We empower players to OWN"
+    (purple rgb(92,94,239) accent + 4 w-210 mini cards), "Meet the
+    team" (2 founders + verbatim bios + 3 square photos), "Our story"
+    timeline (border-l-2, yellow dots, year pills 2025→2011),
+    Trustpilot block, TeamUp, FAQ
+  - `/contact-us` — hero + H1 + two help cards: live chat (blue
+    rgb(177,203,255) icon tile, dark "Start chat" button — NO href in
+    the capture, Intercom on live — rendered as a button; hr + "You can
+    also contact us by email." link) and help articles (amber tile ==
+    guarantee token, light button → https://support.eldorado.gg/ per
+    the capture href)
+  - `/bug-bounty` — cream rgb(255,253,246) hero band + centered ninja
+    (197x182), H2 48, two intro sections (18px copy), 5 numbered steps
+    with mailto:bugs@eldorado.gg + bold $10/$5,000, Known Issues
+  - `globals.css` — new tokens: empower #5c5eef, tpgreen #219653,
+    tpstar #00b67a, avatarbg #c7f2d9, avatartext #126535, bountycream
+    #fffdf6, contactblue #b1cbff (stats-label gray reuses bloggray;
+    contact amber tile reuses guarantee)
+- Visual comparison status (screenshots `docs/ui-ux/screenshots/session12/`):
+  - No rendered capture exists for any of the three pages (thumbnails
+    are 68-byte placeholders) — verification is DOM-structural vs the
+    decoded snapshots + visual self-review at 1920 and 390:
+    /about-us hero pattern + fade, 5-card row, founders/photos,
+    timeline, review cards, Drago-over-CTA, FAQ expanded row all match
+    the captures; /contact-us two-card layout matches; /bug-bounty
+    cream band + ninja + steps + 6 rows match
+  - overflow=0 at 390/768/1024/1536/1920 on ALL THREE routes (after the
+    bubble-arrow lg-only fix); zero console errors everywhere
+  - Image-loading probe false-positives documented: lazy images below
+    the fold (footer payment icons — assetsdelivery.eldorado.gg,
+    confirmed HTTP 200 — and founder portraits) report as unloaded when
+    the probe never scrolls; NOT broken
+- Technical checks: `npm run build` SUCCESS (/, /blog, /login,
+  /dashboard/offers/Account, /efootball-accounts, product route,
+  /xbox-game-pass, /xbox-gift-card, /about-us, /contact-us,
+  /bug-bounty, /_not-found — all three new routes static); FAQ toggle
+  verified (aria-expanded true→false→true); mailto + Start chat +
+  support link verified in DOM
+- Known deviations / documented limitations:
+  - All three captures are 1920-only → below-lg behavior is a
+    documented approximation (fluid padding px-4, mission/vision and
+    founders stack, stats 2-col, play cards wrap, contact cards stack)
+  - Header uses the LOGGED-IN variant (profile avatar, no Log in
+    button) exactly like the dashboard/login captures — the capture's
+    account is signed in; MobileMenu still shows the logged-out menu
+    content (no logged-in mobile menu reference exists)
+  - FAQ answers (other than the captured one) and Known Issues bodies
+    do not exist in any reference — rows are static rather than
+    inventing content
+  - The contact "Start chat" button has no destination in the capture
+    (Intercom on live) — rendered as a no-op button; "contact us by
+    email" is a styled button too (no mailto in the capture)
+  - Footer "+ 15 more"/payment icons come from the shared Footer
+    (matches the capture footer)
+- Deployment: push a1dae56 (rebased over the user's concurrent blog +
+  capture commits without force) — Vercel verified after this doc
+  update (see section log entry)
+- Next exact action: on request — blog article page (no capture pushed
+  yet), more dashboard sections (orders/wallet) reusing DashboardShell,
+  or any new captures the user pushes
 
 ## Section log (append one block per completed section)
 
@@ -304,23 +418,54 @@ actual files and Git history — never trust previous AI claims.
   Hero + CategoryCards + TradingSection + GuaranteeCards + Footer (commit
   981a896); responsive pass 1536/390 (8bc7649); build verified (962cf86).
 
+- 2026-11-04 (session 12b) — Static content pages `/about-us`,
+  `/contact-us`, `/bug-bounty` from the user-pushed captures, per the
+  user's instruction "do everything remaining except the blog" (the
+  blog was the user's own session-12 work: 7593a8a → 3d2ab32 →
+  d5b98b7 → 219c24b → f861117, left untouched). Recovery: local tree
+  had file-mode-only changes (644→755, zero content) — silenced with
+  core.fileMode false; pulled 3d2ab32. Decode: about + bugbounty via
+  the html.to.design zlib decoder; contact is a NATIVE fig-make file
+  (zstd) — adapted the user's blog decoder (scripts/
+  decode_contact_capture.py). All 13 new asset URLs verified 200.
+  Mid-session discovery: the about capture's flattened DOM hoists all
+  sections into the hero wrapper; a live probe (banner img 1905x444
+  absolute, wrapper h=444) settled the bounded-hero structure — the
+  literal capture nesting rendered the banner over the entire page.
+  Fixes during verification: bubble arrow overflowed 22px below lg
+  (lg-only now), El Drago + tail arrow switched from lazy to eager
+  (lazy mid-page decorations missed the paint window in full-page
+  screenshots), 5 play cards forced to one row (grow basis-0), and a
+  stale `next start` process serving a pre-rebuild bundle produced
+  phantom overflow — always restart the server after rebuilding.
+  Verification: overflow=0 at 5 widths × 3 routes, zero console
+  errors, FAQ toggle + known-issues rows + mailto + Start chat
+  verified, visual self-review at 1920/390 (screenshots committed).
+  Pushed a1dae56 (fetch+rebase over the user's concurrent commits).
+
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 12
-- Hash of last pushed commit: session-12 chain `219c24b` (fix(ui): /blog
-  matches live comparison) on top of the concurrent-session verification
-  artifacts d5b98b7 and this session's decode 7593a8a + implementation
-  3d2ab32 checkpoints; push verified by empty `git log origin/main..HEAD`
-- Uncommitted changes: none expected after the doc commit
+- Last successful push timestamp: 2026-11-04, session 12b
+- Hash of last pushed commit: `a1dae56` (session-12b chain: a26544c
+  decoded snapshots → a1dae56 static pages implementation + doc;
+  rebased over the user's concurrent blog commits; push verified by
+  empty `git log origin/main..HEAD`)
+- Uncommitted changes: none expected after this doc commit
 - Unpushed commits: none
-- Push auth: the session-12 PAT is embedded in the origin URL in this
-  sandbox only (transient; never committed to the repo). Future sessions
-  without a token need a fine-grained PAT (Contents: read/write) or pushes
-  fail with "could not read Username for 'https://github.com'". The user
-  pushes captures concurrently — expect push rejections: fetch + rebase
-  (never force) and retry. GitHub also threw transient "remote rejected
-  (failure)" twice on 2026-11-04 — a plain retry after a few seconds
-  succeeded both times; check `git log origin/main..HEAD` after each push
+- Push auth: the session-11 PAT lives in the origin URL in this
+  sandbox only (transient; never committed). Future sessions without a
+  token need a fine-grained PAT (Contents: read/write) or pushes fail
+  with "could not read Username for 'https://github.com'". The user
+  pushes concurrently — expect push rejections: fetch + rebase (never
+  force) and retry.
+- Sandbox gotchas learned this session:
+  - `(cmd &)`-style servers DIE between tool calls; start long-lived
+    servers with the tool's run_in_background
+  - ALWAYS restart `next start` after `npm run build` — a running
+    server mixes old HTML with new chunk references and produces
+    phantom layout breakage
+  - Lazy images below the fold report "broken" in DOM probes that
+    never scroll — not real breakage
 - Recovery instructions:
   1. `git clone https://github.com/mehrshad0289/charjino-front-eldorado.git`
   2. Read this file; verify state per the protocol checklist (git status,
