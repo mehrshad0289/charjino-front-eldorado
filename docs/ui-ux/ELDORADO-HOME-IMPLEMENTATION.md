@@ -11,13 +11,15 @@ actual files and Git history — never trust previous AI claims.
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
   `/xbox-game-pass` + `/xbox-gift-card` + product-single
   `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
-  + `/login` + `/blog` + `/blog/[category]/[slug]` + `/about-us` +
-  `/contact-us` + `/bug-bounty` + search dropdown (session 13) +
-  `/pagelist` (session 14)
-- Current section: session 15 — BLOG ARTICLE live-verified pass COMPLETE.
-  The article page (implemented session 13, "visual verification pending")
-  is now pixel-calibrated against live eldorado.gg at 1920/1536/390 via
-  DOM probes + pixel scans + side-by-side strips; 6 fixes applied and
+  + `/login` + `/blog` + `/blog/[category]/[slug]` + `/blog/[category]`
+  (session 15 — 6 internal category archives) + `/about-us` +
+  `/contact-us` + `/bug-bounty` + search dropdown rebuilt per capture
+  (session 13) + `/pagelist` (session 14)
+- Current section: session 15 — TWO parallel blog passes, both pushed:
+  (a) BLOG ARTICLE live-verified pass (parallel session): the article
+  page (implemented session 13, "visual verification pending") is now
+  pixel-calibrated against live eldorado.gg at 1920/1536/390 via DOM
+  probes + pixel scans + side-by-side strips; 6 fixes applied and
   pushed. Every geometry target now matches live (h1/breadcrumb/section
   paddings exact at 390/768/1920; mutation-table row heights EXACT:
   201/217/206/241 = live; entry height 10862 vs live 10836 — was 617px
@@ -26,6 +28,13 @@ actual files and Git history — never trust previous AI claims.
   agreed with live probes, overruled where it contradicted them
   (stroke caret → filled triangle, mobile EN globe → EN+caret,
   header pt-0 → pt-108, table-layout fixed → auto, all probe-backed).
+  (b) CATEGORY ARCHIVES (this session): the missing internal
+  `/blog/[category]` routes (6 categories / 71 rows scraped live),
+  closing the last navigation gap in the blog section (article
+  breadcrumbs previously had to leave the clone for the live category
+  pages); geometry verified Δ0 vs live at 1920 + 390; verified and
+  pushed. Session 14 — review sweep (22 routes x 3 widths, all green) +
+  /pagelist; session 13 — SearchOverlay rebuilt from capture
 - Reference files:
   - Blog capture (session 12, user-pushed):
     `ui ux/blog/www_eldorado_gg_blog_1920w_390w_1536w_default.make`
@@ -339,8 +348,91 @@ actual files and Git history — never trust previous AI claims.
   - blog rows show the LIVE article titles; hrefs are internal routes
 - Deployment: push after this commit — Vercel verified below in
   Backup Status
-- Next exact action: on request — capture-driven work remains closed;
-  /pagelist should gain a row per new route as they land
+- Implementation status (session 15 — internal blog category archives
+  `/blog/[category]`):
+  - GAP CLOSED: the article breadcrumbs' category crumb pointed at the
+    LIVE eldorado.gg category URLs (deliberate stopgap from 41aff91 —
+    no internal page existed); the blog section was the only area whose
+    internal navigation still left the clone. Live category pages were
+    probed (no .make capture exists for them — the blog capture is the
+    1920 landing only) and rebuilt internally.
+  - DATA: `scripts/scrape_category_pages.js` walks the 6 live category
+    pages (steal-an-egg 18 rows, steal-a-brainrot-en 23, league-of-
+    legends 9, ea-fc-27-en 8, murder-mystery-2-en 7, insider-interviews
+    6 = 71 rows), clicking "Load more" until exhausted; each category =
+    h1 + featured (newest article: href/image/date/title/excerpt) +
+    rows (href/image/title/date/read). Raw JSON committed
+    (`scripts/category-data.json`); generated
+    `data/blogCategoriesData.js` via `scripts/generate_category_data.js`
+    (re-run after re-scraping). All row hrefs stay live URLs;
+    blogInternalHref() rewrites the 11 internal articles exactly like
+    the landing cards.
+  - LIVE ANATOMY (DOM-probed @1920 + @390): container 1240 (px-4 <640 /
+    px-6 ≥640); breadcrumb ul y=144 @1920 (main pt-30 + section pt-90 +
+    mt-6) / y=154 @390 (pt-108 <1024 like the article page + mt-4),
+    "Home" → /blog/ + current category as plain text, 14px gray +
+    article-style 28px chevron; H1 .games-cat-title interstate 900
+    uppercase 32/35.2 (24/26.4 <640) py-10px (rect 55/46) mt-4;
+    featured = newest article, same anatomy as the landing card (reused
+    BlogFeaturedArticle with a new `article` prop + `className` margin
+    override — landing unchanged), mt-8 / mt-6 <640; rows grid 2x560
+    gap-24 (1 col <640) in a px-6 lg:px-12 wrapper (row x=388 @1920 =
+    340+48, x=24 @390), mt-[88px] / mt-[154px] <640 (live .archive-box
+    spacing incl. the reserved mobile band above the list); row = flex
+    p-[10px], thumb box 140 (110 <640) radius 16 with 2px transparent
+    inset img 136/106 radius 14 object-cover — NO yellow border unlike
+    the landing card — white 20/26 700 title (18/23.4 <640), gray 16px
+    date | clock read (the live .item-game-cat purple label is
+    display:none on archives — omitted)
+  - LOAD MORE: live renders ALL rows with inline display:none on rows
+    9+ and a yellow button (123x42, radius 8, interstate 800 18px black
+    on rgb(255,183,0), 36 tall <640) revealing +8 per click; verified
+    live that when everything is visible the button's wrapper
+    (.reg-items-more) is display:none (insider/ea-fc probes + click
+    timeout) → `BlogCategoryGrid.js` (client) reproduces exactly: 8
+    initial, +8/click, button only while rows remain hidden
+  - ARTICLE BREADCRUMB: category crumb now routes to the internal
+    `/blog/[category]/` (live keeps its categoryHref value in the data)
+  - `/pagelist`: Blog group 12 → 18 rows (1 landing + 6 category
+    archives + 11 articles, categories generated from BLOG_CATEGORIES)
+- Visual comparison status (screenshots
+  `docs/ui-ux/screenshots/session15/`):
+  - GEOMETRY Δ0 vs live-probed numbers at BOTH mandatory widths
+    (scripts/verify_category_local.js, steal-an-egg): @1920 breadcrumb
+    y144 / H1 y180 h55 / featured 1190x358 y268 / grid y715 / row
+    560x160 img136 / Load more 123x42 y1491 — ALL Δ0; @390 breadcrumb
+    y154 / H1 y190 h46 / featured 356x365 y261 / grid y781 / row 342x152
+    img106 / Load more 123x36 — ALL Δ0
+  - side-by-side eyeball vs live-category-{1920,390}.png: header,
+    breadcrumb, H1, featured overlay (date/title/2-line excerpt), row
+    grid, Load more, BlogFooter all match; insider-interviews (6 rows,
+    no button) + /pagelist spot-checked
+  - interaction: Load more 8 → 18 in 2 clicks, button gone (live
+    equivalent: wrapper display:none)
+- Technical checks: build green (41 routes — 6 new static category
+  pages); sweep 56 route-width combos PASS (landing x5 widths, 11
+  articles + 6 categories x 1920/1536/390: HTTP 200, overflow 0, zero
+  console errors, zero broken images); overflow 0 + no errors on
+  category pages @1920/1536/390
+- Known deviations / documented limitations:
+  - No capture exists for the category pages — they follow the LIVE
+    site (project convention for capture-less pages, like the article
+    pages' live-scraped content)
+  - The live 155px empty band between featured and the row list <640
+    (.archive-box spacing) is reproduced as spacing; on live it likely
+    hosts a hidden switcher/ad slot
+  - Row data is a live snapshot (2026-11-04): new live articles after
+    this date are not in the dataset until a re-scrape + regenerate
+  - Rows beyond the 11 internal articles keep their live eldorado.gg
+    hrefs (same policy as the landing cards)
+- Deployment: push bc05eea chain — Vercel status recorded in Backup
+  Status below
+- Next exact action: on request — blog section is now fully
+  self-contained (landing + 6 category archives + 11 articles);
+  candidates are re-scraping categories when live adds articles, the
+  capture-less areas (cart, dashboard orders/wallet, game pages), or a
+  pixel pass on any page against live
+
 
 ## Session 15 (blog article live-verified pass)
 
@@ -699,6 +791,29 @@ actual files and Git history — never trust previous AI claims.
   spuriously. Verified overlay geometry/styles vs capture (see
   checkpoint), screenshots committed. Pushed 77a3b77.
 
+- 2026-11-04 (session 15) — internal blog category archives
+  `/blog/[category]` (user instruction: “complete all blog-related
+  items — the goal is the blog”). Recovery first: fresh sandbox, cloned
+  the repo, verified local == remote (41aff91, clean tree), read this
+  doc; found the blog complete EXCEPT the category archives (no
+  internal route; article breadcrumbs pointed at the live site).
+  Live-first workflow (no capture exists): DOM-probed
+  eldorado.gg/blog/steal-an-egg/ at 1920 + 390 (breadcrumb/H1/featured/
+  row/Load-more geometry, row HTML anatomy, hidden-rows mechanism,
+  mobile gap band), scraped all 6 categories (71 rows) with
+  Load-more-until-exhausted, generated the data module, implemented the
+  route + 2 components + BlogFeaturedArticle prop refactor + article
+  breadcrumb wiring + /pagelist rows. Three pushes, each verified by
+  empty origin/main..HEAD: checkpoint 75fdeb6 (probes + scraper +
+  dataset + refs, rebased over the user's concurrent fca82de), feature
+  bc05eea (implementation, rebased over 4f1cd1b), doc commit (this
+  one). Fixes during verification: route import depth ([category] is
+  one level above [slug] — 3 ups, not 4) and the missing `export` on
+  BLOG_CATEGORIES in the generator. Verification: geometry Δ0 vs live
+  at 1920 + 390 (25/25 metrics), Load more 8→18 in 2 clicks + button
+  gone (matches live's display:none wrapper when exhausted), sweep 56
+  route-width combos PASS, build green (41 routes).
+
 - 2026-11-04 (session 14) — full review sweep + /pagelist utility
   index (user request). Recovery: synced origin 981a850 first (user's
   parallel blog fixes); token live on origin. Review: 22 routes x 3
@@ -709,14 +824,18 @@ actual files and Git history — never trust previous AI claims.
 ## Backup Status
 
 - Last successful push timestamp: 2026-11-04, session 15
-- Hash of last pushed commit: session-15 chain — `41aff91` (article
-  responsive pass), `4f1cd1b` (entry td-img margin + card meta stack)
-  + this doc commit; each push rebased over the user's concurrent
-  commits (never force) and verified by empty
-  `git log origin/main..HEAD` immediately after every push
+- Hash of last pushed commit: session-15 chains (two parallel blog
+  passes) — article pass: `41aff91` + `4f1cd1b` + doc `e15cb2c`
+  (merged via the user's 6d99cce); category pass: `75fdeb6`
+  (checkpoint: probes + scraper + 6-category dataset + live refs) →
+  `bc05eea` (feature: /blog/[category] routes + components +
+  breadcrumb wiring + /pagelist +6) → this doc commit; every push
+  rebased/merged over the concurrent commits (never force) and
+  verified by empty `git log origin/main..HEAD` immediately after
+  every push
 - Uncommitted changes: none expected after this doc commit
 - Unpushed commits: none
-- Push auth: the session-12c PAT lives in the origin URL in this
+- Push auth: the session-15 PAT lives in the origin URL in this
   sandbox only (transient; never committed). Future sessions without a
   token need a fine-grained PAT (Contents: read/write) or pushes fail
   with "could not read Username for 'https://github.com'". The user
