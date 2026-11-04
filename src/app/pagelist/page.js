@@ -23,7 +23,10 @@ const PRODUCT_HREF = `/efootball-accounts/oa/${PRODUCT_ID}`;
 const GROUPS = [
   {
     label: "Main",
-    rows: [{ title: "Home", href: "/" }],
+    rows: [
+      { title: "Home", href: "/" },
+      { title: "Influencer Program", href: "/influencer-program" },
+    ],
   },
   {
     label: "Shop",
