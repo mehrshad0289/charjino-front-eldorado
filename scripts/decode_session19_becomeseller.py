@@ -15,6 +15,7 @@ import io
 import os
 import re
 import struct
+import sys
 import zipfile
 import zlib
 
@@ -22,9 +23,15 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 UIUX = os.path.join(HERE, "..", "ui ux")
 SNAPDIR = os.path.join(UIUX, "extracted", "snapshots")
 
-CAPTURE = os.path.join(
-    UIUX, "become-seller",
-    "www_eldorado_gg_become-seller_1920w_390w_1536w_default.make")
+CAPTURES = {
+    "becomeseller": os.path.join(
+        UIUX, "become-seller",
+        "www_eldorado_gg_become-seller_1920w_390w_1536w_default.make"),
+    # user-pushed 5e937e0 (session 19): checkout for a boosting order
+    "checkout": os.path.join(
+        UIUX, "checkout",
+        "www_eldorauantity_1_category_RequestedBoosting_gameId_142_1920w_390w_1536w_default.make"),
+}
 
 
 def try_zstd(data: bytes):
@@ -89,11 +96,16 @@ def scene_graph_text(fig: bytes, tag: str) -> str:
 
 def main() -> None:
     os.makedirs(SNAPDIR, exist_ok=True)
-    path = CAPTURE
-    print(f"=== becomeseller: {os.path.basename(path)}")
+    tags = sys.argv[1:] or list(CAPTURES)
+    for tag in tags:
+      decode_tag(tag)
+
+def decode_tag(tag: str) -> None:
+    path = CAPTURES[tag]
+    print(f"=== {tag}: {os.path.basename(path)}")
     z = zipfile.ZipFile(path)
     fig = z.read("canvas.fig")
-    text = scene_graph_text(fig, "becomeseller")
+    text = scene_graph_text(fig, tag)
     parts = text.split("import React from 'react';")
     print(f"  snapshot-parts: {len(parts) - 1}")
     made = 0
@@ -106,12 +118,12 @@ def main() -> None:
         dark = ("bg-[rgb(24,_24,_27)]" in p[:3000]
                 or "bg-headerdark" in p[:3000]
                 or '"#18181b"' in p[:3000])
-        fn = os.path.join(SNAPDIR, f"becomeseller-{width}px-{'dark' if dark else 'light'}-{made}.tsx")
+        fn = os.path.join(SNAPDIR, f"{tag}-{width}px-{'dark' if dark else 'light'}-{made}.tsx")
         with open(fn, "w") as f:
             f.write("import React from 'react';" + p)
         print(f"  {fn}  ({len(p)} chars)")
     if not made:
-        raw = os.path.join("/tmp", "becomeseller_scene.txt")
+        raw = os.path.join("/tmp", f"{tag}_scene.txt")
         with open(raw, "w") as f:
             f.write(text)
         print(f"  no snapshots found; raw text saved to {raw}")
