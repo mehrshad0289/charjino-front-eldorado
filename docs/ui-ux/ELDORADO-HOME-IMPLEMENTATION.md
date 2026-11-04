@@ -291,7 +291,11 @@ actual files and Git history — never trust previous AI claims.
   - The capture's home content (Brainrot hero, Recently viewed,
     popular link sections) was already implemented in sessions 1-6
     from the same reference; not re-verified pixel-wise this session
-- Deployment: push 77a3b77 — Vercel re-verified after this doc update
+- Deployment: VERIFIED — push 77a3b77; Vercel serves the new build
+  (dropinput token present in the live CSS chunk) and all 9 routes
+  return 200 (/, /blog, /login, /about-us, /contact-us, /bug-bounty,
+  /efootball-accounts, /xbox-game-pass, /xbox-gift-card,
+  /dashboard/offers/Account)
 - Next exact action: on request — nothing capture-driven remains;
   candidates are the captures the user has not pushed yet (cart,
   dashboard orders/wallet, game pages) or a pixel pass on any page
@@ -575,11 +579,11 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 12c
-- Hash of last pushed commit: the session-12c chain — `1fe7994`
-  (/blog live-verified pixel pass + parallel-session merge, rebased
-  over origin session-12/12b) + this doc commit; push verified by
-  empty `git log origin/main..HEAD` after every push
+- Last successful push timestamp: 2026-11-04, session 13
+- Hash of last pushed commit: `77a3b77` (SearchOverlay per capture) +
+  this doc commit; push verified by empty `git log origin/main..HEAD`
+  after every push; Vercel verified (dropinput token in live CSS, all
+  9 routes 200)
 - Uncommitted changes: none expected after this doc commit
 - Unpushed commits: none
 - Push auth: the session-12c PAT lives in the origin URL in this
