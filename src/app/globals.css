@@ -42,6 +42,18 @@
   --color-hlteal: #00e4c9; /* rgb(0,228,201) Tutorials tile */
   --color-hlamber: #f4b400; /* rgb(244,180,0) News tile */
 
+  /* Static content pages (about-us / contact-us / bug-bounty, session 12 —
+     their .make captures) */
+  --color-empower: #5c5eef; /* rgb(92,94,239) purple accent (mission/OWN/Own your …) */
+  --color-tpgreen: #219653; /* rgb(33,150,83) Trustpilot header star green */
+  --color-tpstar: #00b67a; /* rgb(0,182,122) review star green */
+  --color-avatarbg: #c7f2d9; /* rgb(199,242,217) review avatar fill */
+  --color-avatartext: #126535; /* rgb(18,101,53) review avatar initials */
+  --color-bountycream: #fffdf6; /* rgb(255,253,246) bug bounty hero band */
+  --color-contactblue: #b1cbff; /* rgb(177,203,255) contact chat icon tile */
+  /* contact help icon tile rgb(252,231,182) == guarantee token;
+     stats label gray rgb(138,134,157) == bloggray token */
+
   --font-sans: var(--font-lato), "Lato", sans-serif;
 }
 
