@@ -32,6 +32,16 @@
   --color-filtertext: #626362; /* rgb(98,99,98) shop filter/count text */
   --color-glowyellow: #fea900; /* rgb(254,169,0) active tab glow gradient base */
 
+  /* Blog landing page (/blog, session 12 — blog .make capture) */
+  --color-blogpage: #0e0d12; /* rgb(14,13,18) blog page background */
+  --color-blogborder: #2a2a30; /* rgb(42,42,48) blog header bottom hairline */
+  --color-blogyellow: #ffb600; /* rgb(255,182,0) Games/CTA yellow on blog */
+  --color-blogpurple: #987efb; /* rgb(152,126,251) Codes/category purple */
+  --color-bloggray: #8a869d; /* rgb(138,134,157) blog meta/excerpt gray */
+  --color-hlgreen: #c1f07c; /* rgb(193,240,124) Redeem codes tile */
+  --color-hlteal: #00e4c9; /* rgb(0,228,201) Tutorials tile */
+  --color-hlamber: #f4b400; /* rgb(244,180,0) News tile */
+
   --font-sans: var(--font-lato), "Lato", sans-serif;
 }
 
@@ -39,6 +49,27 @@ body {
   background: var(--color-page);
   color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+/* interstate — blog headings/buttons font (800/900 woff2 URLs verbatim from
+   the blog capture's font-face appendix; files live on the same eldorado
+   storage bucket as every capture asset). Lato fallback keeps rendering
+   safe if the bucket is unreachable. */
+@font-face {
+  font-display: swap;
+  font-family: "interstate";
+  font-style: normal;
+  font-weight: 800;
+  src: url("https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F0bcc43503b1d049698c0fe348bb917f5235bf744?generation=1793788934584500&alt=media")
+    format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "interstate";
+  font-style: normal;
+  font-weight: 900;
+  src: url("https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F1ec95877faca2ce6ccd97176c85c720c8ab69ecb?generation=1793788934576235&alt=media")
+    format("woff2");
 }
 
 /* Hero heading text shadow (eldorado uses --shadow-text-hero) */
