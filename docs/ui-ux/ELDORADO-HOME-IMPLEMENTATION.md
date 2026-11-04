@@ -78,7 +78,9 @@ actual files and Git history — never trust previous AI claims.
 - Technical checks: `npm run build` SUCCESS (/, /efootball-accounts,
   /xbox-gift-card, /_not-found); route returns 200; interactions verified
   headless (see above)
-- Deployment: Vercel check pending at time of writing (push 7850310)
+- Deployment: VERIFIED — Vercel serves `/xbox-gift-card` (HTTP 200; HTML
+  contains "Buy now", "How to redeem Xbox gift card?", "Trusted by
+  thousands of players worldwide"), corresponding to push 45c1d86
 - Next exact action: on request — gift card amount→offers step, other
   gift card brands reusing these components, or aligning eFootball
   GameBanner underline to the live yellow
