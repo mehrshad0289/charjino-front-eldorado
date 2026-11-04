@@ -23,6 +23,13 @@ const ICONS = {
       <path d="M9.5 8h5M9.5 11.5h5" {...stroke} />
     </svg>
   ),
+  /* Session 16: /dashboard/loyalty header icon — same empty-glyph
+     convention; star SVG mirroring the sidebar's loyalty icon. */
+  loyalty: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="m12 4 2.3 4.9 5.2.6-3.9 3.6 1.1 5.2L12 15.6l-4.7 2.7 1.1-5.2L4.5 9.5l5.2-.6L12 4Z" {...stroke} />
+    </svg>
+  ),
 };
 
 /* Dashboard page title row: yellow icon + H1 (semibold 30/36) + dark
