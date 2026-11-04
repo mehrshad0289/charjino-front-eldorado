@@ -11,7 +11,9 @@ actual files and Git history — never trust previous AI claims.
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
   `/xbox-game-pass` + `/xbox-gift-card` + `/amazon-prime` +
   `/playstation-plus` + `/cod-points` + support article
-  `/support/articles/8408997-seller-rules` (session 24) + product-single
+  `/support/articles/8408997-seller-rules` (session 24) +
+  `/sab-values/garama-and-madundung` (Roblox items price history,
+  session 24 tail) + product-single
   `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
   + `/login` + `/blog` + `/blog/[category]/[slug]` + `/blog/[category]`
   + `/about-us` + `/contact-us` + `/bug-bounty` + `/pagelist` +
@@ -126,7 +128,27 @@ actual files and Git history — never trust previous AI claims.
   toggles, sidebar collapses); full-site sweep re-run on 40 routes × 2
   widths (80 page-loads): ALL PASS; build green (72 pages).
   Screenshots session24 (local 1920/1536/390 + live 1920/390 refs +
-  cmp composites). Pushes: 111bc77 (link fixes) → 35f3742 (decode) →
+  cmp composites).
+  4) SESSION-24 TAIL (after the parallel merges): the 5th capture
+  implemented — `/sab-values/garama-and-madundung` (Roblox items price
+  history, robloxprice-1920px-light-{1,2}): robloxPriceHistoryData +
+  page — 465px artwork, 36px icon + 30px h1 + subtitle, filter card
+  (Game chip scroller w/ 24px icons, Steal a Brainrot active;
+  Brainrot/Mutations comboboxes), price card (104px outlined thumb,
+  0.60 lowest + dark Buy now + blue TradeShield row), 3-col stats grid
+  (90-day change green 2.17% / high 0.55 / low 0.04; up-arrow SVG
+  stand-in for the empty icomoon glyph), chart card = the capture's
+  own pre-rendered 1112x250 PNG, SEO h1 + verbatim paragraph, NO
+  ChatBubble per capture; pagelist +1; sweep 41 routes x 2 = ALL PASS
+  (82 loads), build green 73 pages. Vercel: /amazon-prime,
+  /playstation-plus, /cod-points and the support article all serve 200
+  after the deploy cycle (~17 min); /sab-values verified local 200 and
+  pending its deploy window at wrap-up. Doc hygiene: the stray
+  session-22 merge-conflict markers (<<<<<<< HEAD / ======= /
+  >>>>>>> f0b896c) removed — both log entries kept, ONE Backup Status;
+  sweep route list deduped to the clean 41-route set after the
+  parallel session-25 added the same routes.
+  Pushes: 111bc77 (link fixes) → 35f3742 (decode) →
   6a13f12/ab9bcf9/ed44a35 (analysis/components/pages) → 8b6d84c
   (comparison round) → f67a538 (seller-rules decode) → 467467f
   (support page) → 1acab47 (route rename); rebased over the parallel
@@ -1642,9 +1664,12 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-05, session 25 (gamepass
-  capture-exact card-anatomy round; this doc commit is the last push)
-- Hash of last pushed commit: this docs commit, preceded by the
+- Last successful push timestamp: 2026-11-05, session 24 tail
+  (Roblox price-history page + doc; this doc commit is the last push;
+  the session-25 gamepass round is merged in the same chain)
+- Hash of last pushed commit: this docs commit, preceded by
+  `0a0d8b9` (sweep-list cleanup), `4912f12`/`3847ae4` (rebase
+  residue cleanup), `56dce18` (sab-values page), and earlier the
   session-24 doc commit, `2daa1b4` (merge of the parallel session-25
   Seller-rules article), `32373be` (gamepass capture-exact fixes),
   `316668a` (merge of the parallel session-24 comparison round),
