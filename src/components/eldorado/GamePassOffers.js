@@ -13,7 +13,11 @@ import {
    Mobile (live @390): white card — seller block left, strike + discounted
    price + clock delivery right, then a full-width Delivery instructions
    row and a full-width outlined Buy now button. Pagination: arrows + page
-   buttons (md+) + "Go to page" single-select dropdown. */
+   buttons (md+) + "Go to page" single-select dropdown.
+   Session 24: data-driven via props (sellers/count/pages/numbered) so the
+   prime/cod pages reuse it; numbered=false renders the prime capture's
+   arrows+dropdown-only pagination. Reviews link: blue rgb(45,94,173)
+   underlined (verbatim in the gamepass AND prime/cod captures). */
 
 function VerifiedBadge({ size = 16 }) {
   return (
@@ -98,7 +102,7 @@ function SellerBlock({ seller }) {
             <ThumbUpIcon size={18} />
             {seller.rating}
           </span>
-          <button type="button" className="underline decoration-solid">
+          <button type="button" className="text-[rgb(45,_94,_173)] underline decoration-solid">
             {seller.reviews} reviews
           </button>
         </div>
@@ -177,18 +181,23 @@ function OfferRow({ seller }) {
   );
 }
 
-export default function GamePassOffers() {
+export default function GamePassOffers({
+  sellers = GAME_PASS_OTHER_SELLERS,
+  count = GAME_PASS_OTHER_SELLERS_COUNT,
+  pages: pageCount = GAME_PASS_OTHER_SELLERS_PAGES,
+  numbered = true,
+}) {
   const [page, setPage] = useState(1);
   const [goOpen, setGoOpen] = useState(false);
-  const pages = Array.from({ length: GAME_PASS_OTHER_SELLERS_PAGES }, (_, i) => i + 1);
+  const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
 
   return (
     <div className="w-full">
       <div className="mb-3 text-[20px] font-bold leading-[30px]">
-        Other sellers ({GAME_PASS_OTHER_SELLERS_COUNT})
+        Other sellers ({count})
       </div>
       <div className="flex flex-col gap-3">
-        {GAME_PASS_OTHER_SELLERS.map((s) => (
+        {sellers.map((s) => (
           <OfferRow key={s.name} seller={s} />
         ))}
       </div>
@@ -205,19 +214,20 @@ export default function GamePassOffers() {
         >
           <Arrow dir="left" />
         </button>
-        {pages.map((p) => (
-          <button
-            key={p}
-            type="button"
-            aria-pressed={page === p}
-            onClick={() => setPage(p)}
-            className={`hidden h-[42px] min-w-[42px] items-center justify-center rounded-sm px-0.5 text-[14px] leading-[19.6px] md:flex ${
-              p === page ? "bg-brand font-bold" : "bg-inputgray"
-            }`}
-          >
-            {p}
-          </button>
-        ))}
+        {numbered &&
+          pages.map((p) => (
+            <button
+              key={p}
+              type="button"
+              aria-pressed={page === p}
+              onClick={() => setPage(p)}
+              className={`hidden h-[42px] min-w-[42px] items-center justify-center rounded-sm px-0.5 text-[14px] leading-[19.6px] md:flex ${
+                p === page ? "bg-brand font-bold" : "bg-inputgray"
+              }`}
+            >
+              {p}
+            </button>
+          ))}
         <button
           type="button"
           aria-label="Next page"
