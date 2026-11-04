@@ -102,8 +102,12 @@ actual files and Git history — never trust previous AI claims.
   /xbox-game-pass, /xbox-gift-card, /_not-found — both new routes
   static); overflow=0 both routes at 5 widths; interactions + zero
   console errors (scripts/verify_dashboard.js)
-- Deployment: pending verification for push 0584d04 (rebased over the
-  user's 1d4ab0c + 590903b capture commits without force)
+- Deployment: VERIFIED — Vercel serves /dashboard/offers/Account (HTTP
+  200; HTML contains "NewFloat-0una", "Want to pause all your offers",
+  "Nothing found", "Search offers") and /login (200; "Sign in with
+  Google"/Apple/Facebook, "With existing account", "Create an account"),
+  corresponding to push 0584d04; /, /efootball-accounts, product route,
+  /xbox-game-pass and /xbox-gift-card re-verified 200 after the deploy
 - Next exact action: on request — the three newly pushed static content
   captures (About us / Contact us / Bug bounty, decode with
   `ui ux/extracted/fig_reassemble.py` + scripts/decode_new_captures.py
