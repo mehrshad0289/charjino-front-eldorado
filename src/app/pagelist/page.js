@@ -63,6 +63,8 @@ const GROUPS = [
       { title: "Bug Bounty", href: "/bug-bounty" },
       { title: "Privacy Policy", href: "/privacy-policy" },
       { title: "Terms of Service", href: "/terms-of-service" },
+      { title: "DMCA", href: "/dmca" },
+      { title: "DSA", href: "/dsa" },
     ],
   },
   {
