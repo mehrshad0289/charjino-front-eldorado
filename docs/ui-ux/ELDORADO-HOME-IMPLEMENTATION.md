@@ -9,84 +9,129 @@ actual files and Git history — never trust previous AI claims.
 ## Current Checkpoint
 
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
-  Xbox gift card shop `/xbox-gift-card` (NEW session 7 — desktop per
-  giftcard .make capture, mobile per LIVE eldorado.gg @390)
-- Current section: session 8 — gift card page RESPONSIVE PASS COMPLETE
-  (tablet band 640-1023 fixed to the live mobile-style layout, desktop
-  switches moved md→lg, verified at 390/768/1024/1536/1920, pushed)
+  `/xbox-gift-card` + Xbox Game Pass shop `/xbox-game-pass` (NEW session 9 —
+  desktop per gamepass .make capture, mobile/tablet per LIVE eldorado.gg
+  @390/768/1024)
+- Current section: session 9 — Xbox Game Pass page COMPLETE (component-based
+  reuse of the gift card system, responsive 390→1920, verified and pushed)
 - Reference files:
-  - Desktop capture: `ui ux/shop-giftcard/www_eldorado_gg_xbox-gift-card_v_103_1920w_390w_1536w_default.make`
-    → decoded snapshots `ui ux/extracted/snapshots/giftcard-1920px-light-1.tsx`
-    (+ `-2.tsx`, byte-equivalent duplicate). 1920-only, same as all captures
-  - Live reference (session 7): full-page screenshots
-    `ui ux/extracted/snapshots/live-giftcard-390.png` and
-    `live-giftcard-1920.png`, captured from
-    `https://www.eldorado.gg/xbox-gift-card/v/103` (URL works without suffix)
-  - FAQ answers scraped live 2026-11-04 from the same URL (collapsed/empty
-    in the capture); stored in `src/components/eldorado/data/giftCardData.js`
-- Implementation status (session 7 — 10 new components + page):
-  - `data/giftCardData.js` — 33 amounts (capture order + "From" prices),
-    5 regions, 6 FAQ Q&A (real answers), process steps, trust rows, asset URLs
-    (all 14 capture GCS assets verified HTTP 200 before use)
-  - `GiftCardBanner.js` — Xbox strip: desktop 1fr_2fr_1fr grid h-14, mobile
-    stacked name row + tabs row (live @390); tabs Accounts/Game Pass point at
-    the capture's own eldorado URLs, active "Gift cards" → `/xbox-gift-card`
-  - `GiftCardRegionStep.js` — gradient-border card (yellow→pink), badge 1,
-    interactive single-select dropdown (captured closed; regions match the
-    currencies sold — documented assumption)
-  - `GiftCardAmountGrid.js` — desktop: open 4-col grid, 33 vertical white
-    cards, badge inline in title row (capture); mobile: white container card,
-    gray horizontal rows, first 8 + "View more" toggle (live @390); click
-    selects a card (subtle ring — no selection design exists in references)
-  - `GiftCardOfferCard.js` — sidebar: Gift Card header, dark Buy now,
-    Money-back/Fast checkout (+Apple Pay/Google Pay/PayPal badges)/24-7 rows;
-    icomoon glyphs replaced with inline SVGs (project pattern)
-  - `GiftCardReviews.js` — "Trusted by thousands…" + white card
-  - `GiftCardProcessSteps.js` — 3 illustrated steps (capture SVGs)
-  - `GiftCardFaq.js` — accordion, left-aligned title on mobile, centered on
-    desktop; first answer is the numbered redeem guide
-  - `GiftCardTrustCard.js` — "Why trust Eldorado?" 2-col checklist
-  - `GiftCardSeoText.js` — h1 + 4.9/14,600 badge + capture copy verbatim
-  - `page.js` — HeaderBar + CategoryNav("Gift cards") + 465px artwork
-    backdrop (desktop only, per live mobile) + all sections + Footer + ChatBubble
-- Visual comparison status:
-  - Desktop 1920 vs live capture: banner strip, steps, sidebar, grid,
-    reviews, process, FAQ, trust, SEO all match structure/colors/spacing;
-    screenshot diff done against live-giftcard-1920.png slices
-  - Mobile 390 vs live @390: header → Xbox strip → step 1 → amount card →
-    offer card → reviews → process → FAQ → trust match the live flow
-    section by section
-  - No horizontal overflow: scrollWidth == viewport at 1920 / 1536 / 390
-  - Interactions verified headless: region dropdown opens (5 options),
-    FAQ toggles with real answers, amount select sets state, mobile
-    "View more" expands 8 → 33 rows
+  - Desktop capture (session 9): `ui ux/shop-giftcart-gamepass-xbox/www_eldorado_gg_xbox-game-pass_t_103_attribute_value_id_xbox-ultimate-1-month_te_v0_Europe_1920w_390w_1536w_default.make`
+    (user-pushed commit 6bbe8f2) → decoded `ui ux/extracted/snapshots/gamepass-1920px-light-1.tsx`
+    (+ `-2.tsx`). 1920-only like all captures
+  - Live references (session 9): full-page screenshots
+    `ui ux/extracted/snapshots/live-gamepass-{390,768,1024,1536,1920}.png`
+    captured from `https://www.eldorado.gg/xbox-game-pass/t/103?attribute_value_id=xbox-ultimate-1-month`
+  - Next-step reference (user-pushed commit dd741ad, decoded, NOT implemented):
+    `ui ux/product-single/www_eldorado_gg_efootball-accounts_oa_...make` →
+    `snapshots/product-1920px-light-{1,2}.tsx` (product single page)
+  - Gift card references (sessions 7-8): see session 7/8 log entries below
+  - FAQ answers scraped live 2026-11-04 from the gamepass URL (collapsed/
+    empty in the capture); stored in `src/components/eldorado/data/gamePassData.js`
+- Implementation status (session 9 — 6 new components + page + refactors):
+  - `data/gamePassData.js` — 19 subscription variants (capture order, EUR
+    prices + discount badges verbatim), 4 region chips (Europe default per
+    capture), featured "Popular" offer (ThorStore), 6 "Other sellers" rows
+    (2 pages), 9 FAQ Q&A (live-scraped), SEO copy verbatim, asset URLs
+  - `GamePassRegionChips.js` — white card "Game region: {region}" +
+    single-select chips (selected: 2px yellow border on 16% tint, live
+    probed class list)
+  - `GamePassAmountGrid.js` — "Amount: {variant}" + variant cards (img,
+    name, strike, green price + badge, ⓘ); below lg: 136px horizontal
+    scroller auto-scrolled to the selected card; lg: 3-col grid;
+    xl: 4-col grid (capture); selected = yellow tint + inset outline +
+    Popular ribbon
+  - `GamePassFeaturedOffer.js` — Popular ribbon (lg only, live), Delivery
+    time / Delivery instructions rows, Total block (strike, badge, green
+    24px), dark Buy now (price in label below lg), 3 reassurance rows
+  - `GamePassSellerCard.js` — "Seller" heading (inside card on desktop per
+    capture, outside on mobile per live @390), avatar, verified badge,
+    rating + reviews link
+  - `GamePassOffers.js` — "Other sellers (8)" + rows: below lg stacked
+    cards (seller | strike/badge/price/clock-delivery, instructions row,
+    full-width outline Buy now), lg: capture's
+    `grid-cols-[0.7fr_0.3fr_120px_auto_auto]`; pagination (arrows, page
+    buttons md+, "Go to page" single-select dropdown, interactive state)
+  - `TrustRows.js` — NEW shared module: Shield/Bolt/Support icons + row
+    layout extracted from GiftCardOfferCard (now imported by both offer
+    cards)
+  - Refactors for reuse (gift card page behavior unchanged):
+    `GiftCardBanner` gained `active` + `iconAlt` props (Game Pass tab now
+    → `/xbox-game-pass`), `GiftCardFaq` gained `items` prop,
+    `GiftCardSeoText` gained `title/orders/blocks` props + the capture's
+    66px yellow star with overlaid 4.9
+  - `app/xbox-game-pass/page.js` — HeaderBar + CategoryNav + banner
+    (active "Game Pass") + steps/offers two-col at lg (sidebar 400px) +
+    reviews + process + FAQ(gamepass items) + trust + SEO(gamepass blocks)
+    + Footer + ChatBubble. NO artwork backdrop, NO quantity picker (both
+    capture-only; live probed without them — live is the design authority)
+- Visual comparison status (side-by-side strips local|live):
+  - 1920 + 1536: banner, region chips, 4-col variant grid with selected
+    Popular card, disclaimer inside the white card, sidebar (featured +
+    seller), other-sellers rows, pagination, reviews, process, FAQ, trust,
+    SEO, footer all match structure/colors/spacing
+  - 1024: live switches to 3-col grid + sidebar — matched
+  - 768: live keeps the mobile flow (scroller, stacked offer cards) —
+    matched after moving the switches md→lg
+  - 390: stacked flow, scroller opens on the selected variant (like live),
+    Popular ribbon only on the variant card, Seller heading outside
+  - No horizontal overflow: scrollWidth == viewport at
+    390/768/1024/1536/1920
+  - Interactions verified headless: region chip select, variant select
+    (label updates), FAQ accordion with real answers, Go-to-page dropdown +
+    page state, banner active tab; zero console errors at all widths
 - Known deviations / documented limitations:
-  - Active tab underline is BRAND YELLOW per the LIVE site (the .make
-    capture shows white) — live site is the design authority; eFootball
-    GameBanner still uses white and can be aligned later
-  - Reviews card: the live Trustpilot carousel renders EMPTY in both
-    references; the attribution line visible on live mobile ("Rated 4.4 of 5
-    based on 289,757 reviews on Trustpilot") is used as card content on all
-    breakpoints instead of shipping an empty white box
-  - Amount "From" prices use the capture's EUR values ("From 5.09"), not the
-    live geo-localized HK$ values; live site currently sells "300 USD" where
-    the capture has "100 USD" — capture followed
-  - Region dropdown options + amount selection ring: no open/selected state
-    exists in any reference — reasonable defaults, documented
-  - Previous chat link (chat.z.ai/s/cdf45798…) is NOT accessible (landing
-    page only); nothing recoverable from it — repo/doc remained the source
-    of truth, per protocol
+  - Prices use the capture's EUR values (e.g. "8.25", "From" rows without
+    currency prefix), not the live geo-localized HK$ — same policy as the
+    gift card page (session 7)
+  - "Other sellers (8)" per the capture; the live page currently shows 11
+    with different sellers — capture followed (design reference file)
+  - Delivery instructions rows are static (caret present; no open state
+    exists in any reference — no copy invented)
+  - Reviews card keeps the session-7 policy: attribution line as card
+    content (live desktop carousel renders empty)
+  - Region chip default "Europe" per the capture (live geo-defaults to
+    "Global" from this sandbox)
+  - Live's exact tablet switch is ~960-1024 (custom standard-grid);
+    standard lg (1024) used — 960-1023 shows the mobile-style flow, same
+    documented approximation as session 8
+  - Featured-offer Buy now label shows the price below lg ("Buy now
+    (8.25)") per live mobile; desktop shows plain "Buy now"
 - Technical checks: `npm run build` SUCCESS (/, /efootball-accounts,
-  /xbox-gift-card, /_not-found); route returns 200; interactions verified
-  headless (see above)
-- Deployment: VERIFIED — Vercel serves `/xbox-gift-card` (HTTP 200; HTML
-  contains "Buy now", "How to redeem Xbox gift card?", "Trusted by
-  thousands of players worldwide"), corresponding to push 45c1d86
-- Next exact action: on request — gift card amount→offers step, other
-  gift card brands reusing these components, or aligning eFootball
-  GameBanner underline to the live yellow
+  /xbox-game-pass, /xbox-gift-card, /_not-found); route returns 200;
+  interactions verified headless (see above)
+- Deployment: pending verification for session 9 pushes (687aac2 →
+  fd435a2); session-8 deployment was verified earlier
+- Next exact action: on request — product-single page (decoded reference
+  already in `snapshots/product-1920px-light-*.tsx`), gift card
+  amount→offers step, or other gift card brands reusing these components
 
 ## Section log (append one block per completed section)
+
+- 2026-11-04 (session 9) — Xbox Game Pass shop page (`/xbox-game-pass`),
+  continuing the user's commit 6bbe8f2 which added the gamepass .make
+  capture. Recovery first: cloned the repo, verified local == remote
+  (session-8 tip ba34276 + user commit 6bbe8f2 on top); mid-session the
+  user pushed dd741ad (product-single capture) — rebased onto it without
+  force, verified remote after every push. Decoded the capture
+  (94b99fd), captured the LIVE page at 390/768/1024/1536/1920 (53f6ac5),
+  decoded the user-pushed product-single capture for the NEXT step
+  (f0a8173), data file (cf0684a), implementation (687aac2), live-compare
+  fixes (0dc788b), tablet-band fixes (fd435a2). Fix rounds driven by
+  side-by-side strips: Popular ribbon desktop-only on the featured card +
+  Seller heading outside the card on mobile + scroller opens on the
+  selected variant + SEO badge 66px yellow star (shared component, also
+  corrects the gift card page per its own capture); then the tablet band
+  768-1023 keeps the mobile flow (horizontal scroller + stacked offer
+  cards) with grid/row switches at lg, matching live @768 vs @1024 and
+  the session-8 standard-grid finding. Previous chat link re-checked this
+  session: still NOT accessible (landing page only) — nothing to recover.
+  Verification: overflow=0 at 390/768/1024/1536/1920, zero console
+  errors, interactions green (region chips, variant select + label,
+  FAQ accordion with live answers, Go-to-page dropdown + page state,
+  banner active tab), `next build` green with the new route. Known
+  deviations documented in the checkpoint above (EUR capture prices,
+  "Other sellers (8)", static Delivery instructions rows, reviews
+  attribution policy, Europe default region, lg switch approximation).
 
 - 2026-11-04 (session 8) — Gift card page responsive pass + shared header.
   The user reported 768-1023 rendered broken (squeezed 59px amount cards).
@@ -167,12 +212,13 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 8
-- Hash of last pushed commit: `b38a59b` (chain this session: f9f7b62 →
-  b38a59b, on top of session-7 tip 8cb58f5; every push verified by empty
-  `git log origin/main..HEAD`)
-- Uncommitted changes: caret icon fixes + session-8 screenshots + this doc
-  update (ship in the session-8 final commit)
+- Last successful push timestamp: 2026-11-04, session 9
+- Hash of last pushed commit: `fd435a2` (chain this session: 94b99fd →
+  53f6ac5 → f0a8173 → cf0684a → 687aac2 → 0dc788b → fd435a2, on top of the
+  user's dd741ad/6bbe8f2; every push verified by empty
+  `git log origin/main..HEAD` + ls-remote)
+- Uncommitted changes: this doc update (ships in the session-9 final
+  commit) + session-9 screenshots
 - Unpushed commits: none
 - Push auth: the user-supplied PAT is embedded in the origin URL in this
   sandbox only (transient; never committed to the repo). Future sessions
