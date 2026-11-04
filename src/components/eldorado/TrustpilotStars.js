@@ -28,7 +28,10 @@ export default function TrustpilotStars({
           style={{
             width: size,
             height: size,
-            backgroundImage: s.half
+            /* full stars need background (a color), NOT backgroundImage —
+               a raw color string in backgroundImage is invalid CSS and
+               renders the square invisible (caught on /checkout) */
+            background: s.half
               ? `linear-gradient(90deg, ${c.green} 50%, ${c.base} 50%)`
               : c.green,
           }}
