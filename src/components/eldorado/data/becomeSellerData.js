@@ -72,8 +72,9 @@ export const BS_WHY = [
 ];
 
 /* "Tools to power your next sale" cards — icon chips are icomoon glyphs
-   in the capture (no SVG asset) → substituted with inline SVG paths
-   (documented assumption, project convention). Chip colors verbatim.
+   in the capture (no SVG asset) → substituted with inline SVG paths;
+   icon SHAPES probed from live @1920 (gear / tray-up / rocket / star).
+   Chip colors verbatim.
    Cards are TRANSPARENT on live (probe: backgroundColor rgba(0,0,0,0),
    radius 16px) — the capture's missing bg class is correct, not a
    decode artifact. */
@@ -86,7 +87,7 @@ export const BS_TOOLS = [
   },
   {
     title: "Bulk Uploads",
-    desc: "Upload hundreds of offers in seconds import, edit, publish fast.",
+    desc: "Upload hundreds of offers in seconds— import, edit, publish fast.",
     chip: "rgb(209, 240, 143)",
     icon: "upload",
   },
@@ -106,7 +107,10 @@ export const BS_TOOLS = [
 
 /* Seller FAQs — questions verbatim from the capture; answers scraped
    from live 2026-11-04. Answer 4 = rich blocks (h/p pairs) exactly as
-   the live article renders it. Apostrophes are the live ’ characters. */
+   the live article renders it. Apostrophes are the live ’ characters.
+   Decode dropped em dashes in TWO one-liners, restored from live:
+   answer 1 ("offer — it only takes") and the CTA band sub
+   ("get paid — all"); Bulk Uploads carries "seconds— import". */
 export const BS_FAQS = [
   {
     q: "How do I start selling on Eldorado?",

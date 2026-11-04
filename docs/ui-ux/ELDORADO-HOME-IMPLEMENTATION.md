@@ -17,70 +17,39 @@ actual files and Git history — never trust previous AI claims.
   GiftCard/Currency/TopUp, orders Purchased/Sold, Loyalty, Feedback,
   Wallet, Messages, Settings) + `/users/NewFloat-0una[/shop|/reviews|
   /about]` + `/privacy-policy` + `/terms-of-service` + `/dmca` + `/dsa`
-  + `/roblox-items` (session 18) + `/become-seller` (session 19 — IN
-  PROGRESS)
-- Current section: session 19 — RECOVERY + the new user-pushed
-  become-seller capture. Recovery (fresh sandbox, cloned at 5426fe6 →
-  pulled 02e63b4): every session-18 commit verified present on origin
-  (270cdbd decode, 05620a1 GiftCard, a48d275 settings, 8bf9163 profiles,
-  5426fe6 dmca+dsa), clean tree, zero unpushed commits — the previous
-  session pushed everything before ending (its doc entry however was
-  never written; recovered below in the section log). New capture
-  decoded: `ui ux/become-seller/…make` (NATIVE fig-make, zstd scene
-  graph) → `snapshots/becomeseller-1920px-light-{1,2}.tsx` (2nd =
-  font-face appendix), 1920-only. Page anatomy per capture: LOGGED-IN
-  header + CategoryNav + hero (h1 72/79.2 max-w-705 + 24px gray sub +
-  dark "Start verification" CTA + 421×418 illustration over a 975px
-  bg-repeat-x PNG band) + 3 white trust pills (rounded-full, star
-  rgb(33,150,83)) + "Why Eldorado?" 4-col cards (134×152 svg, gray
-  top-fade gradient, "Learn how" support links) + "Tools to power your
-  next sale" 2×2 cards (colored icon chips blue/lime/teal/orange) +
-  "Seller FAQs" max-w-3xl 7 white accordion rows + "Full seller FAQ"
-  gray 2px-border button + white CTA band ("Start selling with
-  Eldorado") + Footer + ChatBubble. Session 15 — TWO parallel blog passes, both pushed,
-  then cross-verified by a dedicated verification round:
-  (a) BLOG ARTICLE live-verified pass (parallel session): the article
-  page (implemented session 13, "visual verification pending") is now
-  pixel-calibrated against live eldorado.gg at 1920/1536/390 via DOM
-  probes + pixel scans + side-by-side strips; 6 fixes applied and
-  pushed. Every geometry target now matches live (h1/breadcrumb/section
-  paddings exact at 390/768/1920; mutation-table row heights EXACT:
-  201/217/206/241 = live; entry height 10862 vs live 10836 — was 617px
-  off). Merged the parallel session-14 work (idempotent table-scroll,
-  entry pre/wp-caption CSS, Footer legal bar, /pagelist) — kept where it
-  agreed with live probes, overruled where it contradicted them
-  (stroke caret → filled triangle, mobile EN globe → EN+caret,
-  header pt-0 → pt-108, table-layout fixed → auto, all probe-backed).
-  (b) CATEGORY ARCHIVES (parallel session): the missing internal
-  `/blog/[category]` routes (6 categories / 71 rows scraped live),
-  closing the last navigation gap in the blog section (article
-  breadcrumbs previously had to leave the clone for the live category
-  pages); geometry verified Δ0 vs live at 1920 + 390; verified and
-  pushed. Session 14 — review sweep (22 routes x 3 widths, all green) +
-  /pagelist; session 13 — SearchOverlay rebuilt from capture.
-  (c) VERIFICATION + UNION ROUND (this session, second half): the
-  duplicate /blog/[category] implementation from this round was
-  DISCARDED after a head-to-head probe — the pushed version matched
-  live better (it has the Load more button — confirmed REAL on live,
-  y=1491 between grid bottom 1427 and footer 1629 — and exact @390
-  grid y=781). Remaining gaps closed on top of it: archive card meta
-  separator GLYPH made invisible (live keeps the separator BOX — li
-  "2 Nov 2026" w=97 = text 82 + 12px margins + 4.8px box — so the
-  reading-time li keeps its live x). FONT STATE settled: blog pages
-  render "Lato Eldorado" (the session-14 `.blog-lato` override is
-  INERT — removed in fca82de and not re-added); canvas '400 18px' on
-  the same 65-char string = 473px live == 473px Lato Eldorado vs 477px
-  next/font Google Lato; the "296px vs 259px breadcrumb" that
-  motivated the override compared the live @390 WRAPPED fragment box
-  (296) against our single-line @1920 width (259) — not a font
-  difference (live breadcrumb is 14px everywhere; title @1920 = 259 ==
-  ours). Full verification on the merged tip: category H1 364/180 h55,
-  hero 365/268 1190×358, grid 388/715 1144×712, card 560×160, thumb
-  136, pageH 2101 (live 2141 — 40px shorter footer gap), @390 H1
-  16/190, hero 356×365, thumb 36/804; article table rows 201/217/206
-  == live, cols [84,81,64,93] @390, lede 7 lines line1 343 == live,
-  canvas 473 == live; 8 blog routes × 2 widths: 200/overflow 0/0
-  console errors; build green 41 pages.
+  + `/roblox-items` (session 18) + `/become-seller` (session 19 —
+  COMPLETE: capture implemented, verified 3 widths, visual-matched to
+  live, pushed)
+- Current section: session 19 — /become-seller COMPLETE. Recovery
+  (fresh sandbox, cloned at 5426fe6 → pulled 02e63b4): every
+  session-18 commit verified present on origin (270cdbd decode,
+  05620a1 GiftCard, a48d275 settings, 8bf9163 profiles, 5426fe6
+  dmca+dsa), clean tree, zero unpushed commits — the previous session
+  pushed everything before ending (its doc entry however was never
+  written; recovered below in the section log). New capture decoded:
+  `ui ux/become-seller/…make` (NATIVE fig-make, zstd scene graph) →
+  `snapshots/becomeseller-1920px-light-{1,2}.tsx` (2nd = font-face
+  appendix), 1920-only. Page implemented + verified: sweep @1920/1536/
+  390 = 200 / overflow 0 / 0 errors / 0 broken imgs, all needles,
+  FAQ accordion toggles (7 rows; answer 4 = the live rich article),
+  build green (65 routes). Geometry vs capture: h1 72/900 y=228 +
+  container 1216 + hero img 421×418 + bg band 975 + tool card
+  TRANSPARENT radius 16 w=384 (= live) + faq max-w 768. Visual
+  side-by-side vs live (cmp-1920/cmp-390 bands): header logged-in per
+  capture (live shows Log in — capture wins), hero/pills/why/tools/
+  faq/cta/footer all match; fixes from the comparison round: tool
+  icon SHAPES (gear/tray-up/rocket/star probed from live — capture
+  glyphs empty), Bulk Uploads em dash ("seconds— import"), Learn-how
+  → arrows. Stale-server gotcha re-confirmed: an old next-server kept
+  port 3100 and served the pre-fix build — kill port owner + grep the
+  served HTML for a changed marker BEFORE trusting a sweep. Pushes:
+  checkpoint c909ff4 (decode + doc), feature 0dd8663 (page; rebased
+  over the parallel /roblox-items work), fixes dd3746c (verification
+  round). NEXT: user-pushed checkout capture (5e937e0:
+  `ui ux/checkout/…RequestedBoosting_gameId_142…make`) awaits decode;
+  `ui ux/shop-item/…roblox-items_i_70-2-0…make` also present
+  (product-single for the roblox route — decode after checkout).
+
 - Reference files:
   - Become-seller capture (session 19, user-pushed origin 4b8246c):
     `ui ux/become-seller/…become-seller…make` → decoded
@@ -1118,20 +1087,48 @@ actual files and Git history — never trust previous AI claims.
   new user-pushed become-seller capture (origin 4b8246c). See Current
   Checkpoint above for the full page anatomy; implementation next.
 
+- 2026-11-04 (session 19, FINAL) — /become-seller complete.
+  Implementation per capture (see Current Checkpoint for anatomy):
+  `data/becomeSellerData.js` (verbatim capture copy + live-scraped FAQ
+  answers) + `SellerFaq.js` (client accordion, InfluencerFaq row
+  pattern + rich block answers) + `app/become-seller/page.js`
+  (LOGGED-IN header + CategoryNav + 975px bg band + hero + 3 pills +
+  why/tools/faq + white CTA band + Footer + ChatBubble) + pagelist
+  Company row (now 50 rows with the parallel session's Roblox row).
+  Assets: 24/24 capture URLs HTTP 200 (verify_session19_assets.py —
+  note: the hero bg URL lives in a style={{backgroundImage}} string
+  where & is NOT html-escaped; a &-splitting regex breaks it). Live
+  probes (@1920 + @390, agent-browser): h1 y=228 fs72/900, container
+  1216 @x=344, tool card bg TRANSPARENT radius16 w=384 pad32, bg band
+  h=975, tools grid STAYS 2-col @390 (163.5px), pills full-width
+  stacked @390 gap16, hero @390 = image FIRST then h1 36/900, CTA
+  band pad 40/12 gap 32; FAQ answers + two dropped em dashes +
+  "Learn how →" arrows scraped from live. Verification:
+  verify_becomeseller_local.js — 1920/1536/390 ALL PASS (200,
+  overflow 0, 0 page errors, 0 broken imgs, 13 needles, 7 FAQ rows
+  toggle open/close, rich answer 4, 3 Start-verification CTAs, 4
+  chip colors); geometry exact vs capture (h1 72/900 y=228, container
+  1216, hero img 421×418, band 975, tool card transparent r16 w=384,
+  faq max-w 768); build green 65 routes. Visual: side-by-side strips
+  cmp-1920/cmp-390 ×3 bands vs live-becomeseller-1920/390.png — all
+  sections match; documented divergences: logged-in header per
+  capture (live not logged in), icomoon tool glyphs → live-probed
+  shapes, footer active-page bold on live only. Concurrency: 2 push
+  rejections → fetch+rebase (parallel session shipped /roblox-items
+  89f7c18 + user pushed checkout capture 5e937e0), both resolved
+  clean, pushes verified.
+
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 19 checkpoint 1
-  (recovery + decode; see below)
-- Hash of last pushed commit: session-18 tip on origin was 5426fe6
-  (dmca+dsa) before this session; user pushed 4b8246c + merge 02e63b4
-  (the become-seller capture) concurrently — pulled clean. The session
-  19 checkpoint-1 commit (decode script + snapshots + this doc update)
-  is pushed right after this edit and verified by empty
-  `git log origin/main..HEAD`. Session-18's final commit 89f7c18
-  (/roblox-items) landed on origin after this doc refresh — see the
-  ADDENDUM in the session-18 section-log entry above.
-- Uncommitted changes: none after this doc commit (decode script +
-  2 snapshots + doc included in checkpoint 1)
+- Last successful push timestamp: 2026-11-04, session 19 final
+  (become-seller complete; this doc commit is the last push)
+- Hash of last pushed commit: `dd3746c` (verification-round fixes:
+  live-probed icon shapes + em dashes + Learn-how arrows + screenshots
+  + cmp strips), preceded by 0dd8663 (the page itself, rebased over
+  the parallel /roblox-items work) and c909ff4 (checkpoint: decode +
+  session-18 doc recovery). Every push verified by empty
+  `git log origin/main..HEAD` immediately after.
+- Uncommitted changes: none after this doc commit
 - Unpushed commits: none
 - Push auth: the session PAT lives in the origin URL in this sandbox
   only (transient; never committed). Future sessions without a token
