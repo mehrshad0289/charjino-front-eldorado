@@ -1,11 +1,13 @@
 /
 /about-us
+/amazon-prime
 /become-seller
 /blog
 /blog/[category]
 /blog/[category]/[slug]
 /bug-bounty
 /checkout
+/cod-points
 /contact-us
 /dashboard/feedback
 /dashboard/loyalty
@@ -27,6 +29,7 @@
 /influencer-program
 /login
 /pagelist
+/playstation-plus
 /privacy-policy
 /roblox-items
 /terms-of-service
