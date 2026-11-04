@@ -66,9 +66,28 @@ actual files and Git history — never trust previous AI claims.
   in backgroundImage = invalid CSS → background:) — /about-us review
   stars render correctly now too. 29/29 capture assets 200. Sweep
   @1920/1536/390 ALL PASS. Visual self-review @1920: matches capture;
-  pagelist Account +1 (51). NEXT: `ui ux/Boosting-rivals/…ea-fc-
-  boosting_b_142-4…make` (bddd33e — the boosting product page behind
-  the checkout) + the roblox shop-item capture, both await decode.
+  pagelist Account +1 (51). Boosting page (origin bddd33e — the
+  product page the checkout was taken from) COMPLETE at
+  `/ea-fc-boosting/b/142-4`: parameterized ShopItemSubNav (EA Sports
+  FC + 5 tabs, Boosting active w/ glow; other tabs keep verbatim live
+  hrefs), 465px banner + fade, deals title + 98% seal badge + 353,800
+  orders, 8 chips (Division Rivals dark-active), config cards
+  (Division 1 / Elite / PC - Steam static comboboxes — no dropdown
+  content in any reference, nothing invented) + textarea, CUSTOMIZE
+  ORDER gradient-border panel (Solo active, 3 switches OFF, blue
+  active-request alert), Save-up-to-60% banner + Money Dragon,
+  Why-trust 6 rows, Trusted band with EMPTY 150px carousel (verbatim —
+  unrendered in capture, documented), rank-up band (clip-path slants,
+  4 steps), boosters + lightning bands, FAQ 8 rows (answers scraped
+  live, reused SellerFaq), SEO block (4.9 gradient badge — the
+  capture's span gridArea 1/1/2/2 restored after the number dropped
+  to a second grid row; ol 7 li verbatim). 36/36 assets 200; live
+  @390 probed (1-col DOM-order stack); sweep ALL PASS after a
+  min-w-0 fix on the chips scroller (@390 overflow 1133→390);
+  pagelist Shop +1 (52). Pushed 9d9a25c (rebased over the parallel
+  session's gamepass buy-box work 9d7a8c2). REMAINING capture: the
+  roblox shop-item `ui ux/shop-item/…roblox-items_i_70-2-0…make`
+  (product-single for the roblox route) — decode next.
 - Reference files:
   - Become-seller capture (session 19, user-pushed origin 4b8246c):
     `ui ux/become-seller/…become-seller…make` → decoded
@@ -1150,17 +1169,29 @@ actual files and Git history — never trust previous AI claims.
   29/29 assets 200; sweep 1920/1536/390 ALL PASS; pagelist 51 rows.
   Pushes verified (empty origin/main..HEAD after each).
 
+- 2026-11-04 (session 19, boosting) — /ea-fc-boosting/b/142-4 complete
+  per the user-pushed capture (origin bddd33e). ShopItemSubNav
+  parameterized (game/tabs/contentWidth; roblox-items unchanged).
+  Full anatomy in the Current Checkpoint. Fixes during verification:
+  chips-scroller @390 overflow 1133→0 (min-w-0 on the flex chain),
+  4.9 badge grid overlap (capture's explicit gridArea restored),
+  sweep needles uppercased-innerText + mobile-nav aware. 36/36
+  assets 200; FAQ answers scraped live; sweep 1920/1536/390 ALL
+  PASS; pagelist 52 rows. Pushed 9d9a25c (fetch+rebase over the
+  parallel gamepass work; verified empty origin/main..HEAD).
+
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 19 (checkout
+- Last successful push timestamp: 2026-11-04, session 19 (boosting
   complete; this doc commit is the last push)
-- Hash of last pushed commit: `5de98b2` (/checkout + TrustpilotStars
-  fix), preceded by 5cc0daa (checkout decode checkpoint), 6f64ff6
-  (session-19 doc), dd3746c (become-seller verification fixes),
-  0dd8663 (become-seller page), c909ff4 (checkpoint 1). Every push
-  verified by empty `git log origin/main..HEAD` immediately after.
-  Two push rejections during the session (parallel/user pushes
-  5e937e0, bddd33e, /roblox-items docs) — fetch+rebase, never force.
+- Hash of last pushed commit: `9d9a25c` (/ea-fc-boosting/b/142-4 +
+  parameterized ShopItemSubNav), preceded by 2dedb03 (checkout doc),
+  5de98b2 (/checkout + TrustpilotStars fix), 5cc0daa (checkout
+  decode), 6f64ff6 / dd3746c / 0dd8663 / c909ff4 (become-seller
+  chain). Every push verified by empty `git log origin/main..HEAD`
+  immediately after. THREE push rejections this session (concurrent
+  user + parallel-session pushes: 5e937e0, bddd33e, 9d7a8c2) — all
+  resolved fetch+rebase, never force.
 - Uncommitted changes: none after this doc commit
 - Unpushed commits: none
 - Push auth: the session PAT lives in the origin URL in this sandbox
