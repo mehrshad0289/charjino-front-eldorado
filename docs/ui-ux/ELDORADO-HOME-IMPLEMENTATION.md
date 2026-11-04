@@ -11,14 +11,21 @@ actual files and Git history — never trust previous AI claims.
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
   `/xbox-game-pass` + `/xbox-gift-card` + product-single
   `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
-  + `/login` + `/blog` + `/blog/[category]/[slug]` (user's sessions
-  12-12c) + `/about-us` + `/contact-us` + `/bug-bounty` (session 12b) +
-  search dropdown rebuilt per capture (session 13)
-- Current section: session 14 — review sweep (22 routes x 3 widths,
-  all green) + new utility page `/pagelist` indexing every implemented
-  route (23 rows in 6 groups); session 13 — SearchOverlay rebuilt from
-  the search-1920px-light capture; ALL pushed captures have a page or
-  component; verified and pushed
+  + `/login` + `/blog` + `/blog/[category]/[slug]` + `/about-us` +
+  `/contact-us` + `/bug-bounty` + search dropdown (session 13) +
+  `/pagelist` (session 14)
+- Current section: session 15 — BLOG ARTICLE live-verified pass COMPLETE.
+  The article page (implemented session 13, "visual verification pending")
+  is now pixel-calibrated against live eldorado.gg at 1920/1536/390 via
+  DOM probes + pixel scans + side-by-side strips; 6 fixes applied and
+  pushed. Every geometry target now matches live (h1/breadcrumb/section
+  paddings exact at 390/768/1920; mutation-table row heights EXACT:
+  201/217/206/241 = live; entry height 10862 vs live 10836 — was 617px
+  off). Merged the parallel session-14 work (idempotent table-scroll,
+  entry pre/wp-caption CSS, Footer legal bar, /pagelist) — kept where it
+  agreed with live probes, overruled where it contradicted them
+  (stroke caret → filled triangle, mobile EN globe → EN+caret,
+  header pt-0 → pt-108, table-layout fixed → auto, all probe-backed).
 - Reference files:
   - Blog capture (session 12, user-pushed):
     `ui ux/blog/www_eldorado_gg_blog_1920w_390w_1536w_default.make`
@@ -335,6 +342,87 @@ actual files and Git history — never trust previous AI claims.
 - Next exact action: on request — capture-driven work remains closed;
   /pagelist should gain a row per new route as they land
 
+## Session 15 (blog article live-verified pass)
+
+- Implementation status (session 15 — article page verification + fixes):
+  - Recovery: cloned fresh (no local state), origin synced at de55aac,
+    then rebased over two waves of the user's concurrent pushes
+    (session-13 SearchOverlay chain, session-14 review + /pagelist
+    chain) — every push verified by empty `git log origin/main..HEAD`
+  - Verified the "visual verification pending" item from session 13:
+    the article route. Method: full-page screenshots local vs the
+    committed live captures at 1920/1536/390 + DOM geometry probes +
+    pixel scans; scripts/capture_local_article.py, probe_article_deep.py,
+    probe_live_article_geometry.py, verify_article_geometry.py,
+    probe_article_decoded.py, compare_article_strips.py
+  - FIX 1 (overflow): .entry tables wrapped in div.table-scroll at
+    render time — live behavior (probed live @390: wrapper=entry width,
+    overflow-x auto); killed a 73px horizontal overflow @390. Later
+    made IDEMPOTENT with the session-14 version: the scraped WP HTML
+    already emits .table-scroll around all 108 tables — the naive regex
+    double-wrapped (kept the session-14 idempotent replace)
+  - FIX 2: .screen-reader-text WP accessibility CSS added — the lede
+    HTML carries `<h2 class="screen-reader-text">Summary</h2>` which
+    rendered VISIBLE (caught in the 1920 strip; hidden on live)
+  - FIX 3: TOC scroll-spy starts with NO current item (live @scroll 0
+    shows no highlight; yellow li.current appears only after a heading
+    passes — live verified @scrollY 2500/4200)
+  - FIX 4 (responsive calibration, probed live @390/768/1024/1536/1920):
+    section pt 108px <1024 (was 178), container px-4 <640 (was px-6),
+    breadcrumb ul block + li inline <640 (live wraps the title mid-text
+    across 2 lines, h=48; flex moved it atomically), chevron box 28px
+    (li 66 = Home 38 + chevron 28; mid "…" li 38 = 10+28) — h1 y now
+    278/250/178/178 = live at 390/768/1024+/1920
+  - FIX 5 (fonts): blog pages render GOOGLE Lato — live /blog + article
+    load fonts.gstatic Lato v25 (blog is a separate WP subsite; the
+    marketplace pages self-host a different Lato cut = the capture's
+    "Lato Eldorado", kept for them). Breadcrumb title renders 296px
+    live vs 259px under Lato Eldorado. `.blog-lato, .blog-article-page
+    { font-family: var(--font-lato) }` in globals.css
+  - FIX 6 (entry content): td img margin 24px 0 + display block and
+    a > img margin 24px 0 (live-computed) — mutation-table rows were
+    153px vs live 201px, collapsing the table 575px; now rows are
+    201/217/206/241 = EXACT match, table 2653 vs live 2633, entry
+    10862 vs live 10836. Plus compact mobile table cells (th 14px/8px,
+    td 10px/8px, fs 14px <640 — live @390 probes; the 4-column table
+    fits 358px without scrolling) + th nowrap (live "How to get" never
+    wraps) + table-layout kept AUTO (live computes auto; the session-14
+    draft's `fixed` contradicted the probe)
+  - FIX 7 (blog header carets): live text→caret gap = 9px at BOTH
+    breakpoints (pixel scans @1920: Games 314→caret 323; @390: Codes
+    296→305) — ml-[3px]; mobile Games/Codes caret is a compact ~11px
+    box (w-14.7px) and the row is gap-[60px] + pl-[9px] → Games/Codes
+    text x = 83/242 = live (was 11px left)
+  - FIX 8 (blog listing cards): meta stacks date+pipe / clock+read on
+    two lines <640 (live @390 screenshot; one line @640+ — verified
+    identical at 1920)
+  - Breadcrumb category crumb links to the live category URL
+    (categoryHref added to all 11 articles) instead of self-link
+  - Interaction checks: TOC mobile button + bottom sheet (open/close,
+    16 rows), FAQ accordion toggle (aria-expanded true→false), reading
+    progress bar (fill 0 → 885px @scrollY 6000), listing card →
+    internal article href, zero console errors everywhere
+- Visual comparison status (strips + probes; the article page was
+  verified against BOTH the decoded capture and the LIVE site):
+  - 1920 top strip: header/h1/meta/lede/table header identical; entry
+    mid + bottom strips: content text/link/heading styles match; FAQ
+    rows + expanded first row match; share block (h 154 = live) +
+    RELATED GUIDES grid match
+  - Geometry table (local vs live): section pt/container padding/h1 y/
+    breadcrumb y+h: EXACT at 390/768/1920; td_img 71 vs 66 and ~65px
+    cumulative drift across the 10800px entry remain (documented:
+    table auto-layout distributes 3px differently; sub-1% drift)
+  - overflow = 0 at 390/768/1920 on the article page after FIX 1/4
+- Known deviations / documented limitations:
+  - The live page infinite-scrolls the NEXT articles' content below
+    Related Guides (56 img instances on live after scrolling vs 22 for
+    the article itself — structure counts otherwise identical: 3 h2 /
+    4 h3 / 9 h4 / 37 p / 22 img / 1 table). Out of scope (documented
+    since session 13); navigation via Related Guides
+  - Mutation-table row images: fluid max-width 100% — auto layout gives
+    td_img 71px vs live 66 @390 (3px column distribution nuance)
+- Deployment: Vercel verified after the final push (see Backup Status)
+
 ## Section log (append one block per completed section)
 
 - 2026-11-04 (session 12c) — `/blog` live-verified pixel pass, merging a
@@ -620,12 +708,12 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 14
-- Hash of last pushed commit: session-14 chain — `4e36a9b` (/pagelist
-  + doc) rebased over the user's concurrent commits; push verified by
-  empty `git log origin/main..HEAD` after every push; session 13's
-  `77a3b77` deploy was Vercel-verified (dropinput token in live CSS,
-  all 9 routes 200)
+- Last successful push timestamp: 2026-11-04, session 15
+- Hash of last pushed commit: session-15 chain — `41aff91` (article
+  responsive pass), `4f1cd1b` (entry td-img margin + card meta stack)
+  + this doc commit; each push rebased over the user's concurrent
+  commits (never force) and verified by empty
+  `git log origin/main..HEAD` immediately after every push
 - Uncommitted changes: none expected after this doc commit
 - Unpushed commits: none
 - Push auth: the session-12c PAT lives in the origin URL in this
