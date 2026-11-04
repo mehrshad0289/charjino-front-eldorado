@@ -34,3 +34,7 @@
 /verify/status
 /xbox-game-pass
 /xbox-gift-card
+/amazon-prime
+/playstation-plus
+/cod-points
+/support/articles/8408997-seller-rules
