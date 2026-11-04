@@ -2,6 +2,7 @@ import HeaderBar from "../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../components/eldorado/CategoryNav";
 import DashboardShell from "../../../components/eldorado/DashboardShell";
 import DashboardPageHeader from "../../../components/eldorado/DashboardPageHeader";
+import MessagesFilterBar from "../../../components/eldorado/MessagesFilterBar";
 import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
 import {
@@ -9,13 +10,20 @@ import {
   DASHBOARD_MESSAGES_PAGE,
 } from "../../../components/eldorado/data/dashboardData";
 
-/* Dashboard page /dashboard/messages (own .make capture `ui ux/Messages/…`,
-   decoded 2026-11-05, 1920-only): header "Messages" (no action button) and
-   a tall (900px) empty chat column — the shared 100px empty-state image,
-   bold 24px "Uh oh looks like you dont have any chats yet." and the gray
-   purchase hint. The empty block is inline (not the EmptyState component):
-   the capture centers it without the component's top padding. Sidebar
-   active row: Messages. */
+/* Dashboard page /dashboard/messages — REBUILT session 23 from the newer
+   user-pushed "not-empty" capture `ui ux/messages-notempty/…(1).make`
+   (commit 8111ede, decoded snapshots/msgnotempty-1920px-light-{1,2}.tsx,
+   1920-only). Anatomy: logged-in header + CategoryNav + dashboard shell
+   (465px banner, 260px sidebar with Messages active) + yellow-icon h1
+   "Messages" 30/36 + 900px max-w-1048 column (mt-14, px-6) opening with
+   the filter bar (tabs All/Support/Pre-purchase + "Unread messages only"
+   toggle, gap 16) and the chat area.
+   The chat inbox is a client-rendered widget on live (live SSR HTML has
+   no tabs/toggle/chat — probed 2026-11-05) and never serializes into the
+   capture: the mount div (aria-label="Chat") stays EMPTY verbatim, same
+   documented precedent as the boosting page's unrendered carousel. The
+   superseded empty-state anatomy (old `ui ux/Messages/` capture, session
+   17) is retired from the render; its strings remain in dashboardData. */
 
 export const metadata = {
   title: "Dashboard Messages - Eldorado",
@@ -23,7 +31,7 @@ export const metadata = {
 };
 
 export default function DashboardMessagesPage() {
-  const { icon, title, emptyState } = DASHBOARD_MESSAGES_PAGE;
+  const { icon, title, tabs, unreadToggleLabel } = DASHBOARD_MESSAGES_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
       <HeaderBar loggedIn user={DASHBOARD_USER} />
@@ -32,13 +40,15 @@ export default function DashboardMessagesPage() {
         <DashboardShell active="Messages">
           <DashboardPageHeader icon={icon} title={title} />
           <div className="relative mt-[14px] h-[900px] max-w-[1048px] px-6">
-            <div className="flex justify-center px-[30px]">
-              <div className="flex max-w-[600px] flex-col items-center gap-3">
-                <div className="h-[100px] shrink-0 overflow-hidden">
-                  <img alt={emptyState.imageAlt} src={emptyState.image} className="block size-[100px] object-cover align-middle" />
+            <div className="flex h-full flex-col gap-4">
+              <MessagesFilterBar tabs={tabs} unreadLabel={unreadToggleLabel} />
+              <div className="flex grow basis-0 flex-col">
+                <div className="h-full">
+                  <div
+                    aria-label="Chat"
+                    className="size-full overflow-clip align-middle"
+                  />
                 </div>
-                <div className="text-center text-[24px] font-bold leading-[36px]">{emptyState.title}</div>
-                <div className="pt-1 text-center text-[rgb(106,_102,_123)]">{emptyState.text}</div>
               </div>
             </div>
           </div>

@@ -208,6 +208,16 @@ export const DASHBOARD_WALLET_PAGE = {
 export const DASHBOARD_MESSAGES_PAGE = {
   icon: "messages",
   title: "Messages",
+  /* Session 23 — the newer user-pushed "not-empty" capture
+     (ui ux/messages-notempty/…(1).make, commit 8111ede) supersedes the
+     older ui ux/Messages/ anatomy: the 900px column now opens with a tab
+     row (All active) + an "Unread messages only" toggle, and the chat
+     inbox itself is a client-rendered widget that never serializes into
+     the capture (same precedent as the boosting page's empty carousel).
+     The old emptyState strings below are retained verbatim for
+     reference but are no longer rendered. */
+  tabs: ["All", "Support", "Pre-purchase"],
+  unreadToggleLabel: "Unread messages only",
   emptyState: {
     image: DASHBOARD_OFFERS_PAGE.emptyState.image,
     imageAlt: "No results found",
