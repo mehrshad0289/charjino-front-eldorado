@@ -34,6 +34,7 @@ const GROUPS = [
     label: "Shop",
     rows: [
       { title: "eFootball Accounts (shop template)", href: "/efootball-accounts" },
+      { title: "Roblox Items (shop item template)", href: "/roblox-items" },
       { title: "Xbox Game Pass", href: "/xbox-game-pass" },
       { title: "Xbox Gift Card", href: "/xbox-gift-card" },
       { title: "Product single (eFootball offer)", href: PRODUCT_HREF },
@@ -61,6 +62,7 @@ const GROUPS = [
       { title: "About Us", href: "/about-us" },
       { title: "Contact Us", href: "/contact-us" },
       { title: "Bug Bounty", href: "/bug-bounty" },
+      { title: "Become a Seller", href: "/become-seller" },
       { title: "Privacy Policy", href: "/privacy-policy" },
       { title: "Terms of Service", href: "/terms-of-service" },
       { title: "DMCA", href: "/dmca" },

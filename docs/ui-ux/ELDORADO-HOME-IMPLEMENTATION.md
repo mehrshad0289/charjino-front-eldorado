@@ -17,7 +17,8 @@ actual files and Git history — never trust previous AI claims.
   GiftCard/Currency/TopUp, orders Purchased/Sold, Loyalty, Feedback,
   Wallet, Messages, Settings) + `/users/NewFloat-0una[/shop|/reviews|
   /about]` + `/privacy-policy` + `/terms-of-service` + `/dmca` + `/dsa`
-  (session 18) + `/become-seller` (session 19 — IN PROGRESS)
+  + `/roblox-items` (session 18) + `/become-seller` (session 19 — IN
+  PROGRESS)
 - Current section: session 19 — RECOVERY + the new user-pushed
   become-seller capture. Recovery (fresh sandbox, cloned at 5426fe6 →
   pulled 02e63b4): every session-18 commit verified present on origin
@@ -1104,6 +1105,14 @@ actual files and Git history — never trust previous AI claims.
   verbatim via extract_dsa.py into LegalDoc; DMCA bespoke DmcaDoc;
   both use the LOGGED-IN header). Pagelist grew to 48 rows. All
   verified on origin (empty origin/main..HEAD after each).
+  SESSION-18 ADDENDUM (pushed after this entry was first written):
+  89f7c18 shipped /roblox-items off the user's `shop-item` capture
+  (pushed concurrently as c909ff4 landed) — dark game sub-nav with the
+  active-tab yellow glow, 465px banner backdrop, sticky Price/Game
+  filters sidebar, 10 filter chips, 24 verbatim offer cards
+  (extract_shopitem_cards.py; all cards share one thumbnail — a
+  lazy-load capture artifact, kept verbatim), pagination 1–1000,
+  trust row, verbatim SEO block; pagelist 49 rows.
 
 - 2026-11-04 (session 19, checkpoint 1) — recovery + decode of the
   new user-pushed become-seller capture (origin 4b8246c). See Current
@@ -1118,7 +1127,9 @@ actual files and Git history — never trust previous AI claims.
   (the become-seller capture) concurrently — pulled clean. The session
   19 checkpoint-1 commit (decode script + snapshots + this doc update)
   is pushed right after this edit and verified by empty
-  `git log origin/main..HEAD`.
+  `git log origin/main..HEAD`. Session-18's final commit 89f7c18
+  (/roblox-items) landed on origin after this doc refresh — see the
+  ADDENDUM in the session-18 section-log entry above.
 - Uncommitted changes: none after this doc commit (decode script +
   2 snapshots + doc included in checkpoint 1)
 - Unpushed commits: none
