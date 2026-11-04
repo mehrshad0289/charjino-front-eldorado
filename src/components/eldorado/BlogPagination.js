@@ -5,7 +5,7 @@ import { BLOG_PAGINATION } from "./data/blogData";
    72px "Next »" link (text verbatim, live-verified). */
 export default function BlogPagination() {
   const base =
-    "flex min-h-[42px] items-center justify-center rounded-lg border-[0.8px] p-0 pl-3 pr-3 text-[14px] leading-[14px]";
+    "flex min-h-[42px] min-w-[42px] items-center justify-center rounded-lg border-[0.8px] p-0 pl-3 pr-3 text-[14px] leading-[14px]";
   const idle = `${base} border-[rgb(255,182,0)] text-[rgb(255,182,0)]`;
 
   return (
