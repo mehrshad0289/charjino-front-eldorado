@@ -1,0 +1,346 @@
+{
+ "prime_amounts": [
+  {
+   "label": "Prime Video - 1 Month",
+   "selected": true,
+   "popular": false,
+   "imgAlt": "Amazon Prime Video - 1 Month",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Ffe0d2642f7ccb987a98cc1a0b02258df803a48af.png?generation=1793815585742503&alt=media",
+   "sub": "",
+   "price": "1.34",
+   "discount": "-86%*",
+   "was": null
+  },
+  {
+   "label": "Prime Video - 12 Months",
+   "selected": false,
+   "popular": false,
+   "imgAlt": "Amazon Prime Video - 12 Months",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F6c861ce8f14c90f30bcf46f7d83ea7d1f1919a3a.png?generation=1793815585694597&alt=media",
+   "sub": "",
+   "price": "12.46",
+   "discount": "-87%*",
+   "was": "89.90"
+  }
+ ],
+ "prime_sellers": [
+  {
+   "name": "NOVA_GAMING",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F1ea72d936cb1cbebf854938af74c25895f919112.png?generation=1793815585779954&alt=media",
+   "rating": "99.6%",
+   "reviews": "946 reviews",
+   "delivery": "8 min",
+   "discount": "-85%*",
+   "price": "1.36",
+   "was": "8.99"
+  },
+  {
+   "name": "MrBeast99",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F2c3af1e7dc1810597c7db8ce688d2df136c934b2.jpeg?generation=1793815585765675&alt=media",
+   "rating": "99.6%",
+   "reviews": "485 reviews",
+   "delivery": "11 min",
+   "discount": "-85%*",
+   "price": "1.37",
+   "was": "8.99"
+  },
+  {
+   "name": "Nexora_Store",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F70dffb66dd74f46a74cd3fca8cd6209ba8299060.jpg?generation=1793815585799021&alt=media",
+   "rating": "99.8%",
+   "reviews": "473 reviews",
+   "delivery": "14 min",
+   "discount": "-75%*",
+   "price": "2.29",
+   "was": "8.99"
+  },
+  {
+   "name": "ROYAL__STORE",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F37f34d93ae3ac420507557bdb9a29de60bfd6214.png?generation=1793815585798980&alt=media",
+   "rating": "99.3%",
+   "reviews": "29,247 reviews",
+   "delivery": "22 min",
+   "discount": "-75%*",
+   "price": "2.29",
+   "was": "8.99"
+  },
+  {
+   "name": "FastDealZone",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F90be17566e2e9a8f26f0f178c242d55462705567.png?generation=1793815585841967&alt=media",
+   "rating": "100%",
+   "reviews": "14,876 reviews",
+   "delivery": "1 min",
+   "discount": "-70%*",
+   "price": "2.74",
+   "was": "8.99"
+  },
+  {
+   "name": "245HOURS",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F92b73b3611ec97dc4af9f17b641888666d69f936.png?generation=1793776859917403&alt=media",
+   "rating": "100%",
+   "reviews": "1861 reviews",
+   "delivery": "20 min",
+   "discount": "-68%*",
+   "price": "2.92",
+   "was": "8.99"
+  }
+ ],
+ "cod_amounts": [
+  {
+   "label": "500 CoD Points",
+   "selected": false,
+   "popular": false,
+   "imgAlt": "Call of Duty 500 CoD Points",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fd1841609aaa91ebe7518e5b813b47f1f5f757f96.png?generation=1793816217558739&alt=media",
+   "sub": "CoD Points",
+   "price": "5.41",
+   "discount": null,
+   "was": null
+  },
+  {
+   "label": "1100 CoD Points",
+   "selected": false,
+   "popular": false,
+   "imgAlt": "Call of Duty 1100 CoD Points",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fbba82e75ff4e89a6c3de4bc2e5daef98a41b2e21.png?generation=1793816217576941&alt=media",
+   "sub": "CoD Points",
+   "price": "10.53",
+   "discount": null,
+   "was": null
+  },
+  {
+   "label": "2400 CoD Points",
+   "selected": true,
+   "popular": false,
+   "imgAlt": "Call of Duty 2400 CoD Points",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Ffc634dd39c41a1d5b0f486fd8cd93df29def7a6d.png?generation=1793816217542944&alt=media",
+   "sub": "CoD Points",
+   "price": "9.96",
+   "discount": "-51%*",
+   "was": null
+  },
+  {
+   "label": "4800 CoD Points",
+   "selected": false,
+   "popular": false,
+   "imgAlt": "Call of Duty 4800 CoD Points",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F86f7f91d0d8eb0a869e7cf6a5a7bc94b46df4912.png?generation=1793816217576416&alt=media",
+   "sub": "CoD Points",
+   "price": "19.95",
+   "discount": "-51%*",
+   "was": "39.99"
+  },
+  {
+   "label": "9600 CoD Points",
+   "selected": false,
+   "popular": false,
+   "imgAlt": "Call of Duty 9600 CoD Points",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F685e4ff129c224eec9fd6491c7fc1c4bc18c8d67.png?generation=1793816217562449&alt=media",
+   "sub": "CoD Points",
+   "price": "42.33",
+   "discount": "-44%*",
+   "was": "74.99"
+  },
+  {
+   "label": "12000 CoD Points",
+   "selected": false,
+   "popular": false,
+   "imgAlt": "Call of Duty 12000 CoD Points",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F685e4ff129c224eec9fd6491c7fc1c4bc18c8d67.png?generation=1793816217562449&alt=media",
+   "sub": "CoD Points",
+   "price": "54.04",
+   "discount": "-46%*",
+   "was": "99.99"
+  },
+  {
+   "label": "21600 CoD Points",
+   "selected": false,
+   "popular": false,
+   "imgAlt": "Call of Duty 21600 CoD Points",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F2be3c55b349ef5b74609def7f0e0a0aab3e97e75.png?generation=1793816217559226&alt=media",
+   "sub": "CoD Points",
+   "price": "103.05",
+   "discount": "-49%*",
+   "was": "199.98"
+  },
+  {
+   "label": "26400 CoD Points",
+   "selected": false,
+   "popular": false,
+   "imgAlt": "Call of Duty 26400 CoD Points",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F2be3c55b349ef5b74609def7f0e0a0aab3e97e75.png?generation=1793816217559226&alt=media",
+   "sub": "CoD Points",
+   "price": "122.58",
+   "discount": "-39%*",
+   "was": "199.98"
+  },
+  {
+   "label": "38400 CoD Points",
+   "selected": false,
+   "popular": false,
+   "imgAlt": "Call of Duty 38400 CoD Points",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F2be3c55b349ef5b74609def7f0e0a0aab3e97e75.png?generation=1793816217559226&alt=media",
+   "sub": "CoD Points",
+   "price": "175.74",
+   "discount": "-42%*",
+   "was": "299.97"
+  },
+  {
+   "label": "BlackCell Battle Pass",
+   "selected": false,
+   "popular": false,
+   "imgAlt": "Call of Duty BlackCell Battle Pass",
+   "img": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F788a609f6ffe02b96eefc8d91988bff55600a303.png?generation=1793816217585655&alt=media",
+   "sub": "",
+   "price": "26.49",
+   "discount": "-12%*",
+   "was": "29.99"
+  }
+ ],
+ "cod_sellers": [
+  {
+   "name": "CNLTeam",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fa135388df1ecabeb8e69b5849c9f9e0e9ba42267.png?generation=1793816217720069&alt=media",
+   "rating": "99.3%",
+   "reviews": "1,452,599 reviews",
+   "delivery": "9 min",
+   "discount": "-51%*",
+   "price": "9.97",
+   "was": "19.99"
+  },
+  {
+   "name": "BoosterHub",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F40ea4846c39443a7c55b036b1ad69eff377b516b.png?generation=1793816217719768&alt=media",
+   "rating": "99.8%",
+   "reviews": "19,258 reviews",
+   "delivery": "16 min",
+   "discount": "-46%*",
+   "price": "10.86",
+   "was": "19.99"
+  },
+  {
+   "name": "FastEasySeller",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F366bc7841b8bdbecd97aa20bbaf8dfd933b17077.png?generation=1793816217749177&alt=media",
+   "rating": "99.5%",
+   "reviews": "501,397 reviews",
+   "delivery": "21 min",
+   "discount": "-46%*",
+   "price": "10.87",
+   "was": "19.99"
+  },
+  {
+   "name": "GAFFA",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F31af18e66ea8d2486a07bdad89a93c61d336ba46.png?generation=1793816217771350&alt=media",
+   "rating": "99.9%",
+   "reviews": "1037 reviews",
+   "delivery": "10 min",
+   "discount": "-48%*",
+   "price": "10.54",
+   "was": "19.99"
+  },
+  {
+   "name": "245HOURS",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F92b73b3611ec97dc4af9f17b641888666d69f936.png?generation=1793776859917403&alt=media",
+   "rating": "100%",
+   "reviews": "1861 reviews",
+   "delivery": "20 min",
+   "discount": "-43%*",
+   "price": "11.45",
+   "was": "19.99"
+  },
+  {
+   "name": "LunaGuardTrades",
+   "avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F70faaf8cecde988ed71b70bd1f95e7df16c6072c.png?generation=1793816217759122&alt=media",
+   "rating": "99.3%",
+   "reviews": "42,155 reviews",
+   "delivery": "14 min",
+   "discount": "-36%*",
+   "price": "12.81",
+   "was": "19.99"
+  }
+ ],
+ "prime_featured": {
+  "deliveryTime": null,
+  "price": "1.34",
+  "discount": null,
+  "was": null,
+  "stock": "5"
+ },
+ "cod_featured": {
+  "deliveryTime": null,
+  "price": "9.96",
+  "discount": null,
+  "was": null,
+  "stock": "5"
+ },
+ "prime_featured_seller": {
+  "name": "ArsenicStore",
+  "rating": null,
+  "reviews": null
+ },
+ "cod_featured_seller": {
+  "name": "PowerXhub",
+  "rating": null,
+  "reviews": null
+ },
+ "prime_seo": {
+  "h1": "Buy Amazon Prime Video",
+  "h2s": [],
+  "paragraphs": [
+   "Top up your Amazon Prime Video balance at Eldorado.gg and start streaming your favorite movies and series in seconds. No long-term subscriptions, just fast and flexible access.",
+   "Get top-ups from verified sellers with secure delivery and great prices. Every transaction is protected, so you can buy with confidence.",
+   "Enjoy Prime Video your way - anytime, without limits."
+  ],
+  "list": []
+ },
+ "cod_seo": {
+  "h1": "Buy CoD Points Cheap",
+  "h2s": [
+   "COD Points for Sale",
+   "Buy CoD BO7 Points",
+   "CoD Points",
+   "How to buy COD Points"
+  ],
+  "paragraphs": [
+   "Buy CoD Points cheap, the main currency of the Call of Duty Warzone, Black Ops 7, Cold War and MW3 games and it is used to buy Operator Packs and other bundles from the in-game store including Battle Pass and it's Tiers. Cheap Call of Duty Points is the best method that keeps you progressing through the game. CoD Points price is always on the swing but with Eldorado you can find cheap CoD Points which is an easy method for getting Call of Duty CP that you can't find anywhere else for a better price. Buy CoD Points and have endless possibilies of skins choices and other cosmetics.",
+   "However, bundles are not the only item you can get with COD Points for sale. Whether youre looking for COD Points BO7 or if youre more interested in COD Points Warzone 7, you can use those same Points to unlock Battle Passes that will grant you a variety of rewards. Battle Pass is a seasonal reward system where players go through different tiers with increasingly better rewards. Battle Pass rewards can include anything from new blueprints or character outfits. Buy COD Points and experience all the game has to offer, from cosmetic changes to various utilities. Regardless if its the Battle Pass or bundles from the store, COD Points MW3 grants you access to content and features that might otherwise be out of reach.&nbsp;Cheap Call of Duty Points are available for sale on Eldorado together with near instant delivery times.",
+   "CoD Points can also be used in Black Ops 7 and not only Warzone, meaning that this exact page is the right place for you to purchase BO7 points. Not only the points system is made comfortable in a way that you can use it throughout different Call of Duty games, but it is also a great currency that helps you unlock various new items and accessories with whom you can easily customize your gameplay experience. Buy Black Ops 7 points from Eldorado with cheap prices and enjoy your new in-game look in seconds after the purchase.",
+   "CoD points provide a route for players to achieve specific types of skins and unlock Battle Pass with 1100 CP. Call of Duty points are essential if you are looking to build up your inventory since some of the skins are only available to buy with this currency only. The amount of skins released always increase and older skins get rare so players are always quick to snap whatever is new on the market. Thankfully Eldorado.gg makes snatching CoD points even easier since you can find cheap CoD points available for all platforms. Buy CoD points from any seller for a competitive price and receive a quick delivery.",
+   "Here you can find how to buy COD Points",
+   "That is it! Now you have your COD Points and you can continue playing the game the way you like."
+  ],
+  "list": [
+   "Look through COD Points offers and pick the one that you are interested in.",
+   "Choose your desired COD Points amount",
+   "Click Buy Now and make the payment through your favorite payment method",
+   "Once the payment is registered, the chat box will appear where you can talk with the seller",
+   "The seller will guide you on how you can receive COD Points. Follow the instructions and you will be getting your COD Points in no time.",
+   "Once COD Points is received, we ask to mark the order as Received and leave appropriate feedback (it is optional but much appreciated)."
+  ]
+ },
+ "ps_seo": {
+  "h1": "Buy PlayStation Plus",
+  "h2s": [
+   "Cheap PS Plus",
+   "PlayStation Plus Price",
+   "How to buy PlayStation Plus"
+  ],
+  "paragraphs": [
+   "If you enjoy playing on your console, theres no better gift to yourself than a premium service! Buy PlayStation Plus today and discover an innovative way to approach gaming. Simply put, the service gives players access to dozens, if not hundreds, of games, both old and new. With a cheap PS Plus subscription, you will have a free range to play what you want when you want. And best of all, you will not have to buy individual games. You will simply have to cover the PlayStation Plus price to enjoy all the freedom of gameplay. You can play solo-based games for their story or join others in multiplayer worlds - theres no need to limit yourself or your game selection when you have an entire curated library to choose from. Simply grab a cheap PS Plus subscription now and enjoy your console anew!",
+   "PSN Membership has several tiers - you can get the essential package that will cover the basics of your gaming. Or you can move up to higher tiers, which offer more perks - including a catalog of classic games and even trials for upcoming titles. With great PS Plus membership deals on Eldorado, you can find offers that best suit your needs and wants. Theres no need to buy individual games when you can buy PlayStation Plus and enjoy many various titles - from new releases to nostalgic classics - without paying for them again. With a single service, you will be able to connect with the community of other players and even be able to enjoy cloud storage. Its a good decision to buy PlayStation Plus for those who want to experience a variety of titles and genres and also those who would prefer to test out games before committing to a full-out purchase.",
+   "A PSN Membership is a good investment for anyone who appreciates games in general. With this subscription, you can get the most out of your console. You will also be able to access new and exclusive titles without any additional hassle. And whats more, when you buy PlayStation Plus, you are not locked into a specific genre or one or two tiles. With one service, you can play many different games. If theres a series that you wish to try out, or if there are titles that might cost an arm and a leg to purchase separately, theres no better solution than buying a cheap PS Plus subscription on Eldorado. All your gaming needs will be conveniently covered by one single purchase, and you will have the option to further customize your gaming experience using the subscription tiers. Find PS Plus membership discount offers without delay, and you will never have to worry about PlayStation Plus price ever again! This is your chance to play without compromise - get the most by paying the least. Browse cheap PS Plus listings now!",
+   "Looking to buy PlayStation Plus? Heres a quick guide on how to get started:",
+   "And youre done! Now you can use PlayStation Plus to enhance your gaming experience."
+  ],
+  "list": [
+   "Browse the listed PlayStation Plus offers and select what best suits your needs",
+   "Carefully read the item descriptions and ensure it match what youre looking for, including potential restrictions",
+   "Click the Buy Now button and make a payment with your preferred payment method",
+   "Once the payment is confirmed, youll be connected to the seller via a chat window",
+   "The seller will inform you how you can redeem PlayStation Plus within the specified delivery time",
+   "Once the PlayStation Plus was successfully obtained, please mark the order as Received."
+  ]
+ },
+ "prime_featured_seller_avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F6c5ca64ea9472fb97bb9e53f99ee9ec3065cfe29.png?generation=1793815585719114&alt=media",
+ "cod_featured_seller_avatar": "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F3cf9d978c8dd900e0d45614ab8b78a167391d52a.png?generation=1793816217707498&alt=media"
+}
