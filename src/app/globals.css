@@ -64,18 +64,19 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Blog pages render the LIVE Google Lato. Verified on live /blog AND the
-   article page: computed body/breadcrumb/lede/entry font = "Lato" and the
-   woff requests are fonts.gstatic.com Lato v25 (blog is a separate
-   WordPress subsite; the marketplace pages self-host a DIFFERENT Lato cut
-   — the capture's "Lato Eldorado", kept for those pages). Metrics differ:
-   breadcrumb title renders 296px live (Google Lato) vs 259px
-   (Lato Eldorado), which flipped the @390 breadcrumb wrap.
-   var(--font-lato) = next/font Google Lato (same Google files). */
-.blog-lato,
-.blog-article-page {
-  font-family: var(--font-lato), "Lato", sans-serif;
-}
+/* Blog pages use "Lato Eldorado" (the capture's font-face files) like
+   every other page. Session-15 measured WHY the alternate "use next/font
+   Google Lato" theory is wrong: canvas '400 18px' on the SAME 65-char
+   string = 473px on LIVE eldorado.gg, 473px with the capture's Lato
+   Eldorado, 477px with next/font Google Lato (+0.8%); and the live
+   breadcrumb title @1920 = 259px == ours with Lato Eldorado (the
+   "296px vs 259px" that suggested a different cut compared the live
+   @390 WRAPPED fragment box (296) against our single-line @1920 width
+   (259) — not a font difference; live breadcrumb is 14px everywhere,
+   probed liFS 14px @390 AND @1920). Live's googleapis css2 Lato and the
+   capture's woff2 files are the same cut (v25); next/font pins a
+   different revision. The .blog-lato/.blog-article-page classes remain
+   in the DOM inert. */
 
 /* Lato Eldorado — Lato 400/700/900 woff2 URLs VERBATIM from the blog
    capture's font-face appendix (the exact files eldorado.gg serves).
@@ -307,7 +308,7 @@ body {
    scrolls inside the wrapper instead of overflowing the page) */
 .entry .table-scroll {
   overflow-x: auto;
-  margin: 24px 0;
+  margin: 16px 0; /* live .table-scroll margin 16px/16px (theme.css) */
 }
 .entry .table-scroll table {
   margin: 0;
@@ -319,12 +320,10 @@ body {
   vertical-align: middle;
   font-size: 16px;
   font-weight: 700;
-  line-height: 19.2px;
+  line-height: 1.2; /* live: 1.2 ratio (row height 47 @390 with 14px font) */
   color: #fff;
   border-right: 2px solid rgb(50, 49, 65);
   border-bottom: 2px solid rgb(50, 49, 65);
-  /* live header cells never wrap ("How to get" fits one line @390) */
-  white-space: nowrap;
 }
 .entry td {
   background: rgb(30, 31, 40);
@@ -336,6 +335,27 @@ body {
   color: #fff;
   border-right: 2px solid rgb(50, 49, 65);
   border-bottom: 2px solid rgb(50, 49, 65);
+}
+/* Live theme facts (style.css .entry table rules, read 2026-11-04):
+   even rows zebra #282836, the FIRST COLUMN is bold, real <thead>
+   headers are LEFT-aligned on #0E0E11 (1 of the 8 scraped tables has a
+   thead; the rest use the tbody tr:first-child th header pattern which
+   stays centered). */
+.entry tbody tr:nth-child(even) td,
+.entry tbody tr:nth-child(even) th {
+  background-color: rgb(40, 40, 54);
+}
+.entry tbody td:first-child,
+.entry tbody th:first-child {
+  font-weight: 700;
+}
+.entry thead {
+  background: rgb(14, 14, 17);
+  color: #fff;
+}
+.entry thead th,
+.entry thead td {
+  text-align: left;
 }
 .entry th:last-child,
 .entry td:last-child {
@@ -352,6 +372,33 @@ body {
   .entry td {
     padding: 10px 8px;
     font-size: 14px;
+  }
+  /* Live theme mobile typography (style.css max-639px block, probed live
+     @390): entry paragraphs and list items drop to 14px/28px — the desktop
+     18px/36px rendered ~12% wider and wrapped one word early vs live —
+     and h2/h3 top margins tighten to 40px. */
+  .entry p {
+    font-size: 14px;
+    line-height: 28px;
+  }
+  .entry ul > li,
+  .entry ol > li {
+    font-size: 14px;
+    line-height: 28px;
+  }
+  .entry ul > li::before {
+    top: 12px;
+  }
+  .entry h2:not(:first-child),
+  .entry h3:not(:first-child) {
+    margin-top: 40px;
+  }
+}
+/* Live @<1024 (style.css max-1023px block): h2/h3 top margin 40px */
+@media (max-width: 1023px) {
+  .entry h2:not(:first-child),
+  .entry h3:not(:first-child) {
+    margin-top: 40px;
   }
 }
 .entry tr:last-child td {

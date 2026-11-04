@@ -65,8 +65,13 @@ export async function generateMetadata({ params }) {
    are covered too (no double wrap). */
 function withTableScroll(html) {
   return html.replace(/<table[^>]*>[\s\S]*?<\/table>/g, (m, offset, s) => {
-    const before = s.slice(Math.max(0, offset - 60), offset);
-    return /table-scroll\s*>\s*$/.test(before)
+    const before = s.slice(Math.max(0, offset - 80), offset);
+    /* the lookahead must accept the closing QUOTE of the class attribute:
+       'class="table-scroll">' — the previous /table-scroll\s*>\s*$/ missed
+       it and double-wrapped all 108 pre-wrapped tables (probed at runtime:
+       .table-scroll inside .table-scroll = 1 on the mutations guide, which
+       has exactly one table; session 15 fix) */
+    return /class="[^"]*table-scroll[^"]*"\s*>\s*$/.test(before)
       ? m
       : `<div class="table-scroll">${m}</div>`;
   });
@@ -197,7 +202,7 @@ export default async function BlogArticlePage({ params }) {
                   />
                 )}
 
-                <div className="mb-[40px] rounded-3xl pb-16 pr-6 pt-6">
+                <div className="mb-[40px] rounded-3xl pb-16 pr-6 pt-6 max-sm:px-4 max-sm:pb-10 max-sm:pt-4">
                   <div
                     className="entry"
                     dangerouslySetInnerHTML={{ __html: withTableScroll(article.entryHtml) }}

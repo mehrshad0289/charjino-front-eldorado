@@ -75,6 +75,21 @@ def main():
                     errs = []
                     pg.on("console", lambda m, e=errs: e.append(m.text) if m.type == "error" else None)
                     pg.goto(url, wait_until="networkidle", timeout=60000)
+                    # document.fonts.status turns 'loaded' before a lazily
+                    # requested face even starts downloading — explicitly
+                    # load the faces this page renders with and wait until
+                    # they resolve, or the screenshot paints the wider
+                    # fallback metrics (poisoned compares twice already)
+                    pg.evaluate("""async () => {
+                      await Promise.all([
+                        document.fonts.load('400 18px "Lato Eldorado"'),
+                        document.fonts.load('700 18px "Lato Eldorado"'),
+                        document.fonts.load('900 18px "Lato Eldorado"'),
+                        document.fonts.load('800 32px interstate'),
+                        document.fonts.load('900 32px interstate'),
+                      ]);
+                      await document.fonts.ready;
+                    }""")
                     pg.wait_for_timeout(1200)
                     pg.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                     pg.wait_for_timeout(1500)
