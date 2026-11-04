@@ -113,8 +113,8 @@ export default function BlogHeader() {
 
           {/* Mobile rows (live /blog @390): burger + logo icon + EN + SHOP,
               then a centered Games/Codes row below */}
-          <div className="flex items-center justify-between py-[15px] lg:hidden">
-            <div className="flex items-center">
+          <div className="flex items-center justify-between lg:hidden">
+            <div className="flex h-[70px] items-center">
               <button
                 aria-label="Open menu"
                 className="-ml-2 flex h-[70px] w-10 items-center justify-center text-white"
@@ -151,10 +151,10 @@ export default function BlogHeader() {
               </a>
             </div>
           </div>
-          <div className="flex items-center justify-center gap-12 pb-[15px] lg:hidden">
+          <div className="flex items-center justify-center gap-12 pb-[18px] pt-[19px] lg:hidden">
             <button
               aria-haspopup="true"
-              className="border-[0.8px] border-black/0 bg-black/0 p-2 pl-[9px] pr-[9px] text-center text-[20px] font-extrabold leading-[20px] text-[rgb(255,182,0)]"
+              className="min-h-[42px] border-[0.8px] border-black/0 bg-black/0 p-2 pl-[9px] pr-[9px] text-center text-[20px] font-extrabold leading-[20px] text-[rgb(255,182,0)]"
               style={{ fontFamily: "interstate, Lato, sans-serif" }}
               type="button"
             >
@@ -163,7 +163,7 @@ export default function BlogHeader() {
             </button>
             <button
               aria-haspopup="true"
-              className="border-[0.8px] border-black/0 bg-black/0 p-2 pl-[9px] pr-[9px] text-center text-[20px] font-extrabold leading-[20px] text-[rgb(152,126,251)]"
+              className="min-h-[42px] border-[0.8px] border-black/0 bg-black/0 p-2 pl-[9px] pr-[9px] text-center text-[20px] font-extrabold leading-[20px] text-[rgb(152,126,251)]"
               style={{ fontFamily: "interstate, Lato, sans-serif" }}
               type="button"
             >

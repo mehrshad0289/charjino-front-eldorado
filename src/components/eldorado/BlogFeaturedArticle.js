@@ -10,7 +10,7 @@ export default function BlogFeaturedArticle() {
     <div className="mb-[64px]">
       <div className="relative max-h-[360px] overflow-hidden rounded-2xl border-[0.8px] border-white">
         <a
-          className="relative block h-[358px] overflow-hidden rounded-[0.9375rem]"
+          className="relative block h-[358px] overflow-hidden rounded-[0.9375rem] max-md:h-[365px]"
           href={BLOG_FEATURED.href}
         >
           <div className="absolute left-0 top-0 size-full min-h-[358px] overflow-hidden rounded-[0.9375rem]">
@@ -27,16 +27,20 @@ export default function BlogFeaturedArticle() {
                 "linear-gradient(to right top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 40%, rgba(0, 0, 0, 0) 70%)",
             }}
           />
-          <div className="absolute bottom-0 left-0 z-[2] max-w-[60%] p-8 pr-10 max-md:max-w-full max-md:p-5 max-md:pr-6">
-            <div className="mb-[8px] text-[18px] font-bold leading-[27px] text-[rgb(255,182,0)]">
+          <div className="absolute bottom-0 left-0 z-[2] max-w-[60%] p-8 pr-10 max-md:max-w-full max-md:p-4">
+            <div className="mb-[8px] text-[18px] font-bold leading-[27px] text-[rgb(255,182,0)] max-md:text-[16px] max-md:leading-[24px]">
               {BLOG_FEATURED.date}
             </div>
-            <h4 className="mb-[10px] text-[28px] font-black leading-[36.4px] max-md:text-[24px]">
+            <h4 className="mb-[10px] text-[28px] font-black leading-[36.4px] max-md:text-[24px] max-md:font-bold max-md:leading-[31.2px]">
               {BLOG_FEATURED.title}
             </h4>
-            <div className="flow-root overflow-hidden text-[20px] leading-[28px] text-[rgb(138,134,157)] max-md:text-[16px] max-md:leading-[24px]">
-              <p className="flow-root overflow-hidden">{BLOG_FEATURED.excerpt}</p>
-            </div>
+            {/* excerpt: 2-line clamp at every width — live applies the clamp
+                on the <p> itself (verified: p gets -webkit-line-clamp:2 and
+                clamps to 2 lines in this browser; the capture's mid-word cut
+                "…Baldurs" is this clamp) */}
+            <p className="line-clamp-2 overflow-hidden text-[20px] leading-[28px] text-[rgb(138,134,157)] max-md:text-[18px] max-md:leading-[25.2px]">
+              {BLOG_FEATURED.excerpt}
+            </p>
           </div>
         </a>
       </div>

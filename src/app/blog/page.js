@@ -27,7 +27,7 @@ export default function BlogPage() {
     <div className="min-h-screen bg-blogpage leading-[24px] text-white">
       <BlogHeader />
       <main className="pt-[30px]">
-        <section className="pb-14 pt-[90px] max-md:pt-20">
+        <section className="pb-14 pt-[90px] max-md:pt-[147px]">
           <div className="relative z-[10] mx-auto w-full max-w-[1240px] pl-6 pr-6">
             <div className="rounded-3xl pb-10 pt-6 sm:pl-6 sm:pr-6">
               <BlogFeaturedArticle />
@@ -52,7 +52,7 @@ export default function BlogPage() {
         <BlogHighlights />
         <BlogCtaBanner />
       </main>
-      <Footer />
+      <Footer showLang={false} />
     </div>
   );
 }

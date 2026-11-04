@@ -103,11 +103,12 @@ function GlobeIcon() {
   );
 }
 
-export default function Footer() {
+export default function Footer({ showLang = true }) {
   return (
     <footer className="min-h-[330px] rounded-t-lg bg-ink text-white">
       <div className="mx-auto w-full max-w-[1208px] px-4 md:px-6">
-        {/* payments + language */}
+        {/* payments + language — the blog footer has no language selector
+            (blog capture + live /blog verified 2026-11-04), hence showLang */}
         <div className="flex flex-col items-start gap-6 pt-6 md:flex-row md:items-center md:justify-between md:gap-6">
           <div className="flex flex-wrap items-center gap-2.5">
             {PAYMENTS.map(([alt, slug]) => (
@@ -121,15 +122,17 @@ export default function Footer() {
             ))}
             <span className="ml-1 text-sm leading-normal text-footlink">+15 more</span>
           </div>
-          <button
-            type="button"
-            className="flex h-9 items-center gap-1.5 rounded-lg bg-darkbtn px-4 text-sm leading-[21px]"
-          >
-            <GlobeIcon />
-            <span>
-              English <span className="opacity-60">|</span> EUR - €
-            </span>
-          </button>
+          {showLang && (
+            <button
+              type="button"
+              className="flex h-9 items-center gap-1.5 rounded-lg bg-darkbtn px-4 text-sm leading-[21px]"
+            >
+              <GlobeIcon />
+              <span>
+                English <span className="opacity-60">|</span> EUR - €
+              </span>
+            </button>
+          )}
         </div>
 
         {/* brand + 3 link columns (4-col grid per reference) */}
