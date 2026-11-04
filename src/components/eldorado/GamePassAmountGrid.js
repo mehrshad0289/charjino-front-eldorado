@@ -27,7 +27,7 @@ function InfoIcon() {
 
 function Chip({ children }) {
   return (
-    <div className="flex w-fit items-center gap-1 rounded-lg bg-brand py-1 pl-2 pr-2.5">
+    <div className="flex w-fit items-center gap-1 rounded-lg bg-brand py-[2px] pl-2 pr-2.5">
       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path
           d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 16.9l-6.1 3.5 1.5-6.8L2.2 9l6.9-.7L12 2Z"
@@ -63,7 +63,7 @@ function Card({ variant, selected, onSelect }) {
       }`}
     >
       {(selected && variant.popular) || variant.bestValue ? (
-        <div className="mb-2.5">
+        <div className="-mt-2 mb-1.5">
           <Chip>{selected && variant.popular ? "Popular" : "Best Value"}</Chip>
         </div>
       ) : null}

@@ -49,7 +49,7 @@ export const GAME_PASS_VARIANTS = [
   { label: "Xbox Premium - 12 Months", price: "63.32", discount: "-65%*", was: "179.99", img: IMG_PREMIUM },
   { label: "Xbox Premium - 3 Months", price: "18.35", discount: "-60%*", was: "44.99", img: IMG_PREMIUM },
   { label: "Xbox Premium - 6 Months", price: "36.71", discount: "-60%*", was: "89.99", img: IMG_PREMIUM },
-  { label: "Xbox Ultimate - 1 Month", price: "8.25", img: IMG_ULTIMATE, popular: true },
+  { label: "Xbox Ultimate - 1 Month", price: "8.25", was: "20.99", discount: "-61%*", img: IMG_ULTIMATE, popular: true },
   { label: "Xbox Ultimate - 12 Months", price: "73.40", discount: "-71%*", was: "251.99", img: IMG_ULTIMATE },
   { label: "Xbox Ultimate - 3 Months", price: "17.89", discount: "-72%*", was: "62.99", img: IMG_ULTIMATE },
   { label: "Xbox Ultimate - 6 Months", price: "36.70", discount: "-71%*", was: "125.99", img: IMG_ULTIMATE },

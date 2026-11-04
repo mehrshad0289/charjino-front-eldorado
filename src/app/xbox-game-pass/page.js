@@ -57,7 +57,10 @@ export default function XboxGamePassPage() {
                 (sidebar measured 400px on the live page, switch at 1024) */}
             <div className="mx-auto w-full max-w-[1208px] px-4 lg:px-6">
               <div className="flex flex-col lg:flex-row lg:items-start lg:gap-6">
-                <div className="flex min-w-0 grow flex-col">
+                {/* mobile: the white steps column is full-bleed (live @390:
+                    cards span the viewport, inner padding 16px); lg restores
+                    the 1208 container inset */}
+                <div className="flex min-w-0 grow flex-col -mx-4 lg:mx-0">
                   <GamePassRegionChips />
                   <GamePassAmountGrid />
                   {/* desktop: disclaimer closes the white steps card (capture) */}
@@ -80,7 +83,7 @@ export default function XboxGamePassPage() {
                   sellers below the white flow (live @390 shows the Seller
                   heading on the page background) */}
               <div className="mt-6 flex flex-col gap-6 lg:hidden">
-                <Disclaimer className="px-4" />
+                <Disclaimer />
                 <div>
                   <div className="mb-3 text-[16px] font-bold leading-[24px]">Seller</div>
                   <GamePassSellerCard />
