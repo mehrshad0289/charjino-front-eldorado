@@ -23,7 +23,6 @@ import {
   PRIME_OTHER_SELLERS,
   PRIME_OTHER_SELLERS_COUNT,
   PRIME_OTHER_SELLERS_PAGES,
-  PRIME_OTHER_SELLERS_NUMBERED,
   PRIME_SEO,
 } from "../../components/eldorado/data/shopSubscriptionData";
 
@@ -121,7 +120,6 @@ export default function AmazonPrimePage() {
                   sellers={PRIME_OTHER_SELLERS}
                   count={PRIME_OTHER_SELLERS_COUNT}
                   pages={PRIME_OTHER_SELLERS_PAGES}
-                  numbered={PRIME_OTHER_SELLERS_NUMBERED}
                 />
               </div>
               {/* desktop: other sellers full width below the two columns */}
@@ -130,7 +128,6 @@ export default function AmazonPrimePage() {
                   sellers={PRIME_OTHER_SELLERS}
                   count={PRIME_OTHER_SELLERS_COUNT}
                   pages={PRIME_OTHER_SELLERS_PAGES}
-                  numbered={PRIME_OTHER_SELLERS_NUMBERED}
                 />
               </div>
             </div>
