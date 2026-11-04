@@ -194,16 +194,22 @@ export default function Footer({ showLang = true }) {
           ))}
         </div>
 
-        {/* legal bar */}
-        <div className="flex flex-wrap items-center gap-4 pt-4 pb-4 text-footlink">
-          <span className="leading-normal">
+        {/* legal bar — copyright left, legal links right (article capture:
+            `flex items-center` row, copyright whitespace-nowrap mr-[24px],
+            links ul ml-auto mr-[24px] each; live /blog + article both split) */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 pb-4 text-footlink">
+          <span className="whitespace-normal lg:whitespace-nowrap leading-[19.2px]">
             © 2026. The eldorado.gg website is operated by GWD Processing FZCO.
           </span>
-          {LEGAL_LINKS.map(([label, href]) => (
-            <a key={label} href={href} className="hover:text-white">
-              {label}
-            </a>
-          ))}
+          <ul className="flex flex-wrap items-center gap-6">
+            {LEGAL_LINKS.map(([label, href]) => (
+              <li key={label} className="list-none">
+                <a href={href} className="leading-[19.2px] hover:text-white">
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </footer>

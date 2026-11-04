@@ -59,12 +59,16 @@ export async function generateMetadata({ params }) {
 /* Live eldorado.gg wraps every .entry table in a div.table-scroll
    (block, overflow-x: auto) so wide tables scroll instead of blowing out
    the viewport (verified live @390: wrapper 326px, overflow-x auto).
-   Our entry HTML comes from the data file as raw strings, so the wrap is
-   applied at render time with the same class name as live. */
+   Idempotent: the WP theme already emits div.table-scroll around all 108
+   scraped tables — only tables NOT preceded by one get wrapped here, so
+   re-scrapes without the WP wrapper are covered too (no double wrap). */
 function withTableScroll(html) {
-  return html
-    .replace(/<table(\s|>)/g, '<div class="table-scroll"><table$1')
-    .replace(/<\/table>/g, "</table></div>");
+  return html.replace(/<table[^>]*>[\s\S]*?<\/table>/g, (m, offset, s) => {
+    const before = s.slice(Math.max(0, offset - 60), offset);
+    return /table-scroll\s*>\s*$/.test(before)
+      ? m
+      : `<div class="table-scroll">${m}</div>`;
+  });
 }
 
 function BreadChevron() {
@@ -101,34 +105,28 @@ export default async function BlogArticlePage({ params }) {
       </div>
 
       <main className="pt-[30px]">
-        <section className="pb-[30px] pt-[60px] max-lg:pt-[178px]">
+        <section className="pb-[30px] pt-[60px] max-lg:pt-0">
           <div className="relative z-[10] mx-auto w-full max-w-[1136px] px-6">
-            {/* breadcrumb */}
-            <div className="mb-[8px] pb-[60px]">
-              <ul className="flex flex-wrap">
-                <li className="flex items-center text-[14px] leading-[19.6px] text-[rgb(138,134,157)]">
-                  <a href="/blog/" className="block">
-                    Home
-                  </a>
-                  <BreadChevron />
-                </li>
-                <li className="flex items-center text-[14px] leading-[19.6px] text-[rgb(138,134,157)] max-sm:hidden">
-                  <a href={article.url} className="block">
-                    {article.category}
-                  </a>
-                  <BreadChevron />
-                </li>
-                <li className="flex items-center text-[14px] leading-[19.6px] sm:hidden">
-                  …
-                  <BreadChevron />
-                </li>
-                <li className="flex items-center text-[14px] leading-[19.6px]">
-                  {article.title}
-                </li>
-              </ul>
+            {/* breadcrumb — inline flow so a long current title wraps
+                mid-text like live @390 (Home > … > Title line 1, rest line 2) */}
+            <div className="mb-[8px] pb-[60px] text-[14px] leading-[19.6px]">
+              <span className="text-[rgb(138,134,157)]">
+                <a href="/blog/" className="block sm:inline">
+                  Home
+                </a>
+              </span>
+              <BreadChevron />
+              <span className="text-[rgb(138,134,157)] max-sm:hidden">
+                <a href={article.url} className="block sm:inline">{article.category}</a>
+              </span>
+              <span className="sm:hidden text-[rgb(138,134,157)]">…</span>
+              <BreadChevron />
+              <span>{article.title}</span>
             </div>
 
-            <div className="flex flex-wrap items-start">
+            {/* stretch (default) so the sticky TOC column spans the row —
+                live .single-content-split dflex behaves the same */ }
+            <div className="flex flex-wrap">
               {/* left column (75%) */}
               <div className="w-full lg:w-3/4 lg:pr-[7px]">
                 <div className="mb-[32px]">

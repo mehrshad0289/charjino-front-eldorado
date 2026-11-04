@@ -281,12 +281,22 @@ body {
 }
 .entry table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
   overflow: hidden;
   border: 2px solid rgb(50, 49, 65);
   border-radius: 16px;
   margin: 24px 0;
+}
+/* WordPress wraps tables in .table-scroll (live verified @390: the table
+   scrolls inside the wrapper instead of overflowing the page) */
+.entry .table-scroll {
+  overflow-x: auto;
+  margin: 24px 0;
+}
+.entry .table-scroll table {
+  margin: 0;
 }
 .entry th {
   background: rgb(14, 14, 17);
@@ -339,4 +349,34 @@ body {
 /* TOC link rows (desktop box) */
 .toc-item.current > a {
   color: rgb(255, 182, 0) !important;
+}
+/* WordPress <pre> blocks in entry content (live verified @390: transparent,
+   Lato 16/24 white, overflow-x auto so long formulas scroll in place) */
+.entry pre {
+  margin: 0 0 8px;
+  padding: 0;
+  background: transparent;
+  font-family: Lato, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: #fff;
+  white-space: pre;
+  overflow-x: auto;
+}
+/* WordPress caption blocks (live verified: inline width clamped by
+   max-width:100%, caption text 14px gray left-aligned) */
+.entry .wp-caption {
+  max-width: 100%;
+  height: auto;
+  margin: 5px 0;
+}
+.entry .wp-caption img {
+  margin: 0 auto;
+}
+.entry .wp-caption-text {
+  font-size: 14px;
+  line-height: 19.6px;
+  color: rgb(191, 187, 212);
+  text-align: start;
+  margin: 0 0 8px;
 }
