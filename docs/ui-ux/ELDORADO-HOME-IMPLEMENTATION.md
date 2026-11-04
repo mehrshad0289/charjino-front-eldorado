@@ -111,8 +111,11 @@ actual files and Git history — never trust previous AI claims.
   (see above). Lesson recorded: rebuilding .next while `next start` is
   serving it corrupts static chunk serving (CSS 500, unstyled page) —
   always stop the server before rebuilding
-- Deployment: pending verification for session 10 push (5585abf);
-  session-9 deployment was verified earlier
+- Deployment: VERIFIED — Vercel serves the product page (HTTP 200; HTML
+  contains "ACC 3000 COINS", "Full email access included",
+  "Back to all offers", "How we protect your purchase", "Verified ID"),
+  corresponding to push 3d2f95b; /, /efootball-accounts, /xbox-game-pass
+  and /xbox-gift-card re-verified 200 after the deploy
 - Next exact action: on request — gift card amount→offers step, other
   gift card brands reusing these components, or the product page's
   quantity/feedback sections if the user pushes references for them
