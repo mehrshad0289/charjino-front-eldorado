@@ -1,15 +1,12 @@
-/* EA FC 27 Boosting page data (/ea-fc-boosting/b/142-4) — session 19,
-   from the user-pushed capture `ui ux/Boosting-rivals/…make` (origin
-   bddd33e). Session 23: UPDATED to the newer user-pushed capture
-   `ui ux/Boosting-Champions-Finals/…(1).make` (commit 9f6e420, decoded
-   snapshots/boostfinals-1920px-light-{1,2}.tsx) — Champions Finals chip
-   active, single full-width config card (no 90px icon) titled
-   "Champions Finals" with Current Rank/Desired Rank/Platform fields,
-   customize panel CTA "Get offers now" (the old capture's active-request
-   alert was that logged-in user's state), and the save-money badge SVG
-   regenerated (e7032432 → 99b185c3). Live probe 2026-11-05 (public page)
-   confirms the "Get offers now" panel + Platform "PC - EA"; capture wins
-   on the selected values. Asset URLs verbatim, verified HTTP 200
+/* EA FC 27 Boosting page data (session 22/23: two user-pushed captures
+   of /ea-fc-boosting/b/142-4 — Division Rivals default + Champions
+   Finals variant in BOOST_VARIANTS below, rendered interactively by
+   BoostingConfigSection; BOOST_CARDS/BOOST_CUSTOMIZE keep the
+   session-19 Division Rivals anatomy as the data record). (/ea-fc-boosting/b/142-4) — session 19,
+   from the user-pushed capture `ui ux/Boosting-rivals/
+   www_eldorado_gg_ea-fc-boosting_b_142-4_1920w_390w_1536w_default.make`
+   (origin bddd33e — the boosting product page the /checkout capture was
+   taken from). Asset URLs verbatim, each verified HTTP 200
    (scripts/verify_boosting_assets.py). FAQ answers are NOT in the
    capture (all 8 rows closed @1920) — scraped verbatim from live
    eldorado.gg/ea-fc-boosting/b/142-4 on 2026-11-04 (question order and
@@ -40,8 +37,8 @@ export const BOOST_DEALS_TITLE = [
 ];
 
 export const BOOST_CHIPS = [
-  { label: "Division Rivals" },
-  { label: "Champions Finals", active: true },
+  { label: "Division Rivals", active: true },
+  { label: "Champions Finals" },
   { label: "Gallery Boost" },
   { label: "SBC Boost" },
   { label: "Archetype Boost" },
@@ -50,29 +47,34 @@ export const BOOST_CHIPS = [
   { label: "Custom Request" },
 ];
 
-/* Session 23 config card — single full-width card per the newer
-   capture (gridArea 1/1/2/3 in the left column's 2-col grid): header bg
-   200px + white fade, NO 90px icon, bold 24px title, then the field
-   grid (Current Rank 1/1, Desired Rank 1/2, Platform 2/1 spanning both
-   columns). Comboboxes are static per capture (no dropdown content in
+/* Config cards — header bg images, 90px icons and combobox values
+   verbatim. Comboboxes are static per capture (no dropdown content in
    any reference — nothing invented). */
 export const BOOST_CARDS = [
   {
-    bg: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F92b3f9e977e35c54499ea0b3f9f07c2d7866afdd.png?generation=1793813798533798&alt=media",
-    title: "Champions Finals",
+    bg: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F99cc743fd2d83cb7165100b9463053b35e972a92.png?generation=1793808260347373&alt=media",
+    icon: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F5e0c44277189138f1bd3041ad352bf7cda7c2dc5.png?generation=1793808260338372&alt=media",
+    label: "Current division",
+    value: "Division 1",
     fields: [
-      { label: "Current Rank", value: "Rank 15" },
-      { label: "Desired Rank", value: "Rank 1" },
-      { label: "Platform", value: "PC - EA", span: true },
+      { label: "Current division", value: "Division 1" },
+      { label: "Platform", value: "PC - Steam" },
     ],
+  },
+  {
+    bg: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F8be903c8475a11e1c4f2c391393ef73b9df43ff2.png?generation=1793808260323538&alt=media",
+    icon: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F35324093f3c6eb010360931ae1b570725d93a667.png?generation=1793808260351264&alt=media",
+    label: "Desired division",
+    value: "Elite",
+    fields: [{ label: "Desired division", value: "Elite" }],
   },
 ];
 
 export const BOOST_TEXTAREA_PLACEHOLDER = "e.g. I need it done in a week...\n";
 
-/* Session 23: the exclamation SVG and the active-request alert left the
-   page with the old capture — the newer capture (and the anonymous live
-   probe) show the plain "Get offers now" submit instead. */
+export const BOOST_EXCLAMATION =
+  "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F3ec2873fb253249d46670ddd9eb18de7213996e8.svg?generation=1793808260338837&alt=media";
+
 export const BOOST_CUSTOMIZE = {
   title: "Customize order",
   modes: [
@@ -84,7 +86,109 @@ export const BOOST_CUSTOMIZE = {
     { label: "Solo queue", on: false },
     { label: "Offline mode", on: false },
   ],
-  submit: { button: "Get offers now" },
+  alert: {
+    title: "You already have an active request",
+    body: "If you'd like to submit a new one, cancel the current request first.",
+    button: "Check request",
+  },
+};
+
+/* Session 22 — Champions Finals variant per the user-pushed second
+   capture `ui ux/Boosting-Champions-Finals/…(1).make` (origin 9f6e420,
+   decoded with decode_session22_messages.py → boosting2-1920px-light-1).
+   Same URL /ea-fc-boosting/b/142-4, "Champions Finals" chip active.
+   Differences vs the Division Rivals capture (everything else — banner
+   3dc1f3ac, deals title, Solo/Duo + switches, save-money, trust, rank-
+   up, boosters, lightning, FAQ, SEO — is identical; save-money badge
+   svg regenerated e7032432 → 99b185c3 per session 23's decode):
+   - ONE full-width config card (no 90px icon, no radial glow) titled
+     "Champions Finals" 24px bold; bg 92b3f9e9; image fade bottom-96.8
+     (session 23's capture-exact offset); inner 2-col form: Current
+     Rank → Rank 15 | Desired Rank → Rank 1, Platform → PC - EA
+     spanning both columns (capture gridArea 2/1/3/3; in DR Platform
+     sits inside card 1 at 2/1/3/2).
+   - Customize panel bottom: NO active-request alert — a full-width
+     dark "Get offers now" button (min-h-14 rounded-lg) + a centered
+     14px "Protected by TradeShield" row (shield glyph → inline SVG,
+     link-blue underline rgb(45,94,173)).
+   Chips without a captured variant (Gallery/SBC/Archetype/Clubs/
+   Gauntlet/Custom Request) are rendered but do NOT switch content —
+   no reference defines their state, nothing invented. Session 23
+   implemented the CF state statically; session 22's interactive
+   switch (BoostingConfigSection + this data) supersedes it while
+   keeping BOTH captured states reachable. */
+export const BOOST_VARIANTS = {
+  "Division Rivals": {
+    cards: [
+      {
+        bg: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F99cc743fd2d83cb7165100b9463053b35e972a92.png?generation=1793808260347373&alt=media",
+        icon: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F5e0c44277189138f1bd3041ad352bf7cda7c2dc5.png?generation=1793808260338372&alt=media",
+        label: "Current division",
+        value: "Division 1",
+        fields: [
+          { label: "Current division", value: "Division 1" },
+          { label: "Platform", value: "PC - Steam" },
+        ],
+      },
+      {
+        bg: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F8be903c8475a11e1c4f2c391393ef73b9df43ff2.png?generation=1793808260323538&alt=media",
+        icon: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F35324093f3c6eb010360931ae1b570725d93a667.png?generation=1793808260351264&alt=media",
+        label: "Desired division",
+        value: "Elite",
+        fields: [{ label: "Desired division", value: "Elite" }],
+      },
+    ],
+    customize: {
+      title: "Customize order",
+      modes: [
+        { label: "Solo", active: true },
+        { label: "Duo" },
+      ],
+      switches: [
+        { label: "Stream", on: false },
+        { label: "Solo queue", on: false },
+        { label: "Offline mode", on: false },
+      ],
+      alert: {
+        title: "You already have an active request",
+        body: "If you'd like to submit a new one, cancel the current request first.",
+        button: "Check request",
+      },
+    },
+  },
+  "Champions Finals": {
+    cards: [
+      {
+        title: "Champions Finals",
+        bg: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F92b3f9e977e35c54499ea0b3f9f07c2d7866afdd.png?generation=1793813798533798&alt=media",
+        icon: null,
+        wide: true,
+        fade: 96.8,
+        fields: [
+          { label: "Current Rank", value: "Rank 15" },
+          { label: "Desired Rank", value: "Rank 1" },
+          { label: "Platform", value: "PC - EA", full: true },
+        ],
+      },
+    ],
+    customize: {
+      title: "Customize order",
+      modes: [
+        { label: "Solo", active: true },
+        { label: "Duo" },
+      ],
+      switches: [
+        { label: "Stream", on: false },
+        { label: "Solo queue", on: false },
+        { label: "Offline mode", on: false },
+      ],
+      offerCta: {
+        button: "Get offers now",
+        protectionPrefix: "Protected by",
+        protectionLink: "TradeShield",
+      },
+    },
+  },
 };
 
 export const BOOST_SAVE_MONEY = {

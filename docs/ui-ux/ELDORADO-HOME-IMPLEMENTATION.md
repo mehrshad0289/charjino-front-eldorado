@@ -72,6 +72,20 @@ actual files and Git history — never trust previous AI claims.
   overflow 0, 0 broken images, 0 console/page errors, build green
   (68 pages). Session 20's own log entry (verify/status + capture
   audit) was never written — recovered below in the section log.
+
+  RECONCILIATION (session 22/23, same two captures implemented in
+  parallel): the shipped code merges the best of both rounds —
+  /dashboard/messages renders the capture-verbatim FIVE chips
+  (All/Boosting/Orders/Support/Pre-purchase; the session-23 static
+  MessagesFilterBar with 3 tabs is removed — the decode's aria-labels
+  carry all five) via DashboardMessagesPanel; /ea-fc-boosting/b/142-4
+  keeps BOTH captured states reachable (session 22's interactive
+  BoostingConfigSection + BOOST_VARIANTS supersedes the session-23
+  static Champions-Finals render, which erased the Division Rivals
+  capture's content) while folding in session 23's capture-exact
+  findings: card fade bottom-96.8 on the CF card and the regenerated
+  save-money badge svg 99b185c3. Both verify scripts ALL PASS after
+  the merge; sweep 36 x 2 ALL PASS.
 - Previous section: session 19 — /become-seller COMPLETE. Recovery
   (fresh sandbox, cloned at 5426fe6 → pulled 02e63b4): every
   session-18 commit verified present on origin (270cdbd decode,
@@ -1344,6 +1358,7 @@ actual files and Git history — never trust previous AI claims.
   action: on request — no capture-driven work remains; live-first
   pages or fixes per user direction.
 
+<<<<<<< HEAD
 - 2026-11-05 (session 23) — the two user-pushed "add file" captures
   (8111ede messages-notempty + 9f6e420 Boosting-Champions-Finals)
   decoded, implemented, verified and pushed. Full anatomy in the
@@ -1372,6 +1387,79 @@ actual files and Git history — never trust previous AI claims.
   (parallel session-22 sweep docs). Every push verified by empty
   `git log origin/main..HEAD` immediately after; one rejection
   resolved fetch+rebase (never force).
+=======
+- 2026-11-04 (session 22, user captures round) — mid-session the user
+  pushed TWO second-state captures of already-implemented pages (the
+  folder-name pattern: same page, new state). Both decoded with the
+  new scripts/decode_session22_messages.py (needed `pip install
+  zstandard` — the old Messages capture's scene graph is a zstd
+  chunk; the new ones are deflate+0). Snapshots: messages1-*/messages2-*
+  + boosting2-1920px-light-{1,2}.
+  - /dashboard/messages (origin 8111ede, `ui ux/messages-notempty/`):
+    diff vs the session-17 empty capture — the empty state is GONE;
+    the page now renders (inside the SAME 900px/mt-14/max-w-1048
+    wrapper) a filter chip row All (dark rgb(34,33,39) active) +
+    Boosting/Orders/Support/Pre-purchase (bg rgb(244,244,244); all
+    font-bold 14/21 min-h-42 min-w-70 px-4 py-[10px] rounded-lg, gap-8)
+    + an "Unread messages only" toggle (track 48×20 rgb(231,231,231)
+    rounded-2xl, knob 24 white shadow; ON state = blue knob
+    rgb(71,131,255) on rgba(71,131,255,0.2) per the SETTINGS capture's
+    toggle pattern — no ON state in this capture, documented
+    assumption) + an aria-label="Chat" container EMPTY in the capture
+    (the real chat is a client-rendered app — nothing invented, same
+    treatment as the boosting carousel). Header gains '26' on the
+    Messages icon + '9+' on Favorites: HeaderBar new optional favCount
+    prop (default null — every other page untouched). The capture's
+    red bottom-right fixed alert contains only the stray text
+    "noindex ." — a capture artifact, NOT implemented (documented).
+    New component DashboardMessagesPanel (client). Interaction fixes
+    learned: label-forwarded clicks DOUBLE-toggle a nested checkbox →
+    the switch input now covers the track directly (role="switch",
+    opacity-0 inset-0 z-10, single click); and bg-white vs an
+    arbitrary bg class on ONE element conflict in stylesheet order →
+    make color classes mutually exclusive. verify_messages22_local.js
+    ALL PASS (wrapper 900/1048/mt-14, 5 chips h-42, track 48×20 knob
+    24, badges 26/9+ overhang -4, chip select swaps styles, toggle ON
+    blue, @390 overflow 0 with wrapping chips).
+  - /ea-fc-boosting/b/142-4 (origin 9f6e420, `ui ux/Boosting-Champions-Finals/`):
+    second capture of the SAME URL with "Champions Finals" chip
+    active. Text-level diff vs the Division Rivals capture: ONLY the
+    config cards + customize bottom change (banner 3dc1f3ac, deals
+    title, Solo/Duo + switches, save-money, trust, rank-up, boosters,
+    lightning, FAQ, SEO identical): ONE full-width card (no 90px icon,
+    no radial glow) titled "Champions Finals" 24px bold with bg
+    92b3f9e9 (200px art + white fade) and fields Current Rank →
+    Rank 15 | Desired Rank → Rank 1, Platform → PC - EA spanning both
+    columns (capture gridArea 2/1/3/3; in DR Platform sits in card 1);
+    customize bottom = full-width dark "Get offers now" (min-h-14
+    rounded-lg) + centered "Protected by TradeShield" row (shield
+    icomoon glyph → inline SVG, underline rgb(45,94,173)) instead of
+    the blue active-request alert. Implemented as a two-variant page:
+    data BOOST_VARIANTS (both captured states verbatim) + new client
+    component BoostingConfigSection (chips + cards + textarea +
+    customize + save-money + why-trust moved out of page.js); chips
+    switch on click, chips without a captured variant are no-ops
+    (nothing invented). verify_boosting22_local.js ALL PASS (default
+    DR: 2 cards + icons 99cc743f/8be903c8 + alert; click CF: wide
+    card 92b3f9e9 + Rank 15/Rank 1/PC - EA + Get offers now +
+    TradeShield; back-switch; non-captured chip no-op; @390 overflow
+    0; 0 page errors). New asset 92b3f9e9 → 200.
+  - Regression: sweep_all_routes.js 72 page-loads ALL PASS after both
+    changes; build green (68 pages). Pushes: messages feature +
+    boosting feature + this doc commit — each verified by empty
+    origin/main..HEAD.
+
+## Backup Status
+
+- Last successful push timestamp: 2026-11-04, session 22 (messages
+  notempty + boosting Champions-Finals variant + docs; this doc
+  commit is the last push)
+- Hash of last pushed commit: this docs commit, preceded by the
+  boosting variant feature, the messages feature, `8de2383`
+  (session-22 sweep + doc hygiene), `305210d` (session 21 doc),
+  `fb8e2c5` / `9d7a8c2` (gamepass buy-box chain). Every push verified
+  by empty `git log origin/main..HEAD` immediately after.
+>>>>>>> f0b896c (feat(ui): /ea-fc-boosting/b/142-4 two-variant switch per user-pushed Champions-Finals capture (session 22) — BOOST_VARIANTS data (both captured states verbatim) + client BoostingConfigSection; chips switch states, non-captured chips no-op; CF card 92b3f9e9 + Rank 15/Rank 1/PC - EA + Get-offers-now panel; verify scripts + doc)
 - Uncommitted changes: none after this doc commit
 - Unpushed commits: none
 - Push auth: the session PAT lives in the origin URL in this sandbox
