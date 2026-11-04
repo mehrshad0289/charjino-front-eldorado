@@ -11,12 +11,13 @@ actual files and Git history — never trust previous AI claims.
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
   `/xbox-game-pass` + `/xbox-gift-card` + product-single
   `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
-  + `/login` + `/blog` (session 12 + live-verified pixel pass session
-  12c) + `/about-us` + `/contact-us` + `/bug-bounty` (session 12b)
-- Current section: session 12c — `/blog` live-verified pixel pass +
-  parallel-session merge COMPLETE (header/featured/cards/highlights/
-  footer matched to live at 1920/1536/390 via DOM + pixel probes;
-  section offsets within ±2px of live, page height within 9px; pushed)
+  + `/login` + `/blog` + `/blog/[category]/[slug]` (user's sessions
+  12-12c) + `/about-us` + `/contact-us` + `/bug-bounty` (session 12b) +
+  search dropdown rebuilt per capture (session 13)
+- Current section: session 13 — SearchOverlay rebuilt from the
+  search-1920px-light capture (the last decoded reference without a
+  matching implementation); ALL pushed captures now have a page or
+  component; verified and pushed
 - Reference files:
   - Blog capture (session 12, user-pushed):
     `ui ux/blog/www_eldorado_gg_blog_1920w_390w_1536w_default.make`
@@ -40,6 +41,16 @@ actual files and Git history — never trust previous AI claims.
     + min-h-80 H1 + pb-16, banner img 1905x444 absolute inside it) with
     the sections as a SIBLING container — implemented the live way
     (the literal capture nesting paints the banner over the whole page)
+  - Search dropdown reference: `snapshots/search-1920px-light-{1,2}.tsx`
+    (decoded early from the root www .make; the capture is the HOME page
+    with the search dropdown OPEN — the page content below the header is
+    the home variant already implemented; the dropdown layer z-[5] at
+    the end of the snapshot is the reference for SearchOverlay)
+  - LIVE DIVERGENCE (2026-11-04): current live eldorado.gg renders a
+    WHITE search dropdown (input bg rgb(255,255,255), dark text —
+    probed via Playwright) while the capture shows the DARK panel
+    rgb(30,31,40); per project rules the capture stays the reference
+    and the divergence is documented here
   - Product/gamepass/giftcard/dashboard/login references: see session
     7-11 log entries below
 - Implementation status (session 12 — data + 6 new components + page):
@@ -232,6 +243,59 @@ actual files and Git history — never trust previous AI claims.
 - Next exact action: on request — blog article page (no capture pushed
   yet), more dashboard sections (orders/wallet) reusing DashboardShell,
   or any new captures the user pushes
+
+- Implementation status (session 13 — SearchOverlay rebuild):
+  - `SearchOverlay.js` rewritten from the search-1920px-light capture —
+    the session-3 version was a white approximation (white panel,
+    border-focusblue input, 32px assetsdelivery icons, no capture
+    geometry). New: backdrop `backdrop-blur-xs bg-black/50`; centered
+    panel `flex-col w-[1160px] bg-catnav rgb(30,31,40) max-h-[530px]
+    rounded-2xl`; input row pt-6 px-6 pb-4; input h-[42px] bg
+    rgb(42,42,55) (new token `--color-dropinput` #2a2a37) white text +
+    white 24px search glyph right-2; body `overflow-auto max-h-[440px]
+    pl-6 mt-2 mb-4`; uppercase 12px rgb(168,170,179) label pb-4; 10
+    rows `flex-col gap-2` — a[aria-label] > h-[42px] row gap-2 text-16
+    white > 28px rounded-sm icon + text-ellipsis name
+  - Items verbatim from the capture: 10 names in capture order, 28px
+    googleapis h2d-ext-asset icon URLs each with its OWN generation
+    param (the shared-generation batch 401s — per-URL verification all
+    200), capture hrefs stored per item for when those pages land;
+    rendered hrefs still route to /efootball-accounts per the standing
+    session-3 user wiring request
+  - Mobile (<lg): full-screen white sheet unchanged (live-verified
+    @390 in session 3), now fed by the same capture icon URLs
+  - `globals.css`: + `--color-dropinput` token
+  - Remaining-work audit: after this, EVERY decoded capture has an
+    implementation (home/menu/search → /+HeaderBar+SearchOverlay,
+    shop_account → /efootball-accounts, product-single, giftcard,
+    gamepass, login, dashboard, about/contact/bugbounty, blog +
+    blog-article) — the only unbuilt areas have NO captures (cart
+    page, dashboard orders/wallet/messages, game-specific pages)
+- Visual comparison status (screenshots `docs/ui-ux/screenshots/session13/`):
+  - search-overlay-1920/768/390.png: dark panel + 10 rows match the
+    capture layer; live-search-1920.png = live probe screenshot kept
+    as the white-dropdown divergence reference
+  - Computed styles == capture: input rgb(42,42,55)/white, rows h-42
+    gap-8, icons 28px, label 12px rgb(168,170,179), body max-h-440,
+    backdrop blur 4px black/50, panel 1160/rounded-2xl
+- Technical checks: build green (33 routes); overlay opens via the
+  header trigger at 1920/768/390, Escape closes (HeaderBar handler),
+  body scroll lock intact; 20/20 overlay images load; overflow=0 at
+  5 widths x 3 routes; zero console errors
+- Known deviations / documented limitations:
+  - Live shows a white dropdown today (see reference note) — capture
+    wins per project rules
+  - Suggestion hrefs route to /efootball-accounts (user's session-3
+    wiring request), NOT the capture hrefs — the real hrefs are kept
+    in the ITEMS data for future game pages
+  - The capture's home content (Brainrot hero, Recently viewed,
+    popular link sections) was already implemented in sessions 1-6
+    from the same reference; not re-verified pixel-wise this session
+- Deployment: push 77a3b77 — Vercel re-verified after this doc update
+- Next exact action: on request — nothing capture-driven remains;
+  candidates are the captures the user has not pushed yet (cart,
+  dashboard orders/wallet, game pages) or a pixel pass on any page
+  against live
 
 ## Section log (append one block per completed section)
 
@@ -495,6 +559,19 @@ actual files and Git history — never trust previous AI claims.
   errors, FAQ toggle + known-issues rows + mailto + Start chat
   verified, visual self-review at 1920/390 (screenshots committed).
   Pushed a1dae56 (fetch+rebase over the user's concurrent commits).
+
+- 2026-11-04 (session 13) — SearchOverlay rebuilt per the
+  search-1920px-light capture; remaining-work audit closed. Recovery:
+  fresh sync at de55aac (user had shipped /blog article route + pixel
+  pass in parallel sessions eb749d5..de55aac); token rotated on origin.
+  Audit: every decoded snapshot now maps to a route/component — the
+  only gap was the search dropdown, where the old session-3 overlay
+  was a white approximation. Probed live eldorado.gg for a mobile
+  reference: live now renders a WHITE dropdown (divergence documented;
+  capture wins). 401 lesson: each capture asset URL carries its own
+  `generation` param — batch-verifying with one shared param fails
+  spuriously. Verified overlay geometry/styles vs capture (see
+  checkpoint), screenshots committed. Pushed 77a3b77.
 
 ## Backup Status
 
