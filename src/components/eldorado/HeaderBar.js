@@ -36,7 +36,81 @@ function GearIcon() {
   );
 }
 
-export default function HeaderBar() {
+/* Logged-in right side (dashboard capture): three 42px rounded icon
+   buttons + 44px avatar. The capture's icomoon glyphs decode empty, so
+   the buttons draw neutral SVGs (bell / chat / favorites — unnamed in any
+   reference, documented assumption) and the avatar opens no menu. */
+function LoggedInActions({ user }) {
+  return (
+    <>
+      <button
+        type="button"
+        aria-label="Notifications"
+        className="hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
+      >
+        <BellIcon />
+      </button>
+      <button
+        type="button"
+        aria-label="Messages"
+        className="hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
+      >
+        <ChatIcon />
+      </button>
+      <button
+        type="button"
+        aria-label="Favorites"
+        className="hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
+      >
+        <HeartIcon />
+      </button>
+      <button type="button" aria-label="Account menu" className="ml-1 flex items-center">
+        <span className="size-11 overflow-hidden rounded-full border-2 border-black/0">
+          <img alt="Profile avatar" src={user.avatar} className="block size-11 object-cover align-middle" />
+        </span>
+      </button>
+    </>
+  );
+}
+
+function BellIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 4a6 6 0 0 1 6 6v3.5l1.5 2.5h-15L6 13.5V10a6 6 0 0 1 6-6Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ChatIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3.5" y="5.5" width="17" height="12" rx="2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="m4.5 7 7.5 6 7.5-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function HeartIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 19.5S4 15 4 9.8C4 7.4 5.9 5.5 8.2 5.5c1.5 0 2.9.8 3.8 2 .9-1.2 2.3-2 3.8-2 2.3 0 4.2 1.9 4.2 4.3 0 5.2-8 9.7-8 9.7Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export default function HeaderBar({ loggedIn = false, user = null }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -88,19 +162,25 @@ export default function HeaderBar() {
         </div>
 
         <div className="ml-auto flex shrink-0 items-center gap-1">
-          <button
-            type="button"
-            className="h-[42px] min-w-[70px] rounded-lg bg-brand px-4 text-sm font-bold text-ink"
-          >
-            Log in
-          </button>
-          <button
-            type="button"
-            aria-label="Settings"
-            className="flex h-[42px] w-[42px] items-center justify-center text-white lg:hidden"
-          >
-            <GearIcon />
-          </button>
+          {loggedIn ? (
+            <LoggedInActions user={user} />
+          ) : (
+            <>
+              <button
+                type="button"
+                className="h-[42px] min-w-[70px] rounded-lg bg-brand px-4 text-sm font-bold text-ink"
+              >
+                Log in
+              </button>
+              <button
+                type="button"
+                aria-label="Settings"
+                className="flex h-[42px] w-[42px] items-center justify-center text-white lg:hidden"
+              >
+                <GearIcon />
+              </button>
+            </>
+          )}
         </div>
       </div>
 
