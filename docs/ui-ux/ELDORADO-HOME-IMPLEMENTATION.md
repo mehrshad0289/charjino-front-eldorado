@@ -18,10 +18,47 @@ actual files and Git history — never trust previous AI claims.
   Wallet, Messages, Settings) + `/users/NewFloat-0una[/shop|/reviews|
   /about]` + `/privacy-policy` + `/terms-of-service` + `/dmca` + `/dsa`
   (session 18) + `/become-seller` (session 19 — COMPLETE) + `/checkout`
-  (session 19 — COMPLETE) + `/ea-fc-boosting/b/142-4` (session 19) +
-  `/roblox-items` (session 18) + `/verify/status` (session 20) +
-  `/xbox-game-pass` responsive re-verification (session 21 — COMPLETE)
-- Current section: session 22 — RECOVERY + FULL-SITE HEALTH SWEEP +
+  (session 19 — COMPLETE) + `/ea-fc-boosting/b/142-4` (session 19,
+  session-23 capture refresh) + `/roblox-items` (session 18) +
+  `/verify/status` (session 20) + `/xbox-game-pass` responsive
+  re-verification (session 21 — COMPLETE) + `/dashboard/messages`
+  rebuilt to the not-empty capture (session 23 — COMPLETE)
+- Current section: session 23 — the two user-pushed "add file"
+  captures (commits 8111ede + 9f6e420) decoded and implemented.
+  1) `ui ux/messages-notempty/…(1).make` (46066 bytes; the implemented
+  `ui ux/Messages/` capture is 39875 and EMPTY-state) → decoded
+  `snapshots/msgnotempty-1920px-light-{1,2}.tsx` (deflate+0 variant;
+  decoder `scripts/decode_session22_captures.py` reuses the session-18
+  pipeline; the OLD capture re-decoded too after `pip install
+  zstandard` → `msgempty-*` snapshots committed for reference).
+  Delta: the 900px column now opens with a filter bar — tabs
+  All (active dark rgb(34,33,39)) / Support / Pre-purchase + an
+  "Unread messages only" iOS toggle (OFF in capture) — and the chat
+  inbox itself is a client-rendered widget that never serializes
+  (live SSR probe 2026-11-05: no tabs/toggle/chat in the HTML; the
+  "Uh oh" empty-state anatomy is superseded). Implemented as
+  `MessagesFilterBar.js` ("use client": tab aria-pressed switching +
+  role=switch toggle, ON = the settings page's captured blue
+  convention) + rebuilt `dashboard/messages/page.js`; chat mount
+  `aria-label="Chat"` stays EMPTY verbatim (boosting empty-carousel
+  precedent). Verified: build green, 1920/390 = 200 / overflow 0 /
+  0 errors, tabs + toggle interactive, screenshots @1920+390.
+  2) `ui ux/Boosting-Champions-Finals/…(1).make` (57557 bytes vs the
+  session-19 capture's 47347) → `snapshots/boostfinals-1920px-light-
+  {1,2}.tsx`. Delta: Champions Finals chip active; config section =
+  SINGLE full-width card (no 90px icon, no radial glow — both gone)
+  titled "Champions Finals" with Current Rank=Rank 15 / Desired
+  Rank=Rank 1 / Platform=PC - EA (span 2); fade bottom-158 → 96.8;
+  customize panel alert + "Check request" REPLACED by plain dark
+  "Get offers now" (live probe of the public page confirms the
+  anonymous state shows the same CTA + Platform "PC - EA"; capture
+  wins on the selected values); save-money badge svg regenerated
+  e7032432 → 99b185c3; BOOST_EXCLAMATION removed; chip-active bg
+  corrected to capture-exact rgb(34,33,39) (was bg-ink). Verified:
+  build green, 1920/1536/390 = 200 / overflow 0 / 0 errors / 0
+  broken imgs, new assets 200, screenshots. Full-site sweep re-run
+  (scripts/sweep_all_routes.js, 36 × 2): ALL PASS.
+- Previous section: session 22 — RECOVERY + FULL-SITE HEALTH SWEEP +
   doc hygiene. No capture-driven work remains: session 20's audit
   (8c2698f) re-verified independently this session — the
   `ui ux/shop-item/…roblox-items_i_70-2-0…make` capture is the
@@ -1307,14 +1344,34 @@ actual files and Git history — never trust previous AI claims.
   action: on request — no capture-driven work remains; live-first
   pages or fixes per user direction.
 
+- 2026-11-05 (session 23) — the two user-pushed "add file" captures
+  (8111ede messages-notempty + 9f6e420 Boosting-Champions-Finals)
+  decoded, implemented, verified and pushed. Full anatomy in the
+  Current Checkpoint. Push chain: checkpoint 7b6f996 (decoder +
+  4 snapshots; one push rejection → fetch+rebase over the parallel
+  session-22 doc push 8de2383, never force), feature 051ac4e
+  (/dashboard/messages rebuild + superseded msgempty snapshots),
+  feature c06f7a9 (boosting capture refresh). Sanity on the
+  gift-card/gamepass shop pages (the user's referenced step, complete
+  since sessions 9/21): sweep needles green, overflow 0, 0 errors —
+  the `shop-giftcart-gamepass-xbox` t_103 capture IS /xbox-game-pass
+  and stays implemented + live-verified; nothing new to build there.
+  Verification: build green; 1920/1536/390 on both touched pages =
+  200 / overflow 0 / 0 page errors / 0 broken images; interactions
+  green (messages tabs aria-pressed + switch aria-checked); new
+  capture assets 92b3f9e9 + 99b185c3 HTTP 200; full-site sweep
+  (36 routes × 1920/390) ALL PASS after the changes.
+
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 22 (full-site
-  sweep ALL PASS + doc hygiene; this doc commit is the last push)
-- Hash of last pushed commit: this docs commit, preceded by `305210d`
-  (session 21 doc — gamepass responsive re-verification + screenshots
-  session21), `fb8e2c5` / `9d7a8c2` (gamepass buy-box chain). Every
-  push verified by empty `git log origin/main..HEAD` immediately after.
+- Last successful push timestamp: 2026-11-05, session 23 (both
+  user-pushed captures implemented; this doc commit is the last push)
+- Hash of last pushed commit: this docs commit, preceded by `c06f7a9`
+  (boosting Champions-Finals refresh), `051ac4e` (/dashboard/messages
+  not-empty rebuild), `7b6f996` (decode checkpoint), `8de2383`
+  (parallel session-22 sweep docs). Every push verified by empty
+  `git log origin/main..HEAD` immediately after; one rejection
+  resolved fetch+rebase (never force).
 - Uncommitted changes: none after this doc commit
 - Unpushed commits: none
 - Push auth: the session PAT lives in the origin URL in this sandbox
