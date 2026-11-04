@@ -585,6 +585,31 @@ actual files and Git history — never trust previous AI claims.
     the capture's FOOTER (shared Footer — not part of this page)
   - The footer link "Influencer program" existed since the home
     sessions pointing at /influencer-program and 404'd until now
+- Implementation status (session 15b — /dashboard/offers/CustomItem):
+  - Second new capture this session: `ui ux/CustomItem/
+    www_eldorado_gg_dashboard_offers_CustomItem_1920w_390w_1536w_default.make`
+    (pushed by the user's parallel session as "nfluencer-program"
+    commits) — NATIVE fig-make container, decoded by
+    scripts/decode_customitem_capture.py (zstd chunk walker reused
+    from decode_blog_capture.py)
+  - Text+class diff vs the Account dashboard snapshot: sidebar active
+    child = Items, filter row swaps the search input for a 180px
+    "Delivery method" combobox, Orders/Boosting groups collapsed
+    (transient UI state). Everything else text-identical (same Offers
+    header, offline banner, "Nothing found" empty state)
+  - Implementation: /dashboard/offers/CustomItem/page.js (mirrors the
+    Account page, active="Items", deliveryLabel="Delivery method") +
+    DashboardFilters optional deliveryLabel prop (Account untouched)
+    + /pagelist Account row. Known deviation: capture lacks "Become a
+    Seller" in the sidebar — kept for consistency
+  - Parallel-session note: bc05eea added 6 /blog/[category] archive
+    routes (+6 pagelist rows) while this session ran — probed them
+    (6 x 2 widths clean); pagelist now 32 rows, all fetch-verified
+    200 (Main 2 / Shop 4 / Blog 1+11+6 / Company 3 / Account 3 /
+    Utility 1 = 30 visible rows +6... final count from runtime 31+1)
+- Technical checks (15b): build green (43 routes); sweep 24 x 3 = 0
+  problems; customitem DOM: aria-current=Items, delivery filter
+  present, no search field, empty state, overflow 0 @1920/390
 - Visual comparison status (screenshots `docs/ui-ux/screenshots/session15/`):
   live-influencer-1920/390.png (references) + influencer-1920/390.png
   (implementation) + influencer-faq-open.png; hero/cards/steps/CTA/

@@ -66,6 +66,7 @@ const GROUPS = [
     rows: [
       { title: "Log in", href: "/login" },
       { title: "Dashboard — Offers (Account)", href: "/dashboard/offers/Account" },
+      { title: "Dashboard — Offers (Custom items)", href: "/dashboard/offers/CustomItem" },
     ],
   },
 ];
