@@ -625,6 +625,42 @@ actual files and Git history — never trust previous AI claims.
   parallel session's 15b). Candidates: pixel diff of the dashboard pages
   vs live behind a login, or new captures from the user
 
+- Implementation status (session 17 — dashboard Feedback/Wallet/Messages,
+  merged over the parallel session's session-16 loyalty work):
+  - The parallel session shipped /dashboard/loyalty from the same capture
+    batch (8d55e69: DashboardLoyalty.js, sidebar active-honoring for
+    direct links, pagelist row) while this session decoded all four
+    captures independently — the rebase conflicted; resolved by keeping
+    THEIR loyalty build wholesale and adding only the three they had not
+    covered. My duplicate loyalty page/content component dropped
+  - Decoder variant discovered: wallet/messages .make files carry the
+    scene graph as [u32 clen][4 bytes][raw-deflate] after the schema
+    chunk (no zstd) — scripts/decode_session17_captures.py falls back
+    automatically; feedback used the standard fig-make+zstd path
+  - /dashboard/feedback: 4-col stats card (blue/teal/red/yellow icons,
+    uppercase labels, 0/0/0/0%), All=dark-active + gray chevron buttons,
+    shared empty state with an EMPTY subtitle line (verbatim)
+  - /dashboard/wallet: balance card (grid 1fr/105px, max-w 500), 200px
+    "All" combobox with inset ring, empty table (cols 20/15/31/34%),
+    disabled centered First/‹/›/Last pagination
+  - /dashboard/messages: 900px empty chat column, inline empty block
+    (capture centers it without EmptyState's top padding)
+  - Sidebar: "Become a Seller" REMOVED from DASHBOARD_NAV_LINKS — absent
+    from all five newest captures (CustomItem + these three + loyalty);
+    the parallel session kept it with no recorded rationale; footer link
+    unaffected (verified: only text-footlink occurrence remains)
+  - DashboardPageHeader: +feedback/wallet/messages inline SVG icons
+    (empty icomoon glyphs, documented assumption)
+  - /pagelist Account group +3 rows (39 total)
+- Technical checks (17): build green (51 routes); sweep 39 x 3 widths = 0
+  problems; pagelist 39 links all 200; aria-current + bg rgb(255,201,80)
+  on feedback/wallet/messages; 0 broken images; overflow 0 @1920/390;
+  screenshots docs/ui-ux/screenshots/session17/
+- Deployment: push 10e0592 — Vercel verified in the next Backup Status entry
+- Next exact action: two NEW user-pushed captures await —
+  privacy-policy + terms-of-service (origin 38b31b7/05f1c07) — decode
+  and implement next
+
 ## Section log (append one block per completed section)
 
 - 2026-11-04 (session 16) — dashboard family completion: Currency /
