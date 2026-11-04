@@ -1180,24 +1180,79 @@ actual files and Git history — never trust previous AI claims.
   PASS; pagelist 52 rows. Pushed 9d9a25c (fetch+rebase over the
   parallel gamepass work; verified empty origin/main..HEAD).
 
+- 2026-11-04 (session 21, gamepass responsive re-verification) —
+  /xbox-game-pass re-verified against a FRESH live re-probe
+  (2026-11-04, later runs) after recovery: fresh clone at 02e63b4,
+  session 18-20 work verified on origin, build green. The live page
+  CHANGED since the session-9 probes — its buy box now matches the
+  capture on the elements session 9 had dropped. Implemented
+  (9d7a8c2 + fb8e2c5, two verified pushes):
+  - RESTORED quantity stepper + "In stock: 5" in the featured offer
+    (capture rows AND live agree; the session-9 drop is reverted).
+    Interactive: clamp 1..5 (In stock bound).
+  - ADDED live-only elements (not in the capture, present on live
+    @1920+@390): white "Add to cart" button under Buy now; "Best
+    Value" chip on Xbox Essential - 12 Months; per-card "/ month"
+    normalized footer (full-bleed hairline strip) derived from the
+    capture's own price+duration (months → price/n, days → price×30/n,
+    2 decimals — no invented prices); amount-card titles 14→16px,
+    strike 16px, price 18px bold.
+  - Chips (Popular/Best Value) render compact in-flow at the card's
+    top-left pulled into the padding (-mt-2 mb-1.5, py-[2px]) like
+    live — row heights stay equal (a first taller in-flow variant
+    added +35px per row; caught by the landmark probe and fixed).
+  - Mobile: steps column FULL-BLEED (live cards span the viewport,
+    16px inner padding — the old double 16px inset killed), banner
+    single-row (title left + tabs right; the previously probed stacked
+    rows no longer render on live @390), disclaimer on the page
+    background after the featured card, "Delivery instructions" rows
+    centered, featured Buy now plain (no price suffix), mobile Total
+    block left-aligned without the label (live @390).
+  - Shared fixes: thumbs-up rating glyph (live) in the seller card +
+    seller rows (was seal-with-check); Trustpilot heading 20px/29
+    mobile → 30px/36 desktop (affects /xbox-gift-card too — verified
+    green there); region row gains the capture's right-side
+    "Your region: {region}" hint.
+  - Data fix: "Xbox Ultimate - 1 Month" regained was 20.99 /
+    discount -61%* (capture HAS them on the selected card; session-9
+    data missed them — matches live's discounted selected card).
+  - Verification: landmark spans local vs live match within a few px
+    (Amount→Trusted Δ1 @1536); pageH deltas are inside live's own
+    run-to-run variance (±150: seller count flips 14/15, Trustpilot
+    widget states). Sweep 390/768/1024/1536/1920: overflow 0, 0 page
+    errors, 0 broken images. Interactions green: region chips, amount
+    select (label + yellow outline/16% tint), stepper clamp, Go-to-
+    page dropdown (2 options), FAQ accordion. /xbox-gift-card sanity:
+    200, overflow 0, single-row banner, responsive reviews heading.
+    Screenshots: docs/ui-ux/screenshots/session21/ (local 1920/390 +
+    cmp strips vs live).
+  - Deviations kept (documented): EUR capture prices vs live geo HK$;
+    Europe default region vs live geo Global; "Other sellers (8)" vs
+    live 14/15 (dynamic marketplace data; capture wins); trial cards
+    bare price (capture has no was-price — none invented); Trustpilot
+    card = text attribution vs live's empty widget iframe; a mobile
+    cart icon appeared ONCE on live gamepass (hydration race) and is
+    absent from 2/2 home+giftcard probes and the other gamepass run —
+    NOT added to HeaderBar.
+  - Concurrency: 3 push rejections (2dedb03 checkout docs, aaed37f
+    verify/status + 3ec4aef use-client hotfix) — all fetch+rebase,
+    one 1-block conflict on GamePassFeaturedOffer resolved keeping
+    the parallel hotfix comment; pushes verified by empty
+    origin/main..HEAD after each.
+
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 19 (boosting
-  complete + gamepass use-client hotfix; this doc commit is the last
+- Last successful push timestamp: 2026-11-04, session 21 (gamepass
+  responsive re-verification complete; this doc commit is the last
   push)
-- Hash of last pushed commit: `3ec4aef` (HOTFIX "use client" on
-  GamePassFeaturedOffer — the parallel session's 9d7a8c2 shipped
-  useState without the directive, breaking origin builds and staling
-  Vercel: /ea-fc-boosting 404'd until this fix; after the push Vercel
-  rebuilt and /ea-fc-boosting/b/142-4 + /xbox-game-pass + 6 more
-  routes verified 200), preceded by `9d9a25c` (/ea-fc-boosting/b/
-  142-4 + parameterized ShopItemSubNav), 2dedb03 (checkout doc),
-  5de98b2 (/checkout + TrustpilotStars fix), 5cc0daa (checkout
-  decode), 6f64ff6 / dd3746c / 0dd8663 / c909ff4 (become-seller
-  chain). Every push verified by empty `git log origin/main..HEAD`
-  immediately after. THREE push rejections this session (concurrent
-  user + parallel-session pushes: 5e937e0, bddd33e, 9d7a8c2) — all
-  resolved fetch+rebase, never force.
+- Hash of last pushed commit: `fb8e2c5` (gamepass card-grid height +
+  mobile full-bleed + data fix), preceded by `9d7a8c2` (gamepass
+  buy-box checkpoint: stepper/Add to cart//month/chips/banner), both
+  rebased over the parallel sessions' 2dedb03 (checkout docs) and
+  aaed37f + 3ec4aef (verify/status + use-client hotfix). Every push
+  verified by empty `git log origin/main..HEAD` immediately after.
+  THREE push rejections this session (concurrent parallel-session
+  pushes) — all resolved fetch+rebase, never force.
 - Uncommitted changes: none after this doc commit
 - Unpushed commits: none
 - Push auth: the session PAT lives in the origin URL in this sandbox
@@ -1209,16 +1264,19 @@ actual files and Git history — never trust previous AI claims.
 - Sandbox gotchas learned this session:
   - `(cmd &)`-style servers DIE between tool calls; start long-lived
     servers with the tool's run_in_background
-  - ALWAYS restart `next start` after `npm run build` — a running
+  - ALWAYS restart `next start` after `npm run build` — a stale
     server mixes old HTML with new chunk references and produces
-    phantom layout breakage (session 16 hit the variant: a STALE
-    next-server from a previous session kept port 3100 and served a
-    404ing old build — kill the pid on the port before restarting)
+    phantom breakage (this session: EADDRINUSE + 500ing chunks until
+    the old server was killed; also `pkill -f next-server` kills the
+    CALLING shell because the pattern matches its own command line —
+    use `pkill -f 'next-serv[e]r'`)
+  - Playwright `.first()` on duplicated responsive components picks
+    the hidden variant (display:none timeout) — filter with `:visible`
+  - Live eldorado.gg page height fluctuates ±150px BETWEEN runs
+    (seller count 14/15, widget states) — compare landmark SPANS, not
+    absolute pageH, and never chase single-run deltas
   - Lazy images below the fold report "broken" in DOM probes that
     never scroll — not real breakage
-  - html.to.design captures can ship EMPTY (JOIN_START protocol stream
-    only, 68-byte thumbnail): check for `import React` snapshot parts
-    before trusting a .make file
   - inline-node `-e` probes with escaped quotes are fragile — write
     sweep scripts to scripts/ (project convention anyway)
 - Recovery instructions:
