@@ -1377,6 +1377,15 @@ actual files and Git history — never trust previous AI claims.
   capture assets 92b3f9e9 + 99b185c3 HTTP 200; full-site sweep
   (36 routes × 1920/390) ALL PASS after the changes.
 
+  NEW unclaimed capture (origin b98010b, mid-session): `ui ux/
+  shop-CoD-Points/www_eldorado_gg_cod-points_t_35_te_v0_Xbox_
+  attribute_value_id_2400-cp_…make` — a CoD Points shop-item page
+  (Xbox). NOT yet decoded/implemented; the parallel session is active
+  on the prime-video + psplus captures (35f3742 "analysis next") —
+  whoever takes the CoD capture: decode with
+  scripts/decode_session22_messages.py (add to CAPTURES) or
+  decode_session24_captures.py, and expect rebase conflicts.
+
 ## Backup Status
 
 - Last successful push timestamp: 2026-11-05, session 23 (both
