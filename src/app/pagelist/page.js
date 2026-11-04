@@ -38,6 +38,9 @@ const GROUPS = [
       { title: "EA FC 27 Boosting (product)", href: "/ea-fc-boosting/b/142-4" },
       { title: "Xbox Game Pass", href: "/xbox-game-pass" },
       { title: "Xbox Gift Card", href: "/xbox-gift-card" },
+      { title: "Amazon Prime Video (top-up)", href: "/amazon-prime" },
+      { title: "PlayStation Plus (no-offers state)", href: "/playstation-plus" },
+      { title: "CoD Points (top-up)", href: "/cod-points" },
       { title: "Product single (eFootball offer)", href: PRODUCT_HREF },
     ],
   },
@@ -91,6 +94,7 @@ const GROUPS = [
       { title: "User profile — About", href: "/users/NewFloat-0una/about" },
       { title: "Checkout (boosting order)", href: "/checkout" },
       { title: "Seller verification", href: "/verify/status" },
+      { title: "Help Center — Seller rules", href: "/support/articles/8408997-seller-rules" },
     ],
   },
 ];

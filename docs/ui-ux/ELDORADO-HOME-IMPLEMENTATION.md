@@ -9,7 +9,9 @@ actual files and Git history — never trust previous AI claims.
 ## Current Checkpoint
 
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
-  `/xbox-game-pass` + `/xbox-gift-card` + product-single
+  `/xbox-game-pass` + `/xbox-gift-card` + `/amazon-prime` +
+  `/playstation-plus` + `/cod-points` + support article
+  `/support/articles/8408997-seller-rules` (session 24) + product-single
   `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
   + `/login` + `/blog` + `/blog/[category]/[slug]` + `/blog/[category]`
   + `/about-us` + `/contact-us` + `/bug-bounty` + `/pagelist` +
@@ -23,8 +25,10 @@ actual files and Git history — never trust previous AI claims.
   `/verify/status` (session 20) + `/xbox-game-pass` responsive
   re-verification (session 21 — COMPLETE) + `/dashboard/messages`
   rebuilt to the not-empty capture (session 23 — COMPLETE) +
-  `/xbox-game-pass` capture-exact card anatomy (session 25 — COMPLETE)
-  + `/support/articles/8408997-seller-rules` (parallel session 25)
+  `/xbox-game-pass` capture-exact card anatomy (session 25 — COMPLETE) + `/amazon-prime` + `/playstation-plus` +
+  `/cod-points` (session 24)
+  + `/support/articles/8408997-seller-rules` (session 24 —
+  implemented first, canonical route)
 - Current section: session 25 — gift-card shop page (gamepass
   capture) re-verified mobile->desktop and made capture-exact. The
   user-pushed `ui ux/shop-giftcart-gamepass-xbox/…xbox-ultimate-1-month
@@ -55,6 +59,78 @@ actual files and Git history — never trust previous AI claims.
   Probe scripts: probe_session25_gamepass.js (3-width sweep),
   probe_session25_card_anatomy.js (live DOM anatomy),
   crop_session25_pair.py (local|live composites).
+
+- Previous section: session 24 — "هر چیزی هست چک کن کامل و تمیز باشد و
+  هر آنچه مونده انجام بده" executed as a full health check + the 4
+  remaining user-pushed captures implemented.
+  0) RECOVERY + CLEANUP: repo verified synced (main==origin/main), build
+  green, placeholder scan clean (0 TODO/XXX/【】), 8
+  no-html-link-for-pages eslint errors FIXED (internal <a> -> next/link:
+  HeaderBar logo, Footer brand, checkout/influencer/blog breadcrumbs —
+  rendering identical, Link renders an anchor; eslint --quiet now 0
+  errors; the 118 no-img-element warnings are the deliberate
+  capture-verbatim <img> convention). One stale-server incident (an old
+  next-server kept port 3100 from a previous session and 500ed every
+  chunk — killed, restarted, sweep ALL PASS).
+  1) 3 top-up shop pages (same ELD-TOP-UP-USP template family as
+  /xbox-game-pass): `/amazon-prime` (shop-Subscription capture
+  primevideo-1920px-light-{1,2}: 2 variants, Popular tab-chip cards,
+  sidebar featured offer w/ "Game region: Global" row + ArsenicStore,
+  Other sellers (13) numbered 1/2/3 pagination + Go-to-page, artwork
+  465px + 340px fade — capture AND live @390 both render it here),
+  `/playstation-plus` (shop-Nothing-found capture psplus-1920px-light-
+  {1,2}: the NO-OFFERS state — region chips NA/UK/Turkey/India/Germany*
+  /Ukraine + "No amount selected" + empty grid + Nothing-found block,
+  single column, NO sidebar; live currently serves offers — documented
+  divergence, capture wins), `/cod-points` (shop-CoD-Points capture
+  codpoints-1920px-light-{1,2}: "Game platform" chips
+  Xbox*/Battlenet/PlayStation + 10 variants (2400 Popular, -51%*) +
+  PowerXhub sidebar + Other sellers (8) numbered pagination). Reused +
+  generalized the gamepass components via props (defaults untouched for
+  the xbox pages): GiftCardBanner (gameName/gameIcon/tabs),
+  GamePassRegionChips (label/hint/regions/inlineMobile/scrollMobile —
+  live psplus @390 shows the inline "Game region: Germany" header and a
+  single scrolling chip row), GamePassOffers (sellers/count/pages/
+  numbered; reviews link color fixed to the capture blue rgb(45,94,173)
+  — the gamepass capture has it too). NEW components:
+  ShopAmountCards (top-up card anatomy: Popular tab-chip rounded-bl/br
+  in-flow, price styling split — discounted = green bold 16px + chip +
+  strike/info row, non-discounted = plain 14px ink, NO per-month
+  footer), ShopFeaturedOffer (Popular tab chip, optional region row,
+  stepper desktop-only — live @390 renders no stepper on this page
+  family, Buy now carries the price below lg per live), ShopNoResults.
+  Live probes (scripts/probe_shop_*_live.js): FAQ = 5 generic questions
+  with live-scraped answers (the capture's 6th "Why trust Eldorado?"
+  row is the trust-card heading that follows — live shows 5 answer
+  blocks, probed), live titles pulled for metadata, featured-card 400px
+  + amount-card 736px verified pixel-exact vs live @1920.
+  2) support article `/support/articles/8408997-seller-rules`
+  (shop-Seller rules capture sellerrules-1920px-light-{1,2}):
+  SupportSellerRulesPage + sellerRulesData verbatim — fixed black 60px
+  header (logo, Explore Eldorado / Contact us / EN globe / Ctrl-K
+  search pill), 260|1fr|240 grid, docs-nav accordion tree (capture
+  state, client-side toggles, active article blue rgb(2,88,217) + 2px
+  bar), 830px article column (breadcrumb, 36px h1, description, updated
+  + Copy-for-LLM actions, 22px h2 sections, bold-lead lists, dispute
+  response table, feedback thumbs, related articles), On-this-page TOC.
+  Gotchas fixed: React hydration error #418 (nested <ul> inside <p> —
+  moved the nested list out of the paragraph), and the fixed aside
+  dropping out of the grid flow (the capture wraps it in a
+  self-stretch placeholder div — replicated). Route named to the
+  capture-faithful slug (parallel session-25 announced the same
+  capture — consolidating on this canonical path; its decode +
+  announcement commit f33c4e0 predates that rename).
+  3) VERIFICATION: verify_session24_pages.js (3 pages × 1920/1536/390:
+  status/overflow/broken/errors/needles + interactions — amount card
+  select updates the Amount label, platform chips aria-pressed, FAQ
+  toggles, sidebar collapses); full-site sweep re-run on 40 routes × 2
+  widths (80 page-loads): ALL PASS; build green (72 pages).
+  Screenshots session24 (local 1920/1536/390 + live 1920/390 refs +
+  cmp composites). Pushes: 111bc77 (link fixes) → 35f3742 (decode) →
+  6a13f12/ab9bcf9/ed44a35 (analysis/components/pages) → 8b6d84c
+  (comparison round) → f67a538 (seller-rules decode) → 467467f
+  (support page) → 1acab47 (route rename); rebased over the parallel
+  session's pushes twice, never force.
 - Previous section: session 23 — the two user-pushed "add file"
   captures (commits 8111ede + 9f6e420) decoded and implemented.
   1) `ui ux/messages-notempty/…(1).make` (46066 bytes; the implemented
@@ -1505,16 +1581,24 @@ actual files and Git history — never trust previous AI claims.
     boosting feature + this doc commit — each verified by empty
     origin/main..HEAD.
 
+
 ## Backup Status
 
 - Last successful push timestamp: 2026-11-05, session 25 (gamepass
   capture-exact card-anatomy round; this doc commit is the last push)
-- Hash of last pushed commit: this docs commit, preceded by `2daa1b4`
-  (merge of the parallel session-25 Seller-rules article), `32373be`
-  (gamepass capture-exact fixes), `316668a` (merge of the parallel
-  session-24 comparison round), `502ffe7` (session-25 decode
-  checkpoint). Every push verified by empty `git log origin/main..HEAD`
-  immediately after; two rejections resolved fetch+merge (never force).
+- Hash of last pushed commit: this docs commit, preceded by the
+  session-24 doc commit, `2daa1b4` (merge of the parallel session-25
+  Seller-rules article), `32373be` (gamepass capture-exact fixes),
+  `316668a` (merge of the parallel session-24 comparison round),
+  `502ffe7` (session-25 decode checkpoint), and on the session-24
+  branch: `1acab47` (support route rename), `467467f` (support
+  article page), `f67a538` (seller-rules decode), `8b6d84c`
+  (comparison round), `ed44a35` (3 top-up shop pages), `ab9bcf9`
+  (top-up components), `6a13f12` (analysis), `35f3742` (decode),
+  `111bc77` (no-html-link fixes). Every push verified by an empty
+  `git log origin/main..HEAD` immediately after; multiple rejections
+  (concurrent sessions pushing), all resolved with fetch + rebase or
+  merge (never force).
 - Push auth: the session PAT lives in the origin URL in this sandbox
   only (transient; never committed). Future sessions without a token
   need a fine-grained PAT (Contents: read/write) or pushes fail with
