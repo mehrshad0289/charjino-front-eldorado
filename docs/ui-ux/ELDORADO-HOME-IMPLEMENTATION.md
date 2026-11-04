@@ -17,9 +17,9 @@ actual files and Git history — never trust previous AI claims.
   GiftCard/Currency/TopUp, orders Purchased/Sold, Loyalty, Feedback,
   Wallet, Messages, Settings) + `/users/NewFloat-0una[/shop|/reviews|
   /about]` + `/privacy-policy` + `/terms-of-service` + `/dmca` + `/dsa`
-  + `/roblox-items` (session 18) + `/become-seller` (session 19 —
-  COMPLETE: capture implemented, verified 3 widths, visual-matched to
-  live, pushed)
+  (session 18) + `/become-seller` (session 19 — COMPLETE) + `/checkout`
+  (session 19 — COMPLETE: capture implemented, sweep 3 widths ALL
+  PASS, pushed)
 - Current section: session 19 — /become-seller COMPLETE. Recovery
   (fresh sandbox, cloned at 5426fe6 → pulled 02e63b4): every
   session-18 commit verified present on origin (270cdbd decode,
@@ -45,11 +45,30 @@ actual files and Git history — never trust previous AI claims.
   served HTML for a changed marker BEFORE trusting a sweep. Pushes:
   checkpoint c909ff4 (decode + doc), feature 0dd8663 (page; rebased
   over the parallel /roblox-items work), fixes dd3746c (verification
-  round). NEXT: user-pushed checkout capture (5e937e0:
-  `ui ux/checkout/…RequestedBoosting_gameId_142…make`) awaits decode;
-  `ui ux/shop-item/…roblox-items_i_70-2-0…make` also present
-  (product-single for the roblox route — decode after checkout).
-
+  round). Checkout (5cc0daa decode + 5de98b2 page, BOTH pushed): the
+  capture's filename lost "eldorado_gg_checko" upstream
+  (www_eldorauantity_1_category_RequestedBoosting_gameId_142…make);
+  live /checkout 404-redirects without a cart session → the capture is
+  the ONLY reference (responsive below 1920 = documented approximation:
+  columns stack in DOM order, gutters relax to px-4). Page: MINIMAL
+  checkout header (white bar shadow min-h-72, logo 164×40 at the
+  60%-column right edge — NO site nav/search/avatar per capture);
+  60/40 split: left = lock-badge + "Secure checkout" h1 24 centered +
+  product card (Division Rivals 58×58, meta pipes, Seller: Joren + teal
+  Online dot + 3 blue chips bg rgba(71,131,255,.118)) + 7 payment
+  radios (Apple Pay checked with the yellow border; capture radio/
+  brand SVGs verbatim) + Safe-payment banner 524×79; right = Order
+  summary (73.34 / 6.15 / +5520 coin / Total: 79.49 @24px, hairlines) +
+  black Apple-Pay button h-14 max-w-368 (capture data-URI logo) + 12px
+  ToS/Privacy line with INTERNAL links + Trustpilot "Excellent" 4.5
+  stars (reused TrustpilotStars variant=header) + 2 guarantee rows.
+  BUGFIX TrustpilotStars: full stars were INVISIBLE (raw color string
+  in backgroundImage = invalid CSS → background:) — /about-us review
+  stars render correctly now too. 29/29 capture assets 200. Sweep
+  @1920/1536/390 ALL PASS. Visual self-review @1920: matches capture;
+  pagelist Account +1 (51). NEXT: `ui ux/Boosting-rivals/…ea-fc-
+  boosting_b_142-4…make` (bddd33e — the boosting product page behind
+  the checkout) + the roblox shop-item capture, both await decode.
 - Reference files:
   - Become-seller capture (session 19, user-pushed origin 4b8246c):
     `ui ux/become-seller/…become-seller…make` → decoded
@@ -1118,16 +1137,30 @@ actual files and Git history — never trust previous AI claims.
   89f7c18 + user pushed checkout capture 5e937e0), both resolved
   clean, pushes verified.
 
+- 2026-11-04 (session 19, checkout) — /checkout complete per the
+  user-pushed capture (origin 5e937e0, filename truncated upstream to
+  www_eldorauantity_1_…make). Decoded (5cc0daa) → checkout-1920px-
+  light-{1,2}.tsx. Live /checkout 404-redirects without a cart session
+  → capture-only reference; responsive = documented approximation.
+  Implemented (5de98b2): minimal checkout header + 60/40 split +
+  product card + 7 payment radios + Safe-payment banner + order
+  summary + Apple-Pay button + Trustpilot + guarantees — full anatomy
+  in the Current Checkpoint. TrustpilotStars bugfix (full-star
+  invisibility: raw color in backgroundImage) benefits /about-us too.
+  29/29 assets 200; sweep 1920/1536/390 ALL PASS; pagelist 51 rows.
+  Pushes verified (empty origin/main..HEAD after each).
+
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 19 final
-  (become-seller complete; this doc commit is the last push)
-- Hash of last pushed commit: `dd3746c` (verification-round fixes:
-  live-probed icon shapes + em dashes + Learn-how arrows + screenshots
-  + cmp strips), preceded by 0dd8663 (the page itself, rebased over
-  the parallel /roblox-items work) and c909ff4 (checkpoint: decode +
-  session-18 doc recovery). Every push verified by empty
-  `git log origin/main..HEAD` immediately after.
+- Last successful push timestamp: 2026-11-04, session 19 (checkout
+  complete; this doc commit is the last push)
+- Hash of last pushed commit: `5de98b2` (/checkout + TrustpilotStars
+  fix), preceded by 5cc0daa (checkout decode checkpoint), 6f64ff6
+  (session-19 doc), dd3746c (become-seller verification fixes),
+  0dd8663 (become-seller page), c909ff4 (checkpoint 1). Every push
+  verified by empty `git log origin/main..HEAD` immediately after.
+  Two push rejections during the session (parallel/user pushes
+  5e937e0, bddd33e, /roblox-items docs) — fetch+rebase, never force.
 - Uncommitted changes: none after this doc commit
 - Unpushed commits: none
 - Push auth: the session PAT lives in the origin URL in this sandbox
