@@ -82,6 +82,11 @@ actual files and Git history — never trust previous AI claims.
     + min-h-80 H1 + pb-16, banner img 1905x444 absolute inside it) with
     the sections as a SIBLING container — implemented the live way
     (the literal capture nesting paints the banner over the whole page)
+  - Influencer reference: `ui ux/nfluencer-program/
+    www_eldorado_gg_influencer-program_1920w_390w_1536w_default.make`
+    (1920-only; decoded to `extracted/snapshots/influencer-1920px-
+    light-{1,2}.tsx`). Mobile: live `session15/live-influencer-{1920,390}.png`;
+    FAQ answers scraped from live (accordion closed in the capture)
   - Search dropdown reference: `snapshots/search-1920px-light-{1,2}.tsx`
     (decoded early from the root www .make; the capture is the HOME page
     with the search dropdown OPEN — the page content below the header is
@@ -548,6 +553,51 @@ actual files and Git history — never trust previous AI claims.
     td_img 71px vs live 66 @390 (3px column distribution nuance)
 - Deployment: Vercel verified after the final push (see Backup Status)
 
+- Implementation status (session 15 — /influencer-program):
+  - Sandbox recycle between sessions reset the local checkout to a
+    session-11 snapshot — recovered via `git reset --hard origin/main`
+    (everything had been pushed; origin is the source of truth). The
+    "first commit" (afc86ce) = the user pushing THIS capture with a
+    generic message, not a force-push: 981a850 is still an ancestor.
+    Mid-session the user pushed the capture again (011d5c2/b9778a5/
+    5faa706 "nfluencer-program") + blog fix 2090d75 — rebased cleanly
+  - Capture decoded (scripts/decode_influencer.py, same pipeline as
+    extracted/fig_reassemble.py). Structure: hero (banner PNG +
+    gradient fade, breadcrumb, H1 72, yellow CTA) -> max-w-[1116px]
+    gap-80 column: 3 trust pills / Why? (4 gradient cards, 80px
+    icons) / Who can join? (2fr|3fr rows, 40px icon boxes) / How it
+    works? (62px pastel badges #d1f08f #ffc950 #da8aea #77a3fc) /
+    CTA card (mascots flanking, aspect 182/59) / white apply-form
+    card (hairline headers + 24px icons, #efeff1 inputs h-42, dark
+    Apply now) / agencies gradient card (mascot 283px absolute
+    right-8 -bottom-16, pr-332) / FAQ max-w-700 accordion
+  - New files: src/app/influencer-program/page.js (server) +
+    InfluencerFaq.js (client accordion) + data/influencerData.js
+    (verbatim content; 10 asset URLs each with its own generation
+    param — 10/10 HTTP 200)
+  - Mobile per live @390: 1-col chips/why/steps/form, steps become
+    badge-left rows, CTA keeps only the Currency mascot centered,
+    hero H1 40px, full-width yellow/dark buttons
+  - Known deviations: icomoon glyphs (chips shield/globe/star,
+    who-rows youtube/tiktok, person + chevrons) -> inline SVGs (no
+    icomoon in project); FAQ answers from live; "Become a partner"
+    scrolls to #apply; the Google "preferred source" badge lives in
+    the capture's FOOTER (shared Footer — not part of this page)
+  - The footer link "Influencer program" existed since the home
+    sessions pointing at /influencer-program and 404'd until now
+- Visual comparison status (screenshots `docs/ui-ux/screenshots/session15/`):
+  live-influencer-1920/390.png (references) + influencer-1920/390.png
+  (implementation) + influencer-faq-open.png; hero/cards/steps/CTA/
+  form match capture geometry
+- Technical checks: build green (35 routes); 10/10 capture assets
+  200; sweep 24 routes x 3 widths = 0 problems; pagelist 24 links all
+  200; FAQ accordion toggles; overflow 0 @1920/390; zero page errors
+- Deployment: push 4f474e1 — Vercel verified in the next Backup Status
+  entry after this push
+- Next exact action: on request — no unimplemented captures remain;
+  candidates: pixel diff of /influencer-program vs live, or new
+  captures from the user
+
 ## Section log (append one block per completed section)
 
 - 2026-11-04 (session 15, verification + union round — second half) —
@@ -886,22 +936,21 @@ actual files and Git history — never trust previous AI claims.
   healthy after 13 sessions. New /pagelist route links all 23 rows.
   Push verified by empty origin/main..HEAD.
 
+- 2026-11-04 (session 15) — /influencer-program per the user's new
+  capture. Recovery: sandbox recycle reset the local checkout to a
+  session-11 snapshot; `git reset --hard origin/main` restored it (no
+  local-only work lost — every session pushes before ending). The
+  origin "first commit" = the influencer capture; user re-pushed it
+  mid-session (rebased cleanly). Verified: 35 routes, sweep 24x3
+  clean, 10/10 assets. Pushed 4f474e1.
+
 ## Backup Status
 
 - Last successful push timestamp: 2026-11-04, session 15 (verification
   + union round)
-- Hash of last pushed commit: session-15 chains (two parallel blog
-  passes + the union/verification round) — article pass: `41aff91` +
-  `4f1cd1b` + doc `e15cb2c`; union round: `fca82de` (live-parity
-  union: entry mobile typography 14px/28px, zebra + bold first column +
-  thead rules, quote-aware withTableScroll, content-box paddings, Lato
-  Eldorado kept); category pass: `75fdeb6` → `bc05eea` (feature:
-  /blog/[category] routes + components + breadcrumb wiring + /pagelist
-  +6) + their docs `3506014`; this session's final fixes: the
-  BlogCategoryRow invisible-separator + this doc commit; every push
-  rebased/merged over the concurrent commits (never force) and
-  verified by empty `git log origin/main..HEAD` immediately after
-  every push
+- Hash of last pushed commit: `4f474e1` (/influencer-program + doc);
+  push verified by empty `git log origin/main..HEAD` after every push;
+  session-13 deploy was Vercel-verified (dropinput in live CSS)
 - Uncommitted changes: none expected after this doc commit
 - Unpushed commits: none
 - Push auth: the session-15 PAT lives in the origin URL in this
