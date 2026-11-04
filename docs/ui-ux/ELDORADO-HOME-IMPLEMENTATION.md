@@ -1406,7 +1406,11 @@ actual files and Git history — never trust previous AI claims.
   screenshots compared side-by-side (top, grid+sidebar, sellers,
   reviews/process/FAQ/SEO @1920; 7 strips @390). Push chain:
   502ffe7 checkpoint → 316668a merge → 32373be fixes → 2daa1b4
-  merge → this doc commit.
+  merge → 1d7f967 this doc commit. Vercel: deployment PENDING for
+  ~17 min after push, then verified DEPLOYED — /xbox-game-pass 200
+  with the new markup live (Popular-tab class present, Best Value
+  gone; /xbox-gift-card + /support/articles/8408997-seller-rules
+  also 200).
 - 2026-11-05 (session 23) — the two user-pushed "add file" captures
   (8111ede messages-notempty + 9f6e420 Boosting-Champions-Finals)
   decoded, implemented, verified and pushed. Full anatomy in the
