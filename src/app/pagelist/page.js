@@ -81,6 +81,9 @@ const GROUPS = [
       { title: "Dashboard — Messages", href: "/dashboard/messages" },
       { title: "Dashboard — Feedback", href: "/dashboard/feedback" },
       { title: "Dashboard — Settings", href: "/dashboard/settings" },
+      { title: "User profile — Shop", href: "/users/NewFloat-0una/shop" },
+      { title: "User profile — Reviews", href: "/users/NewFloat-0una/reviews" },
+      { title: "User profile — About", href: "/users/NewFloat-0una/about" },
     ],
   },
 ];
