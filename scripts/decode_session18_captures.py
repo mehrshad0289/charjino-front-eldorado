@@ -41,6 +41,12 @@ CAPTURES = {
     "vpshop": os.path.join(
         UIUX, "View Profile", "Shop",
         "www_eldorado_gg_users_NewFloat-0una_shop_Currency_1920w_390w_1536w_default (1).make"),
+    "dmca": os.path.join(
+        UIUX, "DMCA",
+        "www_eldorado_gg_dmca_1920w_390w_1536w_default (1).make"),
+    "dsa": os.path.join(
+        UIUX, "dsa",
+        "www_eldorado_gg_dsa_1920w_390w_1536w_default.make"),
 }
 
 

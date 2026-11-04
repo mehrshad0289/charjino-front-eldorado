@@ -14,7 +14,9 @@ const ASSET = "https://storage.googleapis.com/download/storage/v1/b/prd-storytod
 export const DASHBOARD_USER = {
   name: "NewFloat-0una",
   registered: "Registered: 11/4/26",
-  profileUrl: "https://www.eldorado.gg/users/NewFloat-0una",
+  /* Session 18: the profile route now exists in the clone — internal href
+     (was the live https://www.eldorado.gg/users/NewFloat-0una URL). */
+  profileUrl: "/users/NewFloat-0una",
   avatar: `${ASSET}84921a2fde83d534b819877fa09cd79af209ba7a.svg?generation=1793785993008975&alt=media`,
 };
 
@@ -67,7 +69,8 @@ export const DASHBOARD_NAV_LINKS = [
 export const DASHBOARD_VIEW_PROFILE = {
   icon: "profile",
   label: "View Profile",
-  href: "https://www.eldorado.gg/users/NewFloat-0una",
+  /* Session 18: internal profile route (was the live URL). */
+  href: "/users/NewFloat-0una",
 };
 
 /* /dashboard/offers/Account page content (empty state — the capture's
