@@ -61,22 +61,22 @@ export default function HeaderBar() {
 
   return (
     <header className="relative z-40 bg-headerdark">
-      <div className="flex items-center px-4 pt-2.5 md:h-[60px] md:px-6 md:pt-0">
+      <div className="flex items-center px-4 pt-2.5 lg:h-[60px] lg:px-6 lg:pt-0">
         <button
           type="button"
           aria-label="Open menu"
           onClick={() => setMenuOpen(true)}
-          className="mr-1 flex h-[42px] w-[42px] items-center justify-center text-white md:hidden"
+          className="mr-1 flex h-[42px] w-[42px] items-center justify-center text-white lg:hidden"
         >
           <BurgerIcon />
         </button>
 
         <a href="/" aria-label="Eldorado logo" className="shrink-0">
-          <Logo color="#FFFFFF" className="hidden md:block" />
-          <Logo iconOnly size={42} className="md:hidden" />
+          <Logo color="#FFFFFF" className="hidden lg:block" />
+          <Logo iconOnly size={42} className="lg:hidden" />
         </a>
 
-        <div className="hidden flex-1 justify-center px-2 md:flex">
+        <div className="hidden flex-1 justify-center px-2 lg:flex">
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
@@ -97,15 +97,16 @@ export default function HeaderBar() {
           <button
             type="button"
             aria-label="Settings"
-            className="flex h-[42px] w-[42px] items-center justify-center text-white md:hidden"
+            className="flex h-[42px] w-[42px] items-center justify-center text-white lg:hidden"
           >
             <GearIcon />
           </button>
         </div>
       </div>
 
-      {/* mobile search row (inside the dark header) */}
-      <div className="mt-2 px-4 pb-3 md:hidden">
+      {/* mobile search row (inside the dark header; live keeps the mobile
+          header — burger + search row, no category strip — up to ~1024) */}
+      <div className="mt-2 px-4 pb-3 lg:hidden">
         <button
           type="button"
           onClick={() => setSearchOpen(true)}

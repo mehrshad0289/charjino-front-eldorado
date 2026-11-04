@@ -82,14 +82,14 @@ export default function CategoryNav({ activeCategory = null }) {
 
   return (
     <nav
-      className={`relative hidden bg-catnav text-white md:block ${
+      className={`relative hidden bg-catnav text-white lg:block ${
         openCategory ? "z-[1001]" : "z-30"
       }`}
       onMouseLeave={() => {
         if (!pinned) closeMenu();
       }}
     >
-      <div className="flex h-10 items-center justify-between md:px-6">
+      <div className="flex h-10 items-center justify-between lg:px-6">
         <ul className="ml-3 flex items-center overflow-x-auto whitespace-nowrap">
           {CATEGORIES.map((c) => {
             const active = openCategory === c || activeCategory === c;
@@ -135,7 +135,7 @@ export default function CategoryNav({ activeCategory = null }) {
           })}
         </ul>
 
-        <div className="hidden items-center gap-2 text-sm md:flex">
+        <div className="hidden items-center gap-2 text-sm lg:flex">
           <a href="#" className="flex h-10 items-center gap-2 px-[14px] text-navgray hover:text-brand">
             <HeadsetIcon />
             24/7 live support

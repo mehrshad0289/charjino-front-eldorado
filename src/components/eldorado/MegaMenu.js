@@ -68,7 +68,7 @@ export default function MegaMenu({ onClose }) {
       <div className="fixed inset-0 z-[1002]" onClick={onClose} aria-hidden="true" />
       <div
         ref={panelRef}
-        className="absolute inset-x-0 top-full z-[1003] mx-5 hidden md:block"
+        className="absolute inset-x-0 top-full z-[1003] mx-5 hidden lg:block"
       >
         <div className="flex max-w-[1070px] overflow-hidden rounded-[10px] bg-white text-ink shadow-[rgba(47,47,55,0.15)_0px_2px_4px_0px,rgba(47,47,55,0.1)_0px_24px_60px_0px,rgba(47,47,55,0.05)_0px_12px_24px_0px]">
           <div className="w-[63%]">

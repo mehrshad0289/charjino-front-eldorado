@@ -33,8 +33,8 @@ export default function SearchOverlay({ onClose }) {
     <div className="fixed inset-0 z-50" role="dialog" aria-modal="true">
       <div className="absolute inset-0 bg-[rgba(12,12,16,0.55)]" onClick={onClose} />
 
-      <div className="absolute inset-x-0 bottom-0 top-0 overflow-y-auto bg-white p-3 md:bottom-auto md:top-3 md:mx-auto md:h-fit md:max-h-[530px] md:w-[1160px] md:max-w-[calc(100vw-40px)] md:rounded-xl md:p-6">
-        <div className="flex items-center gap-3 md:hidden">
+      <div className="absolute inset-x-0 bottom-0 top-0 overflow-y-auto bg-white p-3 lg:bottom-auto lg:top-3 lg:mx-auto lg:h-fit lg:max-h-[530px] lg:w-[1160px] lg:max-w-[calc(100vw-40px)] lg:rounded-xl lg:p-6">
+        <div className="flex items-center gap-3 lg:hidden">
           <div className="relative flex-1">
             <input
               autoFocus
@@ -51,7 +51,7 @@ export default function SearchOverlay({ onClose }) {
           </button>
         </div>
 
-        <div className="relative hidden md:block">
+        <div className="relative hidden lg:block">
           <input
             autoFocus
             type="text"
@@ -63,20 +63,20 @@ export default function SearchOverlay({ onClose }) {
           </span>
         </div>
 
-        <p className="mb-1 mt-6 text-xs font-bold uppercase text-labelgray md:mt-5">
+        <p className="mb-1 mt-6 text-xs font-bold uppercase text-labelgray lg:mt-5">
           Popular categories
         </p>
 
         <ul>
           {ITEMS.map(([name, n]) => (
             <li key={name}>
-              <a href={SHOP_ACCOUNTS} className="flex items-center gap-4 py-[11px] md:gap-3 md:py-[9px]">
+              <a href={SHOP_ACCOUNTS} className="flex items-center gap-4 py-[11px] lg:gap-3 lg:py-[9px]">
                 <img
                   src={`${CDN}/icons/v30/${n}.png`}
                   alt=""
                   width="32"
                   height="32"
-                  className="h-8 w-8 rounded-lg object-cover md:h-7 md:w-7 md:rounded-md"
+                  className="h-8 w-8 rounded-lg object-cover lg:h-7 lg:w-7 lg:rounded-md"
                   loading="lazy"
                 />
                 <span className="text-base text-ink hover:underline">{name}</span>
