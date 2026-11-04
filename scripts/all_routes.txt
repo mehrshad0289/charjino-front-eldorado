@@ -39,5 +39,3 @@
 /verify/status
 /xbox-game-pass
 /xbox-gift-card
-<<<<<<< HEAD
-=======
