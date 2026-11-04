@@ -73,6 +73,7 @@ const GROUPS = [
       { title: "Dashboard — Offers (Custom items)", href: "/dashboard/offers/CustomItem" },
       { title: "Dashboard — Offers (Currency)", href: "/dashboard/offers/Currency" },
       { title: "Dashboard — Offers (Top Ups)", href: "/dashboard/offers/TopUp" },
+      { title: "Dashboard — Offers (Gift Cards)", href: "/dashboard/offers/GiftCard" },
       { title: "Dashboard — Purchased orders", href: "/dashboard/orders/purchased" },
       { title: "Dashboard — Sold orders", href: "/dashboard/orders/sold" },
       { title: "Dashboard — Loyalty", href: "/dashboard/loyalty" },

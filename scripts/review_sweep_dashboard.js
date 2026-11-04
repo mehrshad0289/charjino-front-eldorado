@@ -25,6 +25,11 @@ const CASES = [
     absent: ["Search offers", "Recommended"],
   },
   {
+    route: "/dashboard/offers/GiftCard/",
+    markers: ["Offers", "Select Game", "Nothing found", "Try to adjust filters", "Want to pause all your offers?", "New Offer", "Gift Cards"],
+    absent: ["Search offers", "Recommended"],
+  },
+  {
     route: "/dashboard/orders/purchased/",
     markers: ["Purchased orders", "All statuses", "Recent", "Nothing found", "You have no purchased orders"],
     absent: ["Search Orders", "Download invoice", "New Offer", "Want to pause"],

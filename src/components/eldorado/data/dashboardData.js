@@ -116,6 +116,16 @@ export const DASHBOARD_OFFERS_TOPUP_PAGE = {
   filters: { gamePlaceholder: "Select Game" },
 };
 
+/* Session 18 — /dashboard/offers/GiftCard (own capture, decoded 2026-11-04,
+   1920-only, deflate+0 variant): same offers template as Currency/TopUp —
+   h1 "Offers" + New Offer → /become-seller, offline-mode banner, "Select
+   Game" combobox only, "Nothing found" empty state. Active sidebar row:
+   Gift Cards (bg rgb(255,201,80) verbatim in the capture). */
+export const DASHBOARD_OFFERS_GIFTCARD_PAGE = {
+  ...DASHBOARD_OFFERS_PAGE,
+  filters: { gamePlaceholder: "Select Game" },
+};
+
 /* Session 16 — /dashboard/orders/purchased + /dashboard/orders/sold
    (own captures, decoded 2026-11-04, 1920-only): page header WITHOUT an
    action button, content gap mt-[32px] (offers pages use mt-[4px]); filter
