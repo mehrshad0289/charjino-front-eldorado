@@ -9,106 +9,138 @@ actual files and Git history — never trust previous AI claims.
 ## Current Checkpoint
 
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
-  `/xbox-gift-card` + Xbox Game Pass shop `/xbox-game-pass` (NEW session 9 —
-  desktop per gamepass .make capture, mobile/tablet per LIVE eldorado.gg
-  @390/768/1024)
-- Current section: session 9 — Xbox Game Pass page COMPLETE (component-based
-  reuse of the gift card system, responsive 390→1920, verified and pushed)
+  `/xbox-game-pass` + `/xbox-gift-card` + product-single
+  `/efootball-accounts/oa/[id]` (NEW session 10 — desktop per product
+  .make capture, mobile/tablet per LIVE eldorado.gg @390/768/1024)
+- Current section: session 10 — product-single page COMPLETE (dynamic
+  route with generateStaticParams, 9 new components, reuse of
+  HeaderBar/CategoryNav/TrustRows/Footer/ChatBubble, responsive
+  390→1920, verified and pushed)
 - Reference files:
-  - Desktop capture (session 9): `ui ux/shop-giftcart-gamepass-xbox/www_eldorado_gg_xbox-game-pass_t_103_attribute_value_id_xbox-ultimate-1-month_te_v0_Europe_1920w_390w_1536w_default.make`
-    (user-pushed commit 6bbe8f2) → decoded `ui ux/extracted/snapshots/gamepass-1920px-light-1.tsx`
-    (+ `-2.tsx`). 1920-only like all captures
-  - Live references (session 9): full-page screenshots
-    `ui ux/extracted/snapshots/live-gamepass-{390,768,1024,1536,1920}.png`
-    captured from `https://www.eldorado.gg/xbox-game-pass/t/103?attribute_value_id=xbox-ultimate-1-month`
-  - Next-step reference (user-pushed commit dd741ad, decoded, NOT implemented):
-    `ui ux/product-single/www_eldorado_gg_efootball-accounts_oa_...make` →
-    `snapshots/product-1920px-light-{1,2}.tsx` (product single page)
-  - Gift card references (sessions 7-8): see session 7/8 log entries below
-  - FAQ answers scraped live 2026-11-04 from the gamepass URL (collapsed/
-    empty in the capture); stored in `src/components/eldorado/data/gamePassData.js`
-- Implementation status (session 9 — 6 new components + page + refactors):
-  - `data/gamePassData.js` — 19 subscription variants (capture order, EUR
-    prices + discount badges verbatim), 4 region chips (Europe default per
-    capture), featured "Popular" offer (ThorStore), 6 "Other sellers" rows
-    (2 pages), 9 FAQ Q&A (live-scraped), SEO copy verbatim, asset URLs
-  - `GamePassRegionChips.js` — white card "Game region: {region}" +
-    single-select chips (selected: 2px yellow border on 16% tint, live
-    probed class list)
-  - `GamePassAmountGrid.js` — "Amount: {variant}" + variant cards (img,
-    name, strike, green price + badge, ⓘ); below lg: 136px horizontal
-    scroller auto-scrolled to the selected card; lg: 3-col grid;
-    xl: 4-col grid (capture); selected = yellow tint + inset outline +
-    Popular ribbon
-  - `GamePassFeaturedOffer.js` — Popular ribbon (lg only, live), Delivery
-    time / Delivery instructions rows, Total block (strike, badge, green
-    24px), dark Buy now (price in label below lg), 3 reassurance rows
-  - `GamePassSellerCard.js` — "Seller" heading (inside card on desktop per
-    capture, outside on mobile per live @390), avatar, verified badge,
-    rating + reviews link
-  - `GamePassOffers.js` — "Other sellers (8)" + rows: below lg stacked
-    cards (seller | strike/badge/price/clock-delivery, instructions row,
-    full-width outline Buy now), lg: capture's
-    `grid-cols-[0.7fr_0.3fr_120px_auto_auto]`; pagination (arrows, page
-    buttons md+, "Go to page" single-select dropdown, interactive state)
-  - `TrustRows.js` — NEW shared module: Shield/Bolt/Support icons + row
-    layout extracted from GiftCardOfferCard (now imported by both offer
-    cards)
-  - Refactors for reuse (gift card page behavior unchanged):
-    `GiftCardBanner` gained `active` + `iconAlt` props (Game Pass tab now
-    → `/xbox-game-pass`), `GiftCardFaq` gained `items` prop,
-    `GiftCardSeoText` gained `title/orders/blocks` props + the capture's
-    66px yellow star with overlaid 4.9
-  - `app/xbox-game-pass/page.js` — HeaderBar + CategoryNav + banner
-    (active "Game Pass") + steps/offers two-col at lg (sidebar 400px) +
-    reviews + process + FAQ(gamepass items) + trust + SEO(gamepass blocks)
-    + Footer + ChatBubble. NO artwork backdrop, NO quantity picker (both
-    capture-only; live probed without them — live is the design authority)
+  - Desktop capture (session 10): `ui ux/product-single/www_eldorado_gg_efootball-accounts_oa_2f48f97f-c412-48b0-c3a4-08df0a5485be_1920w_390w_1536w_default.make`
+    (user-pushed commit dd741ad) → decoded
+    `snapshots/product-1920px-light-1.tsx` (+ `-2.tsx`, font-face-only diff)
+  - Live references (session 10): full-page screenshots
+    `snapshots/live-product-{390,768,1024,1536,1920}.png`, captured from
+    `https://www.eldorado.gg/efootball-accounts/oa/2f48f97f-c412-48b0-c3a4-08df0a5485be`
+    (still live 2026-11-04)
+  - Game pass references (session 9): see session 9 log entry below
+  - "How we protect your purchase" expanded features + Warranty ⓘ tooltip
+    (Covered / Not covered) scraped live 2026-11-04 by expanding the
+    panel / hovering ⓘ (the capture ships both collapsed/empty); stored in
+    `src/components/eldorado/data/productData.js`
+- Implementation status (session 10 — 9 new components + dynamic page):
+  - `data/productData.js` — offer fields verbatim (title "[ ANDROID ] ACC
+    3000 COINS, 2.5M GP", price 2.38, Game Series/Original email/Warranty/
+    Delivery rows, EN+PT description), 4 carousel cards, 9 bottom grid
+    cards + "+15 more", seller (Rintana93), protect features + warranty
+    tooltip (live-scraped), payment badge URLs (verified HTTP 200)
+  - `ProductBanner.js` — dark game strip, NO Accounts/Coins tabs (capture +
+    live): lg icon + "eFootball 2027"; mobile back chevron + stacked names
+    (the live mobile banner doubles as the breadcrumb)
+  - `ProductBreadcrumb.js` — lg-only bar: blue chevron + bold 14px
+    "Back to all offers" (capture wording; live says "Browse all offers")
+  - `ProductTitleCard.js` — lg: white card, 24px title + hairline border-b,
+    scrollable 255px rounded screenshot strip; mobile: inset image on
+    white (p-[10px], rounded, live @390) + title section
+  - `ProductOfferCard.js` — lg sidebar card: blue "Full email access
+    included" gradient banner (link icon + ⓘ), 24px price, min-h-12 detail
+    rows (Game Series first, Delivery time = teal bolt + bold Instant),
+    dark Buy now, shared TrustRows; mobile: compact chip + 28px price,
+    Game Series row hidden (live hides it — banner names the game)
+  - `ProductProtectCard.js` — light-blue accordion: shield roundel + bold
+    title + chevron; open = 4 live-scraped feature rows (bold + gray text)
+  - `ProductSellerCard.js` — lg per capture: avatar 48px + name + teal
+    badge + "99.6% positive feedback" link, rows (Online teal dot, 2,699
+    orders delivered, Selling since Mar 31, 2026, gray icons),
+    "Verified ID" light-blue chip; mobile per live: gray "Seller" heading
+    outside, avatar + name + thumbs "99.6%" + "2,701 reviews" link
+  - `ProductCarousel.js` — "More like this" (18px lg / 16px mobile) +
+    "Page {n} of 4" 12px + bordered arrow buttons (disabled = #c6c6cc);
+    w-52 cards (84px 3-line title, seller + teal badge | feedback, 18px
+    price | teal bolt-only delivery); mobile swaps indicator for an
+    "All offers" link and moves arrows under the row; scroll updates page
+  - `ProductDescriptionCard.js` — "Offer description" 18px bold, chips
+    (blue check + bold + ⓘ), 16px/24px pre-wrapped description
+  - `ProductMoreGrid.js` — lg only (live @390 has no bottom grid): 24px
+    header + "All offers" link, 3-col grid of h-40 cards (2-line title +
+    58px img, seller | feedback, price | bolt + gray delivery label),
+    "+15 more" gray cell
+  - `app/efootball-accounts/oa/[id]/page.js` — async params (Next 16),
+    generateStaticParams → the one capture product, notFound otherwise;
+    lg: two-col grid-cols-[minmax(0,1fr)_444px] gap-6 with sticky sidebar
+    (top-[108px] per capture); <lg: stacked live flow (image → title →
+    offer → protect → carousel → seller → description); PPR static build
 - Visual comparison status (side-by-side strips local|live):
-  - 1920 + 1536: banner, region chips, 4-col variant grid with selected
-    Popular card, disclaimer inside the white card, sidebar (featured +
-    seller), other-sellers rows, pagination, reviews, process, FAQ, trust,
-    SEO, footer all match structure/colors/spacing
-  - 1024: live switches to 3-col grid + sidebar — matched
-  - 768: live keeps the mobile flow (scroller, stacked offer cards) —
-    matched after moving the switches md→lg
-  - 390: stacked flow, scroller opens on the selected variant (like live),
-    Popular ribbon only on the variant card, Seller heading outside
+  - 1920 + 1536: banner, breadcrumb, title card + 255px image, carousel
+    (4 cards + paginator), description card, sidebar (included banner,
+    price, rows, Buy now, trust rows, protect, seller), bottom grid,
+    footer all match structure/colors/spacing
+  - 1024: live switches to the two-col desktop layout — matched
+  - 768 + 390: live keeps the stacked mobile flow (inset image, chip +
+    big price, rows without Game Series, protect, carousel + arrows,
+    seller, description, no bottom grid) — matched after fixes
   - No horizontal overflow: scrollWidth == viewport at
     390/768/1024/1536/1920
-  - Interactions verified headless: region chip select, variant select
-    (label updates), FAQ accordion with real answers, Go-to-page dropdown +
-    page state, banner active tab; zero console errors at all widths
+  - Interactions verified headless: protect accordion opens (live
+    content), Warranty tooltip shows Covered/Not covered, carousel arrows
+    scroll + page indicator updates; zero console errors at all widths
 - Known deviations / documented limitations:
-  - Prices use the capture's EUR values (e.g. "8.25", "From" rows without
-    currency prefix), not the live geo-localized HK$ — same policy as the
-    gift card page (session 7)
-  - "Other sellers (8)" per the capture; the live page currently shows 11
-    with different sellers — capture followed (design reference file)
-  - Delivery instructions rows are static (caret present; no open state
-    exists in any reference — no copy invented)
-  - Reviews card keeps the session-7 policy: attribution line as card
-    content (live desktop carousel renders empty)
-  - Region chip default "Europe" per the capture (live geo-defaults to
-    "Global" from this sandbox)
-  - Live's exact tablet switch is ~960-1024 (custom standard-grid);
-    standard lg (1024) used — 960-1023 shows the mobile-style flow, same
-    documented approximation as session 8
-  - Featured-offer Buy now label shows the price below lg ("Buy now
-    (8.25)") per live mobile; desktop shows plain "Buy now"
+  - Prices use the capture's EUR values ("2.38" etc.), not the live
+    geo-localized HK$ — same policy as sessions 7/9
+  - Live sidebar shows a "Recent feedback" list + "All feedback" button
+    and the bottom-grid cards carry a small game-name line — both
+    live-only details absent from the capture; capture followed (design
+    reference file)
+  - Description text follows the live rendering: the capture decode lost
+    the Portuguese diacritics (Região/Transferência/verificação)
+  - Original email / Delivery time ⓘ buttons are decorative (no tooltip
+    content in any reference; no copy invented) — only Warranty has the
+    live-scraped Covered/Not covered tooltip
+  - Carousel "Page 1 of 4" per the capture (only 4 cards ship in it, so
+    one Next click reaches the last page); live has 4 pages of real data
+  - Bottom "+15 more" is a static gray cell per the capture
+  - Seller card icons (orders/selling-since) and the protect shield
+    roundel are reasonable SVG defaults — the capture's icomoon glyphs
+    are empty (project pattern: inline SVG replacements)
+  - Mobile footer language chip shows EUR (existing Footer per its own
+    session-7 capture), live geo-shows HK$ — pre-existing component
 - Technical checks: `npm run build` SUCCESS (/, /efootball-accounts,
-  /xbox-game-pass, /xbox-gift-card, /_not-found); route returns 200;
-  interactions verified headless (see above)
-- Deployment: VERIFIED — Vercel serves `/xbox-game-pass` (HTTP 200; HTML
-  contains "Game region", "Other sellers", "How much does Xbox Game Pass
-  cost", "Effortless buying process"), corresponding to push 42ed541;
-  `/xbox-gift-card` re-verified healthy after the refactors (200, region/
-  amount/FAQ markers present), `/` and `/efootball-accounts` 200
-- Next exact action: on request — product-single page (decoded reference
-  already in `snapshots/product-1920px-light-*.tsx`), gift card
-  amount→offers step, or other gift card brands reusing these components
+  /efootball-accounts/oa/2f48f97f-…, /xbox-game-pass, /xbox-gift-card,
+  /_not-found); route returns 200; interactions verified headless
+  (see above). Lesson recorded: rebuilding .next while `next start` is
+  serving it corrupts static chunk serving (CSS 500, unstyled page) —
+  always stop the server before rebuilding
+- Deployment: pending verification for session 10 push (5585abf);
+  session-9 deployment was verified earlier
+- Next exact action: on request — gift card amount→offers step, other
+  gift card brands reusing these components, or the product page's
+  quantity/feedback sections if the user pushes references for them
 
 ## Section log (append one block per completed section)
+
+- 2026-11-04 (session 10) — Product-single page
+  (`/efootball-accounts/oa/[id]`), implementing the user-pushed dd741ad
+  capture. Recovery: repo clean and synced at f232be4; the capture had
+  already been decoded (f0a8173). Analysis: capture text/class extraction
+  + LIVE captures at 390/768/1024/1536/1920 + DOM probes (two-col
+  [minmax(0,1fr)_444px] grid, mobile order image→title→offer→protect→
+  carousel→seller→description, Game Series row hidden on mobile, no
+  bottom grid on mobile, 1024 = desktop switch) + live-scraping the
+  collapsed-in-capture content: "How we protect your purchase" expanded
+  (4 feature rows) and the Warranty ⓘ tooltip (Covered/Not covered, 4+4)
+  via hover/TreeWalker scripts (scripts/scrape_product_*.js). Asset URLs
+  verified HTTP 200 before use. Fixes after side-by-side strips: mobile
+  image inset on white (was full-bleed) + description text 16px/24px
+  (capture base size, was 14px). Ops lesson: rebuilding .next while the
+  server serves it corrupts CSS chunk serving (page went unstyled and
+  the interaction checks false-failed) — clean rebuild + fresh
+  `next start` resolved it. Previous chat link still NOT accessible
+  (checked session 9; unchanged). Verification: overflow=0 at
+  390/768/1024/1536/1920, zero console errors, interactions green
+  (protect accordion, warranty tooltip, carousel page state),
+  `next build` green with the PPR static route. Push: 5585abf (+ doc
+  commit). Known deviations documented in the checkpoint above.
 
 - 2026-11-04 (session 9) — Xbox Game Pass shop page (`/xbox-game-pass`),
   continuing the user's commit 6bbe8f2 which added the gamepass .make
@@ -215,13 +247,11 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 9
-- Hash of last pushed commit: `fd435a2` (chain this session: 94b99fd →
-  53f6ac5 → f0a8173 → cf0684a → 687aac2 → 0dc788b → fd435a2, on top of the
-  user's dd741ad/6bbe8f2; every push verified by empty
-  `git log origin/main..HEAD` + ls-remote)
-- Uncommitted changes: this doc update (ships in the session-9 final
-  commit) + session-9 screenshots
+- Last successful push timestamp: 2026-11-04, session 10
+- Hash of last pushed commit: `5585abf` (session-10 chain: product page
+  implementation + this doc commit; on top of session-9 tip f232be4;
+  push verified by empty `git log origin/main..HEAD` + tail of push)
+- Uncommitted changes: none expected after the doc commit
 - Unpushed commits: none
 - Push auth: the user-supplied PAT is embedded in the origin URL in this
   sandbox only (transient; never committed to the repo). Future sessions
