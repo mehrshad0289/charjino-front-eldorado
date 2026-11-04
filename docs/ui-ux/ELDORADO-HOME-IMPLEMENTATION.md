@@ -18,9 +18,24 @@ actual files and Git history — never trust previous AI claims.
   Wallet, Messages, Settings) + `/users/NewFloat-0una[/shop|/reviews|
   /about]` + `/privacy-policy` + `/terms-of-service` + `/dmca` + `/dsa`
   (session 18) + `/become-seller` (session 19 — COMPLETE) + `/checkout`
-  (session 19 — COMPLETE: capture implemented, sweep 3 widths ALL
-  PASS, pushed)
-- Current section: session 19 — /become-seller COMPLETE. Recovery
+  (session 19 — COMPLETE) + `/ea-fc-boosting/b/142-4` (session 19) +
+  `/roblox-items` (session 18) + `/verify/status` (session 20) +
+  `/xbox-game-pass` responsive re-verification (session 21 — COMPLETE)
+- Current section: session 22 — RECOVERY + FULL-SITE HEALTH SWEEP +
+  doc hygiene. No capture-driven work remains: session 20's audit
+  (8c2698f) re-verified independently this session — the
+  `ui ux/shop-item/…roblox-items_i_70-2-0…make` capture is the
+  /roblox-items LISTING (decode carries H1 "Roblox Items" + "items
+  for sale" + canonical /roblox-items/i/70-2-0, ZERO product-page
+  markers; the live URL serves the "Buy Roblox Items Cheap" listing)
+  — the session-19 "remaining: roblox shop-item product-single" note
+  below was STALE and is removed; every .make in `ui ux/` maps to an
+  implemented route. Full-site sweep (scripts/sweep_all_routes.js,
+  36 routes × 1920/390 = 72 page-loads): ALL PASS — every route 200,
+  overflow 0, 0 broken images, 0 console/page errors, build green
+  (68 pages). Session 20's own log entry (verify/status + capture
+  audit) was never written — recovered below in the section log.
+- Previous section: session 19 — /become-seller COMPLETE. Recovery
   (fresh sandbox, cloned at 5426fe6 → pulled 02e63b4): every
   session-18 commit verified present on origin (270cdbd decode,
   05620a1 GiftCard, a48d275 settings, 8bf9163 profiles, 5426fe6
@@ -85,9 +100,7 @@ actual files and Git history — never trust previous AI claims.
   @390 probed (1-col DOM-order stack); sweep ALL PASS after a
   min-w-0 fix on the chips scroller (@390 overflow 1133→390);
   pagelist Shop +1 (52). Pushed 9d9a25c (rebased over the parallel
-  session's gamepass buy-box work 9d7a8c2). REMAINING capture: the
-  roblox shop-item `ui ux/shop-item/…roblox-items_i_70-2-0…make`
-  (product-single for the roblox route) — decode next.
+  session's gamepass buy-box work 9d7a8c2).
 - Reference files:
   - Become-seller capture (session 19, user-pushed origin 4b8246c):
     `ui ux/become-seller/…become-seller…make` → decoded
@@ -1240,19 +1253,68 @@ actual files and Git history — never trust previous AI claims.
     the parallel hotfix comment; pushes verified by empty
     origin/main..HEAD after each.
 
+- 2026-11-04 (session 20, RECOVERED) — /verify/status complete + the
+  capture audit. This entry was never written by session 20 (same
+  pattern as session 18); recovered in session 22 from the git
+  history (8c2698f + aaed37f) and re-verified against the files.
+  Decoded the 2 never-decoded captures: `ui ux/verify/
+  …verify_status…make` → snapshots/verify-1920px-light-{1,2}.tsx
+  and the root-level `www_eldorado_gg_…make` (audit: session-4 home
+  capture, already implemented; snapshots archived as rootmake-*).
+  Implemented /verify/status per capture (aaed37f): logged-in header
+  variant with yellow '26' badge + orange '!' avatar alert
+  (HeaderBar gains optional notiCount/avatarAlert props, default off
+  — all other pages untouched), category strip, centered max-w-648
+  column over the 465px capture banner + 340px fade; red 'Action
+  required' badge + soft-red info disc, 'Almost there...' 24 bold +
+  gray 18/27 subtitle (capture text verbatim — live page is
+  client-rendered, capture-only reference), dark 'Continue
+  verification' button (min-h-42 rounded-lg, trailing arrow;
+  icomoon→inline SVG assumption), 3 white info cards ('What happens
+  next' 3-li ul, 'Why verification matters', 'Need help?' links).
+  19/19 capture assets 200; pagelist Account +1 (53); build green.
+  CAPTURE AUDIT (the load-bearing result): `ui ux/shop-item/
+  …roblox-items_i_70-2-0…make` is a byte-identical re-decode of the
+  session-18 /roblox-items listing — the session-19 "remaining:
+  roblox shop-item product-single" doc note was STALE. After the
+  audit, NO unimplemented .make capture remains in `ui ux/`.
+
+- 2026-11-04 (session 22, recovery + full-site sweep) — continuation
+  after session 21. Recovery: local == origin at 305210d, clean
+  tree, no new commits. Independent re-verification of session 20's
+  audit claim (protocol: never trust previous AI claims): decoded
+  shopitem-1920px-light-1.tsx contains "Roblox Items" + "items for
+  sale" + canonical https://www.eldorado.gg/roblox-items/i/70-2-0
+  and ZERO product-page markers (no "Add to cart" / "Seller:" /
+  "Instant delivery" anywhere); live URL roblox-items/i/70-2-0
+  serves the "Buy Roblox Items Cheap" listing (title "Buy Roblox
+  Items | Cheap Items For Roblox Games"). Audit CONFIRMED — no
+  capture-driven work remains. Full-site health sweep (new
+  scripts/sweep_all_routes.js + scripts/all_routes.txt, both
+  committed): all 36 routes × 1920/390 = 72 page-loads — ALL PASS
+  (every route 200, horizontal overflow 0, 0 broken images, 0
+  console/page errors; npm run build green at 68 pages; sweep run
+  against a fresh `next start` after the port was confirmed free —
+  stale-server gotcha respected). One sweep-script fix along the
+  way: the blog-article probe URL must be a REAL slug from
+  blogArticlesData.js (a guessed slug 404s; data-derived slug
+  steal-an-egg-mutations-guide used). Doc hygiene: Current
+  Checkpoint page list extended with /roblox-items, /ea-fc-boosting/
+  b/142-4, /verify/status + the session-21 gamepass re-verification;
+  the STALE "REMAINING capture: roblox shop-item product-single"
+  sentence removed from the session-19 checkpoint block; session
+  20's missing section-log entry recovered (above). Next exact
+  action: on request — no capture-driven work remains; live-first
+  pages or fixes per user direction.
+
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 21 (gamepass
-  responsive re-verification complete; this doc commit is the last
-  push)
-- Hash of last pushed commit: `fb8e2c5` (gamepass card-grid height +
-  mobile full-bleed + data fix), preceded by `9d7a8c2` (gamepass
-  buy-box checkpoint: stepper/Add to cart//month/chips/banner), both
-  rebased over the parallel sessions' 2dedb03 (checkout docs) and
-  aaed37f + 3ec4aef (verify/status + use-client hotfix). Every push
-  verified by empty `git log origin/main..HEAD` immediately after.
-  THREE push rejections this session (concurrent parallel-session
-  pushes) — all resolved fetch+rebase, never force.
+- Last successful push timestamp: 2026-11-04, session 22 (full-site
+  sweep ALL PASS + doc hygiene; this doc commit is the last push)
+- Hash of last pushed commit: this docs commit, preceded by `305210d`
+  (session 21 doc — gamepass responsive re-verification + screenshots
+  session21), `fb8e2c5` / `9d7a8c2` (gamepass buy-box chain). Every
+  push verified by empty `git log origin/main..HEAD` immediately after.
 - Uncommitted changes: none after this doc commit
 - Unpushed commits: none
 - Push auth: the session PAT lives in the origin URL in this sandbox
