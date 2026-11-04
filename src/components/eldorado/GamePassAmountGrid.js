@@ -4,16 +4,20 @@ import { useEffect, useRef, useState } from "react";
 import { GAME_PASS_IMAGES, GAME_PASS_VARIANTS, GAME_PASS_DEFAULT_VARIANT } from "./data/gamePassData";
 
 /* Step 2 of the buying flow (gamepass .make capture + live re-probe
-   2026-11-04): "Amount: {variant}" inline label over the subscription
-   variant cards. Card anatomy follows the CURRENT live page (title 16px,
-   strike / discounted price / info icon, then a full-bleed hairline footer
-   with the normalized per-month price — "/ month" is a live addition the
-   capture doesn't have; the per-month value is derived from the capture's
-   own price and duration). "Popular" (selected) and "Best Value"
-   (Essential 12 Months) chips render in-flow at the card's top-left per
-   live. Mobile (live @390): horizontal scroll row of 142px cards.
-   Selected card: 16% yellow tint + 2px yellow outline inset -2px (capture
-   == live). Clicking a card selects it. */
+   2026-11-05, session 25): "Amount: {variant}" inline label over the
+   subscription variant cards. Card anatomy is capture-exact (and the live
+   page converges on it): 40px icon, 14px/19.6 label (bold when selected),
+   then the price ROW (bold green 16px + discount chip) and BELOW it the
+   strike row (line-through 14px + 16px info icon, gap-8) — the old
+   strike-above-price / 18px price render is corrected to both authorities.
+   "Popular" chip = flush top tab on the SELECTED card only (yellow bg,
+   rounded bottom corners, star + 12px bold label) — the "Best Value" chip
+   is gone in BOTH the capture and today's live page, so it is dropped.
+   A full-bleed hairline footer with the normalized per-month price stays
+   (live addition the capture doesn't have; value derived from the
+   capture's own price + duration, 12px like live). Mobile (live @390):
+   horizontal scroll row of 142px cards. Selected card: 16% yellow tint +
+   2px yellow outline inset -2px (capture == live). Click selects. */
 
 function InfoIcon() {
   return (
@@ -25,16 +29,18 @@ function InfoIcon() {
   );
 }
 
-function Chip({ children }) {
+// flush top tab (capture selected card): yellow bg, only bottom corners
+// rounded, star 12px + 12px bold label, pt-1 pr-3 pb-1 pl-2
+function PopularTab() {
   return (
-    <div className="flex w-fit items-center gap-1 rounded-lg bg-brand py-[2px] pl-2 pr-2.5">
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <div className="mb-2.5 flex w-fit items-center gap-1 rounded-bl-lg rounded-br-lg bg-brand pt-1 pr-3 pb-1 pl-2">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path
           d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 16.9l-6.1 3.5 1.5-6.8L2.2 9l6.9-.7L12 2Z"
           fill="#14131a"
         />
       </svg>
-      <span className="block text-[12px] font-bold leading-[16.8px]">{children}</span>
+      <span className="block text-[12px] font-bold leading-[16.8px]">Popular</span>
     </div>
   );
 }
@@ -62,11 +68,7 @@ function Card({ variant, selected, onSelect }) {
         selected ? "bg-brand/[0.16] outline-2 outline-offset-[-2px] outline-brand" : "bg-white hover:bg-badgebg"
       }`}
     >
-      {(selected && variant.popular) || variant.bestValue ? (
-        <div className="-mt-2 mb-1.5">
-          <Chip>{selected && variant.popular ? "Popular" : "Best Value"}</Chip>
-        </div>
-      ) : null}
+      {selected && variant.popular ? <PopularTab /> : null}
       <div className="h-10 w-10 shrink-0 overflow-hidden">
         <img
           alt={`Xbox ${variant.label}`}
@@ -74,23 +76,32 @@ function Card({ variant, selected, onSelect }) {
           className="block h-10 w-10 rounded-sm object-cover align-middle"
         />
       </div>
-      <div className="mt-2.5 min-w-0 grow text-[16px] leading-[22px]">{variant.label}</div>
+      {/* capture: 14px/19.6 label, bold on the selected card */}
+      <div className={`mt-2.5 min-w-0 grow text-[14px] leading-[19.6px] ${selected ? "font-bold" : ""}`}>
+        {variant.label}
+      </div>
       <div className="w-full shrink-0">
-        {variant.was && <div className="text-[16px] leading-[24px] text-graytext line-through">{variant.was}</div>}
+        {/* price row first (capture + live 2026-11-05): bold green 16px
+            + discount chip; then the strike row: line-through 14px + info
+            icon, gap-2 (8px) */}
         <div className="flex items-center gap-2">
-          <span className="text-[18px] font-bold leading-[27px] text-[rgb(54,_117,_6)]">{variant.price}</span>
+          <span className="text-[16px] font-bold leading-[24px] text-[rgb(54,_117,_6)]">{variant.price}</span>
           {variant.discount && (
             <span className="rounded-sm bg-[rgba(209,_240,_143,_0.2)] px-1 py-0.5 text-[12px] font-bold leading-[16.8px] text-[rgb(54,_117,_6)]">
               {variant.discount}
             </span>
           )}
         </div>
-        <div className="mb-2.5 mt-1.5">
-          <InfoIcon />
-        </div>
+        {variant.was && (
+          <div className="mt-1 flex items-center gap-2">
+            <span className="text-[14px] leading-[19.6px] text-graytext line-through">{variant.was}</span>
+            <InfoIcon />
+          </div>
+        )}
+        <div className="mt-1.5 mb-2.5" />
       </div>
       {monthly && (
-        <div className="-mx-3 -mb-3 mt-2 border-t border-cardborder px-3 py-2.5 text-[14px] leading-[19.6px] text-graytext">
+        <div className="-mx-3 -mb-3 mt-2 border-t border-cardborder px-3 py-2.5 text-[12px] leading-[16.8px] text-graytext">
           {monthly} / month
         </div>
       )}

@@ -61,7 +61,10 @@ export default function XboxGamePassPage() {
                     cards span the viewport, inner padding 16px); lg restores
                     the 1208 container inset */}
                 <div className="flex min-w-0 grow flex-col -mx-4 lg:mx-0">
-                  <GamePassRegionChips />
+                  {/* inlineMobile: live @390 renders "Game region: Europe" as
+                      one inline label (split header + "Your region:" hint is
+                      the 1920 capture's desktop format only) */}
+                  <GamePassRegionChips inlineMobile />
                   <GamePassAmountGrid />
                   {/* desktop: disclaimer closes the white steps card (capture) */}
                   <div className="hidden rounded-b-lg bg-white px-6 pb-5 lg:block">

@@ -10,12 +10,13 @@ import { GAME_PASS_FEATURED_OFFER, GAME_PASS_IMAGES } from "./data/gamePassData"
 import { BoltIcon, ShieldIcon, SupportIcon, TrustRow } from "./TrustRows";
 
 /* Featured "Popular" offer card (gamepass .make capture + live sidebar
-   @1920 / stacked flow @390): yellow Popular ribbon, "Delivery time" +
-   "Delivery instructions" rows, quantity stepper + "In stock: 5" (capture
-   AND live 2026-11-04 re-probe — the session-9 drop is reverted), Total
-   block (strike, discount badge, green price), dark full-width Buy now +
-   light "Add to cart" (live addition, not in the capture) and the three
-   reassurance rows.
+   @1920 / stacked flow @390, re-probed session 25): yellow Popular ribbon,
+   "Delivery time" + "Delivery instructions" rows, quantity stepper +
+   "In stock: 5", Total block (capture order: discount chip + bold green
+   price row FIRST, then the strike row with the 16px info icon below —
+   both the capture and today's live page agree), dark full-width Buy now
+   + light "Add to cart" (mobile-only: live mobile keeps it, live desktop
+   AND the capture dropped it) and the three reassurance rows.
    Mobile: flush white continuation of the steps column (no shadow, rounded
    bottom), the Total block renders left-aligned without the "Total" label
    (live @390); desktop keeps the label + right price column (capture). */
@@ -104,17 +105,21 @@ export default function GamePassFeaturedOffer() {
       </div>
 
       {/* Total: mobile = left-aligned stack without the label (live @390);
-          desktop = label + right column (capture) */}
+          desktop = label + right column (capture). Capture order: price row
+          (chip + bold green 20px) first, strike row (16px info icon +
+          line-through 16px) below. */}
       <div className="flex flex-col items-start px-4 py-3 lg:flex-row lg:items-end lg:justify-between lg:px-6">
         <div className="hidden text-[16px] font-bold leading-[24px] lg:block">Total</div>
         <div className="flex flex-col items-start lg:items-end">
-          <div className="text-[16px] leading-[24px] text-graytext line-through">{total.was}</div>
           <div className="flex items-center gap-2">
-            <InfoIcon />
             <span className="rounded-sm bg-[rgba(209,_240,_143,_0.2)] px-1 py-0.5 text-[12px] font-bold leading-[16.8px] text-[rgb(54,_117,_6)]">
               {total.discount}
             </span>
-            <span className="text-[24px] font-bold leading-[30px] text-[rgb(54,_117,_6)]">{total.price}</span>
+            <span className="text-[20px] font-bold leading-[30px] text-[rgb(54,_117,_6)]">{total.price}</span>
+          </div>
+          <div className="mt-0.5 flex items-center gap-1">
+            <InfoIcon />
+            <span className="text-[16px] leading-[24px] text-graytext line-through">{total.was}</span>
           </div>
         </div>
       </div>
@@ -127,13 +132,13 @@ export default function GamePassFeaturedOffer() {
         >
           <span className="block">Buy now</span>
         </button>
-        {/* live 2026-11-04: light secondary button under Buy now (not in
-            the capture — styled from the live probe: light fill, dark bold
-            label, same 56px height) */}
+        {/* live 2026-11-05 + capture: desktop has NO Add to cart (both
+            authorities agree); live @390 keeps the light secondary button
+            under Buy now, so it stays mobile-only */}
         <button
           type="button"
           aria-label="Add to cart"
-          className="block min-h-14 w-full rounded-lg bg-[rgb(244,_244,_245)] px-4 py-3 text-center font-bold text-ink"
+          className="block min-h-14 w-full rounded-lg bg-[rgb(244,_244,_245)] px-4 py-3 text-center font-bold text-ink lg:hidden"
         >
           <span className="block">Add to cart</span>
         </button>
