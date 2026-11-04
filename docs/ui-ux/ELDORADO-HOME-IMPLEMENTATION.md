@@ -99,8 +99,11 @@ actual files and Git history — never trust previous AI claims.
 - Technical checks: `npm run build` SUCCESS (/, /efootball-accounts,
   /xbox-game-pass, /xbox-gift-card, /_not-found); route returns 200;
   interactions verified headless (see above)
-- Deployment: pending verification for session 9 pushes (687aac2 →
-  fd435a2); session-8 deployment was verified earlier
+- Deployment: VERIFIED — Vercel serves `/xbox-game-pass` (HTTP 200; HTML
+  contains "Game region", "Other sellers", "How much does Xbox Game Pass
+  cost", "Effortless buying process"), corresponding to push 42ed541;
+  `/xbox-gift-card` re-verified healthy after the refactors (200, region/
+  amount/FAQ markers present), `/` and `/efootball-accounts` 200
 - Next exact action: on request — product-single page (decoded reference
   already in `snapshots/product-1920px-light-*.tsx`), gift card
   amount→offers step, or other gift card brands reusing these components
