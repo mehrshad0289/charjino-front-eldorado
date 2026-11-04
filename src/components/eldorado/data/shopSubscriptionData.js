@@ -81,11 +81,10 @@ export const PRIME_FEATURED_OFFER = {
   },
 };
 
-// "Other sellers (13)" — 6 rows on the captured page, 3 pages at 6/page.
+/* "Other sellers (13)" — 6 rows on the captured page, 3 pages (numbered
+   pagination 1/2/3 verified in the capture raw + live @1920). */
 export const PRIME_OTHER_SELLERS_COUNT = 13;
 export const PRIME_OTHER_SELLERS_PAGES = 3;
-// capture pagination: arrows + "Go to page" dropdown, NO numbered buttons
-export const PRIME_OTHER_SELLERS_NUMBERED = false;
 
 export const PRIME_OTHER_SELLERS = [
   { name: "NOVA_GAMING", avatar: `${GCS}1ea72d936cb1cbebf854938af74c25895f919112.png?generation=1793815585779954&alt=media`, rating: "99.6%", reviews: "946", delivery: "8 min", price: "1.36", discount: "-85%*", was: "8.99" },

@@ -52,7 +52,7 @@ export default function PlayStationPlusPage() {
   return (
     <>
       <HeaderBar />
-      <CategoryNav activeCategory="Gift cards" />
+      <CategoryNav activeCategory="Top ups" />
       <main className="relative">
         {/* banner artwork + fade (capture AND live @390 render it) */}
         <div aria-hidden="true" className="absolute left-0 top-0 z-0 h-[465px] w-full overflow-hidden">

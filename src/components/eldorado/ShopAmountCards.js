@@ -64,22 +64,25 @@ function Card({ variant, selected, onSelect }) {
             {variant.sub ? <div className="text-[14px] leading-[19.6px] text-graytext">{variant.sub}</div> : null}
           </div>
           <div className="w-full shrink-0 text-[14px] leading-[19.6px]">
-            <div className="flex flex-col items-start gap-1">
-              <div className="flex items-center gap-2">
-                <span className="block text-[16px] font-bold leading-[24px] text-[rgb(54,_117,_6)]">{variant.price}</span>
-                {variant.discount && (
+            {variant.discount ? (
+              <div className="flex flex-col items-start gap-1">
+                <div className="flex items-center gap-2">
+                  <span className="block text-[16px] font-bold leading-[24px] text-[rgb(54,_117,_6)]">{variant.price}</span>
                   <span className="block rounded-sm bg-[rgba(209,_240,_143,_0.2)] px-1 py-0.5 text-[12px] font-bold leading-[16.8px] text-[rgb(54,_117,_6)]">
                     {variant.discount}
                   </span>
+                </div>
+                {variant.was && (
+                  <div className="flex items-center gap-2">
+                    <InfoIcon />
+                    <span className="block text-[16px] leading-[24px] text-graytext line-through">{variant.was}</span>
+                  </div>
                 )}
               </div>
-              {variant.was && (
-                <div className="flex items-center gap-2">
-                  <InfoIcon />
-                  <span className="block text-[16px] leading-[24px] text-graytext line-through">{variant.was}</span>
-                </div>
-              )}
-            </div>
+            ) : (
+              /* non-discounted variant (cod 500/1100): plain 14px ink price */
+              <span className="block">{variant.price}</span>
+            )}
           </div>
         </div>
       </div>
