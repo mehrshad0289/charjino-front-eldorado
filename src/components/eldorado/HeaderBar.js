@@ -45,8 +45,11 @@ function GearIcon() {
    count badge on the MIDDLE icon (bg rgb(255,201,80), ink text 12px,
    top-right, overhangs the button edge) and an orange "!" alert badge on
    the avatar (bg rgb(255,141,0), 12px, top-right of the 44px circle) —
-   both optional props, off by default so every verified page is untouched. */
-function LoggedInActions({ user, notiCount = null, avatarAlert = false }) {
+   both optional props, off by default so every verified page is untouched.
+   Session 22 (messages-notempty capture): the FOURTH icon (Favorites)
+   can carry the same yellow badge with a "9+" value — optional favCount
+   prop, default off. */
+function LoggedInActions({ user, notiCount = null, favCount = null, avatarAlert = false }) {
   return (
     <>
       <button
@@ -71,9 +74,14 @@ function LoggedInActions({ user, notiCount = null, avatarAlert = false }) {
       <button
         type="button"
         aria-label="Favorites"
-        className="hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
+        className="relative hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
       >
         <HeartIcon />
+        {favCount != null && (
+          <span className="absolute -right-1 top-0 block min-h-4 rounded-[0.4375rem] bg-[rgb(255,_201,_80)] px-[5px] py-[2px] text-[12px] leading-[normal] text-ink">
+            {favCount}
+          </span>
+        )}
       </button>
       <button type="button" aria-label="Account menu" className="relative ml-1 flex items-center">
         <span className="size-11 overflow-hidden rounded-full border-2 border-black/0">
@@ -130,6 +138,7 @@ export default function HeaderBar({
   loggedIn = false,
   user = null,
   notiCount = null,
+  favCount = null,
   avatarAlert = false,
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -184,7 +193,7 @@ export default function HeaderBar({
 
         <div className="ml-auto flex shrink-0 items-center gap-1">
           {loggedIn ? (
-            <LoggedInActions user={user} notiCount={notiCount} avatarAlert={avatarAlert} />
+            <LoggedInActions user={user} notiCount={notiCount} favCount={favCount} avatarAlert={avatarAlert} />
           ) : (
             <>
               <button

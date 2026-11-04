@@ -2,7 +2,7 @@ import HeaderBar from "../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../components/eldorado/CategoryNav";
 import DashboardShell from "../../../components/eldorado/DashboardShell";
 import DashboardPageHeader from "../../../components/eldorado/DashboardPageHeader";
-import MessagesFilterBar from "../../../components/eldorado/MessagesFilterBar";
+import DashboardMessagesPanel from "../../../components/eldorado/DashboardMessagesPanel";
 import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
 import {
@@ -10,20 +10,20 @@ import {
   DASHBOARD_MESSAGES_PAGE,
 } from "../../../components/eldorado/data/dashboardData";
 
-/* Dashboard page /dashboard/messages — REBUILT session 23 from the newer
-   user-pushed "not-empty" capture `ui ux/messages-notempty/…(1).make`
-   (commit 8111ede, decoded snapshots/msgnotempty-1920px-light-{1,2}.tsx,
-   1920-only). Anatomy: logged-in header + CategoryNav + dashboard shell
-   (465px banner, 260px sidebar with Messages active) + yellow-icon h1
-   "Messages" 30/36 + 900px max-w-1048 column (mt-14, px-6) opening with
-   the filter bar (tabs All/Support/Pre-purchase + "Unread messages only"
-   toggle, gap 16) and the chat area.
-   The chat inbox is a client-rendered widget on live (live SSR HTML has
-   no tabs/toggle/chat — probed 2026-11-05) and never serializes into the
-   capture: the mount div (aria-label="Chat") stays EMPTY verbatim, same
-   documented precedent as the boosting page's unrendered carousel. The
-   superseded empty-state anatomy (old `ui ux/Messages/` capture, session
-   17) is retired from the render; its strings remain in dashboardData. */
+/* Dashboard page /dashboard/messages. Session 17 built the EMPTY state
+   from `ui ux/Messages/…`; session 22 rebuilt it per the user-pushed
+   "messages-notempty" capture (`ui ux/messages-notempty/…(1).make`,
+   decoded with decode_session22_messages.py): same 900px / mt-14 /
+   max-w-1048 wrapper, but the content is now a filter chip row
+   (All active dark + Boosting/Orders/Support/Pre-purchase) + an
+   "Unread messages only" toggle + an aria-label="Chat" container that
+   is EMPTY in the capture (the real chat is a client-rendered app —
+   no conversation content exists in any reference, nothing invented).
+   The capture's header carries the yellow '26' badge on the Messages
+   icon and '9+' on Favorites (HeaderBar notiCount + favCount). The red
+   bottom-right fixed alert in the capture contains only the stray text
+   "noindex ." (a capture artifact, not page copy) — not implemented.
+   Sidebar active row: Messages. */
 
 export const metadata = {
   title: "Dashboard Messages - Eldorado",
@@ -31,26 +31,16 @@ export const metadata = {
 };
 
 export default function DashboardMessagesPage() {
-  const { icon, title, tabs, unreadToggleLabel } = DASHBOARD_MESSAGES_PAGE;
+  const { icon, title, chips, unreadToggleLabel } = DASHBOARD_MESSAGES_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
+      <HeaderBar loggedIn user={DASHBOARD_USER} notiCount={26} favCount="9+" />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell active="Messages">
           <DashboardPageHeader icon={icon} title={title} />
           <div className="relative mt-[14px] h-[900px] max-w-[1048px] px-6">
-            <div className="flex h-full flex-col gap-4">
-              <MessagesFilterBar tabs={tabs} unreadLabel={unreadToggleLabel} />
-              <div className="flex grow basis-0 flex-col">
-                <div className="h-full">
-                  <div
-                    aria-label="Chat"
-                    className="size-full overflow-clip align-middle"
-                  />
-                </div>
-              </div>
-            </div>
+            <DashboardMessagesPanel chips={chips} unreadToggleLabel={unreadToggleLabel} />
           </div>
         </DashboardShell>
       </main>
