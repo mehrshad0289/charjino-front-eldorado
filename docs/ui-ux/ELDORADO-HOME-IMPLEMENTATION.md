@@ -1183,9 +1183,15 @@ actual files and Git history — never trust previous AI claims.
 ## Backup Status
 
 - Last successful push timestamp: 2026-11-04, session 19 (boosting
-  complete; this doc commit is the last push)
-- Hash of last pushed commit: `9d9a25c` (/ea-fc-boosting/b/142-4 +
-  parameterized ShopItemSubNav), preceded by 2dedb03 (checkout doc),
+  complete + gamepass use-client hotfix; this doc commit is the last
+  push)
+- Hash of last pushed commit: `3ec4aef` (HOTFIX "use client" on
+  GamePassFeaturedOffer — the parallel session's 9d7a8c2 shipped
+  useState without the directive, breaking origin builds and staling
+  Vercel: /ea-fc-boosting 404'd until this fix; after the push Vercel
+  rebuilt and /ea-fc-boosting/b/142-4 + /xbox-game-pass + 6 more
+  routes verified 200), preceded by `9d9a25c` (/ea-fc-boosting/b/
+  142-4 + parameterized ShopItemSubNav), 2dedb03 (checkout doc),
   5de98b2 (/checkout + TrustpilotStars fix), 5cc0daa (checkout
   decode), 6f64ff6 / dd3746c / 0dd8663 / c909ff4 (become-seller
   chain). Every push verified by empty `git log origin/main..HEAD`
