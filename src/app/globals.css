@@ -27,6 +27,7 @@
   --color-focusblue: #4783ff; /* search input focus ring in open overlay */
   --color-labelgray: #6a667b; /* "Popular categories" overlay label */
   --color-inputgray: #efeff1; /* rgb(239,239,241) light gray input/dropdown fill + border (menu search, shop filters) */
+  --color-dropinput: #2a2a37; /* rgb(42,42,55) open search dropdown input fill (search capture) */
   --color-catactive: #282836; /* rgb(40,40,54) active catnav item fill (mega menu open / category page) */
   --color-metaicon: #00e4c9; /* rgb(0,228,201) seller verified badge green */
   --color-filtertext: #626362; /* rgb(98,99,98) shop filter/count text */
