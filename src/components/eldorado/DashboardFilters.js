@@ -3,9 +3,12 @@
    ("Recommended", transparent). No menu content exists in any reference,
    so the comboboxes are static buttons (no invented dropdowns); the input
    is a real text field. Config passed via props for reuse.
-   The CustomItem capture (session 15) swaps the search input for a
+   Session 15b: the CustomItem capture swaps the search input for a
    "Delivery method" combobox (180px, same closed style) — pass
-   deliveryLabel to render it instead of the search field. */
+   deliveryLabel to render it instead of the search field.
+   Session 16: search input and sort button are now optional — the
+   Currency and TopUp offers captures have only the game select
+   (no "Search offers", no "Recommended" in their captures). */
 
 function ChevronDown() {
   return (
@@ -69,7 +72,7 @@ export default function DashboardFilters({ gamePlaceholder, searchPlaceholder, d
             </span>
           </button>
         </div>
-      ) : (
+      ) : searchPlaceholder ? (
         <div>
           <div className="w-[200px]">
             <div className="relative">
@@ -84,23 +87,25 @@ export default function DashboardFilters({ gamePlaceholder, searchPlaceholder, d
             </div>
           </div>
         </div>
+      ) : null}
+      {sortLabel && (
+        <div className="ml-auto">
+          <button
+            type="button"
+            aria-label="Single-select dropdown"
+            aria-haspopup="listbox"
+            className="flex min-h-[42px] items-center justify-between overflow-hidden rounded-lg px-[14px] py-2 leading-[19.6px]"
+          >
+            <span className="flex items-center gap-2">
+              <SortIcon />
+              <span className="block truncate">{sortLabel}</span>
+            </span>
+            <span className="block text-[rgb(98,_99,_98)]">
+              <ChevronDown />
+            </span>
+          </button>
+        </div>
       )}
-      <div className="ml-auto">
-        <button
-          type="button"
-          aria-label="Single-select dropdown"
-          aria-haspopup="listbox"
-          className="flex min-h-[42px] items-center justify-between overflow-hidden rounded-lg px-[14px] py-2 leading-[19.6px]"
-        >
-          <span className="flex items-center gap-2">
-            <SortIcon />
-            <span className="block truncate">{sortLabel}</span>
-          </span>
-          <span className="block text-[rgb(98,_99,_98)]">
-            <ChevronDown />
-          </span>
-        </button>
-      </div>
     </div>
   );
 }

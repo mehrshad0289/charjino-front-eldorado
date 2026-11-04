@@ -11,6 +11,18 @@ const ICONS = {
       <circle cx="8.3" cy="8.3" r="1.2" fill="currentColor" />
     </svg>
   ),
+  /* Session 16: orders pages header icon — the captures' icomoon glyph is
+     empty (project-wide pattern); inline receipt SVG replacement
+     (documented assumption, same convention as the tag icon). */
+  orders: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M7 3.5h10v17l-2.5-1.7-2.5 1.7-2.5-1.7L7 20.5v-17Z"
+        {...stroke}
+      />
+      <path d="M9.5 8h5M9.5 11.5h5" {...stroke} />
+    </svg>
+  ),
 };
 
 /* Dashboard page title row: yellow icon + H1 (semibold 30/36) + dark
