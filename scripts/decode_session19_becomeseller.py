@@ -31,6 +31,10 @@ CAPTURES = {
     "checkout": os.path.join(
         UIUX, "checkout",
         "www_eldorauantity_1_category_RequestedBoosting_gameId_142_1920w_390w_1536w_default.make"),
+    # user-pushed bddd33e (session 19): boosting product page behind the checkout
+    "boosting": os.path.join(
+        UIUX, "Boosting-rivals",
+        "www_eldorado_gg_ea-fc-boosting_b_142-4_1920w_390w_1536w_default.make"),
 }
 
 
