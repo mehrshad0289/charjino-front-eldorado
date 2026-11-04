@@ -22,8 +22,40 @@ actual files and Git history — never trust previous AI claims.
   session-23 capture refresh) + `/roblox-items` (session 18) +
   `/verify/status` (session 20) + `/xbox-game-pass` responsive
   re-verification (session 21 — COMPLETE) + `/dashboard/messages`
-  rebuilt to the not-empty capture (session 23 — COMPLETE)
-- Current section: session 23 — the two user-pushed "add file"
+  rebuilt to the not-empty capture (session 23 — COMPLETE) +
+  `/xbox-game-pass` capture-exact card anatomy (session 25 — COMPLETE)
+  + `/support/articles/8408997-seller-rules` (parallel session 25)
+- Current section: session 25 — gift-card shop page (gamepass
+  capture) re-verified mobile->desktop and made capture-exact. The
+  user-pushed `ui ux/shop-giftcart-gamepass-xbox/…xbox-ultimate-1-month
+  …Europe…make` capture re-decoded
+  (scripts/decode_session25_capture.py → snapshots/xboxgp-europe-1920px-
+  light-{1,2}.tsx — byte-identical to the session-18 gamepass decode, so
+  the captured STATE was already implemented; this session arbitrated
+  the card anatomy against BOTH authorities: the capture and a fresh
+  live probe 2026-11-05, which now CONVERGE). Fixes
+  (GamePassAmountGrid/GamePassFeaturedOffer/gamePassData/page):
+  amount cards = 14px/19.6 label (bold when selected), price ROW first
+  (bold green 16px + discount chip) with the strike row BELOW (14px
+  line-through + 16px info icon, gap-8) — supersedes the 2026-11-04
+  strike-above/18px render; Popular chip = flush top tab (yellow bg,
+  rounded-bl/br-lg, star + 12px bold); Best Value chip DROPPED (absent
+  in capture AND today's live); "/ month" footer 12px per live;
+  featured-offer Total = chip + bold green 20px price row FIRST, strike
+  row (16px info icon + 16px line-through) below; Add to cart now
+  MOBILE-ONLY (live @390 keeps it; live @1920 and the capture dropped
+  it); region chips inlineMobile per live @390 ("Game region: Europe"
+  one-liner; the split header + "Your region:" hint stays desktop per
+  the capture). Verified: eslint 0 errors, build green 72 pages (after
+  merging the parallel Seller-rules article), local @390/1536/1920 =
+  200 / overflow 0 / 0 broken imgs / 0 errors, pageH 5839 vs live 5805
+  @1920 (was 6007), 8757 vs live 8904 @390 (live carries geo-only
+  extras: HK$ prices, savings banner, All-sellers filter chips +
+  Current-offer highlight — documented, capture-verbatim wins).
+  Probe scripts: probe_session25_gamepass.js (3-width sweep),
+  probe_session25_card_anatomy.js (live DOM anatomy),
+  crop_session25_pair.py (local|live composites).
+- Previous section: session 23 — the two user-pushed "add file"
   captures (commits 8111ede + 9f6e420) decoded and implemented.
   1) `ui ux/messages-notempty/…(1).make` (46066 bytes; the implemented
   `ui ux/Messages/` capture is 39875 and EMPTY-state) → decoded
@@ -1358,7 +1390,23 @@ actual files and Git history — never trust previous AI claims.
   action: on request — no capture-driven work remains; live-first
   pages or fixes per user direction.
 
-<<<<<<< HEAD
+- 2026-11-05 (session 25, gamepass round) — the gift-card shop page
+  (`ui ux/shop-giftcart-gamepass-xbox/` capture) re-handled
+  mobile->desktop per user instruction as a continuation of the
+  session-24 shop round. Recovery first: fresh sandbox clone,
+  clean tree, all prior commits verified on origin; TWO parallel-
+  session push rejections resolved via fetch+merge (99dce3f
+  session-24 comparison round; 1acab47 Seller-rules article).
+  Capture re-decoded (byte-identical to session-18) → the work is
+  arbitration + fixes, not re-implementation: live probe
+  2026-11-05 shows the live card anatomy NOW matches the capture
+  (price row first, strike below) — the local render lagged one
+  probe generation behind. Fixes listed in the Current Checkpoint;
+  verification: eslint 0 / build green 72 / 3x3 widths PASS /
+  screenshots compared side-by-side (top, grid+sidebar, sellers,
+  reviews/process/FAQ/SEO @1920; 7 strips @390). Push chain:
+  502ffe7 checkpoint → 316668a merge → 32373be fixes → 2daa1b4
+  merge → this doc commit.
 - 2026-11-05 (session 23) — the two user-pushed "add file" captures
   (8111ede messages-notempty + 9f6e420 Boosting-Champions-Finals)
   decoded, implemented, verified and pushed. Full anatomy in the
@@ -1396,17 +1444,6 @@ actual files and Git history — never trust previous AI claims.
   (session 25). Route decision: /support/articles/8408997-seller-rules
   (mirrors the live URL minus domain).
 
-## Backup Status
-
-- Last successful push timestamp: 2026-11-05, session 23 (both
-  user-pushed captures implemented; this doc commit is the last push)
-- Hash of last pushed commit: this docs commit, preceded by `c06f7a9`
-  (boosting Champions-Finals refresh), `051ac4e` (/dashboard/messages
-  not-empty rebuild), `7b6f996` (decode checkpoint), `8de2383`
-  (parallel session-22 sweep docs). Every push verified by empty
-  `git log origin/main..HEAD` immediately after; one rejection
-  resolved fetch+rebase (never force).
-=======
 - 2026-11-04 (session 22, user captures round) — mid-session the user
   pushed TWO second-state captures of already-implemented pages (the
   folder-name pattern: same page, new state). Both decoded with the
@@ -1470,17 +1507,14 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 22 (messages
-  notempty + boosting Champions-Finals variant + docs; this doc
-  commit is the last push)
-- Hash of last pushed commit: this docs commit, preceded by the
-  boosting variant feature, the messages feature, `8de2383`
-  (session-22 sweep + doc hygiene), `305210d` (session 21 doc),
-  `fb8e2c5` / `9d7a8c2` (gamepass buy-box chain). Every push verified
-  by empty `git log origin/main..HEAD` immediately after.
->>>>>>> f0b896c (feat(ui): /ea-fc-boosting/b/142-4 two-variant switch per user-pushed Champions-Finals capture (session 22) — BOOST_VARIANTS data (both captured states verbatim) + client BoostingConfigSection; chips switch states, non-captured chips no-op; CF card 92b3f9e9 + Rank 15/Rank 1/PC - EA + Get-offers-now panel; verify scripts + doc)
-- Uncommitted changes: none after this doc commit
-- Unpushed commits: none
+- Last successful push timestamp: 2026-11-05, session 25 (gamepass
+  capture-exact card-anatomy round; this doc commit is the last push)
+- Hash of last pushed commit: this docs commit, preceded by `2daa1b4`
+  (merge of the parallel session-25 Seller-rules article), `32373be`
+  (gamepass capture-exact fixes), `316668a` (merge of the parallel
+  session-24 comparison round), `502ffe7` (session-25 decode
+  checkpoint). Every push verified by empty `git log origin/main..HEAD`
+  immediately after; two rejections resolved fetch+merge (never force).
 - Push auth: the session PAT lives in the origin URL in this sandbox
   only (transient; never committed). Future sessions without a token
   need a fine-grained PAT (Contents: read/write) or pushes fail with
