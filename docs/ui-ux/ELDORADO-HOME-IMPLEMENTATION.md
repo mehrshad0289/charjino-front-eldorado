@@ -14,9 +14,10 @@ actual files and Git history — never trust previous AI claims.
   + `/login` + `/blog` + `/blog/[category]/[slug]` (user's sessions
   12-12c) + `/about-us` + `/contact-us` + `/bug-bounty` (session 12b) +
   search dropdown rebuilt per capture (session 13)
-- Current section: session 13 — SearchOverlay rebuilt from the
-  search-1920px-light capture (the last decoded reference without a
-  matching implementation); ALL pushed captures now have a page or
+- Current section: session 14 — review sweep (22 routes x 3 widths,
+  all green) + new utility page `/pagelist` indexing every implemented
+  route (23 rows in 6 groups); session 13 — SearchOverlay rebuilt from
+  the search-1920px-light capture; ALL pushed captures have a page or
   component; verified and pushed
 - Reference files:
   - Blog capture (session 12, user-pushed):
@@ -301,6 +302,39 @@ actual files and Git history — never trust previous AI claims.
   dashboard orders/wallet, game pages) or a pixel pass on any page
   against live
 
+- Implementation status (session 14 — review + /pagelist):
+  - Review sweep: synced origin first (981a850 — the user's parallel
+    blog-article fixes), rebuilt, probed 22 routes (11 static incl
+    product single + 11 blog articles) x 3 widths = 66 probes: all
+    HTTP 200, overflow 0, zero console/page errors. Spot-checks:
+    search overlay opens with 10 rows, mega menu opens. Scripts:
+    scripts/review_sweep.js (route list auto-built from
+    blogArticlesData.js)
+  - New route `/pagelist` (user request): index of every implemented
+    page — Main 1 / Shop 4 / Blog 12 (landing + articles generated
+    from BLOG_ARTICLE_PAGES, never drifts from data) / Company 3 /
+    Account 2 / Utility 1 = 23 rows. Site frame (HeaderBar + Footer),
+    token styling, white hairline cards, yellow count badges. Rows:
+    title + category + mono route under it (long slugs truncate the
+    ROUTE, never the title — first layout had the opposite)
+  - Lesson: a stale next-server holding the port serves a stale
+    .next — after rebuilding, kill by PID (ps, not lsof — lsof lists
+    no LISTEN sockets in this sandbox) before `next start`
+- Visual comparison status (screenshots docs/ui-ux/screenshots/session14/):
+  pagelist-1920.png / pagelist-390.png — 6 groups render, titles full
+  width (480px @1920), category label + route below title, hover row
+  bg; all 23 links fetch-verified 200
+- Technical checks: build green (34 routes incl /pagelist); overflow
+  0 at 1920/390; zero page errors
+- Known deviations / documented limitations:
+  - /pagelist has NO capture (user-requested utility page) — styling
+    follows the design system, not a reference
+  - blog rows show the LIVE article titles; hrefs are internal routes
+- Deployment: push after this commit — Vercel verified below in
+  Backup Status
+- Next exact action: on request — capture-driven work remains closed;
+  /pagelist should gain a row per new route as they land
+
 ## Section log (append one block per completed section)
 
 - 2026-11-04 (session 12c) — `/blog` live-verified pixel pass, merging a
@@ -577,9 +611,16 @@ actual files and Git history — never trust previous AI claims.
   spuriously. Verified overlay geometry/styles vs capture (see
   checkpoint), screenshots committed. Pushed 77a3b77.
 
+- 2026-11-04 (session 14) — full review sweep + /pagelist utility
+  index (user request). Recovery: synced origin 981a850 first (user's
+  parallel blog fixes); token live on origin. Review: 22 routes x 3
+  widths all green (200 / overflow 0 / no errors) — the codebase is
+  healthy after 13 sessions. New /pagelist route links all 23 rows.
+  Push verified by empty origin/main..HEAD.
+
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 13
+- Last successful push timestamp: 2026-11-04, session 14
 - Hash of last pushed commit: `77a3b77` (SearchOverlay per capture) +
   this doc commit; push verified by empty `git log origin/main..HEAD`
   after every push; Vercel verified (dropinput token in live CSS, all
