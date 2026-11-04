@@ -5,7 +5,8 @@ import { GIFT_CARD_FAQ } from "./data/giftCardData";
 
 /* "Frequently Asked Questions" (giftcard .make capture): white rounded
    accordion rows with a chevron; answers are collapsed in the capture, so
-   the answer copy was scraped live from eldorado.gg/xbox-gift-card/v/103.
+   the answer copy was scraped live. Shared by the gift card and game pass
+   pages via the `items` prop (defaults to the gift card FAQ).
    Title is left-aligned on mobile (live @390), centered on desktop. */
 
 function Chevron({ open }) {
@@ -45,7 +46,7 @@ function Answer({ item }) {
   );
 }
 
-export default function GiftCardFaq() {
+export default function GiftCardFaq({ items = GIFT_CARD_FAQ }) {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
@@ -54,7 +55,7 @@ export default function GiftCardFaq() {
         Frequently Asked Questions
       </div>
       <div className="flex flex-col gap-2">
-        {GIFT_CARD_FAQ.map((item, i) => {
+        {items.map((item, i) => {
           const open = openIndex === i;
           return (
             <div key={item.q} className="flex w-full flex-col rounded-lg bg-white px-[14px] py-3">
