@@ -652,6 +652,24 @@ actual files and Git history — never trust previous AI claims.
   - DashboardPageHeader: +feedback/wallet/messages inline SVG icons
     (empty icomoon glyphs, documented assumption)
   - /pagelist Account group +3 rows (39 total)
+- Implementation status (session 17c — /privacy-policy + /terms-of-service):
+  - The two new user-pushed captures (origin 38b31b7/05f1c07) decoded via
+    the session-17 dual-variant pipeline; content extracted VERBATIM to
+    data/legalData.js by scripts/extract_legal.py (privacy 66KB: h5 + 7
+    h6 sections, 291 p / 59 ul; terms 168KB: Current ToS until Nov 30
+    2026 + New General/Buyer/Seller ToS from Dec 1 2026, 462 p / 14 h6),
+    rendered via dangerouslySetInnerHTML (blog-body convention)
+  - New LegalDoc.js: max-w-682 centered column (capture layout); bare
+    <h6> styled 16px bold (assumption — no styling info in captures).
+    Layout gotcha: the capture's flex wrapper held one nested column —
+    flex after extraction lined all paragraphs in one 7300px row;
+    block centering fixed it (caught by the sweep @1920)
+  - Pages use the LOGGED-OUT header (no avatar in these captures)
+  - Footer legal links pre-wired since the home sessions — now live;
+    /pagelist Company +2 rows (41 total)
+- Technical checks (17c): build green (53 routes); sweep 41 x 3 = 0
+  problems; pagelist 41 links all 200; needles all present; overflow 0
+  @1920/768/390; screenshots session17/{privacy-policy,terms-of-service}-*
 - Technical checks (17): build green (51 routes); sweep 39 x 3 widths = 0
   problems; pagelist 39 links all 200; aria-current + bg rgb(255,201,80)
   on feedback/wallet/messages; 0 broken images; overflow 0 @1920/390;
