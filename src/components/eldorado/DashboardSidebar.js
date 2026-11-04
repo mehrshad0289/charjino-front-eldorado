@@ -171,12 +171,20 @@ export default function DashboardSidebar({ active = null }) {
               );
             })}
 
-            {DASHBOARD_NAV_LINKS.map((link) => (
-              <a key={link.label} href={link.href} className="flex items-center p-1 hover:text-brand">
-                <SidebarIcon name={link.icon} className="mr-[12px]" />
-                <span className="block">{link.label}</span>
-              </a>
-            ))}
+            {DASHBOARD_NAV_LINKS.map((link) => {
+              const isActive = active === link.label;
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`flex items-center p-1 ${isActive ? "bg-brand" : "hover:text-brand"}`}
+                >
+                  <SidebarIcon name={link.icon} className="mr-[12px]" />
+                  <span className="block">{link.label}</span>
+                </a>
+              );
+            })}
           </div>
         </div>
 

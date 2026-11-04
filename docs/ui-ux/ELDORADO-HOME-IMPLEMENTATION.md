@@ -619,11 +619,51 @@ actual files and Git history — never trust previous AI claims.
   200; FAQ accordion toggles; overflow 0 @1920/390; zero page errors
 - Deployment: push 4f474e1 — Vercel verified in the next Backup Status
   entry after this push
-- Next exact action: on request — no unimplemented captures remain;
-  candidates: pixel diff of /influencer-program vs live, or new
-  captures from the user
+- Next exact action: on request — every .make capture in `ui ux/` now
+  maps to an implemented route (session 16 closed the dashboard family:
+  Currency / TopUp / Purchased / Sold / Loyalty; CustomItem was the
+  parallel session's 15b). Candidates: pixel diff of the dashboard pages
+  vs live behind a login, or new captures from the user
 
 ## Section log (append one block per completed section)
+
+- 2026-11-04 (session 16) — dashboard family completion: Currency /
+  TopUp / Purchased / Sold / Loyalty routes + sidebar active fix.
+  Recovery: repo present (no re-clone), synced 3506014 → pulled 5 new
+  remote commits (2090d75 blog fix + 3 user-pushed .make files). New
+  captures decoded with fig_reassemble (dash-* + influencer snapshots;
+  the CustomItem .make in Currency/CustomItem folders is an empty
+  JOIN_START container — 0 printable runs, 68-byte thumbnail — the
+  parallel session's session 15b later implemented /dashboard/offers/
+  CustomItem from the user's NEW Items/ capture, verified here
+  independently: 200 + overflow 0 + Delivery method/Nothing found
+  markers @1920/1536/390). Implemented: /dashboard/offers/Currency +
+  /dashboard/offers/TopUp (verbatim Account content minus search/sort —
+  DashboardFilters search+sort now optional), /dashboard/orders/
+  purchased + /dashboard/orders/sold (new DashboardOrderFilters: two
+  200px comboboxes; sold adds 200px Search Orders + gray Download
+  invoice; content gap mt-[32px] per capture vs offers mt-[4px];
+  receipt header icon = documented assumption) and /dashboard/loyalty
+  (DashboardLoyalty: amber streak banner rgb(252,231,182) min-h 230
+  with 4 dimmed milestones + Bronze rank + teal 0% bar + absolute
+  "How it works?" link, white Available-points card w/ dimmed Redeem,
+  achievements 0/17 grid with Critic/Master Trader/Explorer cards
+  (1fr|2fr template ≥sm; below-sm stack is a documented approximation —
+  390 overflow 13→0), Dedication bg-image card w/ dark Browse Eldorado).
+  DashboardSidebar: direct nav links (Loyalty/Wallet/...) now honor the
+  `active` prop with bg-brand + aria-current (capture shows the yellow
+  fill on the Loyalty row). Mid-session concurrency: push rejected
+  twice — rebased onto the parallel session's 11 commits (influencer +
+  CustomItem + docs), conflict resolved in DashboardFilters.js by
+  unioning deliveryLabel (theirs) with optional search/sort (mine);
+  thumb placeholder file dropped in the amend. Verification: dashboard
+  sweep 15 combos PASS (content markers + placeholders + overflow +
+  errors + broken imgs, Account regression included), geometry probe
+  green vs capture values (148px select, 200px comboboxes, mt gaps,
+  button flush), loyalty sweep PASS @1920/1536/390 (banner bg/min-h,
+  7 reward imgs, 4 teal bars, all sections), pagelist all 36 links 200.
+  Pushes: 08f6da9 (dashboard 4 routes, rebased) → 8d55e69 (loyalty +
+  sidebar fix) — both verified by empty origin/main..HEAD.
 
 - 2026-11-04 (session 15, verification + union round — second half) —
   ran the cross-session verification of the parallel session's tip
@@ -971,27 +1011,36 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 15 (verification
-  + union round)
-- Hash of last pushed commit: `4f474e1` (/influencer-program + doc);
-  push verified by empty `git log origin/main..HEAD` after every push;
-  session-13 deploy was Vercel-verified (dropinput in live CSS)
+- Last successful push timestamp: 2026-11-04, session 16 (dashboard
+  family completion)
+- Hash of last pushed commit: `8d55e69` (/dashboard/loyalty + sidebar
+  active fix), preceded by `08f6da9` (dashboard Currency/TopUp/
+  Purchased/Sold, rebased over the parallel session's 11 commits); the
+  doc commit after this entry is the final session-16 push — every
+  push verified by empty `git log origin/main..HEAD` immediately after
 - Uncommitted changes: none expected after this doc commit
 - Unpushed commits: none
-- Push auth: the session-15 PAT lives in the origin URL in this
-  sandbox only (transient; never committed). Future sessions without a
-  token need a fine-grained PAT (Contents: read/write) or pushes fail
-  with "could not read Username for 'https://github.com'". The user
-  pushes concurrently — expect push rejections: fetch + rebase (never
-  force) and retry.
+- Push auth: the session PAT lives in the origin URL in this sandbox
+  only (transient; never committed). Future sessions without a token
+  need a fine-grained PAT (Contents: read/write) or pushes fail with
+  "could not read Username for 'https://github.com'". The user (and a
+  parallel agent session) push concurrently — expect push rejections:
+  fetch + rebase (never force) and retry.
 - Sandbox gotchas learned this session:
   - `(cmd &)`-style servers DIE between tool calls; start long-lived
     servers with the tool's run_in_background
   - ALWAYS restart `next start` after `npm run build` — a running
     server mixes old HTML with new chunk references and produces
-    phantom layout breakage
+    phantom layout breakage (session 16 hit the variant: a STALE
+    next-server from a previous session kept port 3100 and served a
+    404ing old build — kill the pid on the port before restarting)
   - Lazy images below the fold report "broken" in DOM probes that
     never scroll — not real breakage
+  - html.to.design captures can ship EMPTY (JOIN_START protocol stream
+    only, 68-byte thumbnail): check for `import React` snapshot parts
+    before trusting a .make file
+  - inline-node `-e` probes with escaped quotes are fragile — write
+    sweep scripts to scripts/ (project convention anyway)
 - Recovery instructions:
   1. `git clone https://github.com/mehrshad0289/charjino-front-eldorado.git`
   2. Read this file; verify state per the protocol checklist (git status,
