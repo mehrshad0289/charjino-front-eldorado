@@ -668,7 +668,6 @@ actual files and Git history — never trust previous AI claims.
   capture-less areas (cart, dashboard orders/wallet, game pages), or a
   pixel pass on any page against live
 
-
 ## Session 15 (blog article live-verified pass)
 
 - Implementation status (session 15 — article page verification + fixes):
@@ -1524,6 +1523,74 @@ actual files and Git history — never trust previous AI claims.
   (session 25). Route decision: /support/articles/8408997-seller-rules
   (mirrors the live URL minus domain).
 
+- 2026-11-04 (session 25, Seller rules) — the user pushed the Help
+  Center capture `ui ux/Seller rules/
+  support_eldorado_gg_en_articles_8408997-seller-rules_…make` (origin
+  8d5dd29); BOTH parallel sessions decoded it (this session's
+  decode_session25_sellerrules.py → sellerrules-1920px-light-{1,2};
+  the parallel session-25 claimed + implemented it the same minutes)
+  and consolidated on the announced canonical route
+  /support/articles/8408997-seller-rules (this session's route note;
+  the parallel session renamed its page to match — commit 1acab47).
+  Anatomy (session 25's decode): support.eldorado.gg Help Center,
+  Lato, fixed black 60px header (logo c4167a01, Explore Eldorado /
+  Contact us, EN globe 483fb55d + chevron 862fa312, white/5 search
+  pill "Search | Ctrl K" in JetBrains Mono), body grid
+  260px | 1fr | 240px gap-48 px-4: FIXED 276px docs-nav accordion
+  (top-60, border-r; 6 png collection icons + 14 per-row chevron
+  svgs; Getting started / Buying [expanded: Buying and receiving
+  orders + Payments] / Selling [expanded: Seller verification 4
+  articles + Rules and guidelines 10 articles, "Seller rules" ACTIVE
+  blue rgb(2,88,217) + 2px bar left-[-26.5px]; Refunds / Eldorado
+  account / Game guides top-level collapsed]) + article column
+  (breadcrumb All Collections > Rules and guidelines > Seller rules,
+  36px/40.32 semibold h1, 18px/27.9 gray description, "Updated over
+  a week ago" 13px + Copy-for-LLM + more-actions group, 8 h2
+  sections 22/27.5 with the capture's h_ anchor hashes, dispute
+  table 3x3 with rgba(232,232,232,.5) header cells, feedback
+  fieldset with 2 thumbs buttons, Related: Start selling) + fixed
+  240px "On this page" TOC (right-4 top-60; 13px semibold title,
+  12px/16.8 items gap-8 pl-3, FIRST item active blue + 2px bar
+  left-[-17.5px]). This session then QA'd the parallel
+  implementation against the decode and fixed the capture-fidelity
+  gaps: sidebar hrefs corrected to the capture's verbatim URLs
+  (8408996/13859407/11703747/12032614/13859389/13917635/13917846/
+  10183840/11130882/9896838/11928248/16860239/11315779 + collection
+  ids), Refunds/Eldorado-account/Game-guides moved back to TOP level
+  with icons, 6 collection pngs + 14 chevron svgs (per-row capture
+  assets) added, Buying's children made collapsible collections,
+  invented "All Collections" sidebar row removed (breadcrumb-only),
+  invented "Selling" breadcrumb item + Submit feedback button
+  removed, intro paragraph bold+justify per capture, "Initial
+  response" bold moved to "If theres no communication…" (API
+  sentence regular), "This includes charges like:" de-bolded +
+  Exception paragraph restored INSIDE the No-extra-fees li, td
+  padding pt-2/pb-2 + border color rgba(26,26,26,.15), TOC rebuilt
+  capture-exact (8 items — 2 were missing — with h_ hash anchors,
+  active first item + bar, fixed right-4 top-60 w-60), related-row
+  arrow + more-actions use the capture svgs. Verify
+  scripts/verify_session25_support.js: 35 checks ALL PASS (geometry
+  vs capture numbers, sidebar collapse/re-expand interactions, @390
+  overflow 0 / TOC hidden / aside static); screenshots 1920+390.
+  Sweep route list 39 -> 40; full sweep 40 x 2 = 80 page-loads ALL
+  PASS; build green (72 pages). Below 1024 the columns stack and the
+  fixed aside/TOC go static/hidden (no capture reference —
+  documented). Responsive title/metadata: <title> Seller rules |
+  Eldorado Help Center (assumption — live title not verifiable from
+  the capture).
+
+## Backup Status
+
+- Last successful push timestamp: 2026-11-05, session 23 (both
+  user-pushed captures implemented; this doc commit is the last push)
+- Hash of last pushed commit: this docs commit, preceded by `c06f7a9`
+  (boosting Champions-Finals refresh), `051ac4e` (/dashboard/messages
+  not-empty rebuild), `7b6f996` (decode checkpoint), `8de2383`
+  (parallel session-22 sweep docs). Every push verified by empty
+  `git log origin/main..HEAD` immediately after; one rejection
+  resolved fetch+rebase (never force).
+=======
+>>>>>>> c89b8e8 (feat(ui): session-25 QA round on /support/articles/8408997-seller-rules vs the Seller-rules decode — sidebar hrefs to the capture's verbatim URLs, Refunds/account/guides back to top level with the 6 png icons + 14 per-row chevrons, Buying children as collapsible collections, invented Submit button / Selling crumb / All-Collections sidebar row removed, intro bold+justify, Initial-response bold re-ordered, Exception back inside No-extra-fees li, td pt-2 + border rgb26/.15, TOC rebuilt (8 h_ items, active first + bar, fixed right-4 top-60); verify_session25_support.js 35 checks ALL PASS; sweep 40x2=80 ALL PASS; build green 72 pages)
 - 2026-11-04 (session 22, user captures round) — mid-session the user
   pushed TWO second-state captures of already-implemented pages (the
   folder-name pattern: same page, new state). Both decoded with the

@@ -32,6 +32,7 @@
 /playstation-plus
 /privacy-policy
 /roblox-items
+/support/articles/8408997-seller-rules
 /terms-of-service
 /users/[username]/[[...tab]]
 /verify/status
