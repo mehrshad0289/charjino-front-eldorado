@@ -1,9 +1,11 @@
 import { GAME_PASS_FEATURED_OFFER } from "./data/gamePassData";
 
 /* Seller info card (gamepass .make capture): white rounded card with the
-   bold "Seller" heading, 48px round avatar, seller name + teal verified
-   badge, then rating % + underlined reviews-count link. Shown under the
-   featured offer in the desktop sidebar and in the mobile flow. */
+   bold "Seller" heading (inside the card per the capture, desktop) — the
+   live mobile flow shows the heading above the card on the page background,
+   so below lg the heading renders externally via the `headingOutside`
+   structure in the page. 48px round avatar, seller name + teal verified
+   badge, then rating % + underlined reviews-count link. */
 
 function VerifiedBadge() {
   return (
@@ -22,7 +24,7 @@ export default function GamePassSellerCard({ seller }) {
   return (
     <div className="rounded-lg bg-white p-4 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] lg:p-6">
       <div className="flex flex-col gap-3">
-        <div className="font-bold">Seller</div>
+        <div className="hidden font-bold lg:block">Seller</div>
         <div className="flex items-center gap-[10px]">
           <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full">
             <img alt={s.name} src={s.avatar} className="block h-12 w-12 object-cover align-middle" />

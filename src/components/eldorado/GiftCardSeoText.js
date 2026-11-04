@@ -1,6 +1,6 @@
 function StarIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="66" height="66" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 16.9l-6.1 3.5 1.5-6.8L2.2 9l6.9-.7L12 2Z"
         fill="currentColor"
@@ -59,8 +59,13 @@ export default function GiftCardSeoText({
           className="flex h-[43px] min-w-[246px] items-center rounded-lg pr-3"
           style={{ backgroundImage: "linear-gradient(to right, rgb(223, 28, 255) -55.11%, rgb(255, 201, 80) 97.14%)" }}
         >
-          <StarIcon />
-          <span className="pl-1 font-bold">4.9</span>
+          {/* capture: 66px yellow star with the 4.9 overlaid on it */}
+          <div className="relative ml-1 h-[43px] w-[60px] shrink-0">
+            <span className="absolute left-[22px] top-[11px] z-[2] block font-bold">4.9</span>
+            <span className="absolute -top-3 left-0 z-[1] block text-[rgb(255,_201,_80)]">
+              <StarIcon />
+            </span>
+          </div>
           <p className="ml-1.5 flex items-center justify-center text-[13px] leading-[21px]">
             From last<b className="px-1 font-bold">{orders}</b>orders
           </p>

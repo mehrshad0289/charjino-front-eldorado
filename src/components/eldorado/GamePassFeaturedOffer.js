@@ -32,8 +32,10 @@ export default function GamePassFeaturedOffer() {
   const { deliveryTime, total } = GAME_PASS_FEATURED_OFFER;
   return (
     <div className="relative bg-white lg:rounded-lg lg:shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]">
-      {/* Popular ribbon (live @1920/@390: pill overlapping the top edge) */}
-      <div className="absolute -top-3 left-0 z-[2] flex items-center gap-1 rounded-md bg-brand py-1 pl-2 pr-2.5 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px]">
+      {/* Popular ribbon (live @1920: pill overlapping the top edge; the
+          live mobile flow keeps the ribbon only on the selected variant
+          card, so it is hidden below lg here) */}
+      <div className="absolute -top-3 left-0 z-[2] hidden items-center gap-1 rounded-md bg-brand py-1 pl-2 pr-2.5 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px] lg:flex">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 16.9l-6.1 3.5 1.5-6.8L2.2 9l6.9-.7L12 2Z"

@@ -78,9 +78,13 @@ export default function XboxGamePassPage() {
                   <GamePassSellerCard />
                 </aside>
               </div>
-              {/* mobile: seller card + other sellers below the white flow */}
+              {/* mobile: seller card + other sellers below the white flow
+                  (live @390 shows the Seller heading on the page background) */}
               <div className="mt-6 flex flex-col gap-6 lg:hidden">
-                <GamePassSellerCard />
+                <div>
+                  <div className="mb-3 text-[16px] font-bold leading-[24px]">Seller</div>
+                  <GamePassSellerCard />
+                </div>
                 <GamePassOffers />
               </div>
               {/* desktop: other sellers full width below the two columns */}

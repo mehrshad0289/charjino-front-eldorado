@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GAME_PASS_IMAGES, GAME_PASS_VARIANTS, GAME_PASS_DEFAULT_VARIANT } from "./data/gamePassData";
 
 /* Step 2 of the buying flow (gamepass .make capture + live probes):
@@ -75,6 +75,16 @@ function Card({ variant, selected, onSelect }) {
 
 export default function GamePassAmountGrid() {
   const [selected, setSelected] = useState(GAME_PASS_DEFAULT_VARIANT);
+  const scrollerRef = useRef(null);
+
+  // live @390 opens with the selected variant visible in the scroller
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    const el = scroller.querySelector(`[aria-label="Select ${CSS.escape(selected)}"]`);
+    if (el) scroller.scrollTo({ left: Math.max(0, el.offsetLeft - 16) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="bg-white px-4 pb-4 pt-4 lg:px-6 lg:pb-5">
@@ -83,7 +93,7 @@ export default function GamePassAmountGrid() {
         <span className="text-graytext">{selected}</span>
       </div>
       {/* mobile: horizontal scroll row (live @390, card width 136px) */}
-      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden">
+      <div ref={scrollerRef} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden">
         {GAME_PASS_VARIANTS.map((v) => (
           <div key={v.label} className="w-[136px] shrink-0">
             <Card variant={v} selected={selected === v.label} onSelect={() => setSelected(v.label)} />
