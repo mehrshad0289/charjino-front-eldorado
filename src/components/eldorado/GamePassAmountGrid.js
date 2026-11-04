@@ -42,7 +42,7 @@ function Card({ variant, selected, onSelect }) {
       aria-label={`Select ${variant.label}`}
       aria-pressed={selected}
       onClick={onSelect}
-      className={`relative flex h-full w-full flex-col rounded-lg border border-cardborder p-3 text-left transition-colors ${
+      className={`relative flex h-full w-full flex-col rounded-lg border border-cardborder p-3 text-left transition-colors lg:min-h-[160px] ${
         selected ? "bg-brand/[0.16] outline-2 outline-offset-[-2px] outline-brand" : "bg-white hover:bg-badgebg"
       }`}
     >
@@ -92,16 +92,18 @@ export default function GamePassAmountGrid() {
         <span className="font-bold">Amount: </span>
         <span className="text-graytext">{selected}</span>
       </div>
-      {/* mobile: horizontal scroll row (live @390, card width 136px) */}
-      <div ref={scrollerRef} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden">
+      {/* below lg: horizontal scroll row (live keeps the mobile-style flow
+          through the whole tablet band — live @768 still scrolls, @1024 grids;
+          card width 136px per live @390 probe) */}
+      <div ref={scrollerRef} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:hidden">
         {GAME_PASS_VARIANTS.map((v) => (
           <div key={v.label} className="w-[136px] shrink-0">
             <Card variant={v} selected={selected === v.label} onSelect={() => setSelected(v.label)} />
           </div>
         ))}
       </div>
-      {/* md+: probed grid — md:grid-cols-3, xl:grid-cols-4 (1920 capture) */}
-      <div className="hidden gap-4 md:grid md:grid-cols-3 xl:grid-cols-4">
+      {/* lg+: probed grid — lg:grid-cols-3, xl:grid-cols-4 (1920 capture) */}
+      <div className="hidden gap-4 lg:grid lg:grid-cols-3 xl:grid-cols-4">
         {GAME_PASS_VARIANTS.map((v) => (
           <Card key={v.label} variant={v} selected={selected === v.label} onSelect={() => setSelected(v.label)} />
         ))}

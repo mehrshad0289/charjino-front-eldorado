@@ -113,8 +113,9 @@ function PriceBlock({ seller, withDelivery, align = "right" }) {
 function OfferRow({ seller }) {
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]">
-      {/* mobile: stacked card (live @390) */}
-      <div className="p-4 md:hidden">
+      {/* below lg: stacked card (live keeps the mobile flow through the
+          tablet band — live @768 stacked, @1024 grid rows) */}
+      <div className="p-4 lg:hidden">
         <div className="flex items-start justify-between gap-3">
           <SellerBlock seller={seller} />
           <PriceBlock seller={seller} withDelivery />
@@ -133,8 +134,8 @@ function OfferRow({ seller }) {
           Buy now ({seller.price})
         </button>
       </div>
-      {/* md+: capture's 5-column grid row */}
-      <div className="hidden items-center justify-between gap-4 px-6 py-4 md:grid md:grid-cols-[0.7fr_0.3fr_120px_auto_auto]">
+      {/* lg+: capture's 5-column grid row */}
+      <div className="hidden items-center justify-between gap-4 px-6 py-4 lg:grid lg:grid-cols-[0.7fr_0.3fr_120px_auto_auto]">
         <SellerBlock seller={seller} />
         <div className="flex flex-col gap-1">
           <div className="text-[14px] leading-[19.6px] text-graytext">Delivery time</div>
