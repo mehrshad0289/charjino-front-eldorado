@@ -10,7 +10,9 @@ import { PRODUCT_ID } from "../../components/eldorado/data/productData";
    (--color-page bg, white hairline cards, brand-yellow accents). Group
    rows are plain <a> links; blog rows come from BLOG_ARTICLE_PAGES so
    the list never drifts from the data file. Session 15: + 6 category
-   archive rows from BLOG_CATEGORIES. */
+   archive rows from BLOG_CATEGORIES. Session 15b: + CustomItem offers.
+   Session 16: + dashboard Currency / Top Up / Purchased / Sold / Loyalty
+   rows (5 new routes). */
 
 export const metadata = {
   title: "Page List - Eldorado",
@@ -67,6 +69,11 @@ const GROUPS = [
       { title: "Log in", href: "/login" },
       { title: "Dashboard — Offers (Account)", href: "/dashboard/offers/Account" },
       { title: "Dashboard — Offers (Custom items)", href: "/dashboard/offers/CustomItem" },
+      { title: "Dashboard — Offers (Currency)", href: "/dashboard/offers/Currency" },
+      { title: "Dashboard — Offers (Top Ups)", href: "/dashboard/offers/TopUp" },
+      { title: "Dashboard — Purchased orders", href: "/dashboard/orders/purchased" },
+      { title: "Dashboard — Sold orders", href: "/dashboard/orders/sold" },
+      { title: "Dashboard — Loyalty", href: "/dashboard/loyalty" },
     ],
   },
 ];
