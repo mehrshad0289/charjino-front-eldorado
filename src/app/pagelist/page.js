@@ -90,6 +90,7 @@ const GROUPS = [
       { title: "User profile — Reviews", href: "/users/NewFloat-0una/reviews" },
       { title: "User profile — About", href: "/users/NewFloat-0una/about" },
       { title: "Checkout (boosting order)", href: "/checkout" },
+      { title: "Seller verification", href: "/verify/status" },
     ],
   },
 ];

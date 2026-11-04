@@ -39,8 +39,13 @@ function GearIcon() {
 /* Logged-in right side (dashboard capture): three 42px rounded icon
    buttons + 44px avatar. The capture's icomoon glyphs decode empty, so
    the buttons draw neutral SVGs (bell / chat / favorites — unnamed in any
-   reference, documented assumption) and the avatar opens no menu. */
-function LoggedInActions({ user }) {
+   reference, documented assumption) and the avatar opens no menu.
+   Session 20 (/verify/status capture): the same header can carry a yellow
+   count badge on the MIDDLE icon (bg rgb(255,201,80), ink text 12px,
+   top-right, overhangs the button edge) and an orange "!" alert badge on
+   the avatar (bg rgb(255,141,0), 12px, top-right of the 44px circle) —
+   both optional props, off by default so every verified page is untouched. */
+function LoggedInActions({ user, notiCount = null, avatarAlert = false }) {
   return (
     <>
       <button
@@ -53,9 +58,14 @@ function LoggedInActions({ user }) {
       <button
         type="button"
         aria-label="Messages"
-        className="hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
+        className="relative hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
       >
         <ChatIcon />
+        {notiCount != null && (
+          <span className="absolute -right-1 top-0 block min-h-4 rounded-[0.4375rem] bg-[rgb(255,_201,_80)] px-[5px] py-[2px] text-[12px] leading-[normal] text-ink">
+            {notiCount}
+          </span>
+        )}
       </button>
       <button
         type="button"
@@ -64,10 +74,15 @@ function LoggedInActions({ user }) {
       >
         <HeartIcon />
       </button>
-      <button type="button" aria-label="Account menu" className="ml-1 flex items-center">
+      <button type="button" aria-label="Account menu" className="relative ml-1 flex items-center">
         <span className="size-11 overflow-hidden rounded-full border-2 border-black/0">
           <img alt="Profile avatar" src={user.avatar} className="block size-11 object-cover align-middle" />
         </span>
+        {avatarAlert && (
+          <span className="absolute right-0 top-0 flex h-4 min-h-4 items-center justify-center rounded-[0.4375rem] bg-[rgb(255,_141,_0)] px-[5px] pt-[2px] text-[12px] leading-[18px] text-ink">
+            !
+          </span>
+        )}
       </button>
     </>
   );
@@ -110,7 +125,12 @@ function HeartIcon() {
   );
 }
 
-export default function HeaderBar({ loggedIn = false, user = null }) {
+export default function HeaderBar({
+  loggedIn = false,
+  user = null,
+  notiCount = null,
+  avatarAlert = false,
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -163,7 +183,7 @@ export default function HeaderBar({ loggedIn = false, user = null }) {
 
         <div className="ml-auto flex shrink-0 items-center gap-1">
           {loggedIn ? (
-            <LoggedInActions user={user} />
+            <LoggedInActions user={user} notiCount={notiCount} avatarAlert={avatarAlert} />
           ) : (
             <>
               <button
