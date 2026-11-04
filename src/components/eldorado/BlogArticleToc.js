@@ -24,7 +24,10 @@ function tocTextCls(level, inSheet) {
 }
 
 export default function BlogArticleToc({ items }) {
-  const [active, setActive] = useState(items[0]?.anchor || "");
+  /* live @scroll 0 shows NO highlighted item (committed full-page capture);
+     the yellow li.current appears only after a heading is passed
+     (live verified @scrollY 2500/4200) — so start empty. */
+  const [active, setActive] = useState("");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -35,7 +38,7 @@ export default function BlogArticleToc({ items }) {
     if (!heads.length) return undefined;
     const onScroll = () => {
       const y = window.scrollY + 160;
-      let cur = heads[0].id;
+      let cur = "";
       for (const h of heads) {
         if (h.getBoundingClientRect().top + window.scrollY <= y) cur = h.id;
       }

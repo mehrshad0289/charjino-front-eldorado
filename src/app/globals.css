@@ -254,6 +254,31 @@ body {
   border: 0;
   border-radius: 24px;
 }
+/* Live wraps .entry tables in div.table-scroll (block, overflow-x: auto,
+   probed live @390: wrapper = entry width, scrollable) so wide tables
+   scroll horizontally instead of overflowing the viewport. */
+.table-scroll {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+/* WordPress accessibility class present in the scraped entry/lede HTML
+   (11 occurrences, e.g. the "Summary" lede heading) — visually hidden on
+   live; without it the label rendered as visible text (caught in the
+   1920 article comparison strip). */
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}
 .entry table {
   width: 100%;
   border-collapse: separate;

@@ -56,6 +56,17 @@ export async function generateMetadata({ params }) {
   };
 }
 
+/* Live eldorado.gg wraps every .entry table in a div.table-scroll
+   (block, overflow-x: auto) so wide tables scroll instead of blowing out
+   the viewport (verified live @390: wrapper 326px, overflow-x auto).
+   Our entry HTML comes from the data file as raw strings, so the wrap is
+   applied at render time with the same class name as live. */
+function withTableScroll(html) {
+  return html
+    .replace(/<table(\s|>)/g, '<div class="table-scroll"><table$1')
+    .replace(/<\/table>/g, "</table></div>");
+}
+
 function BreadChevron() {
   return (
     <span
@@ -174,7 +185,7 @@ export default async function BlogArticlePage({ params }) {
                 <div className="mb-[40px] rounded-3xl pb-16 pr-6 pt-6">
                   <div
                     className="entry"
-                    dangerouslySetInnerHTML={{ __html: article.entryHtml }}
+                    dangerouslySetInnerHTML={{ __html: withTableScroll(article.entryHtml) }}
                   />
                   <BlogArticleShare url={article.url} title={article.title} />
                 </div>
