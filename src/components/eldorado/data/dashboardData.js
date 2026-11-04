@@ -95,6 +95,61 @@ export const DASHBOARD_OFFERS_PAGE = {
   },
 };
 
+/* Session 16 — /dashboard/offers/Currency and /dashboard/offers/TopUp
+   (own captures, decoded 2026-11-04, 1920-only): page content identical
+   to the Account offers page (title "Offers" + New Offer → /become-seller,
+   offline-mode info banner, same "Nothing found" empty state and asset)
+   except the filter row carries ONLY the "Select Game" combobox — no
+   search input and no sort button exist in either capture. The active
+   sidebar row differs per route (Currency / Top Ups). */
+export const DASHBOARD_OFFERS_CURRENCY_PAGE = {
+  ...DASHBOARD_OFFERS_PAGE,
+  filters: { gamePlaceholder: "Select Game" },
+};
+
+export const DASHBOARD_OFFERS_TOPUP_PAGE = {
+  ...DASHBOARD_OFFERS_PAGE,
+  filters: { gamePlaceholder: "Select Game" },
+};
+
+/* Session 16 — /dashboard/orders/purchased + /dashboard/orders/sold
+   (own captures, decoded 2026-11-04, 1920-only): page header WITHOUT an
+   action button, content gap mt-[32px] (offers pages use mt-[4px]); filter
+   row = two min-w-[200px] comboboxes ("All statuses", "Recent"); sold adds
+   a 200px "Search Orders" input and a right-aligned gray "Download invoice"
+   button (bg rgb(244,244,244)). Empty states reuse the offers asset but
+   with order-specific texts. Header icon: capture's icomoon glyph is empty
+   (project-wide pattern) — "orders" maps to an inline receipt SVG
+   (documented assumption, same convention as the tag icon). */
+export const DASHBOARD_ORDERS_PURCHASED_PAGE = {
+  icon: "orders",
+  title: "Purchased orders",
+  filters: { status: "All statuses", period: "Recent" },
+  emptyState: {
+    image: DASHBOARD_OFFERS_PAGE.emptyState.image,
+    imageAlt: "No results found",
+    title: "Nothing found",
+    text: "You have no purchased orders",
+  },
+};
+
+export const DASHBOARD_ORDERS_SOLD_PAGE = {
+  icon: "orders",
+  title: "Sold orders",
+  filters: {
+    status: "All statuses",
+    period: "Recent",
+    searchPlaceholder: "Search Orders",
+    invoiceLabel: "Download invoice",
+  },
+  emptyState: {
+    image: DASHBOARD_OFFERS_PAGE.emptyState.image,
+    imageAlt: "No results found",
+    title: "Nothing found",
+    text: "You have no sold orders",
+  },
+};
+
 /* Login page (login.eldorado.gg capture) */
 export const LOGIN_BG = `${ASSET}fdbcce785891c023ba5cef0f78a6cfaa2620fc0b.png?generation=1793786228667980&alt=media`;
 
