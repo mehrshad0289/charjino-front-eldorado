@@ -34,6 +34,7 @@ const GROUPS = [
     label: "Shop",
     rows: [
       { title: "eFootball Accounts (shop template)", href: "/efootball-accounts" },
+      { title: "Roblox Items (shop item template)", href: "/roblox-items" },
       { title: "Xbox Game Pass", href: "/xbox-game-pass" },
       { title: "Xbox Gift Card", href: "/xbox-gift-card" },
       { title: "Product single (eFootball offer)", href: PRODUCT_HREF },

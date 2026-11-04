@@ -47,6 +47,9 @@ CAPTURES = {
     "dsa": os.path.join(
         UIUX, "dsa",
         "www_eldorado_gg_dsa_1920w_390w_1536w_default.make"),
+    "shopitem": os.path.join(
+        UIUX, "shop-item",
+        "www_eldorado_gg_roblox-items_i_70-2-0_1920w_390w_1536w_default.make"),
 }
 
 
