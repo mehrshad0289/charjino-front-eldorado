@@ -46,6 +46,12 @@ const CASES = [
     absent: [],
     placeholders: ["Search offers"],
   },
+  {
+    route: "/dashboard/settings/",
+    markers: ["Account settings", "Profile", "Email:", "Username:", "Password:", "Change password", "Profile picture", "Upload image", "Security", "Payment Lock", "Set Up 2FA", "Log out from all sessions", "Email notifications", "All email notifications", "New order", "Boosting offers", "Your description", "Change description"],
+    absent: ["New Offer"],
+    values: [["Email", "mehrshad02899@gmail.com"], ["Username", "NewFloat-0una"]],
+  },
 ];
 
 (async () => {
@@ -82,6 +88,13 @@ const CASES = [
             c.placeholders
           )
         : true;
+      /* input values likewise (read-only fields, e.g. settings email) */
+      const valOk = c.values
+        ? await page.evaluate(
+            (pairs) => pairs.every(([lbl, v]) => document.querySelector(`input[aria-label="${lbl}"]`)?.value === v),
+            c.values
+          )
+        : true;
       const brokenImgs = await page.evaluate(() =>
         Array.from(document.images)
           .filter((i) => i.complete && i.naturalWidth === 0 && i.offsetParent !== null)
@@ -96,13 +109,15 @@ const CASES = [
         brokenImgs.length === 0 &&
         missing.length === 0 &&
         present.length === 0 &&
-        phOk;
+        phOk &&
+        valOk;
       if (!ok) failed = true;
       console.log(
         `${ok ? "PASS" : "FAIL"} ${c.route} @${width} status=${status} overflow=${overflow} errors=${errors.length} brokenImgs=${brokenImgs.length}` +
           (missing.length ? ` missing=[${missing.join(" | ")}]` : "") +
           (present.length ? ` unexpected=[${present.join(" | ")}]` : "") +
           (!phOk ? ` placeholders-missing=[${(c.placeholders || []).join(" | ")}]` : "") +
+          (!valOk ? ` values-missing=[${(c.values || []).map((v) => v[0]).join(" | ")}]` : "") +
           (brokenImgs.length ? ` imgs=[${brokenImgs.join(", ")}]` : "") +
           (errors.length ? ` err0=${String(errors[0]).slice(0, 100)}` : "")
       );

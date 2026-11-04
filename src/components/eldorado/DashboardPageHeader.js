@@ -50,6 +50,19 @@ const ICONS = {
       <path d="M8.5 9h7M8.5 12h4.5" {...stroke} />
     </svg>
   ),
+  /* Session 18: /dashboard/settings header icon — same empty-glyph
+     convention, inline gear SVG mirroring the sidebar's settings icon. */
+  settings: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.6 5.4l-1.9 1.9M7.3 16.7l-1.9 1.9M18.6 18.6l-1.9-1.9M7.3 7.3 5.4 5.4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
 };
 
 /* Dashboard page title row: yellow icon + H1 (semibold 30/36) + dark

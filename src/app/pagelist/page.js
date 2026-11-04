@@ -80,6 +80,7 @@ const GROUPS = [
       { title: "Dashboard — Wallet", href: "/dashboard/wallet" },
       { title: "Dashboard — Messages", href: "/dashboard/messages" },
       { title: "Dashboard — Feedback", href: "/dashboard/feedback" },
+      { title: "Dashboard — Settings", href: "/dashboard/settings" },
     ],
   },
 ];
