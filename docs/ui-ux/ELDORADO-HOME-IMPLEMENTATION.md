@@ -11,8 +11,9 @@ actual files and Git history — never trust previous AI claims.
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
   Xbox gift card shop `/xbox-gift-card` (NEW session 7 — desktop per
   giftcard .make capture, mobile per LIVE eldorado.gg @390)
-- Current section: session 7 — gift card page COMPLETE (implemented,
-  visually compared, technically verified, pushed); Vercel check pending
+- Current section: session 8 — gift card page RESPONSIVE PASS COMPLETE
+  (tablet band 640-1023 fixed to the live mobile-style layout, desktop
+  switches moved md→lg, verified at 390/768/1024/1536/1920, pushed)
 - Reference files:
   - Desktop capture: `ui ux/shop-giftcard/www_eldorado_gg_xbox-gift-card_v_103_1920w_390w_1536w_default.make`
     → decoded snapshots `ui ux/extracted/snapshots/giftcard-1920px-light-1.tsx`
@@ -87,6 +88,32 @@ actual files and Git history — never trust previous AI claims.
 
 ## Section log (append one block per completed section)
 
+- 2026-11-04 (session 8) — Gift card page responsive pass + shared header.
+  The user reported 768-1023 rendered broken (squeezed 59px amount cards).
+  Measured the LIVE page headless at 375/390/500/555/600/640/660/768/820/
+  900/990/1000/1010/1024/1280 + probed real Tailwind class lists: the live
+  site keeps the stacked mobile-style flow (white amount card, 24px titles,
+  burger header, no catnav) through the whole tablet band and switches to
+  desktop at its custom breakpoint (~960-1024; standard-grid equivalent =
+  1024); trust checklist is 2-col from 640. Fixes, one verified push per
+  batch: (1) all gift card components md:→lg: (sidebar+4-col grid, banner,
+  process grid-3, reviews 230px card, FAQ centered title, SEO spacing),
+  trust checklist md:→sm:grid-cols-2, mobile labels 18→16px + trust rows
+  18px per live probes — kills the squeezed cards (f9f7b62); (2) HeaderBar/
+  CategoryNav/SearchOverlay/MegaMenu md:→lg: so the mobile header survives
+  to 1023 like live (b38a59b); (3) solid caret icons in FAQ / View more /
+  region dropdown per live zoom-crops, session-8 screenshots committed
+  (pending hash). Verification: side-by-side strips local|live at 390/768/
+  1024 match; overflow=0 at 390/640/768/820/900/1024/1280/1536; all 7
+  interactions green (View more 66 cards, region dropdown 5 options +
+  Europe select, amount aria-pressed, FAQ accordion aria-expanded+answer,
+  mobile drawer, search overlay, 1024 megamenu); `next build` green; Vercel
+  serving the lg classes within a minute of push. Known deviations
+  (documented): amount prices show capture-currency EUR while live renders
+  the visitor's geo currency (HK$ from this sandbox) — same underlying
+  numbers; live's exact tablet breakpoint is ~960-1024 vs our standard
+  1024, so 960-1023 shows the mobile-style flow.
+
 - 2026-11-04 (session 7) — Xbox gift card shop page. Recovered state from
   git (4da9ada, decoded giftcard snapshots already pushed); captured LIVE
   eldorado.gg/xbox-gift-card/v/103 headless at 390 + 1920 as references
@@ -140,11 +167,12 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 7
-- Hash of last pushed commit: `7850310` (chain this session: b6992e9 →
-  7850310, on top of session-7 prep 4da9ada; every push verified by empty
+- Last successful push timestamp: 2026-11-04, session 8
+- Hash of last pushed commit: `b38a59b` (chain this session: f9f7b62 →
+  b38a59b, on top of session-7 tip 8cb58f5; every push verified by empty
   `git log origin/main..HEAD`)
-- Uncommitted changes: none (this doc update ships in the final commit)
+- Uncommitted changes: caret icon fixes + session-8 screenshots + this doc
+  update (ship in the session-8 final commit)
 - Unpushed commits: none
 - Push auth: the user-supplied PAT is embedded in the origin URL in this
   sandbox only (transient; never committed to the repo). Future sessions

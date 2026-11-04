@@ -11,14 +11,15 @@ import { GIFT_CARD_REGIONS } from "./data/giftCardData";
 function Chevron({ open }) {
   return (
     <svg
-      width="24"
-      height="24"
+      width="12"
+      height="12"
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden="true"
       className={`shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
     >
-      <path d="m6 9.5 6 5 6-5" stroke="#626362" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      {/* live dropdown shows a solid caret */}
+      <path d="M4 8.5h16L12 17.5 4 8.5Z" fill="#626362" stroke="#626362" strokeWidth="2" strokeLinejoin="round" />
     </svg>
   );
 }

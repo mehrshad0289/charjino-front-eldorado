@@ -114,14 +114,14 @@ export default function GiftCardAmountGrid() {
         >
           {expanded ? "View less" : "View more"}
           <svg
-            width="16"
-            height="16"
+            width="12"
+            height="12"
             viewBox="0 0 24 24"
             fill="none"
             aria-hidden="true"
             className={`transition-transform ${expanded ? "rotate-180" : ""}`}
           >
-            <path d="m6 9.5 6 5 6-5" stroke="#14131a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M4 8.5h16L12 17.5 4 8.5Z" fill="#14131a" stroke="#14131a" strokeWidth="2" strokeLinejoin="round" />
           </svg>
         </button>
       </div>
