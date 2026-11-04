@@ -1,3 +1,4 @@
+import Link from "next/link";
 import HeaderBar from "../../components/eldorado/HeaderBar";
 import Footer from "../../components/eldorado/Footer";
 import InfluencerFaq from "../../components/eldorado/InfluencerFaq";
@@ -123,9 +124,9 @@ export default function InfluencerProgramPage() {
           />
           <div className="relative">
             <nav aria-label="Breadcrumb" className="flex flex-wrap items-center">
-              <a href="/" className="block text-[14px] leading-[19.6px] text-graytext hover:underline">
+              <Link href="/" className="block text-[14px] leading-[19.6px] text-graytext hover:underline">
                 Home
-              </a>
+              </Link>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" className="mx-1 text-graytext">
                 <path d="m4.5 2.5 3.5 3.5-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

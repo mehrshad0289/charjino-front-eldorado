@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Footer from "../../components/eldorado/Footer";
 import ChatBubble from "../../components/eldorado/ChatBubble";
 import TrustpilotStars, {
@@ -101,7 +102,7 @@ export default function CheckoutPage() {
       <header className="flex min-h-[72px] w-full bg-card shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,_rgba(9,9,11,0.02)_0px_12px_8px_0px]">
         <div className="flex basis-full justify-start pl-4 lg:basis-[60%] lg:justify-end lg:pl-0">
           <div className="flex w-full max-w-[726px] items-center gap-1">
-            <a href="/" aria-label="Eldorado logo" className="flex items-center text-[14px] leading-[21px]">
+            <Link href="/" aria-label="Eldorado logo" className="flex items-center text-[14px] leading-[21px]">
               <div className="flex py-2 pl-4 pr-[15px] lg:pl-6">
                 <div className="flex">
                   <div className="h-10 w-[164px] overflow-hidden align-middle">
@@ -109,7 +110,7 @@ export default function CheckoutPage() {
                   </div>
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
         </div>
       </header>

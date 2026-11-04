@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import BlogHeader from "../../../../components/eldorado/BlogHeader";
 import BlogReadingProgress from "../../../../components/eldorado/BlogReadingProgress";
 import BlogArticleToc from "../../../../components/eldorado/BlogArticleToc";
@@ -125,9 +126,9 @@ export default async function BlogArticlePage({ params }) {
                   wraps mid-item across 2 lines (h 48px); flex @640+ */}
               <ul className="flex flex-wrap max-sm:block max-sm:leading-[24px]">
                 <li className="flex items-center text-[14px] leading-[19.6px] text-[rgb(138,134,157)] max-sm:inline">
-                  <a href="/blog/" className="block max-sm:inline">
+                  <Link href="/blog/" className="block max-sm:inline">
                     Home
-                  </a>
+                  </Link>
                   <BreadChevron />
                 </li>
                 <li className="flex items-center text-[14px] leading-[19.6px] text-[rgb(138,134,157)] max-sm:hidden">

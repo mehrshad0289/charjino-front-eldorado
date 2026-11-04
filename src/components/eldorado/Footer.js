@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Logo from "./Logo";
 
 const PAY_URL = "https://assetsdelivery.eldorado.gg/v7/_assets_/payments/v11/icons";
@@ -138,9 +139,9 @@ export default function Footer({ showLang = true }) {
         {/* brand + 3 link columns (4-col grid per reference) */}
         <div className="mb-[72px] grid grid-cols-1 gap-6 pt-[54px] sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex max-w-[255px] flex-col gap-6">
-            <a href="/" aria-label="Eldorado logo">
+            <Link href="/" aria-label="Eldorado logo">
               <Logo color="#FFFFFF" />
-            </a>
+            </Link>
             <p className="text-base leading-normal text-white">
               Join us today to level up your gaming experience.
             </p>

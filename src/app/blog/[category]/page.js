@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import BlogHeader from "../../../components/eldorado/BlogHeader";
 import BlogFeaturedArticle from "../../../components/eldorado/BlogFeaturedArticle";
 import BlogCategoryGrid from "../../../components/eldorado/BlogCategoryGrid";
@@ -74,7 +75,7 @@ export default async function BlogCategoryPage({ params }) {
             <nav className="mt-4 sm:mt-6" aria-label="Breadcrumb">
               <ul className="flex flex-wrap items-center">
                 <li className="flex items-center text-[14px] leading-[19.6px] text-[rgb(138,134,157)]">
-                  <a href="/blog/">Home</a>
+                  <Link href="/blog/">Home</Link>
                   <BreadChevron />
                 </li>
                 <li className="flex items-center text-[14px] leading-[19.6px] text-[rgb(138,134,157)]">

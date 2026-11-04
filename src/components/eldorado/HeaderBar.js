@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Logo from "./Logo";
 import SearchOverlay from "./SearchOverlay";
 import MobileMenu from "./MobileMenu";
@@ -165,10 +166,10 @@ export default function HeaderBar({
           <BurgerIcon />
         </button>
 
-        <a href="/" aria-label="Eldorado logo" className="shrink-0">
+        <Link href="/" aria-label="Eldorado logo" className="shrink-0">
           <Logo color="#FFFFFF" className="hidden lg:block" />
           <Logo iconOnly size={42} className="lg:hidden" />
-        </a>
+        </Link>
 
         <div className="hidden flex-1 justify-center px-2 lg:flex">
           <button
