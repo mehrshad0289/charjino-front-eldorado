@@ -11,12 +11,12 @@ actual files and Git history — never trust previous AI claims.
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
   `/xbox-game-pass` + `/xbox-gift-card` + product-single
   `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
-  + `/login` + `/blog` (session 12, user's own commits) + `/about-us` +
-  `/contact-us` + `/bug-bounty` (NEW session 12b — static content pages
-  per the user-pushed captures; verified and pushed)
-- Current section: session 12b — about-us / contact-us / bug-bounty
-  COMPLETE (decoded snapshots + live hero probe + visual self-review;
-  all three captures are 1920-only with no rendered thumbnail)
+  + `/login` + `/blog` (session 12 + live-verified pixel pass session
+  12c) + `/about-us` + `/contact-us` + `/bug-bounty` (session 12b)
+- Current section: session 12c — `/blog` live-verified pixel pass +
+  parallel-session merge COMPLETE (header/featured/cards/highlights/
+  footer matched to live at 1920/1536/390 via DOM + pixel probes;
+  section offsets within ±2px of live, page height within 9px; pushed)
 - Reference files:
   - Blog capture (session 12, user-pushed):
     `ui ux/blog/www_eldorado_gg_blog_1920w_390w_1536w_default.make`
@@ -235,6 +235,53 @@ actual files and Git history — never trust previous AI claims.
 
 ## Section log (append one block per completed section)
 
+- 2026-11-04 (session 12c) — `/blog` live-verified pixel pass, merging a
+  PARALLEL session's blog work (origin 219c24b fixed the root font bug
+  — next/font variable moved to `<html>`, every page had silently
+  rendered the system stack — and shipped its own /blog pass + a
+  Footer showLang prop) with this session's pixel-measured corrections.
+  Recovery first: cloned, synced at 3d2ab32, verified clean; verified
+  the earlier chat-link recovery (CHAT-RECOVERY-NOTE.md) still holds.
+  Verification method: side-by-side strips (scripts/compare_blog_strips.py)
+  + DOM probes (scripts/probe_blog_*.js) + PIXEL scans of the committed
+  live-blog-390.png (hairlines at y=70/148, Games/Codes text rows at
+  y=102-114, header totals 149px). Fixes, one verified build per batch:
+  (1) header mobile rebuilt — logo icon FIRST then burger (live order),
+  EN shows caret and NO globe <1024, centered 20px Games/Codes in 55px
+  buttons with their own hairline, container px-4 <640; header stays
+  fixed at all widths (origin model) and the section clears it via
+  pt-[147px] <640 / pt-20 @640-1023 / pt-[90px] lg+ (featured top ≈201/
+  ≈135/≈145 = live at all three bands). (2) featured: 2-line clamp on
+  the <p> (clamping the wrapper div does nothing under Chrome's
+  -webkit-box aliasing), capture overlay padding px-10 py-8 @1920,
+  mobile 365px card + p-4 + 24/31.2 bold-700 title + 16px date +
+  18/25.2 excerpt. (3) cards: 110px image, 14px category <640, flex-1
+  text column (384px like live; without it the column shrank to
+  max-content and the longest title wrapped one word early).
+  (4) highlights: px-4 container <768 (live hlGrid 358px vs cardsUl
+  342px), h3 24/36 tracking .96 + mb-32, titles 18/23.4.
+  (5) pagination min-w-[42px] (live pill 42×42). (6) BlogFooter — the
+  blog capture footer is NOT the marketplace footer: title-case 16px
+  links (Help Center…Become a Seller), 1240px container, no language
+  selector, px-4 <768, last-3 payment icons hidden <768 (live shows
+  Visa/MC/Amex/Discover + "15 more" in one row); Google badge 140×44.
+  (7) FONT METRIC PARITY: Google Lato (next/font) renders ~3% wider
+  than Eldorado's Lato (canvas probe: same 40-char string 379px vs
+  live 368px) — registered "Lato Eldorado" @font-face 400/700/900 from
+  the blog capture's font-face appendix URLs (all 200) first in
+  --font-sans; next/font Lato stays as fallback. After the swap the
+  longest card title wraps in 2 lines exactly like live and page
+  height @1920 = 2825 vs live 2824. Rebase note: push rejected twice
+  (user pushes concurrently) — fetch + rebase, conflicts resolved by
+  keeping the origin root-cause font fix + fixed-header model and this
+  session's pixel-measured internals (no force). Verification:
+  overflow=0 at 390/768/1024/1536/1920, 0 console errors, 0 broken
+  images, burger drawer open/close OK, build green with all routes
+  static, section offsets @390 within ±2px of live (grid +26px over 10
+  cards, footer −55px), total page height within 9px of a same-day
+  live load (live itself fluctuates ±110 between loads). Screenshots +
+  comparison strips committed under docs/ui-ux/screenshots/session12/.
+
 - 2026-11-04 (session 12) — Blog landing page `/blog`, implementing the
   user-pushed blog .make capture. Recovery first: fresh sandbox, cloned
   the repo, verified local == remote (9f8eba4) with a clean tree; the
@@ -451,14 +498,14 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 12b
-- Hash of last pushed commit: `a1dae56` (session-12b chain: a26544c
-  decoded snapshots → a1dae56 static pages implementation + doc;
-  rebased over the user's concurrent blog commits; push verified by
-  empty `git log origin/main..HEAD`)
+- Last successful push timestamp: 2026-11-04, session 12c
+- Hash of last pushed commit: the session-12c chain — `1fe7994`
+  (/blog live-verified pixel pass + parallel-session merge, rebased
+  over origin session-12/12b) + this doc commit; push verified by
+  empty `git log origin/main..HEAD` after every push
 - Uncommitted changes: none expected after this doc commit
 - Unpushed commits: none
-- Push auth: the session-11 PAT lives in the origin URL in this
+- Push auth: the session-12c PAT lives in the origin URL in this
   sandbox only (transient; never committed). Future sessions without a
   token need a fine-grained PAT (Contents: read/write) or pushes fail
   with "could not read Username for 'https://github.com'". The user

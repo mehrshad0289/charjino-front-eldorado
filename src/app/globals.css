@@ -54,13 +54,45 @@
   /* contact help icon tile rgb(252,231,182) == guarantee token;
      stats label gray rgb(138,134,157) == bloggray token */
 
-  --font-sans: var(--font-lato), "Lato", sans-serif;
+  --font-sans: "Lato Eldorado", var(--font-lato), "Lato", sans-serif;
 }
 
 body {
   background: var(--color-page);
   color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+/* Lato Eldorado — Lato 400/700/900 woff2 URLs VERBATIM from the blog
+   capture's font-face appendix (the exact files eldorado.gg serves).
+   Needed because Google's Lato (next/font) renders ~3% wider than
+   Eldorado's Lato and flipped the wrap of the longest blog card title
+   (canvas probe: same 40-char string = 379px vs live 368px). First in
+   --font-sans everywhere; var(--font-lato) (next/font) stays as the
+   safe fallback if the bucket is unreachable. */
+@font-face {
+  font-display: swap;
+  font-family: "Lato Eldorado";
+  font-style: normal;
+  font-weight: 400;
+  src: url("https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Ffcd4136085f2a03481d9958cc6793a5ed98e714c.woff2?generation=1778054403296909&alt=media")
+    format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Lato Eldorado";
+  font-style: normal;
+  font-weight: 700;
+  src: url("https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F2ac78601179c3a63ba3f3f3081556b12ddcaf655.woff2?generation=1778057801069581&alt=media")
+    format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Lato Eldorado";
+  font-style: normal;
+  font-weight: 900;
+  src: url("https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F898d9808304dc157f5dcb18ca169ec6e2b96b3d7.woff2?generation=1778150791171972&alt=media")
+    format("woff2");
 }
 
 /* interstate — blog headings/buttons font (800/900 woff2 URLs verbatim from
