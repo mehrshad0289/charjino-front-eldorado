@@ -1,7 +1,9 @@
 /* One "The Latest" article row (blog capture @1920): 140px yellow-bordered
    thumbnail, purple uppercase category, white 20px title, gray date |
    clock ~N min read meta. Image shrinks to ~106px on mobile (live @390),
-   grid goes 1-col below 640 (live probed). */
+   grid goes 1-col below 640 (live probed). Links resolve internally when
+   the article has a cloned /blog/[category]/[slug] page (session 13). */
+import { blogInternalHref } from "./data/blogData";
 
 function ClockIcon() {
   /* capture renders a 14px gray glyph (icomoon, decodes empty) — inline SVG
@@ -27,7 +29,7 @@ function ClockIcon() {
 export default function BlogArticleCard({ article }) {
   return (
     <li className="w-full list-none self-start">
-      <a className="relative flex items-center rounded-2xl p-[10px]" href={article.href}>
+      <a className="relative flex items-center rounded-2xl p-[10px]" href={blogInternalHref(article.href)}>
         <div className="relative h-[106px] w-[106px] min-w-[106px] shrink-0 overflow-hidden rounded-2xl border-2 border-[rgb(255,182,0)] sm:h-[140px] sm:w-[140px] sm:min-w-[140px]">
           <img
             alt={article.title}

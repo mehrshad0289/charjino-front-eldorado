@@ -1,17 +1,18 @@
-import { BLOG_FEATURED } from "./data/blogData";
+import { BLOG_FEATURED, blogInternalHref } from "./data/blogData";
 
 /* Featured article card (blog capture @1920): 358px image card with a
    bottom-left overlay — yellow date, 28px black title, gray excerpt — over
    a "to right top" black gradient. max-h-360 frame with a white hairline
    border. Mobile keeps the same overlay structure (live @390) with a 24px
-   title. */
+   title. Links to the internal /blog/[category]/[slug] article page
+   (session 13). */
 export default function BlogFeaturedArticle() {
   return (
     <div className="mb-[64px]">
       <div className="relative max-h-[360px] overflow-hidden rounded-2xl border-[0.8px] border-white">
         <a
           className="relative block h-[358px] overflow-hidden rounded-[0.9375rem] max-md:h-[365px]"
-          href={BLOG_FEATURED.href}
+          href={blogInternalHref(BLOG_FEATURED.href)}
         >
           <div className="absolute left-0 top-0 size-full min-h-[358px] overflow-hidden rounded-[0.9375rem]">
             <img

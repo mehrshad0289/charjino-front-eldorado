@@ -162,3 +162,27 @@ export const BLOG_CTA = {
   image: `${ASSET}c40dbf9e25be4f91f8411a9b3fdf360711611574.webp?generation=1793788935057551&alt=media`,
   alt: "Eldorado Halloween",
 };
+
+/* Internal article pages (session 13): /blog/[category]/[slug] pages exist
+   for the 11 articles linked by this landing page (content scraped live
+   into data/blogArticlesData.js). Card links resolve to the internal
+   route; any other href keeps the capture's external eldorado.gg URL. */
+const BLOG_INTERNAL_SLUGS = new Set([
+  "steal-an-egg-mutations-guide",
+  "steal-an-egg-headless-horseman-and-paranoid-pete-update",
+  "steal-a-brainrot-traits-guide",
+  "all-brainrots-in-steal-a-brainrot",
+  "league-of-legends-worlds-2026-guide",
+  "ea-fc-27-make-coins-fast",
+  "league-of-legends-riot-points",
+  "ea-fc-27-evolutions-guide",
+  "mm2-halloween-event-2026",
+  "mm2-all-weapons-list",
+  "mark-darrah-bioware-shutdown-dragon-age-veilguard-interview",
+]);
+
+export function blogInternalHref(href) {
+  const m = /\/blog\/([^/]+)\/([^/]+)\/?$/.exec(href || "");
+  if (m && BLOG_INTERNAL_SLUGS.has(m[2])) return `/blog/${m[1]}/${m[2]}/`;
+  return href;
+}

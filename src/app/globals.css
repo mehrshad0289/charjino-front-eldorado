@@ -88,3 +88,197 @@ body {
 .hero-text-shadow {
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.45);
 }
+
+/* ===== Blog article pages (/blog/[category]/[slug], session 13) =====
+   Typography values verbatim from the article .make capture
+   (snapshots/blog-article-1920px-1.tsx) — WordPress entry HTML is
+   rendered raw inside .entry, so the site styles are reproduced here:
+   p 18/36 rgb(191,187,212) mb-8, h2 32/38.4 Lato 700 white (48/20),
+   h3 24/28.8 (48/16), h4 22/26.4 (48/12), links #FFC950 bold with
+   0.8px bottom border, custom 5px gray list dots, 24px-radius centered
+   figures, bordered rounded tables (header #0E0E11, cells #1E1F28). */
+
+.blog-article-page .entry,
+.blog-article-page .blog-answer,
+.blog-article-page .blog-lede {
+  color: rgb(191, 187, 212);
+}
+.blog-lede p {
+  margin-bottom: 8px;
+  font-size: 18px;
+  line-height: 36px;
+  color: #fff;
+}
+.blog-lede p a {
+  color: rgb(255, 201, 80);
+  font-weight: 700;
+  border-bottom: 0.8px solid rgb(255, 201, 80);
+}
+.blog-answer p {
+  font-size: 18px;
+  line-height: 24.75px;
+  color: rgb(191, 187, 212);
+}
+.entry p {
+  margin-bottom: 8px;
+  font-size: 18px;
+  line-height: 36px;
+  color: rgb(191, 187, 212);
+}
+.entry h2 {
+  margin: 48px 0 20px;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 38.4px;
+  color: #fff;
+}
+.entry h3 {
+  margin: 48px 0 16px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 28.8px;
+  color: #fff;
+}
+.entry h4 {
+  margin: 48px 0 12px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 26.4px;
+  color: #fff;
+}
+.entry a {
+  color: rgb(255, 201, 80);
+  font-weight: 700;
+  border-bottom: 0.8px solid rgb(255, 201, 80);
+}
+.entry a:has(img) {
+  display: inline-block;
+  border-bottom: 0;
+}
+.entry strong,
+.entry b {
+  font-weight: 700;
+  color: inherit;
+}
+.entry ul {
+  margin-bottom: 8px;
+}
+.entry ul > li {
+  position: relative;
+  margin: 0 0 6px;
+  padding-left: 24px;
+  font-size: 18px;
+  line-height: 36px;
+  color: rgb(191, 187, 212);
+  list-style: none;
+}
+.entry ul > li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 16px;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: rgb(138, 134, 157);
+}
+.entry ol {
+  margin-bottom: 8px;
+  list-style: decimal;
+}
+.entry ol > li {
+  position: relative;
+  margin: 0 0 6px;
+  padding-left: 8px;
+  font-size: 18px;
+  line-height: 36px;
+  color: rgb(191, 187, 212);
+  list-style: decimal;
+  margin-left: 16px;
+}
+.entry ol > li::marker {
+  color: rgb(138, 134, 157);
+}
+.entry img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 24px auto;
+  border-radius: 24px;
+}
+.entry td img,
+.entry li img,
+.entry a > img {
+  display: inline-block;
+  margin: 0;
+  border-radius: 8px;
+}
+.entry iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 24px 0;
+  border: 0;
+  border-radius: 24px;
+}
+.entry table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 2px solid rgb(50, 49, 65);
+  border-radius: 16px;
+  margin: 24px 0;
+}
+.entry th {
+  background: rgb(14, 14, 17);
+  padding: 14px 20px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19.2px;
+  color: #fff;
+  border-right: 2px solid rgb(50, 49, 65);
+  border-bottom: 2px solid rgb(50, 49, 65);
+}
+.entry td {
+  background: rgb(30, 31, 40);
+  padding: 10px 16px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 16px;
+  line-height: 19.2px;
+  color: #fff;
+  border-right: 2px solid rgb(50, 49, 65);
+  border-bottom: 2px solid rgb(50, 49, 65);
+}
+.entry th:last-child,
+.entry td:last-child {
+  border-right: 0;
+}
+.entry tr:last-child td {
+  border-bottom: 0;
+}
+.entry hr {
+  margin: 56px 0;
+  height: 2px;
+  border: 0;
+  background: rgb(255, 201, 80);
+}
+.entry blockquote {
+  margin: 24px 0;
+  padding: 16px 24px;
+  border-left: 3px solid rgb(255, 201, 80);
+  background: rgb(30, 31, 40);
+  border-radius: 12px;
+}
+/* anchored headings must clear the fixed header */
+.entry [id] {
+  scroll-margin-top: 110px;
+}
+
+/* TOC link rows (desktop box) */
+.toc-item.current > a {
+  color: rgb(255, 182, 0) !important;
+}
