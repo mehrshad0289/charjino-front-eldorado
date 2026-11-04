@@ -15,7 +15,8 @@ actual files and Git history — never trust previous AI claims.
   (session 15 — 6 internal category archives) + `/about-us` +
   `/contact-us` + `/bug-bounty` + search dropdown rebuilt per capture
   (session 13) + `/pagelist` (session 14)
-- Current section: session 15 — TWO parallel blog passes, both pushed:
+- Current section: session 15 — TWO parallel blog passes, both pushed,
+  then cross-verified by a dedicated verification round:
   (a) BLOG ARTICLE live-verified pass (parallel session): the article
   page (implemented session 13, "visual verification pending") is now
   pixel-calibrated against live eldorado.gg at 1920/1536/390 via DOM
@@ -28,13 +29,36 @@ actual files and Git history — never trust previous AI claims.
   agreed with live probes, overruled where it contradicted them
   (stroke caret → filled triangle, mobile EN globe → EN+caret,
   header pt-0 → pt-108, table-layout fixed → auto, all probe-backed).
-  (b) CATEGORY ARCHIVES (this session): the missing internal
+  (b) CATEGORY ARCHIVES (parallel session): the missing internal
   `/blog/[category]` routes (6 categories / 71 rows scraped live),
   closing the last navigation gap in the blog section (article
   breadcrumbs previously had to leave the clone for the live category
   pages); geometry verified Δ0 vs live at 1920 + 390; verified and
   pushed. Session 14 — review sweep (22 routes x 3 widths, all green) +
-  /pagelist; session 13 — SearchOverlay rebuilt from capture
+  /pagelist; session 13 — SearchOverlay rebuilt from capture.
+  (c) VERIFICATION + UNION ROUND (this session, second half): the
+  duplicate /blog/[category] implementation from this round was
+  DISCARDED after a head-to-head probe — the pushed version matched
+  live better (it has the Load more button — confirmed REAL on live,
+  y=1491 between grid bottom 1427 and footer 1629 — and exact @390
+  grid y=781). Remaining gaps closed on top of it: archive card meta
+  separator GLYPH made invisible (live keeps the separator BOX — li
+  "2 Nov 2026" w=97 = text 82 + 12px margins + 4.8px box — so the
+  reading-time li keeps its live x). FONT STATE settled: blog pages
+  render "Lato Eldorado" (the session-14 `.blog-lato` override is
+  INERT — removed in fca82de and not re-added); canvas '400 18px' on
+  the same 65-char string = 473px live == 473px Lato Eldorado vs 477px
+  next/font Google Lato; the "296px vs 259px breadcrumb" that
+  motivated the override compared the live @390 WRAPPED fragment box
+  (296) against our single-line @1920 width (259) — not a font
+  difference (live breadcrumb is 14px everywhere; title @1920 = 259 ==
+  ours). Full verification on the merged tip: category H1 364/180 h55,
+  hero 365/268 1190×358, grid 388/715 1144×712, card 560×160, thumb
+  136, pageH 2101 (live 2141 — 40px shorter footer gap), @390 H1
+  16/190, hero 356×365, thumb 36/804; article table rows 201/217/206
+  == live, cols [84,81,64,93] @390, lede 7 lines line1 343 == live,
+  canvas 473 == live; 8 blog routes × 2 widths: 200/overflow 0/0
+  console errors; build green 41 pages.
 - Reference files:
   - Blog capture (session 12, user-pushed):
     `ui ux/blog/www_eldorado_gg_blog_1920w_390w_1536w_default.make`
@@ -58,6 +82,11 @@ actual files and Git history — never trust previous AI claims.
     + min-h-80 H1 + pb-16, banner img 1905x444 absolute inside it) with
     the sections as a SIBLING container — implemented the live way
     (the literal capture nesting paints the banner over the whole page)
+  - Influencer reference: `ui ux/nfluencer-program/
+    www_eldorado_gg_influencer-program_1920w_390w_1536w_default.make`
+    (1920-only; decoded to `extracted/snapshots/influencer-1920px-
+    light-{1,2}.tsx`). Mobile: live `session15/live-influencer-{1920,390}.png`;
+    FAQ answers scraped from live (accordion closed in the capture)
   - Search dropdown reference: `snapshots/search-1920px-light-{1,2}.tsx`
     (decoded early from the root www .make; the capture is the HOME page
     with the search dropdown OPEN — the page content below the header is
@@ -471,6 +500,15 @@ actual files and Git history — never trust previous AI claims.
     "Lato Eldorado", kept for them). Breadcrumb title renders 296px
     live vs 259px under Lato Eldorado. `.blog-lato, .blog-article-page
     { font-family: var(--font-lato) }` in globals.css
+    [CORRECTION, session-15 verification round — this override is INERT:
+    it was removed in fca82de and NOT re-added; the final rendering is
+    "Lato Eldorado" everywhere and it matches live exactly (canvas
+    '400 18px' same 65-char string: live 473 == Eldorado 473 vs
+    next/font Google 477). The 296-vs-259 breadcrumb number was a
+    structural artifact: 296 = the live @390 WRAPPED inline fragment
+    box, 259 = our single-line @1920 width — live breadcrumb is 14px at
+    every width and its @1920 title is 259 == ours. Do NOT re-apply the
+    override; the block is kept here only as history.]
   - FIX 6 (entry content): td img margin 24px 0 + display block and
     a > img margin 24px 0 (live-computed) — mutation-table rows were
     153px vs live 201px, collapsing the table 575px; now rows are
@@ -515,7 +553,84 @@ actual files and Git history — never trust previous AI claims.
     td_img 71px vs live 66 @390 (3px column distribution nuance)
 - Deployment: Vercel verified after the final push (see Backup Status)
 
+- Implementation status (session 15 — /influencer-program):
+  - Sandbox recycle between sessions reset the local checkout to a
+    session-11 snapshot — recovered via `git reset --hard origin/main`
+    (everything had been pushed; origin is the source of truth). The
+    "first commit" (afc86ce) = the user pushing THIS capture with a
+    generic message, not a force-push: 981a850 is still an ancestor.
+    Mid-session the user pushed the capture again (011d5c2/b9778a5/
+    5faa706 "nfluencer-program") + blog fix 2090d75 — rebased cleanly
+  - Capture decoded (scripts/decode_influencer.py, same pipeline as
+    extracted/fig_reassemble.py). Structure: hero (banner PNG +
+    gradient fade, breadcrumb, H1 72, yellow CTA) -> max-w-[1116px]
+    gap-80 column: 3 trust pills / Why? (4 gradient cards, 80px
+    icons) / Who can join? (2fr|3fr rows, 40px icon boxes) / How it
+    works? (62px pastel badges #d1f08f #ffc950 #da8aea #77a3fc) /
+    CTA card (mascots flanking, aspect 182/59) / white apply-form
+    card (hairline headers + 24px icons, #efeff1 inputs h-42, dark
+    Apply now) / agencies gradient card (mascot 283px absolute
+    right-8 -bottom-16, pr-332) / FAQ max-w-700 accordion
+  - New files: src/app/influencer-program/page.js (server) +
+    InfluencerFaq.js (client accordion) + data/influencerData.js
+    (verbatim content; 10 asset URLs each with its own generation
+    param — 10/10 HTTP 200)
+  - Mobile per live @390: 1-col chips/why/steps/form, steps become
+    badge-left rows, CTA keeps only the Currency mascot centered,
+    hero H1 40px, full-width yellow/dark buttons
+  - Known deviations: icomoon glyphs (chips shield/globe/star,
+    who-rows youtube/tiktok, person + chevrons) -> inline SVGs (no
+    icomoon in project); FAQ answers from live; "Become a partner"
+    scrolls to #apply; the Google "preferred source" badge lives in
+    the capture's FOOTER (shared Footer — not part of this page)
+  - The footer link "Influencer program" existed since the home
+    sessions pointing at /influencer-program and 404'd until now
+- Visual comparison status (screenshots `docs/ui-ux/screenshots/session15/`):
+  live-influencer-1920/390.png (references) + influencer-1920/390.png
+  (implementation) + influencer-faq-open.png; hero/cards/steps/CTA/
+  form match capture geometry
+- Technical checks: build green (35 routes); 10/10 capture assets
+  200; sweep 24 routes x 3 widths = 0 problems; pagelist 24 links all
+  200; FAQ accordion toggles; overflow 0 @1920/390; zero page errors
+- Deployment: push 4f474e1 — Vercel verified in the next Backup Status
+  entry after this push
+- Next exact action: on request — no unimplemented captures remain;
+  candidates: pixel diff of /influencer-program vs live, or new
+  captures from the user
+
 ## Section log (append one block per completed section)
+
+- 2026-11-04 (session 15, verification + union round — second half) —
+  ran the cross-session verification of the parallel session's tip
+  (e15cb2c) against live and closed the remaining blog gaps. Recovery:
+  cloned fresh (sandbox recycled), synced at 96c6cc4, worked through
+  three waves of concurrent pushes (rebased twice; the third conflict
+  was resolved by DISCARDING this session's duplicate /blog/[category]
+  commit after a head-to-head probe showed the parallel bc05eea version
+  matched live better — it has the Load more button (live y=1491,
+  confirmed REAL on live) and exact @390 grid y=781; the duplicate's
+  own verified numbers (H1 364/180, hero 364/268 1192×358, card
+  560×160, pageH 2141 exact) were reproduced by their build within
+  0-2px). Findings + fixes on top of their tip:
+  (1) live Load more button confirmed on /blog/<category>/ between the
+  grid (bottom 1427) and footer (1629) — the parallel version renders
+  it; (2) their td-img fix reproduces live mutation-row heights
+  201/217/206 EXACT (@1920) and the @390 mutations table keeps cols
+  [84,81,64,93], 326px, scroll 0, dw 0; (3) archive card meta — the
+  date|read separator GLYPH is invisible on live but its BOX remains
+  (li w=97) — BlogCategoryRow separator set to `invisible`; (4) the
+  session-14 `.blog-lato` font override is inert in the final tree —
+  documented in the Current Checkpoint (do not re-apply); (5) the
+  capture scripts now load the @font-face files explicitly before
+  screenshotting — document.fonts.status turns 'loaded' before a
+  lazily-requested woff2 even starts downloading, which poisoned two
+  compare rounds with ~11-13% wider fallback metrics. Full live-parity
+  verification on their tip: category H1 364/180 h55, hero 365/268
+  1190×358, grid 388/715 1144×712, card 560×160, thumb 136 @1920;
+  H1 16/190, hero 356×365, thumb 36/804 106 @390; article lede
+  7 lines line1 343 == live @390, bc title 259 == live @1920, canvas
+  473 == live; 6 categories × 2 widths overflow 0, 0 console errors;
+  build green 41 pages.
 
 - 2026-11-04 (session 12c) — `/blog` live-verified pixel pass, merging a
   PARALLEL session's blog work (origin 219c24b fixed the root font bug
@@ -821,18 +936,21 @@ actual files and Git history — never trust previous AI claims.
   healthy after 13 sessions. New /pagelist route links all 23 rows.
   Push verified by empty origin/main..HEAD.
 
+- 2026-11-04 (session 15) — /influencer-program per the user's new
+  capture. Recovery: sandbox recycle reset the local checkout to a
+  session-11 snapshot; `git reset --hard origin/main` restored it (no
+  local-only work lost — every session pushes before ending). The
+  origin "first commit" = the influencer capture; user re-pushed it
+  mid-session (rebased cleanly). Verified: 35 routes, sweep 24x3
+  clean, 10/10 assets. Pushed 4f474e1.
+
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 15
-- Hash of last pushed commit: session-15 chains (two parallel blog
-  passes) — article pass: `41aff91` + `4f1cd1b` + doc `e15cb2c`
-  (merged via the user's 6d99cce); category pass: `75fdeb6`
-  (checkpoint: probes + scraper + 6-category dataset + live refs) →
-  `bc05eea` (feature: /blog/[category] routes + components +
-  breadcrumb wiring + /pagelist +6) → this doc commit; every push
-  rebased/merged over the concurrent commits (never force) and
-  verified by empty `git log origin/main..HEAD` immediately after
-  every push
+- Last successful push timestamp: 2026-11-04, session 15 (verification
+  + union round)
+- Hash of last pushed commit: `4f474e1` (/influencer-program + doc);
+  push verified by empty `git log origin/main..HEAD` after every push;
+  session-13 deploy was Vercel-verified (dropinput in live CSS)
 - Uncommitted changes: none expected after this doc commit
 - Unpushed commits: none
 - Push auth: the session-15 PAT lives in the origin URL in this

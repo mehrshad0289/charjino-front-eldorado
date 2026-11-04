@@ -57,9 +57,14 @@ export default function BlogCategoryRow({ article }) {
             <ul className="flex flex-wrap items-center">
               <li className="flex items-center text-[16px] leading-[22.4px] text-[rgb(138,134,157)]">
                 {article.date}
+                {/* the archive meta row has NO visible pipe (probed live:
+                    li "2 Nov 2026" w=97 = text ~82 + the separator's own
+                    12px margins + 4.8px box) — the separator BOX stays,
+                    only the glyph is invisible, so the reading-time li
+                    keeps its live x position */}
                 <span
                   aria-hidden="true"
-                  className="ml-[6px] mr-[6px] block h-[22.4px] w-[4.8px] opacity-60"
+                  className="invisible ml-[6px] mr-[6px] block h-[22.4px] w-[4.8px]"
                 >
                   |
                 </span>
