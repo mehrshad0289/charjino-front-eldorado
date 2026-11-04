@@ -99,7 +99,7 @@ export default function EaFcBoostingPage() {
       <HeaderBar loggedIn user={DASHBOARD_USER} />
       <CategoryNav />
       <main className="isolate relative">
-        <ShopItemSubNav game={BOOST_GAME} tabs={BOOST_TABS} contentWidth="md:w-[1208px]" />
+        <ShopItemSubNav game={BOOST_GAME} tabs={BOOST_TABS} contentWidth="md:w-full md:max-w-[1208px]" />
 
         {/* Banner (absolute 465px + bottom fade) */}
         <div aria-hidden="true" className="absolute left-0 top-0 z-0 h-[465px] w-full overflow-hidden">
@@ -116,7 +116,7 @@ export default function EaFcBoostingPage() {
         </div>
 
         {/* Config + customize section */}
-        <section className="relative mx-auto w-full px-6 pt-9 pb-24 md:w-[1208px]">
+        <section className="relative mx-auto w-full px-6 pt-9 pb-24 md:max-w-[1208px]">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
             <div className="text-[20px] font-bold leading-[30px]">
               {BOOST_DEALS_TITLE[0]}
@@ -267,7 +267,7 @@ export default function EaFcBoostingPage() {
         </section>
 
         {/* SEO block */}
-        <div className="relative mx-auto mt-20 w-full px-6 pt-9 pb-24 md:w-[1208px]">
+        <div className="relative mx-auto mt-20 w-full px-6 pt-9 pb-24 md:max-w-[1208px]">
           <div className="pb-5">
             <h1 className="mb-[10px] text-[24px] font-bold leading-[33.6px]">{BOOST_SEO.h1}</h1>
           </div>

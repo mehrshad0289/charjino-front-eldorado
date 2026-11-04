@@ -1711,3 +1711,10 @@ actual files and Git history — never trust previous AI claims.
   2. Read this file; verify state per the protocol checklist (git status,
      local vs origin, build)
   3. Continue from "Next exact action"
+
+- 2026-11-04 (post-merge fix) — /ea-fc-boosting/b/142-4 responsive
+  overflow: md:w-[1208px] (fixed width at 768–1207px, a band the
+  original probes never covered) → md:max-w-[1208px] + SubNav
+  contentWidth "md:w-full md:max-w-[1208px]" (desktop rendering
+  unchanged); found by the rebuilt pagelist-scraping review_sweep.js
+  (59 routes x 1920/768/390 = 0 problems incl. this page after fix).
