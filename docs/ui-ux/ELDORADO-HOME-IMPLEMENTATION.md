@@ -10,117 +10,131 @@ actual files and Git history — never trust previous AI claims.
 
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
   `/xbox-game-pass` + `/xbox-gift-card` + product-single
-  `/efootball-accounts/oa/[id]` (NEW session 10 — desktop per product
-  .make capture, mobile/tablet per LIVE eldorado.gg @390/768/1024)
-- Current section: session 10 — product-single page COMPLETE (dynamic
-  route with generateStaticParams, 9 new components, reuse of
-  HeaderBar/CategoryNav/TrustRows/Footer/ChatBubble, responsive
-  390→1920, verified and pushed)
+  `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
+  + `/login` (NEW session 11 — logged-in dashboard per the dashboard
+  .make capture, login per the login .make capture; both 1920-only)
+- Current section: session 11 — dashboard (logged-in) + login COMPLETE
+  (data-driven reusable dashboard components, HeaderBar loggedIn variant,
+  verified and pushed)
 - Reference files:
-  - Desktop capture (session 10): `ui ux/product-single/www_eldorado_gg_efootball-accounts_oa_2f48f97f-c412-48b0-c3a4-08df0a5485be_1920w_390w_1536w_default.make`
-    (user-pushed commit dd741ad) → decoded
-    `snapshots/product-1920px-light-1.tsx` (+ `-2.tsx`, font-face-only diff)
-  - Live references (session 10): full-page screenshots
-    `snapshots/live-product-{390,768,1024,1536,1920}.png`, captured from
-    `https://www.eldorado.gg/efootball-accounts/oa/2f48f97f-c412-48b0-c3a4-08df0a5485be`
-    (still live 2026-11-04)
-  - Game pass references (session 9): see session 9 log entry below
-  - "How we protect your purchase" expanded features + Warranty ⓘ tooltip
-    (Covered / Not covered) scraped live 2026-11-04 by expanding the
-    panel / hovering ⓘ (the capture ships both collapsed/empty); stored in
-    `src/components/eldorado/data/productData.js`
-- Implementation status (session 10 — 9 new components + dynamic page):
-  - `data/productData.js` — offer fields verbatim (title "[ ANDROID ] ACC
-    3000 COINS, 2.5M GP", price 2.38, Game Series/Original email/Warranty/
-    Delivery rows, EN+PT description), 4 carousel cards, 9 bottom grid
-    cards + "+15 more", seller (Rintana93), protect features + warranty
-    tooltip (live-scraped), payment badge URLs (verified HTTP 200)
-  - `ProductBanner.js` — dark game strip, NO Accounts/Coins tabs (capture +
-    live): lg icon + "eFootball 2027"; mobile back chevron + stacked names
-    (the live mobile banner doubles as the breadcrumb)
-  - `ProductBreadcrumb.js` — lg-only bar: blue chevron + bold 14px
-    "Back to all offers" (capture wording; live says "Browse all offers")
-  - `ProductTitleCard.js` — lg: white card, 24px title + hairline border-b,
-    scrollable 255px rounded screenshot strip; mobile: inset image on
-    white (p-[10px], rounded, live @390) + title section
-  - `ProductOfferCard.js` — lg sidebar card: blue "Full email access
-    included" gradient banner (link icon + ⓘ), 24px price, min-h-12 detail
-    rows (Game Series first, Delivery time = teal bolt + bold Instant),
-    dark Buy now, shared TrustRows; mobile: compact chip + 28px price,
-    Game Series row hidden (live hides it — banner names the game)
-  - `ProductProtectCard.js` — light-blue accordion: shield roundel + bold
-    title + chevron; open = 4 live-scraped feature rows (bold + gray text)
-  - `ProductSellerCard.js` — lg per capture: avatar 48px + name + teal
-    badge + "99.6% positive feedback" link, rows (Online teal dot, 2,699
-    orders delivered, Selling since Mar 31, 2026, gray icons),
-    "Verified ID" light-blue chip; mobile per live: gray "Seller" heading
-    outside, avatar + name + thumbs "99.6%" + "2,701 reviews" link
-  - `ProductCarousel.js` — "More like this" (18px lg / 16px mobile) +
-    "Page {n} of 4" 12px + bordered arrow buttons (disabled = #c6c6cc);
-    w-52 cards (84px 3-line title, seller + teal badge | feedback, 18px
-    price | teal bolt-only delivery); mobile swaps indicator for an
-    "All offers" link and moves arrows under the row; scroll updates page
-  - `ProductDescriptionCard.js` — "Offer description" 18px bold, chips
-    (blue check + bold + ⓘ), 16px/24px pre-wrapped description
-  - `ProductMoreGrid.js` — lg only (live @390 has no bottom grid): 24px
-    header + "All offers" link, 3-col grid of h-40 cards (2-line title +
-    58px img, seller | feedback, price | bolt + gray delivery label),
-    "+15 more" gray cell
-  - `app/efootball-accounts/oa/[id]/page.js` — async params (Next 16),
-    generateStaticParams → the one capture product, notFound otherwise;
-    lg: two-col grid-cols-[minmax(0,1fr)_444px] gap-6 with sticky sidebar
-    (top-[108px] per capture); <lg: stacked live flow (image → title →
-    offer → protect → carousel → seller → description); PPR static build
-- Visual comparison status (side-by-side strips local|live):
-  - 1920 + 1536: banner, breadcrumb, title card + 255px image, carousel
-    (4 cards + paginator), description card, sidebar (included banner,
-    price, rows, Buy now, trust rows, protect, seller), bottom grid,
-    footer all match structure/colors/spacing
-  - 1024: live switches to the two-col desktop layout — matched
-  - 768 + 390: live keeps the stacked mobile flow (inset image, chip +
-    big price, rows without Game Series, protect, carousel + arrows,
-    seller, description, no bottom grid) — matched after fixes
+  - Dashboard capture (session 11, user commit 58f7236):
+    `ui ux/dashbord/www_eldorado_gg_dashboard_offers_Account_1920w_390w_1536w_default.make`
+    → decoded `snapshots/dashboard-1920px-light-{1,2}.tsx` (2nd = font-face
+    appendix). The offers page is the EMPTY state (account registered
+    11/4/26, no offers yet). 1920-only
+  - Login capture (session 11, same commit):
+    `ui ux/login/login_eldorado_gg_loginofile_20aws_co.make` → decoded
+    `snapshots/login-1920px-light-{1,2}.tsx`. 1920-only
+  - New captures pushed mid-session (NOT implemented yet, next steps):
+    `ui ux/About-us/…make`, `ui ux/contact-us/…make` (1d4ab0c) and
+    `ui ux/bug-bounty/…make` (590903b) — three static content pages
+  - Product/gamepass/giftcard references: see session 7-10 log entries
+    below
+- Implementation status (session 11 — data + 6 new components + 2 pages):
+  - `data/dashboardData.js` — user (NewFloat-0una, registered 11/4/26,
+    avatar), collapsible nav groups (Orders/Offers/Boosting with capture
+    hrefs), single links (Loyalty…Account settings), View Profile, offers
+    page config (title, action, offline-mode banner with italic parts,
+    filters, empty state), login card content; asset URLs verified 200
+  - `DashboardSidebar.js` — data-driven white 260px sidebar: user block
+    (avatar 40px + name + Registered), collapsible groups (chevron
+    rotates, children hide) with pl-7 sub-links, active row = yellow fill
+    (bg rgb(255,201,80), capture's "Accounts"), single icon links, View
+    Profile; reused by every future dashboard page via `active` prop
+  - `DashboardShell.js` — reusable dashboard layout: 465px banner image
+    (objectPosition 50% 15%) + transparent→page gradient, sidebar +
+    content column; sidebar sticky top-[100px] under the 100px header
+  - `DashboardPageHeader.js` — yellow icon + H1 30px + dark action button
+    ("New Offer") — reusable per dashboard section
+  - `InfoBanner.js` — blue role=status banner (bg 20% / border 40% 0.8px)
+    with italic body parts — reusable
+  - `DashboardFilters.js` — Select Game combobox 148px, Search offers
+    input 200px (real field), right sort combobox ("Recommended");
+    comboboxes are static buttons (no menu content in any reference —
+    nothing invented)
+  - `EmptyState.js` — 100px image + "Nothing found" + gray text — reusable
+  - `HeaderBar.js` — new `loggedIn` + `user` props: right side becomes 3
+    rounded icon buttons + 44px avatar (icons unnamed in the capture —
+    bell/chat/favorites SVG stand-ins, documented); logged-out variant
+    unchanged (all other pages unaffected)
+  - `app/dashboard/offers/Account/page.js` — HeaderBar(loggedIn) +
+    CategoryNav + shell + page header + banner + filters + empty state +
+    Footer + ChatBubble
+  - `LoginCard.js` + `app/login/page.js` — 402px dark card (logo 60px,
+    Sign in 24px, 3 OAuth buttons with real icons, Or divider, email
+    form, yellow Next, Create an account link) on the full-viewport cave
+    backdrop; Open Sans per the capture (marketplace pages stay Lato)
+- Visual comparison status (screenshots `docs/ui-ux/screenshots/session11/`):
+  - No rendered capture exists (thumbnail.png is a 68-byte placeholder) —
+    verification is DOM-structural against the decoded TSX + visual
+    self-review: 1920 matches the capture's structure/colors (logged-in
+    header, sidebar with yellow active row, banner + gradient, blue
+    notice, filters, empty state, footer)
+  - Login @1920 matches the capture (card content, backdrop); @390 the
+    card fills the width (documented approximation)
   - No horizontal overflow: scrollWidth == viewport at
-    390/768/1024/1536/1920
-  - Interactions verified headless: protect accordion opens (live
-    content), Warranty tooltip shows Covered/Not covered, carousel arrows
-    scroll + page indicator updates; zero console errors at all widths
+    390/768/1024/1536/1920 on BOTH routes (login card needed a min-w-0
+    fix — the 354px divider blocked flex shrinking)
+  - Interactions verified headless: sidebar group collapse (Boosting 17→16
+    links) + chevron rotation + restore, active row rgb(255,201,80),
+    banner/empty-state images load, header icon buttons present, login
+    socials/email/Next/backdrop; zero console errors at all widths
 - Known deviations / documented limitations:
-  - Prices use the capture's EUR values ("2.38" etc.), not the live
-    geo-localized HK$ — same policy as sessions 7/9
-  - Live sidebar shows a "Recent feedback" list + "All feedback" button
-    and the bottom-grid cards carry a small game-name line — both
-    live-only details absent from the capture; capture followed (design
-    reference file)
-  - Description text follows the live rendering: the capture decode lost
-    the Portuguese diacritics (Região/Transferência/verificação)
-  - Original email / Delivery time ⓘ buttons are decorative (no tooltip
-    content in any reference; no copy invented) — only Warranty has the
-    live-scraped Covered/Not covered tooltip
-  - Carousel "Page 1 of 4" per the capture (only 4 cards ship in it, so
-    one Next click reaches the last page); live has 4 pages of real data
-  - Bottom "+15 more" is a static gray cell per the capture
-  - Seller card icons (orders/selling-since) and the protect shield
-    roundel are reasonable SVG defaults — the capture's icomoon glyphs
-    are empty (project pattern: inline SVG replacements)
-  - Mobile footer language chip shows EUR (existing Footer per its own
-    session-7 capture), live geo-shows HK$ — pre-existing component
-- Technical checks: `npm run build` SUCCESS (/, /efootball-accounts,
-  /efootball-accounts/oa/2f48f97f-…, /xbox-game-pass, /xbox-gift-card,
-  /_not-found); route returns 200; interactions verified headless
-  (see above). Lesson recorded: rebuilding .next while `next start` is
-  serving it corrupts static chunk serving (CSS 500, unstyled page) —
-  always stop the server before rebuilding
-- Deployment: VERIFIED — Vercel serves the product page (HTTP 200; HTML
-  contains "ACC 3000 COINS", "Full email access included",
-  "Back to all offers", "How we protect your purchase", "Verified ID"),
-  corresponding to push 3d2f95b; /, /efootball-accounts, /xbox-game-pass
-  and /xbox-gift-card re-verified 200 after the deploy
-- Next exact action: on request — gift card amount→offers step, other
-  gift card brands reusing these components, or the product page's
-  quantity/feedback sections if the user pushes references for them
+  - Both captures are 1920-only and the live dashboard requires a real
+    login (no live reference possible) — below lg the sidebar spans the
+    full width above the content; login card is fluid with light padding.
+    Both approximations documented here and in code comments
+  - The capture's icomoon glyphs decode empty (project pattern) — header
+    icon buttons (unnamed), sidebar icons and the yellow page icon are
+    inline SVG stand-ins with sensible semantics
+  - Select Game / sort comboboxes are static (no menu content exists in
+    any reference); the dashboard search opens nothing (no overlay
+    reference for the logged-in state)
+  - The offers page ships the capture's EMPTY state only (no offers table
+    exists in any reference)
+  - Sidebar links to /dashboard/orders/*, /dashboard/wallet, etc. are
+    anchors — only /dashboard/offers/Account and /login have pages
+  - MobileMenu in the logged-in header shows the logged-out menu content
+    (no logged-in mobile menu reference exists)
+  - "New Offer" routes to /become-seller per the capture href
+- Technical checks: `npm run build` SUCCESS (/, /login,
+  /dashboard/offers/Account, /efootball-accounts, product route,
+  /xbox-game-pass, /xbox-gift-card, /_not-found — both new routes
+  static); overflow=0 both routes at 5 widths; interactions + zero
+  console errors (scripts/verify_dashboard.js)
+- Deployment: pending verification for push 0584d04 (rebased over the
+  user's 1d4ab0c + 590903b capture commits without force)
+- Next exact action: on request — the three newly pushed static content
+  captures (About us / Contact us / Bug bounty, decode with
+  `ui ux/extracted/fig_reassemble.py` + scripts/decode_new_captures.py
+  pattern), or more dashboard sections (orders/wallet) reusing the
+  DashboardShell/sidebar components
 
 ## Section log (append one block per completed section)
+
+- 2026-11-04 (session 11) — Logged-in dashboard `/dashboard/offers/Account`
+  + `/login`, implementing the user-pushed dashboard/login captures
+  (58f7236). Order of operations per the user's message: push leftovers
+  (nothing pending, local == eec1966) with the fresh PAT, then pull
+  (dashboard + login captures). Recovery: reused the repo's own decoder
+  (`ui ux/extracted/fig_reassemble.py`, recovered from the extracted dir)
+  via scripts/decode_new_captures.py — 2 snapshots per capture, second is
+  a font-face appendix. Analysis: dashboard = logged-in header (search +
+  3 icon buttons + avatar), category strip, 465px banner + white 260px
+  sidebar (active "Accounts" yellow), page header "Offers" + "New Offer",
+  blue offline-mode banner, filter row, "Nothing found" empty state
+  (brand-new account); login = standalone dark card on a cave backdrop.
+  Mid-session the user pushed MORE captures (About-us + contact-us 1d4ab0c,
+  bug-bounty 590903b) — first push rejected, fixed with fetch + rebase
+  (no force), pushed clean as 0584d04. Fixes during verification: login
+  card overflow 44px @390 (min-width:auto + the fixed 354px divider
+  blocked flex shrinking → min-w-0 + fluid divider) and the verify
+  script's chevron check (Tailwind v4 uses the CSS `rotate` property,
+  not transform). Verification: build green (2 new static routes),
+  overflow=0 at 5 widths on both routes, sidebar collapse/active-row
+  interactions pass, zero console errors, visual self-review at
+  1920/390/login (screenshots committed). Token note: the PAT supplied
+  this session was embedded in the origin URL in the sandbox only.
 
 - 2026-11-04 (session 10) — Product-single page
   (`/efootball-accounts/oa/[id]`), implementing the user-pushed dd741ad
@@ -250,16 +264,18 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 10
-- Hash of last pushed commit: `5585abf` (session-10 chain: product page
-  implementation + this doc commit; on top of session-9 tip f232be4;
-  push verified by empty `git log origin/main..HEAD` + tail of push)
+- Last successful push timestamp: 2026-11-04, session 11
+- Hash of last pushed commit: `0584d04` (session-11 chain: dashboard +
+  login implementation, rebased over the user's capture commits
+  1d4ab0c/590903b; push verified by empty `git log origin/main..HEAD`)
 - Uncommitted changes: none expected after the doc commit
 - Unpushed commits: none
-- Push auth: the user-supplied PAT is embedded in the origin URL in this
+- Push auth: the session-11 PAT is embedded in the origin URL in this
   sandbox only (transient; never committed to the repo). Future sessions
   without a token need a fine-grained PAT (Contents: read/write) or pushes
-  fail with "could not read Username for 'https://github.com'".
+  fail with "could not read Username for 'https://github.com'". The user
+  pushes captures concurrently — expect push rejections: fetch + rebase
+  (never force) and retry.
 - Recovery instructions:
   1. `git clone https://github.com/mehrshad0289/charjino-front-eldorado.git`
   2. Read this file; verify state per the protocol checklist (git status,
