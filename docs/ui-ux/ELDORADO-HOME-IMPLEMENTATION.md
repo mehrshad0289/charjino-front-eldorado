@@ -1579,18 +1579,6 @@ actual files and Git history — never trust previous AI claims.
   Eldorado Help Center (assumption — live title not verifiable from
   the capture).
 
-## Backup Status
-
-- Last successful push timestamp: 2026-11-05, session 23 (both
-  user-pushed captures implemented; this doc commit is the last push)
-- Hash of last pushed commit: this docs commit, preceded by `c06f7a9`
-  (boosting Champions-Finals refresh), `051ac4e` (/dashboard/messages
-  not-empty rebuild), `7b6f996` (decode checkpoint), `8de2383`
-  (parallel session-22 sweep docs). Every push verified by empty
-  `git log origin/main..HEAD` immediately after; one rejection
-  resolved fetch+rebase (never force).
-=======
->>>>>>> c89b8e8 (feat(ui): session-25 QA round on /support/articles/8408997-seller-rules vs the Seller-rules decode — sidebar hrefs to the capture's verbatim URLs, Refunds/account/guides back to top level with the 6 png icons + 14 per-row chevrons, Buying children as collapsible collections, invented Submit button / Selling crumb / All-Collections sidebar row removed, intro bold+justify, Initial-response bold re-ordered, Exception back inside No-extra-fees li, td pt-2 + border rgb26/.15, TOC rebuilt (8 h_ items, active first + bar, fixed right-4 top-60); verify_session25_support.js 35 checks ALL PASS; sweep 40x2=80 ALL PASS; build green 72 pages)
 - 2026-11-04 (session 22, user captures round) — mid-session the user
   pushed TWO second-state captures of already-implemented pages (the
   folder-name pattern: same page, new state). Both decoded with the
@@ -1651,7 +1639,6 @@ actual files and Git history — never trust previous AI claims.
     changes; build green (68 pages). Pushes: messages feature +
     boosting feature + this doc commit — each verified by empty
     origin/main..HEAD.
-
 
 ## Backup Status
 
