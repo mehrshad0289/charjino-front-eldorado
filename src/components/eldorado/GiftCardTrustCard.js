@@ -18,13 +18,13 @@ export default function GiftCardTrustCard() {
         <div className="mb-2 text-[24px] font-bold leading-[normal]">Why trust Eldorado?</div>
         <div className="text-graytext">From start to finish, your purchase experience is supervised and safe</div>
       </div>
-      <div className="relative grid grid-cols-1 gap-x-8 md:grid-cols-2">
+      <div className="relative grid grid-cols-1 gap-x-8 sm:grid-cols-2">
         {GIFT_CARD_TRUST_ROWS.map((row, i) => (
           <div
             key={row}
             className={`flex items-center gap-2 border-b border-cardborder py-[15px] ${
               i === 0 ? "border-t" : ""
-            } ${i === 1 ? "md:border-t-0" : ""}`}
+            } ${i === 1 ? "sm:border-t-0" : ""}`}
           >
             <div className="h-[18px] shrink-0 overflow-hidden">
               <img
@@ -33,7 +33,7 @@ export default function GiftCardTrustCard() {
                 className="block h-[18px] w-[18px] object-cover align-middle"
               />
             </div>
-            <div className="text-[16px] leading-[27px] md:text-[18px]">{row}</div>
+            <div className="text-[18px] leading-[27px]">{row}</div>
           </div>
         ))}
       </div>

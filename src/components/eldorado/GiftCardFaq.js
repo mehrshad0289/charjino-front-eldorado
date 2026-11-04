@@ -48,8 +48,8 @@ export default function GiftCardFaq() {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <div className="mb-10 md:mb-16">
-      <div className="mb-6 text-left text-[24px] font-bold leading-[36px] md:mb-8 md:text-center md:text-[30px]">
+    <div className="mb-10 lg:mb-16">
+      <div className="mb-6 text-left text-[24px] font-bold leading-[36px] lg:mb-8 lg:text-center lg:text-[30px]">
         Frequently Asked Questions
       </div>
       <div className="flex flex-col gap-2">

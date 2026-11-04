@@ -17,12 +17,12 @@ export default function GiftCardReviews() {
   return (
     <div className="w-full">
       <div className="flex w-full justify-center text-center">
-        <span className="block text-center text-[24px] font-bold leading-[36px] md:text-[30px]">
+        <span className="block text-center text-[24px] font-bold leading-[36px] lg:text-[30px]">
           Trusted by thousands of players worldwide
         </span>
       </div>
-      <div className="relative mx-auto mt-6 md:mt-8 md:h-[230px] md:max-w-[1208px]">
-        <div className="flex h-full min-h-[120px] items-center justify-center rounded-lg bg-white px-6 pb-8 pt-12 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] md:min-h-[230px] md:py-0">
+      <div className="relative mx-auto mt-6 lg:mt-8 lg:h-[230px] lg:max-w-[1208px]">
+        <div className="flex h-full min-h-[120px] items-center justify-center rounded-lg bg-white px-6 pb-8 pt-12 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] lg:min-h-[230px] lg:py-0">
           <p className="text-center text-[14px] leading-[21px]">
             Rated 4.4 out of 5 based on{" "}
             <a

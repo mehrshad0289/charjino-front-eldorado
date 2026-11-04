@@ -36,7 +36,7 @@ function Row({ amount, selected, onSelect, horizontal }) {
           className="block h-9 w-9 rounded-sm object-cover align-middle"
         />
       </div>
-      <div className="min-w-0 grow md:mt-3">
+      <div className="min-w-0 grow lg:mt-3">
         <div className="text-[14px] leading-[19.6px]">{amount.label}</div>
         <div className="text-[12px] leading-[18px] text-graytext">Value</div>
       </div>
@@ -65,8 +65,9 @@ export default function GiftCardAmountGrid() {
 
   return (
     <div className="relative mb-8">
-      {/* desktop: badge inline in title row + open grid (capture) */}
-      <div className="hidden md:block">
+      {/* desktop: badge inline in title row + open grid (capture; live
+          switches from the stacked card at ~960-1024, mapped to lg) */}
+      <div className="hidden lg:block">
         <div className="mb-3 flex items-center text-[18px] font-bold leading-[27px]">
           <div className="mr-[10px]">
             <AmountBadge />
@@ -81,15 +82,15 @@ export default function GiftCardAmountGrid() {
         </div>
       </div>
 
-      {/* mobile: white container card (live @390) */}
-      <div className="relative rounded-2xl bg-white p-4 pt-6 md:hidden">
+      {/* mobile: white container card (live @390, kept through the tablet band) */}
+      <div className="relative rounded-2xl bg-white p-4 pt-6 lg:hidden">
         <div
           className="absolute left-0 top-0 z-[10] flex h-10 w-10 -translate-x-2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full bg-brand"
           aria-hidden="true"
         >
           <span className="block text-[28px] leading-[42px]">2</span>
         </div>
-        <div className="mb-3 text-[18px] font-bold leading-[27px]">
+        <div className="mb-3 text-[16px] font-bold leading-[27px] lg:text-[18px]">
           Select amount<span className="text-[rgb(212,_25,_20)]">*</span>
         </div>
         <div className="flex flex-col gap-2">

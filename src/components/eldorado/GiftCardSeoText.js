@@ -14,7 +14,7 @@ function StarIcon() {
 
 export default function GiftCardSeoText() {
   return (
-    <div className="mx-auto mb-16 mt-16 w-full max-w-[1208px] px-4 md:mb-[64px] md:mt-[128px] md:px-6">
+    <div className="mx-auto mb-16 mt-16 w-full max-w-[1208px] px-4 lg:mb-[64px] lg:mt-[128px] lg:px-6">
       <div className="pb-5">
         <h1 className="mb-2.5 text-[24px] font-bold leading-[33.6px]">Buy Xbox Gift Cards Cheap</h1>
       </div>

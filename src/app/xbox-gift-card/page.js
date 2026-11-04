@@ -47,26 +47,27 @@ export default function XboxGiftCardPage() {
         </div>
         <div className="relative z-10">
           <GiftCardBanner />
-          <div className="pt-6 md:pt-8">
-            {/* steps + offer sidebar */}
-            <div className="mx-auto w-full max-w-[1208px] px-4 md:px-6">
-              <div className="flex flex-col gap-6 md:mb-8 md:flex-row md:gap-9">
+          <div className="pt-6 lg:pt-8">
+            {/* steps + offer sidebar (live keeps the stacked mobile flow up to
+                its ~960-1024 switch; mapped to lg) */}
+            <div className="mx-auto w-full max-w-[1208px] px-4 lg:px-6">
+              <div className="flex flex-col gap-6 lg:mb-8 lg:flex-row lg:gap-9">
                 <div className="min-w-0 grow">
                   <GiftCardRegionStep />
                   <GiftCardAmountGrid />
                 </div>
-                <aside className="shrink-0 md:basis-[400px]">
+                <aside className="shrink-0 lg:basis-[400px]">
                   <GiftCardOfferCard />
                 </aside>
               </div>
             </div>
             {/* social proof + process */}
-            <div className="mx-auto mt-10 flex w-full max-w-[1208px] flex-col gap-10 px-4 md:mt-16 md:gap-[128px] md:px-6">
+            <div className="mx-auto mt-10 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-16 lg:gap-[128px] lg:px-6">
               <GiftCardReviews />
               <GiftCardProcessSteps />
             </div>
             {/* FAQ + trust card (capture keeps both in a max-w-3xl column) */}
-            <div className="mx-auto mt-12 w-full max-w-3xl px-4 md:mt-0 md:px-3.5">
+            <div className="mx-auto mt-12 w-full max-w-3xl px-4 lg:mt-0 lg:px-3.5">
               <GiftCardFaq />
               <GiftCardTrustCard />
             </div>

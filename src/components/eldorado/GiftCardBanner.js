@@ -56,8 +56,9 @@ function BannerIcon() {
 export default function GiftCardBanner() {
   return (
     <div className="w-full bg-catactive shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]">
-      {/* mobile: stacked — game row, tabs row (live reference @390) */}
-      <div className="md:hidden">
+      {/* mobile: stacked — game row, tabs row (live reference @390; live
+          keeps this stacked style through the tablet band up to ~1024) */}
+      <div className="lg:hidden">
         <div className="flex h-11 items-center px-4">
           <BannerIcon />
           <div className="ml-2 truncate font-bold leading-[20px] text-white">Xbox</div>
@@ -78,7 +79,7 @@ export default function GiftCardBanner() {
       </div>
 
       {/* desktop: 1fr_2fr_1fr grid per the 1920 capture */}
-      <div className="mx-auto hidden h-14 w-full max-w-[1208px] grid-cols-[1fr_2fr_1fr] px-6 md:grid">
+      <div className="mx-auto hidden h-14 w-full max-w-[1208px] grid-cols-[1fr_2fr_1fr] px-6 lg:grid">
         <div className="flex items-center">
           <BannerIcon />
           <div className="ml-2 font-bold leading-[20px] text-white">Xbox</div>

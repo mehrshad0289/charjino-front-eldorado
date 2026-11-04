@@ -8,11 +8,11 @@ import { GIFT_CARD_PROCESS_STEPS } from "./data/giftCardData";
 export default function GiftCardProcessSteps() {
   return (
     <div className="w-full">
-      <div className="flex flex-col items-center gap-8 md:gap-12">
-        <div className="max-w-[400px] text-center text-[24px] font-bold leading-[36px] md:text-[30px]">
+      <div className="flex flex-col items-center gap-8 lg:gap-12">
+        <div className="max-w-[280px] text-center text-[24px] font-bold leading-[36px] lg:max-w-[400px] lg:text-[30px]">
           Effortless buying process
         </div>
-        <div className="grid w-full grid-cols-1 items-start gap-8 md:grid-cols-3 md:gap-8">
+        <div className="grid w-full grid-cols-1 items-start gap-8 lg:grid-cols-3 lg:gap-8">
           {GIFT_CARD_PROCESS_STEPS.map((step) => (
             <div
               key={step.title}
@@ -31,10 +31,10 @@ export default function GiftCardProcessSteps() {
                 </div>
               </div>
               <div className="max-w-[270px] text-center">
-                <div className="mb-4 text-center text-[20px] font-bold leading-[28.8px] md:text-[24px]">
+                <div className="mb-4 text-center text-[20px] font-bold leading-[28.8px] lg:text-[24px]">
                   {step.title}
                 </div>
-                <p className="text-center text-[16px] leading-[30px] text-graytext md:text-[20px]">
+                <p className="text-center text-[16px] leading-[30px] text-graytext lg:text-[20px]">
                   {step.text}
                 </p>
               </div>
