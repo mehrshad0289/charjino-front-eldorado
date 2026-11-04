@@ -15,7 +15,8 @@ actual files and Git history — never trust previous AI claims.
   (session 15 — 6 internal category archives) + `/about-us` +
   `/contact-us` + `/bug-bounty` + search dropdown rebuilt per capture
   (session 13) + `/pagelist` (session 14)
-- Current section: session 15 — TWO parallel blog passes, both pushed:
+- Current section: session 15 — TWO parallel blog passes, both pushed,
+  then cross-verified by a dedicated verification round:
   (a) BLOG ARTICLE live-verified pass (parallel session): the article
   page (implemented session 13, "visual verification pending") is now
   pixel-calibrated against live eldorado.gg at 1920/1536/390 via DOM
@@ -28,13 +29,36 @@ actual files and Git history — never trust previous AI claims.
   agreed with live probes, overruled where it contradicted them
   (stroke caret → filled triangle, mobile EN globe → EN+caret,
   header pt-0 → pt-108, table-layout fixed → auto, all probe-backed).
-  (b) CATEGORY ARCHIVES (this session): the missing internal
+  (b) CATEGORY ARCHIVES (parallel session): the missing internal
   `/blog/[category]` routes (6 categories / 71 rows scraped live),
   closing the last navigation gap in the blog section (article
   breadcrumbs previously had to leave the clone for the live category
   pages); geometry verified Δ0 vs live at 1920 + 390; verified and
   pushed. Session 14 — review sweep (22 routes x 3 widths, all green) +
-  /pagelist; session 13 — SearchOverlay rebuilt from capture
+  /pagelist; session 13 — SearchOverlay rebuilt from capture.
+  (c) VERIFICATION + UNION ROUND (this session, second half): the
+  duplicate /blog/[category] implementation from this round was
+  DISCARDED after a head-to-head probe — the pushed version matched
+  live better (it has the Load more button — confirmed REAL on live,
+  y=1491 between grid bottom 1427 and footer 1629 — and exact @390
+  grid y=781). Remaining gaps closed on top of it: archive card meta
+  separator GLYPH made invisible (live keeps the separator BOX — li
+  "2 Nov 2026" w=97 = text 82 + 12px margins + 4.8px box — so the
+  reading-time li keeps its live x). FONT STATE settled: blog pages
+  render "Lato Eldorado" (the session-14 `.blog-lato` override is
+  INERT — removed in fca82de and not re-added); canvas '400 18px' on
+  the same 65-char string = 473px live == 473px Lato Eldorado vs 477px
+  next/font Google Lato; the "296px vs 259px breadcrumb" that
+  motivated the override compared the live @390 WRAPPED fragment box
+  (296) against our single-line @1920 width (259) — not a font
+  difference (live breadcrumb is 14px everywhere; title @1920 = 259 ==
+  ours). Full verification on the merged tip: category H1 364/180 h55,
+  hero 365/268 1190×358, grid 388/715 1144×712, card 560×160, thumb
+  136, pageH 2101 (live 2141 — 40px shorter footer gap), @390 H1
+  16/190, hero 356×365, thumb 36/804; article table rows 201/217/206
+  == live, cols [84,81,64,93] @390, lede 7 lines line1 343 == live,
+  canvas 473 == live; 8 blog routes × 2 widths: 200/overflow 0/0
+  console errors; build green 41 pages.
 - Reference files:
   - Blog capture (session 12, user-pushed):
     `ui ux/blog/www_eldorado_gg_blog_1920w_390w_1536w_default.make`
@@ -471,6 +495,15 @@ actual files and Git history — never trust previous AI claims.
     "Lato Eldorado", kept for them). Breadcrumb title renders 296px
     live vs 259px under Lato Eldorado. `.blog-lato, .blog-article-page
     { font-family: var(--font-lato) }` in globals.css
+    [CORRECTION, session-15 verification round — this override is INERT:
+    it was removed in fca82de and NOT re-added; the final rendering is
+    "Lato Eldorado" everywhere and it matches live exactly (canvas
+    '400 18px' same 65-char string: live 473 == Eldorado 473 vs
+    next/font Google 477). The 296-vs-259 breadcrumb number was a
+    structural artifact: 296 = the live @390 WRAPPED inline fragment
+    box, 259 = our single-line @1920 width — live breadcrumb is 14px at
+    every width and its @1920 title is 259 == ours. Do NOT re-apply the
+    override; the block is kept here only as history.]
   - FIX 6 (entry content): td img margin 24px 0 + display block and
     a > img margin 24px 0 (live-computed) — mutation-table rows were
     153px vs live 201px, collapsing the table 575px; now rows are
@@ -516,6 +549,38 @@ actual files and Git history — never trust previous AI claims.
 - Deployment: Vercel verified after the final push (see Backup Status)
 
 ## Section log (append one block per completed section)
+
+- 2026-11-04 (session 15, verification + union round — second half) —
+  ran the cross-session verification of the parallel session's tip
+  (e15cb2c) against live and closed the remaining blog gaps. Recovery:
+  cloned fresh (sandbox recycled), synced at 96c6cc4, worked through
+  three waves of concurrent pushes (rebased twice; the third conflict
+  was resolved by DISCARDING this session's duplicate /blog/[category]
+  commit after a head-to-head probe showed the parallel bc05eea version
+  matched live better — it has the Load more button (live y=1491,
+  confirmed REAL on live) and exact @390 grid y=781; the duplicate's
+  own verified numbers (H1 364/180, hero 364/268 1192×358, card
+  560×160, pageH 2141 exact) were reproduced by their build within
+  0-2px). Findings + fixes on top of their tip:
+  (1) live Load more button confirmed on /blog/<category>/ between the
+  grid (bottom 1427) and footer (1629) — the parallel version renders
+  it; (2) their td-img fix reproduces live mutation-row heights
+  201/217/206 EXACT (@1920) and the @390 mutations table keeps cols
+  [84,81,64,93], 326px, scroll 0, dw 0; (3) archive card meta — the
+  date|read separator GLYPH is invisible on live but its BOX remains
+  (li w=97) — BlogCategoryRow separator set to `invisible`; (4) the
+  session-14 `.blog-lato` font override is inert in the final tree —
+  documented in the Current Checkpoint (do not re-apply); (5) the
+  capture scripts now load the @font-face files explicitly before
+  screenshotting — document.fonts.status turns 'loaded' before a
+  lazily-requested woff2 even starts downloading, which poisoned two
+  compare rounds with ~11-13% wider fallback metrics. Full live-parity
+  verification on their tip: category H1 364/180 h55, hero 365/268
+  1190×358, grid 388/715 1144×712, card 560×160, thumb 136 @1920;
+  H1 16/190, hero 356×365, thumb 36/804 106 @390; article lede
+  7 lines line1 343 == live @390, bc title 259 == live @1920, canvas
+  473 == live; 6 categories × 2 widths overflow 0, 0 console errors;
+  build green 41 pages.
 
 - 2026-11-04 (session 12c) — `/blog` live-verified pixel pass, merging a
   PARALLEL session's blog work (origin 219c24b fixed the root font bug
@@ -823,13 +888,17 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 15
+- Last successful push timestamp: 2026-11-04, session 15 (verification
+  + union round)
 - Hash of last pushed commit: session-15 chains (two parallel blog
-  passes) — article pass: `41aff91` + `4f1cd1b` + doc `e15cb2c`
-  (merged via the user's 6d99cce); category pass: `75fdeb6`
-  (checkpoint: probes + scraper + 6-category dataset + live refs) →
-  `bc05eea` (feature: /blog/[category] routes + components +
-  breadcrumb wiring + /pagelist +6) → this doc commit; every push
+  passes + the union/verification round) — article pass: `41aff91` +
+  `4f1cd1b` + doc `e15cb2c`; union round: `fca82de` (live-parity
+  union: entry mobile typography 14px/28px, zebra + bold first column +
+  thead rules, quote-aware withTableScroll, content-box paddings, Lato
+  Eldorado kept); category pass: `75fdeb6` → `bc05eea` (feature:
+  /blog/[category] routes + components + breadcrumb wiring + /pagelist
+  +6) + their docs `3506014`; this session's final fixes: the
+  BlogCategoryRow invisible-separator + this doc commit; every push
   rebased/merged over the concurrent commits (never force) and
   verified by empty `git log origin/main..HEAD` immediately after
   every push
