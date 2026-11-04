@@ -12,10 +12,31 @@ actual files and Git history — never trust previous AI claims.
   `/xbox-game-pass` + `/xbox-gift-card` + product-single
   `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
   + `/login` + `/blog` + `/blog/[category]/[slug]` + `/blog/[category]`
-  (session 15 — 6 internal category archives) + `/about-us` +
-  `/contact-us` + `/bug-bounty` + search dropdown rebuilt per capture
-  (session 13) + `/pagelist` (session 14)
-- Current section: session 15 — TWO parallel blog passes, both pushed,
+  + `/about-us` + `/contact-us` + `/bug-bounty` + `/pagelist` +
+  `/influencer-program` + dashboard family (offers Account/CustomItem/
+  GiftCard/Currency/TopUp, orders Purchased/Sold, Loyalty, Feedback,
+  Wallet, Messages, Settings) + `/users/NewFloat-0una[/shop|/reviews|
+  /about]` + `/privacy-policy` + `/terms-of-service` + `/dmca` + `/dsa`
+  (session 18) + `/become-seller` (session 19 — IN PROGRESS)
+- Current section: session 19 — RECOVERY + the new user-pushed
+  become-seller capture. Recovery (fresh sandbox, cloned at 5426fe6 →
+  pulled 02e63b4): every session-18 commit verified present on origin
+  (270cdbd decode, 05620a1 GiftCard, a48d275 settings, 8bf9163 profiles,
+  5426fe6 dmca+dsa), clean tree, zero unpushed commits — the previous
+  session pushed everything before ending (its doc entry however was
+  never written; recovered below in the section log). New capture
+  decoded: `ui ux/become-seller/…make` (NATIVE fig-make, zstd scene
+  graph) → `snapshots/becomeseller-1920px-light-{1,2}.tsx` (2nd =
+  font-face appendix), 1920-only. Page anatomy per capture: LOGGED-IN
+  header + CategoryNav + hero (h1 72/79.2 max-w-705 + 24px gray sub +
+  dark "Start verification" CTA + 421×418 illustration over a 975px
+  bg-repeat-x PNG band) + 3 white trust pills (rounded-full, star
+  rgb(33,150,83)) + "Why Eldorado?" 4-col cards (134×152 svg, gray
+  top-fade gradient, "Learn how" support links) + "Tools to power your
+  next sale" 2×2 cards (colored icon chips blue/lime/teal/orange) +
+  "Seller FAQs" max-w-3xl 7 white accordion rows + "Full seller FAQ"
+  gray 2px-border button + white CTA band ("Start selling with
+  Eldorado") + Footer + ChatBubble. Session 15 — TWO parallel blog passes, both pushed,
   then cross-verified by a dedicated verification round:
   (a) BLOG ARTICLE live-verified pass (parallel session): the article
   page (implemented session 13, "visual verification pending") is now
@@ -60,6 +81,11 @@ actual files and Git history — never trust previous AI claims.
   canvas 473 == live; 8 blog routes × 2 widths: 200/overflow 0/0
   console errors; build green 41 pages.
 - Reference files:
+  - Become-seller capture (session 19, user-pushed origin 4b8246c):
+    `ui ux/become-seller/…become-seller…make` → decoded
+    `snapshots/becomeseller-1920px-light-{1,2}.tsx` (2nd = font-face
+    appendix). 1920-only NATIVE fig-make; responsive below 1920 to be
+    probed against live eldorado.gg/become-seller
   - Blog capture (session 12, user-pushed):
     `ui ux/blog/www_eldorado_gg_blog_1920w_390w_1536w_default.make`
     → decoded `snapshots/blog-1920px-light-{1,2}.tsx` (2nd = font-face
@@ -1063,16 +1089,38 @@ actual files and Git history — never trust previous AI claims.
   mid-session (rebased cleanly). Verified: 35 routes, sweep 24x3
   clean, 10/10 assets. Pushed 4f474e1.
 
+- 2026-11-04 (session 18 — RECOVERED this session) — the session-18
+  work reached origin in 5 pushes but its doc entry was never written
+  (reconstructed here from the verified Git history, not from any AI
+  claim): 270cdbd decoded 4 user-pushed captures (dashgiftcard/
+  settings/vpabout/vpshop; zstd OR raw-deflate scene graphs),
+  05620a1 shipped /dashboard/offers/GiftCard (offers template, sidebar
+  active bg rgb(255,201,80)), a48d275 shipped /dashboard/settings
+  (5 white cards: profile/password/2FA/email-toggles/description),
+  8bf9163 shipped the /users/NewFloat-0una profile family (optional
+  catch-all [[...tab]] route; Shop/Reviews/About; Reviews probe-led
+  because the .h2d capture is an undecodable encrypted container),
+  5426fe6 shipped /dmca + /dsa per user captures (DSA HTML extracted
+  verbatim via extract_dsa.py into LegalDoc; DMCA bespoke DmcaDoc;
+  both use the LOGGED-IN header). Pagelist grew to 48 rows. All
+  verified on origin (empty origin/main..HEAD after each).
+
+- 2026-11-04 (session 19, checkpoint 1) — recovery + decode of the
+  new user-pushed become-seller capture (origin 4b8246c). See Current
+  Checkpoint above for the full page anatomy; implementation next.
+
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 16 (dashboard
-  family completion)
-- Hash of last pushed commit: `8d55e69` (/dashboard/loyalty + sidebar
-  active fix), preceded by `08f6da9` (dashboard Currency/TopUp/
-  Purchased/Sold, rebased over the parallel session's 11 commits); the
-  doc commit after this entry is the final session-16 push — every
-  push verified by empty `git log origin/main..HEAD` immediately after
-- Uncommitted changes: none expected after this doc commit
+- Last successful push timestamp: 2026-11-04, session 19 checkpoint 1
+  (recovery + decode; see below)
+- Hash of last pushed commit: session-18 tip on origin was 5426fe6
+  (dmca+dsa) before this session; user pushed 4b8246c + merge 02e63b4
+  (the become-seller capture) concurrently — pulled clean. The session
+  19 checkpoint-1 commit (decode script + snapshots + this doc update)
+  is pushed right after this edit and verified by empty
+  `git log origin/main..HEAD`.
+- Uncommitted changes: none after this doc commit (decode script +
+  2 snapshots + doc included in checkpoint 1)
 - Unpushed commits: none
 - Push auth: the session PAT lives in the origin URL in this sandbox
   only (transient; never committed). Future sessions without a token
