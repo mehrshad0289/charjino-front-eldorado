@@ -220,9 +220,15 @@ actual files and Git history — never trust previous AI claims.
     email" is a styled button too (no mailto in the capture)
   - Footer "+ 15 more"/payment icons come from the shared Footer
     (matches the capture footer)
-- Deployment: push a1dae56 (rebased over the user's concurrent blog +
-  capture commits without force) — Vercel verified after this doc
-  update (see section log entry)
+- Deployment: VERIFIED — push a1dae56 (rebased over the user's
+  concurrent blog + capture commits without force); Vercel serves
+  /about-us (200; "What is Eldorado.gg?", "Meet the team", "Lets team
+  up", Vladas Jurkeviius, the expanded FAQ question), /contact-us
+  (200; "How can we help?", "Start live chat", "Search help articles")
+  and /bug-bounty (200; "Why is the bug bounty a big deal?", "Known
+  Issues", bugs@eldorado.gg); /, /blog, /login,
+  /dashboard/offers/Account, /efootball-accounts, /xbox-game-pass and
+  /xbox-gift-card re-verified 200 after the deploy
 - Next exact action: on request — blog article page (no capture pushed
   yet), more dashboard sections (orders/wallet) reusing DashboardShell,
   or any new captures the user pushes
