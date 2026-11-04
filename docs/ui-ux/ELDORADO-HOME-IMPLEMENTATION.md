@@ -621,10 +621,11 @@ actual files and Git history — never trust previous AI claims.
 ## Backup Status
 
 - Last successful push timestamp: 2026-11-04, session 14
-- Hash of last pushed commit: `77a3b77` (SearchOverlay per capture) +
-  this doc commit; push verified by empty `git log origin/main..HEAD`
-  after every push; Vercel verified (dropinput token in live CSS, all
-  9 routes 200)
+- Hash of last pushed commit: session-14 chain — `4e36a9b` (/pagelist
+  + doc) rebased over the user's concurrent commits; push verified by
+  empty `git log origin/main..HEAD` after every push; session 13's
+  `77a3b77` deploy was Vercel-verified (dropinput token in live CSS,
+  all 9 routes 200)
 - Uncommitted changes: none expected after this doc commit
 - Unpushed commits: none
 - Push auth: the session-12c PAT lives in the origin URL in this
