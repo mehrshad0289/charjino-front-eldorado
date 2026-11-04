@@ -50,10 +50,14 @@ export const DASHBOARD_NAV_GROUPS = [
   },
 ];
 
+/* Session 17: the five newest captures (CustomItem, Feedback, Wallet,
+   Messages, loyalty — all captured 2026-11-04/05) no longer contain the
+   "Become a Seller" sidebar link that the older dashboard/Account captures
+   had. Treated as a live-site change, not a per-page variation: removed
+   from the shared nav (the link itself lives on at /become-seller). */
 export const DASHBOARD_NAV_LINKS = [
   { icon: "loyalty", label: "Loyalty", href: "/dashboard/loyalty" },
   { icon: "wallet", label: "Wallet", href: "/dashboard/wallet" },
-  { icon: "seller", label: "Become a Seller", href: "/become-seller" },
   { icon: "messages", label: "Messages", href: "/dashboard/messages" },
   { icon: "notifications", label: "Notifications", href: "/dashboard/notifications" },
   { icon: "feedback", label: "Feedback", href: "/dashboard/feedback" },
@@ -147,6 +151,55 @@ export const DASHBOARD_ORDERS_SOLD_PAGE = {
     imageAlt: "No results found",
     title: "Nothing found",
     text: "You have no sold orders",
+  },
+};
+
+/* Session 17 — /dashboard/feedback, /dashboard/wallet, /dashboard/messages
+   (own captures `ui ux/{Feedback,Wallet,Messages}/…`, decoded 2026-11-05,
+   1920-only, by scripts/decode_session17_captures.py — feedback via the
+   fig-make+zstd path, the other two via the newer
+   [u32 clen][4B][raw-deflate] chunk variant). /dashboard/loyalty from the
+   same capture batch is session-16 work (DashboardLoyalty.js). Header
+   icons: the captures' icomoon glyphs are empty (project-wide pattern) —
+   inline SVG replacements (documented assumption, same convention as the
+   tag/orders icons). */
+
+export const DASHBOARD_FEEDBACK_PAGE = {
+  icon: "feedback",
+  title: "Feedback",
+  stats: [
+    { icon: "completed", label: "Completed orders", value: "0" },
+    { icon: "positive", label: "Positive feedback", value: "0" },
+    { icon: "negative", label: "Negative feedback", value: "0" },
+    { icon: "score", label: "Feedback score", value: "0%" },
+  ],
+  filters: ["All", "Positive", "Negative"],
+  emptyState: {
+    image: DASHBOARD_OFFERS_PAGE.emptyState.image,
+    imageAlt: "No results found",
+    title: "Nothing found",
+    text: "",
+  },
+};
+
+export const DASHBOARD_WALLET_PAGE = {
+  icon: "wallet",
+  title: "Wallet",
+  balanceLabel: "Balance",
+  balanceValue: "0.00",
+  filterLabel: "All",
+  columns: ["Date Created", "Balance change", "Order ID", "Description"],
+  columnWidths: ["20%", "15%", "31%", "34%"],
+};
+
+export const DASHBOARD_MESSAGES_PAGE = {
+  icon: "messages",
+  title: "Messages",
+  emptyState: {
+    image: DASHBOARD_OFFERS_PAGE.emptyState.image,
+    imageAlt: "No results found",
+    title: "Uh oh looks like you dont have any chats yet.",
+    text: "After your first purchase, you will be able to see your conversations with sellers here. Be sure to return after purchasing!",
   },
 };
 

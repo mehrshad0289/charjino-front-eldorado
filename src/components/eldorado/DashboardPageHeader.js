@@ -30,6 +30,26 @@ const ICONS = {
       <path d="m12 4 2.3 4.9 5.2.6-3.9 3.6 1.1 5.2L12 15.6l-4.7 2.7 1.1-5.2L4.5 9.5l5.2-.6L12 4Z" {...stroke} />
     </svg>
   ),
+  /* Session 17: feedback/wallet/messages header icons — same empty-glyph
+     convention, inline SVG replacements (documented assumptions). */
+  feedback: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="m12 3.6 2.5 5.1 5.6.8-4 4 .9 5.6-5-2.7-5 2.7.9-5.6-4-4 5.6-.8L12 3.6Z" {...stroke} />
+    </svg>
+  ),
+  wallet: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3.5" y="6" width="17" height="13" rx="2" {...stroke} />
+      <path d="M3.5 10h17" {...stroke} />
+      <circle cx="16.5" cy="14.8" r="1.2" fill="currentColor" />
+    </svg>
+  ),
+  messages: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H9l-5 4v-13.5Z" {...stroke} />
+      <path d="M8.5 9h7M8.5 12h4.5" {...stroke} />
+    </svg>
+  ),
 };
 
 /* Dashboard page title row: yellow icon + H1 (semibold 30/36) + dark

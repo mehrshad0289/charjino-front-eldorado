@@ -74,6 +74,9 @@ const GROUPS = [
       { title: "Dashboard — Purchased orders", href: "/dashboard/orders/purchased" },
       { title: "Dashboard — Sold orders", href: "/dashboard/orders/sold" },
       { title: "Dashboard — Loyalty", href: "/dashboard/loyalty" },
+      { title: "Dashboard — Wallet", href: "/dashboard/wallet" },
+      { title: "Dashboard — Messages", href: "/dashboard/messages" },
+      { title: "Dashboard — Feedback", href: "/dashboard/feedback" },
     ],
   },
 ];
