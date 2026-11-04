@@ -213,6 +213,58 @@ export const DASHBOARD_MESSAGES_PAGE = {
   },
 };
 
+/* Session 18 — /dashboard/settings (own capture, decoded 2026-11-04,
+   1920-only, deflate+0 variant): h1 "Account settings" + five white
+   shadow cards (Profile / Profile picture / Security / Email
+   notifications / Your description). Email + Username render as disabled
+   gray inputs (bg rgb(239,239,241), text rgb(198,198,204)) with a blue
+   uppercase "Edit" label; password row = dark "Change password" button.
+   Toggles verbatim from the capture: master "All email notifications" OFF,
+   "Boosting offers" OFF, the other seven ON (track rgba(71,131,255,0.2)
+   with a blue rgb(71,131,255) knob; off track rgb(231,231,231), white
+   knob). Description textarea is EMPTY with placeholder "Type here...". */
+export const DASHBOARD_SETTINGS_PAGE = {
+  icon: "settings",
+  title: "Account settings",
+  email: "mehrshad02899@gmail.com",
+  emailNote: "This email is linked to your account. It is not visible to other users.",
+  username: "NewFloat-0una",
+  changePassword: "Change password",
+  passwordNote:
+    "Password can only be changed if you are using the email/password login flow",
+  pictureNote: "Must be JPEG, PNG or HEIC and cannot exceed 10MB.",
+  twoFa: {
+    label: "Set Up 2FA",
+    bodyParts: [
+      "Enable with Google Authenticator. 2FA codes will be requested for ",
+      { bold: "withdrawals" },
+      " and",
+      { bold: "purchases" },
+      ". They are not ",
+      { bold: "required for logging in" },
+      ".",
+    ],
+  },
+  logout: {
+    label: "Log out from all devices",
+    body: "This button logs you out from all devices and browsers.",
+    footnote: "* This action can take up to 1 hour to complete.",
+  },
+  notifications: [
+    { label: "All email notifications", desc: "", on: false, master: true },
+    { label: "New order", desc: "When you receive a new order", on: true },
+    { label: "Message received", desc: "When you receive a new message", on: true },
+    { label: "Order updates", desc: "When your order status changes", on: true },
+    { label: "Dispute updates", desc: "When your dispute is resolved or updated", on: true },
+    { label: "Payment updates", desc: "When your payment is received or refunded", on: true },
+    { label: "Withdrawal updates", desc: "When you request a withdrawal, and when it is processed", on: true },
+    { label: "Verification updates", desc: "When your verification is processed or updated", on: true },
+    { label: "Boosting offers", desc: "When you receive boosting offers or updates", on: false },
+  ],
+  descriptionPlaceholder: "Type here...",
+  changeDescription: "Change description",
+};
+
 /* Login page (login.eldorado.gg capture) */
 export const LOGIN_BG = `${ASSET}fdbcce785891c023ba5cef0f78a6cfaa2620fc0b.png?generation=1793786228667980&alt=media`;
 
