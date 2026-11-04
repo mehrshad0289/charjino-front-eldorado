@@ -48,7 +48,9 @@ export default function BlogArticleCard({ article }) {
             {article.title}
           </div>
           <div>
-            <ul className="flex flex-wrap items-center">
+            {/* live @390: date+pipe on line 1, clock+read on line 2 (screenshot;
+                the details container is ~196px there) — one line @640+ */}
+            <ul className="flex flex-wrap items-center max-sm:flex-col max-sm:items-start">
               <li className="flex items-center text-[16px] leading-[22.4px] text-[rgb(138,134,157)]">
                 {article.date}
                 <span

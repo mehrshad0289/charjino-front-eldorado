@@ -1,6 +1,7 @@
 import HeaderBar from "../../components/eldorado/HeaderBar";
 import Footer from "../../components/eldorado/Footer";
 import { BLOG_ARTICLE_PAGES } from "../../components/eldorado/data/blogArticlesData";
+import { BLOG_CATEGORIES } from "../../components/eldorado/data/blogCategoriesData";
 import { PRODUCT_ID } from "../../components/eldorado/data/productData";
 
 /* Utility index page (/pagelist) — session 14, user request: one page
@@ -8,7 +9,8 @@ import { PRODUCT_ID } from "../../components/eldorado/data/productData";
    reuses the site frame (HeaderBar + Footer) and design tokens
    (--color-page bg, white hairline cards, brand-yellow accents). Group
    rows are plain <a> links; blog rows come from BLOG_ARTICLE_PAGES so
-   the list never drifts from the data file. */
+   the list never drifts from the data file. Session 15: + 6 category
+   archive rows from BLOG_CATEGORIES. */
 
 export const metadata = {
   title: "Page List - Eldorado",
@@ -36,6 +38,11 @@ const GROUPS = [
     label: "Blog",
     rows: [
       { title: "Blog landing", href: "/blog" },
+      ...BLOG_CATEGORIES.map((c) => ({
+        title: `${c.name} — category archive`,
+        href: `/blog/${c.slug}`,
+        meta: "Category",
+      })),
       ...BLOG_ARTICLE_PAGES.map((a) => ({
         title: a.title,
         href: `/blog/${a.categorySlug}/${a.slug}`,

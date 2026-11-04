@@ -131,7 +131,13 @@ export default async function BlogArticlePage({ params }) {
                   <BreadChevron />
                 </li>
                 <li className="flex items-center text-[14px] leading-[19.6px] text-[rgb(138,134,157)] max-sm:hidden">
-                  <a href={article.categoryHref} className="block max-sm:inline">
+                  {/* session 15: internal category archive routes now exist —
+                      the crumb routes to /blog/[category]/ like live (the
+                      live categoryHref value is kept in the data) */}
+                  <a
+                    href={`/blog/${article.categorySlug}/`}
+                    className="block max-sm:inline"
+                  >
                     {article.category}
                   </a>
                   <BreadChevron />
