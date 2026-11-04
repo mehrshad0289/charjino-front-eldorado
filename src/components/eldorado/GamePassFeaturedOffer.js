@@ -1,3 +1,10 @@
+"use client";
+
+/* Session-19 hotfix: this component uses useState (quantity stepper) but
+   was missing the "use client" directive — the gamepass build failed on
+   origin ("module that depends on useState into a React Server
+   Component"), which kept the Vercel deployment stale (new routes 404).
+   Adding the directive; no behavior change. */
 import { useState } from "react";
 import { GAME_PASS_FEATURED_OFFER, GAME_PASS_IMAGES } from "./data/gamePassData";
 import { BoltIcon, ShieldIcon, SupportIcon, TrustRow } from "./TrustRows";
