@@ -62,6 +62,7 @@ const GROUPS = [
       { title: "About Us", href: "/about-us" },
       { title: "Contact Us", href: "/contact-us" },
       { title: "Bug Bounty", href: "/bug-bounty" },
+      { title: "Become a Seller", href: "/become-seller" },
       { title: "Privacy Policy", href: "/privacy-policy" },
       { title: "Terms of Service", href: "/terms-of-service" },
       { title: "DMCA", href: "/dmca" },
