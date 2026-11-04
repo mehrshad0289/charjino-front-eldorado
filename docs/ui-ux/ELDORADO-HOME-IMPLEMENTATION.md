@@ -11,110 +11,148 @@ actual files and Git history — never trust previous AI claims.
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
   `/xbox-game-pass` + `/xbox-gift-card` + product-single
   `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
-  + `/login` (NEW session 11 — logged-in dashboard per the dashboard
-  .make capture, login per the login .make capture; both 1920-only)
-- Current section: session 11 — dashboard (logged-in) + login COMPLETE
-  (data-driven reusable dashboard components, HeaderBar loggedIn variant,
-  verified and pushed)
+  + `/login` + `/blog` (NEW session 12 — blog landing per the blog .make
+  capture; 1920 capture + live responsive references)
+- Current section: session 12 — blog landing COMPLETE (decode → data → 6
+  new components + page → live compare fixes → verified and pushed)
 - Reference files:
-  - Dashboard capture (session 11, user commit 58f7236):
-    `ui ux/dashbord/www_eldorado_gg_dashboard_offers_Account_1920w_390w_1536w_default.make`
-    → decoded `snapshots/dashboard-1920px-light-{1,2}.tsx` (2nd = font-face
-    appendix). The offers page is the EMPTY state (account registered
-    11/4/26, no offers yet). 1920-only
-  - Login capture (session 11, same commit):
-    `ui ux/login/login_eldorado_gg_loginofile_20aws_co.make` → decoded
-    `snapshots/login-1920px-light-{1,2}.tsx`. 1920-only
-  - New captures pushed mid-session (NOT implemented yet, next steps):
-    `ui ux/About-us/…make`, `ui ux/contact-us/…make` (1d4ab0c) and
-    `ui ux/bug-bounty/…make` (590903b) — three static content pages
-  - Product/gamepass/giftcard references: see session 7-10 log entries
-    below
-- Implementation status (session 11 — data + 6 new components + 2 pages):
-  - `data/dashboardData.js` — user (NewFloat-0una, registered 11/4/26,
-    avatar), collapsible nav groups (Orders/Offers/Boosting with capture
-    hrefs), single links (Loyalty…Account settings), View Profile, offers
-    page config (title, action, offline-mode banner with italic parts,
-    filters, empty state), login card content; asset URLs verified 200
-  - `DashboardSidebar.js` — data-driven white 260px sidebar: user block
-    (avatar 40px + name + Registered), collapsible groups (chevron
-    rotates, children hide) with pl-7 sub-links, active row = yellow fill
-    (bg rgb(255,201,80), capture's "Accounts"), single icon links, View
-    Profile; reused by every future dashboard page via `active` prop
-  - `DashboardShell.js` — reusable dashboard layout: 465px banner image
-    (objectPosition 50% 15%) + transparent→page gradient, sidebar +
-    content column; sidebar sticky top-[100px] under the 100px header
-  - `DashboardPageHeader.js` — yellow icon + H1 30px + dark action button
-    ("New Offer") — reusable per dashboard section
-  - `InfoBanner.js` — blue role=status banner (bg 20% / border 40% 0.8px)
-    with italic body parts — reusable
-  - `DashboardFilters.js` — Select Game combobox 148px, Search offers
-    input 200px (real field), right sort combobox ("Recommended");
-    comboboxes are static buttons (no menu content in any reference —
-    nothing invented)
-  - `EmptyState.js` — 100px image + "Nothing found" + gray text — reusable
-  - `HeaderBar.js` — new `loggedIn` + `user` props: right side becomes 3
-    rounded icon buttons + 44px avatar (icons unnamed in the capture —
-    bell/chat/favorites SVG stand-ins, documented); logged-out variant
-    unchanged (all other pages unaffected)
-  - `app/dashboard/offers/Account/page.js` — HeaderBar(loggedIn) +
-    CategoryNav + shell + page header + banner + filters + empty state +
-    Footer + ChatBubble
-  - `LoginCard.js` + `app/login/page.js` — 402px dark card (logo 60px,
-    Sign in 24px, 3 OAuth buttons with real icons, Or divider, email
-    form, yellow Next, Create an account link) on the full-viewport cave
-    backdrop; Open Sans per the capture (marketplace pages stay Lato)
-- Visual comparison status (screenshots `docs/ui-ux/screenshots/session11/`):
-  - No rendered capture exists (thumbnail.png is a 68-byte placeholder) —
-    verification is DOM-structural against the decoded TSX + visual
-    self-review: 1920 matches the capture's structure/colors (logged-in
-    header, sidebar with yellow active row, banner + gradient, blue
-    notice, filters, empty state, footer)
-  - Login @1920 matches the capture (card content, backdrop); @390 the
-    card fills the width (documented approximation)
-  - No horizontal overflow: scrollWidth == viewport at
-    390/768/1024/1536/1920 on BOTH routes (login card needed a min-w-0
-    fix — the 354px divider blocked flex shrinking)
-  - Interactions verified headless: sidebar group collapse (Boosting 17→16
-    links) + chevron rotation + restore, active row rgb(255,201,80),
-    banner/empty-state images load, header icon buttons present, login
-    socials/email/Next/backdrop; zero console errors at all widths
-- Known deviations / documented limitations:
-  - Both captures are 1920-only and the live dashboard requires a real
-    login (no live reference possible) — below lg the sidebar spans the
-    full width above the content; login card is fluid with light padding.
-    Both approximations documented here and in code comments
-  - The capture's icomoon glyphs decode empty (project pattern) — header
-    icon buttons (unnamed), sidebar icons and the yellow page icon are
-    inline SVG stand-ins with sensible semantics
-  - Select Game / sort comboboxes are static (no menu content exists in
-    any reference); the dashboard search opens nothing (no overlay
-    reference for the logged-in state)
-  - The offers page ships the capture's EMPTY state only (no offers table
-    exists in any reference)
-  - Sidebar links to /dashboard/orders/*, /dashboard/wallet, etc. are
-    anchors — only /dashboard/offers/Account and /login have pages
-  - MobileMenu in the logged-in header shows the logged-out menu content
-    (no logged-in mobile menu reference exists)
-  - "New Offer" routes to /become-seller per the capture href
-- Technical checks: `npm run build` SUCCESS (/, /login,
+  - Blog capture (session 12, user-pushed):
+    `ui ux/blog/www_eldorado_gg_blog_1920w_390w_1536w_default.make`
+    → decoded `snapshots/blog-1920px-light-{1,2}.tsx` (2nd = font-face
+    appendix). 1920-only, NATIVE Figma format (see decode note below)
+  - Live references captured @390/768/1024/1536/1920:
+    `snapshots/live-blog-*.png` (the capture is 1920-only; live site is
+    the responsive source of truth per project convention)
+  - Product/gamepass/giftcard/dashboard/login references: see session
+    7-11 log entries below
+- Implementation status (session 12 — data + 6 new components + page):
+  - DECODE: the blog .make is NOT html.to.design like the earlier
+    captures — it is a native Figma file ('fig-make' container: chunk 0 =
+    raw-deflate schema, chunk 1 = zstd frame holding the scene graph with
+    the full App.tsx snapshots). `scripts/decode_blog_capture.py` walks
+    the chunks (pip zstandard) — reusable for any future native-Figma
+    .make capture
+  - `data/blogData.js` — featured article (Mark Darrah/BioWare, full
+    excerpt live-verified — the capture truncates it at the clamp), 10
+    "The Latest" cards (category/title/date/~N min read/href/image,
+    capture order), pagination 1..26, 4 highlights (Play Smart strip,
+    tile colors + 33px icons), Halloween CTA banner, blog logo (202x40
+    wordmark SVG from the capture); all 32 capture asset URLs verified
+    HTTP 200
+  - `BlogHeader.js` — standalone blog bar (no search/sign-in/catnav, unlike
+    HeaderBar): logo → /blog/, Games (yellow #FFB600) + Codes (purple
+    #987EFB) buttons with chevrons (icomoon glyphs decode empty → inline
+    SVG caret stand-ins), EN globe (data-URI verbatim from the capture) +
+    yellow SHOP → eldorado.gg; mobile = burger row (h-70) + centered
+    Games/Codes row (live @390) + full-screen drawer (Games/Codes links —
+    live shows a hamburger popup; minimal approximation documented)
+  - `BlogFeaturedArticle.js` — 358px image card (365 mobile), white
+    hairline frame, gradient overlay "to right top" (85%/45%/0%), bottom-
+    left overlay: yellow date, title, 2-line-clamped gray excerpt
+  - `BlogArticleCard.js` — 140px yellow-2px-border thumbnail (106 mobile),
+    purple uppercase category, white 20px title, gray date | clock ~N min
+    read (clock = inline SVG stand-in for the empty icomoon glyph)
+  - `BlogPagination.js` — 42px pills: [1] yellow active, 2 3 … 26, Next »
+    (72px) — capture order + live "Next »" text
+  - `BlogHighlights.js` — "Play Smart. Skip the Grind." centered interstate
+    h3 + 4 items (60px rounded-xl colored tile, 33px icon, 24px title,
+    gray 18px copy); grid 2 cols → 4 cols @768 (live probed)
+  - `BlogCtaBanner.js` — Halloween banner image in the 786px white-hairline
+    rounded frame (capture: alt "Eldorado Halloween")
+  - `app/blog/page.js` — HeaderBar-less dark page bg rgb(14,13,18):
+    fixed blog header + featured + The Latest grid (1→2 cols @640) +
+    pagination + highlights + CTA + shared Footer (NO ChatBubble —
+    verified absent on live /blog)
+  - `globals.css` — interstate 800/900 @font-face (woff2 URLs verbatim
+    from the capture's font-face appendix, same storage bucket as all
+    capture assets) + blog tokens (blogpage/blogborder/blogyellow/
+    blogpurple/bloggray/hlgreen/hlteal/hlamber)
+  - `Footer.js` — new optional `showLang` prop (default true): the blog
+    footer has NO language selector (capture + live verified)
+- Global fix found via /blog (affects ALL pages): layout.js moved the
+  next/font `--font-lato` variable class from <body> to <html> — Tailwind
+  v4 resolves the @theme `--font-sans` value at :root, so the body-scoped
+  variable resolved EMPTY and every page silently rendered the system
+  font stack instead of Lato (found because the featured title wrapped 5
+  lines vs live 5-with-different-metrics and h4 computed
+  -apple-system...). Real Lato 400/700/900 now loads everywhere
+  (document.fonts verified). This is a rendering improvement toward the
+  references, not a regression
+- Visual comparison status (screenshots `docs/ui-ux/screenshots/session12/`):
+  - Side-by-side strips local|live at 1920 + 390 (cmp-*.png from the
+    mid-session checkpoint, blog-fixed-*.png after fixes): header,
+    featured card (title wrap, clamp, gradient), 10 cards, pagination,
+    highlights, CTA and footer all match
+  - Breakpoint behavior verified against live DOM probes: article grid
+    1→2 cols @640, highlights 2→4 cols @768, header mobile→desktop @1024,
+    inner container padding @640, card image 140px ≥640 / fluid below
+  - overflow=0 at 390/768/1024/1536/1920 (scrollWidth == viewport)
+- Technical checks: `npm run build` SUCCESS (/, /blog, /login,
   /dashboard/offers/Account, /efootball-accounts, product route,
-  /xbox-game-pass, /xbox-gift-card, /_not-found — both new routes
-  static); overflow=0 both routes at 5 widths; interactions + zero
-  console errors (scripts/verify_dashboard.js)
-- Deployment: VERIFIED — Vercel serves /dashboard/offers/Account (HTTP
-  200; HTML contains "NewFloat-0una", "Want to pause all your offers",
-  "Nothing found", "Search offers") and /login (200; "Sign in with
-  Google"/Apple/Facebook, "With existing account", "Create an account"),
-  corresponding to push 0584d04; /, /efootball-accounts, product route,
-  /xbox-game-pass and /xbox-gift-card re-verified 200 after the deploy
-- Next exact action: on request — the three newly pushed static content
-  captures (About us / Contact us / Bug bounty, decode with
-  `ui ux/extracted/fig_reassemble.py` + scripts/decode_new_captures.py
-  pattern), or more dashboard sections (orders/wallet) reusing the
-  DashboardShell/sidebar components
+  /xbox-game-pass, /xbox-gift-card, /_not-found — /blog static); zero
+  console errors; burger drawer opens/closes with Games/Codes links;
+  zero horizontal overflow at all 5 widths
+- Known deviations / documented limitations:
+  - The blog .make capture is 1920-only (native Figma) — all responsive
+    behavior below 1920 follows live eldorado.gg/blog probes/screenshots
+  - Games/Codes buttons are static (aria-haspopup, no menu content exists
+    in any reference — nothing invented, per session-11 combobox pattern)
+  - The mobile drawer content is a minimal approximation (live shows a
+    hamburger popup; only Games/Codes links are observable)
+  - interstate is loaded from the eldorado storage bucket (capture's own
+    font URLs); if the bucket ever drops the files, headings fall back
+    to Lato (documented in globals.css)
+  - Footer "+ 15 more" matches the capture; live also shows a second
+    "+ 18 more" (providers row) that the capture does not contain
+  - Blog featured/article links point to the real eldorado.gg blog URLs
+    per the capture hrefs (no blog-article pages exist in this clone)
+- Deployment: verified after the final push (see section log) — /blog
+  HTTP 200 on Vercel with "The Latest", "Play Smart", "Mark Darrah"
+- Next exact action: on request — blog article page (no capture pushed
+  yet), or the remaining static pages (About us / Contact us / Bug
+  bounty captures already pushed in session 11), or more dashboard
+  sections reusing DashboardShell/sidebar
 
 ## Section log (append one block per completed section)
+
+- 2026-11-04 (session 12) — Blog landing page `/blog`, implementing the
+  user-pushed blog .make capture. Recovery first: fresh sandbox, cloned
+  the repo, verified local == remote (9f8eba4) with a clean tree; the
+  progress doc pointed at the pushed-but-unimplemented blog capture.
+  Decode discovery: the blog .make is a NATIVE Figma file (fig-make
+  container) — chunk 0 = raw-deflate protobuf schema, chunk 1 = zstd
+  scene graph containing the full html.to.design App.tsx snapshots;
+  wrote scripts/decode_blog_capture.py (pip zstandard) and committed the
+  decoded snapshots + live-blog-{390,768,1024,1536,1920}.png references
+  (7593a8a). Checked the previously-unreachable chat link (section 13 of
+  the instructions) — it NOW loads and describes only session-1-era work
+  (tokens/header/hero/footer) that is already implemented and pushed;
+  nothing to recover. Implementation in two checkpoint pushes (3d2ab32)
+  then live-comparison fixes (219c24b): mobile header row metrics,
+  featured card mobile typography (title 24/31.2 @700, date 16px,
+  excerpt 18/25.2), 2-line excerpt clamp ON THE P (live puts the clamp
+  on the p; wrapper divs don't clamp under Chrome 157's -webkit-box
+  aliasing — computed display shows flow-root but the clamp applies),
+  mobile section padding 147px so the featured card clears the 2-row
+  fixed header exactly like live (52px gap), Footer showLang prop.
+  GLOBAL FIX: the Lato next/font variable was scoped to <body> while
+  Tailwind v4 resolves @theme --font-sans at :root — every page has been
+  silently rendering the system font stack; moving the variable to
+  <html> makes real Lato load on all pages. A concurrent session pushed
+  verification artifacts (d5b98b7: session12 screenshots + probe/verify
+  scripts) mid-session — first push rejected, fixed with fetch + rebase
+  (no force), pushed clean as 219c24b. Note: GitHub accepted pushes only
+  on the 2nd attempt twice today ("remote rejected (failure)", transient
+  server error) — both retried and verified via ls-remote/log origin.
+  Ops notes for future sessions: (1) the local `scripts/` helpers from
+  sessions ≤11 were never committed — this session committed its decoder
+  + compare scripts; (2) pkill pattern for the preview server is
+  `next-server`, not "next start"; (3) this headless Chrome caches
+  aggressively across `agent-browser open` calls — use a unique query
+  param per measurement or restart the browser before trusting computed
+  styles. Verification: build green, overflow=0 @5 widths, zero console
+  errors, drawer interaction green, 32/32 capture assets HTTP 200,
+  side-by-side strips match at 1920/390.
 
 - 2026-11-04 (session 11) — Logged-in dashboard `/dashboard/offers/Account`
   + `/login`, implementing the user-pushed dashboard/login captures
@@ -268,18 +306,21 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-04, session 11
-- Hash of last pushed commit: `0584d04` (session-11 chain: dashboard +
-  login implementation, rebased over the user's capture commits
-  1d4ab0c/590903b; push verified by empty `git log origin/main..HEAD`)
+- Last successful push timestamp: 2026-11-04, session 12
+- Hash of last pushed commit: session-12 chain `219c24b` (fix(ui): /blog
+  matches live comparison) on top of the concurrent-session verification
+  artifacts d5b98b7 and this session's decode 7593a8a + implementation
+  3d2ab32 checkpoints; push verified by empty `git log origin/main..HEAD`
 - Uncommitted changes: none expected after the doc commit
 - Unpushed commits: none
-- Push auth: the session-11 PAT is embedded in the origin URL in this
+- Push auth: the session-12 PAT is embedded in the origin URL in this
   sandbox only (transient; never committed to the repo). Future sessions
   without a token need a fine-grained PAT (Contents: read/write) or pushes
   fail with "could not read Username for 'https://github.com'". The user
   pushes captures concurrently — expect push rejections: fetch + rebase
-  (never force) and retry.
+  (never force) and retry. GitHub also threw transient "remote rejected
+  (failure)" twice on 2026-11-04 — a plain retry after a few seconds
+  succeeded both times; check `git log origin/main..HEAD` after each push
 - Recovery instructions:
   1. `git clone https://github.com/mehrshad0289/charjino-front-eldorado.git`
   2. Read this file; verify state per the protocol checklist (git status,
