@@ -1,0 +1,1179 @@
+import React from 'react';
+
+
+export default function App() {
+  return ( <div className="h-full text-black text-[16px] leading-[24px]" style={{"fontFamily":"Lato, sans-serif","textDecoration":"none","width":"1920px","transform":"scale(1)","margin":"auto"}}>
+  <div className="h-full bg-[rgb(246,_246,_246)] text-[rgb(20,_19,_26)]">
+    <div className="inline">
+      <div className="absolute top-0"></div>
+      <div className="isolate z-[0]">
+        <div className="inline"></div>
+        <div className="flex flex-col min-h-[1200px]">
+          <header className="isolate relative z-[2]">
+            <div className="inline">
+              <div className="pt-[100px] pr-0 pb-0 pl-0"></div>
+              <div className="fixed left-0 top-0 right-0 bg-[rgb(14,_14,_17)] z-[9997]">
+                <nav>
+                  <div className="grid min-h-[60px]" style={{"gridTemplateColumns":"minmax(auto, 362px) 1fr minmax(max-content, 362px)","gridTemplateAreas":"\"navigation search activities\""}}>
+                    <div className="items-center flex" style={{"gridArea":"1 / 1 / 2 / 2"}}>
+                      <div className="items-center flex">
+                        <a href="https://www.eldorado.gg/" aria-label="Eldorado logo" className="items-center flex text-[14px] leading-[21px]">
+                          <div className="flex pt-0 pr-[15px] pb-0 pl-6">
+                            <div className="flex">
+                              <div className="overflow-hidden align-middle w-[164px] h-10">
+                                <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F917ad6d767747e6c4c573b1c6c967f332ea6f50f.svg?generation=1793802851141869&amp;alt=media" className="block size-full" />
+                              </div>
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                    <div className="items-center flex justify-end h-[60px] mr-[24px] gap-[10px]" style={{"gridArea":"1 / 3 / 2 / 4"}}>
+                      <div>
+                        <div className="items-center flex justify-end"></div>
+                      </div>
+                      <div className="flex relative">
+                        <div>
+                          <div className="items-center flex font-black justify-center relative w-[42px] h-[42px] min-h-4 min-w-4 rounded-[0.625rem]">
+                            <div className="text-[rgb(168,_170,_179)]">
+                              <div className="overflow-hidden w-6 h-6">
+                                <span className="block font-normal w-6 h-6 text-[24px]" style={{"fontFamily":"icomoon"}}>
+                                  <span className="origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="items-center flex font-black justify-center relative w-[42px] h-[42px] min-h-4 min-w-4 rounded-[0.625rem]">
+                          <div className="text-[rgb(168,_170,_179)]">
+                            <div className="overflow-hidden w-6 h-6">
+                              <span className="block font-normal w-6 h-6 text-[24px]" style={{"fontFamily":"icomoon"}}>
+                                <span className="origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="relative">
+                        <div className="inline">
+                          <div className="items-center flex font-black justify-center relative w-[42px] h-[42px] min-h-4 min-w-4 rounded-[0.625rem]">
+                            <div className="text-[rgb(168,_170,_179)]">
+                              <div className="overflow-hidden w-6 h-6">
+                                <span className="block font-normal w-6 h-6 text-[24px]" style={{"fontFamily":"icomoon"}}>
+                                  <span className="origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="items-center flex h-full relative max-h-[60px]">
+                        <div className="items-center flex relative max-w-[344px] min-h-[60px] pt-[10px] pr-0 pb-[10px] pl-[10px] z-[1000]">
+                          <div className="items-center flex">
+                            <div className="items-center flex justify-center">
+                              <div>
+                                <div className="flex font-black overflow-hidden relative">
+                                  <div className="box-content overflow-hidden w-11 h-11 border-black/0 border-[2px] rounded-[50%]">
+                                    <div className="inline overflow-hidden h-11 rounded-sm">
+                                      <img alt="Profile avatar" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F84921a2fde83d534b819877fa09cd79af209ba7a.svg?generation=1793785993008975&amp;alt=media" className="block object-cover overflow-clip align-middle w-11 h-11 aspect-[auto_44_/_44]" />
+                                    </div>
+                                    <span className="items-center flex justify-center absolute w-4 h-4 top-0 right-0 bg-[rgb(255,_141,_0)] text-[12px] leading-[18px] pt-[2px] pr-[5px] pb-[2px] pl-[5px] rounded-[0.4375rem]">
+                                      <span className="block">!</span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="w-full" style={{"gridArea":"1 / 2 / 2 / 3"}}>
+                      <div className="items-center flex h-full justify-center">
+                        <div className="flex w-full max-w-[1178px]">
+                          <button className="items-center flex overflow-hidden text-center w-full h-[42px] bg-[rgb(40,_39,_46)] border-[rgb(50,_49,_65)] border-[2px] gap-[8px] pt-0 pr-3 pb-0 pl-3 rounded-lg m-2" style={{"appearance":"button"}}>
+                            <div className="text-center text-white">
+                              <div className="overflow-hidden text-center w-6 h-6">
+                                <span className="block text-center w-6 h-6 text-[24px]" style={{"fontFamily":"icomoon"}}>
+                                  <span className="text-center origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(255, 255, 255)"}}></span>
+                                </span>
+                              </div>
+                            </div>
+                            <span className="block truncate text-center text-[rgb(198,_198,_204)]">Search for games, keywords, sellers...</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="grid h-10 bg-[rgb(30,_31,_40)]" style={{"gridTemplateColumns":"1fr auto"}}>
+                      <div style={{"gridArea":"1 / 1 / 2 / 2"}}>
+                        <div className="inline">
+                          <div className="items-center flex h-full ml-[12px]">
+                            <button className="items-center flex font-bold h-full justify-center relative text-center whitespace-nowrap bg-black/0 text-white gap-[4px] tracking-[0.48px] leading-[25px] pt-0 pr-3 pb-[2px] pl-3 rounded-sm" style={{"appearance":"button"}}>
+                              <span className="block text-center h-6">Currency</span>
+                              <div className="text-center mt-[4px] text-[rgb(168,_170,_179)] rotate-[90deg]">
+                                <div className="overflow-hidden text-center w-3 h-3">
+                                  <span className="block font-normal text-center w-3 h-3 text-[12px] leading-[12px]" style={{"fontFamily":"icomoon"}}>
+                                    <span className="text-center origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                                  </span>
+                                </div>
+                              </div>
+                            </button>
+                            <button className="items-center flex font-bold h-full justify-center relative text-center whitespace-nowrap bg-black/0 text-white gap-[4px] tracking-[0.48px] leading-[25px] pt-0 pr-3 pb-[2px] pl-3 rounded-sm" style={{"appearance":"button"}}>
+                              <span className="block text-center h-6">Accounts</span>
+                              <div className="text-center mt-[4px] text-[rgb(168,_170,_179)] rotate-[90deg]">
+                                <div className="overflow-hidden text-center w-3 h-3">
+                                  <span className="block font-normal text-center w-3 h-3 text-[12px] leading-[12px]" style={{"fontFamily":"icomoon"}}>
+                                    <span className="text-center origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                                  </span>
+                                </div>
+                              </div>
+                            </button>
+                            <button className="items-center flex font-bold h-full justify-center relative text-center whitespace-nowrap bg-black/0 text-white gap-[4px] tracking-[0.48px] leading-[25px] pt-0 pr-3 pb-[2px] pl-3 rounded-sm" style={{"appearance":"button"}}>
+                              <span className="block text-center h-6">Top ups</span>
+                              <div className="text-center mt-[4px] text-[rgb(168,_170,_179)] rotate-[90deg]">
+                                <div className="overflow-hidden text-center w-3 h-3">
+                                  <span className="block font-normal text-center w-3 h-3 text-[12px] leading-[12px]" style={{"fontFamily":"icomoon"}}>
+                                    <span className="text-center origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                                  </span>
+                                </div>
+                              </div>
+                            </button>
+                            <button className="items-center flex font-bold h-full justify-center relative text-center whitespace-nowrap bg-black/0 text-white gap-[4px] tracking-[0.48px] leading-[25px] pt-0 pr-3 pb-[2px] pl-3 rounded-sm" style={{"appearance":"button"}}>
+                              <span className="block text-center h-6">Items</span>
+                              <div className="text-center mt-[4px] text-[rgb(168,_170,_179)] rotate-[90deg]">
+                                <div className="overflow-hidden text-center w-3 h-3">
+                                  <span className="block font-normal text-center w-3 h-3 text-[12px] leading-[12px]" style={{"fontFamily":"icomoon"}}>
+                                    <span className="text-center origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                                  </span>
+                                </div>
+                              </div>
+                            </button>
+                            <button className="items-center flex font-bold h-full justify-center relative text-center whitespace-nowrap bg-black/0 text-white gap-[4px] tracking-[0.48px] leading-[25px] pt-0 pr-3 pb-[2px] pl-3 rounded-sm" style={{"appearance":"button"}}>
+                              <span className="block text-center h-6">Boosting</span>
+                              <div className="text-center mt-[4px] text-[rgb(168,_170,_179)] rotate-[90deg]">
+                                <div className="overflow-hidden text-center w-3 h-3">
+                                  <span className="block font-normal text-center w-3 h-3 text-[12px] leading-[12px]" style={{"fontFamily":"icomoon"}}>
+                                    <span className="text-center origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                                  </span>
+                                </div>
+                              </div>
+                            </button>
+                            <button className="items-center flex font-bold h-full justify-center relative text-center whitespace-nowrap bg-black/0 text-white gap-[4px] tracking-[0.48px] leading-[25px] pt-0 pr-3 pb-[2px] pl-3 rounded-sm" style={{"appearance":"button"}}>
+                              <span className="block text-center h-6">Gift cards</span>
+                              <div className="text-center mt-[4px] text-[rgb(168,_170,_179)] rotate-[90deg]">
+                                <div className="overflow-hidden text-center w-3 h-3">
+                                  <span className="block font-normal text-center w-3 h-3 text-[12px] leading-[12px]" style={{"fontFamily":"icomoon"}}>
+                                    <span className="text-center origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                                  </span>
+                                </div>
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="items-center flex mr-[24px] gap-[8px]" style={{"gridArea":"1 / 2 / 2 / 3"}}>
+                        <div role="button" className="items-center flex grow h-full text-center basis-[0%] gap-[8px] pt-0 pr-[14px] pb-0 pl-[14px] rounded-sm">
+                          <div className="text-center text-[rgb(168,_170,_179)]">
+                            <div className="overflow-hidden text-center w-4 h-4">
+                              <span className="block text-center w-4 h-4 leading-[16px]" style={{"fontFamily":"icomoon"}}>
+                                <span className="text-center origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                              </span>
+                            </div>
+                          </div>
+                          <p className="text-center whitespace-nowrap text-[rgb(168,_170,_179)] text-[14px] leading-[21px]">24/7 live support</p>
+                        </div>
+                        <div role="button" className="items-center flex grow h-full text-center text-[rgb(168,_170,_179)] basis-[0%] pt-0 pr-[6px] pb-0 pl-[6px] rounded-sm">
+                          <div className="pointer-events-none text-center">
+                            <div className="items-center flex min-w-max pointer-events-none text-center gap-[8px] pt-1 pr-2 pb-1 pl-2">
+                              <div className="pointer-events-none text-center">
+                                <div className="overflow-hidden pointer-events-none text-center w-4 h-4">
+                                  <span className="block pointer-events-none text-center w-4 h-4 leading-[16px]" style={{"fontFamily":"icomoon"}}>
+                                    <span className="pointer-events-none text-center origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(168, 170, 179)"}}></span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="pointer-events-none text-center">
+                                <div className="flex pointer-events-none text-center text-[14px] gap-[4px] leading-[19.6px]">
+                                  <span className="block pointer-events-none text-center">English</span>
+                                  <span className="block pointer-events-none text-center">|</span>
+                                  <span className="block pointer-events-none text-center">EUR - </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="items-center flex text-white gap-[4px]">
+                          <div className="bg-[rgb(50,_49,_65)] p-1 rounded-sm">
+                            <div className="overflow-hidden w-4 h-4">
+                              <span className="block w-4 h-4 leading-[16px]" style={{"fontFamily":"icomoon"}}>
+                                <span className="origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(255, 255, 255)"}}></span>
+                              </span>
+                            </div>
+                          </div>
+                          <div className="p-1 rounded-sm">
+                            <div className="overflow-hidden w-4 h-4">
+                              <span className="block w-4 h-4 leading-[16px]" style={{"fontFamily":"icomoon"}}>
+                                <span className="origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(255, 255, 255)"}}></span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+              <div>
+                <div>
+                  <div className="inline">
+                    <div className="flex relative w-full"></div>
+                  </div>
+                  <div className="inline"></div>
+                  <div className="inline"></div>
+                </div>
+              </div>
+            </div>
+          </header>
+          <main className="grow isolate relative basis-[0%] min-h-[1200px] z-[1]">
+            <div className="inline"></div>
+            <div className="inline">
+              <div className="ml-auto mr-auto max-w-full relative w-fit pt-0 pr-6 pb-0 pl-6">
+                <div className="flex justify-center mt-[40px] mb-[40px] max-w-[682px]">
+                  <div>
+                    <div>
+                      <div>
+                        <h4 className="font-bold mb-[25px] text-[36px] leading-[40px]">
+                          <b className="font-black">Eldorado.gg Current Terms of Service</b>
+                        </h4>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">Effective until November 30th, 2026</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">Last modified: April 1st, 2026</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1. Introduction</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.1. Eldorado (as defined in Section 1.2 below) is a marketplace that allows users to offer, sell and buy products through the website www.eldorado.gg (Site). The registrant of the domain is Eldorado Market. As a marketplace, Eldorado does not own the items listed on this site and acts as a commercial agent of Sellers (as defined in Section 2.4 below). By agreeing and accepting these Terms of Service Sellers authorize Eldorado on behalf of Sellers to conclude contracts for sale with Buyers. While Eldorado may help to facilitate the transactions and/or handling of Buyers complaints on behalf of Sellers, Eldorado has no control over and does not guarantee: the existence, quality, safety or legality of items advertised; the truth or accuracy of users content or listings. You agree that the Site is a venue and as such Eldorado is not responsible or liable for any content, for example, data, text, information, usernames, graphics, images, photographs, profiles, audio, video, items, and links posted by you, other users, or outside parties on the Site. You use the Site at your own risk.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.2. These Terms of Service (Agreement or Terms), the Privacy Policy, and all policies and guidelines posted on the Site set out the terms and conditions on which Eldorado offers you access to and use of the Site as well as services, applications and tool available therein (collectively Services). This Agreement is entered into by and between you as the User and the following entities: GWD Processing FZCO, a company incorporated and existing under the laws of the United Arab Emirates, with license No. 52076, and its registered address at IFZA Business Park, DDP, PO Box 342001, Dubai, United Arab Emirates, Eldorado Sales LLC, a company incorporated under the laws of the State of Delaware, United States, with its registered office at 1209 Orange Street, Wilmington, New Castle County, Delaware 19801 and Halfway house O, a company incorporated and existing under the laws of the Republic of Estonia, with registration code 17278567, and its registered address at Harju County, Tallinn, Kesklinna District, Tartu Road 67/1-13b, 10115, Estonia. Together, GWD Processing FZCO, Eldorado Sales LLC and Halfway House O are collectively referred to in this Agreement as Eldorado, unless otherwise specified. For any inquiries, please contact: support@eldorado.gg. All policies and the Eldorado Privacy Policy are incorporated into this Agreement. You agree to comply with all of the above when accessing and using our Services.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.3. Please be advised that this Agreement contains provisions that govern how claims you and/or Eldorado may have against each other are resolved (see Disclaimer of Warranties; Limitation of Liability and Legal Disputes provisions below).</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.4. Acceptance of the Agreement. By accessing or using the Site, you hereby agree to accept the terms and conditions set forth in this Agreement as a User. You shall be bound by the terms and conditions of this Agreement with respect to your access or use of this Site and any further upgrade, modification, addition or change to this Site. If you do not accept all of the terms and conditions of this Agreement, please do not use this Site. You may not use the Site and may not accept the terms of this Agreement if (a) you are not of legal age and/or have no necessary consents and approvals (including consents of parents/guardians  if applicable) to form a binding contract, or (b) you are a person barred from using the Site under applicable laws including the country in which you are a resident or from which you use the Site. Eldorado may verify the age and/or nationality of the Registered User As a part of the verification process, Eldorado may require the Registered User to provide additional identification information, including, without limitation, a copy of a valid driver's license (orother form of government issued identification). This Agreement applies to all users of the Services, including without limitation users who are vendors, customers, merchants, or contributors of content, information and other materials or services. Before you continue, you should print off or save a local copy of this Agreement for your records.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.5. Amendments. Eldorado may amend this Agreement and/or Site policies at any time, with at least 14 calendar days prior notice to you, by posting the amended and restated Agreement or policy on the Site and your Account. The amended and restated Agreement and/or policy shall become effective on the set day of their entry into force and it shall be deemed that the User agrees with such amendments if the User continues to use of the Site. This Agreement and Site policies may not otherwise be modified, except in writing by an authorized officer of Eldorado.</p>
+                        <h6>2. Definitions</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.1. Buyer  User (account) who accesses and uses the Site for the purpose to buy the goods offered by Sellers on the Site.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.2. Eldorado Content  information, text, images, video clips, directories, files, databases or offers available on or through the Site.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.3. Inactive Account - an account (Buyer or Seller) where no login activity has occurred for a continuous period of twelve (12) months.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.4. Registered User  each User who has filled out a registration form on the Site by giving User information (such as name, address, telephone number, fax number, email address, etc.). Eldorado will establish an account ("Account") for each Registered User on the Site and each Registered User will be assigned a user alias ("User Name") and password ("Password") for log-in access to its/his/her Account on the Site.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.5. Seller  User (account) who accesses and uses the Site for the purpose to sell the goods to Buyers through the Site.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.6. Third-Party Content  content displayed on the Site that is provided or posted by third parties.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.7. Third Party Rights  third party copyrights, trademarks, trade secrets, patents, and other personal or proprietary rights affecting or relating to material or information displayed on the Site, including but not limited to rights of personality and rights of privacy, or affecting or relating to products that are offered or displayed on the Site.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.8. Transaction Risks  The risks assumed by Users when using the Site or conducting transactions via the Site. Transaction Risks include risks of liability or harm of any kind in connection with using the Site. Such risks shall include, but are not limited to: (i) misrepresentation of products and services, fraudulent schemes, unsatisfactory quality, failure to meet specifications, defective or dangerous products, unlawful products, delay or default in delivery or payment, cost miscalculations, breach of warranty, and breach of contract; (ii) risks that the manufacture, importation, distribution, offer, display, purchase, sale and/or use of products or services offered or displayed on the Site may violate or may be asserted to violate Third Party Rights, and the risk that Users may incur costs of defense or other costs in connection with third parties' assertion of Third Party Rights, or in connection with any claims by any party that they are entitled to defense or indemnification in relation to assertions of rights, demands, or claims by Third Party Rights claimants; (iii) risks that consumers, other purchasers, end-users of products, or others claiming to have suffered injuries or harms relating to a product originally obtained by Users of the Site as a result of purchase and sale transactions in connection with using the Site may suffer harms and/or assert claims arising from their use of such products.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.9. User  any person who accesses the Site for whatever purpose, regardless of whether said User has registered with the Site as a Registered User. A User includes any person usingthis Site and any legal entity which may be represented by such person under actual or apparent authority.</p>
+                        <h6>3. Use of the Site</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.1. General. Users may use this Site solely for their own personal or internal purposes. Each User agrees that it shall not copy, reproduce or download any Eldorado Content for the purpose of reselling or redistributing Eldorados Content, mass mailing (via emails, wireless text messages, physical mail, or otherwise), operating a business that competes with Eldorado, or otherwise commercially exploiting Eldorado Content. Systematic retrieval of Eldorado Content from this Site to create or compile, directly or indirectly, a collection, compilation, database or directory (whether through robots, spiders, automatic devices, or manual processes) without written permission from Eldorado is prohibited. In addition, use of Eldorado Content for any purpose not expressly permitted in this Agreement is prohibited.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.2. Messages or information sent by a User through communication systems provided by Eldorado, as well as emails, faxes, letters to addressees, or instant messages sent to addresses acquired from information obtained from the Site, shall not contain any of the materials described in the provisions of Section 5.3.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.3. No User shall undertake any scheme to undermine the integrity of the computer systems or networks used by Eldorado or any other User, and no User shall attempt to gain unauthorized access to such computer systems or networks.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.4. Privacy Policy. We urge that you read Sites Privacy Policy published here, which governs the protection and use of each User's information in Eldorado's possession. Each User hereby accepts the Privacy Policy and any updates and amendments thereto. Each User acknowledges that Eldorado may change the Privacy Policy from time to time, with or without notice to you, and shall make available the updated version of the Privacy Policy on the Site at all times. Your continued use of the Site shall be deemed to be your acceptance of the Privacy Policy which is then displayed on the Site at the time of such use.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.5. Third Party Rights. As a condition of your access to and use of the Site, you agree that you will not use our Services to infringe the Third Party Rights of others in any way. Eldorado may in appropriate circumstances terminate the accounts of Users who are repeat infringers of the Third Party Rights of others. In addition, Eldorado reserves the right to terminate the account of any User if Eldorado believes that the Users conduct is harmful to the interests of the Site, Eldorado, its employees, directors, affiliates, or other Users, or for any other reason in Eldorados sole and absolute discretion, with or without cause.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.6. By using the Site, You also covenant, represent, and warrant that:</p>
+                        <ul className="ml-[30px] mb-[20px]">
+                          <li><p className="text-[14px] leading-[21px]">You have all necessary and relevant experience and knowledge to deal with digital items, have a full understanding of their framework, are aware of all the merits, risks and any restrictions associated with digital assets (including their purchase and use), as well as the necessary and relevant expertise and knowledge to purchase, use and manage them, and are solely responsible for any evaluations based on such knowledge;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">If You are a corporation, governmental organization or other legal entity, You have the right, power and authority to act on behalf of such corporation, governmental organization or other legal entity and bind them to these Terms;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">You will not use the Website for any illegal activity and You are not engaged in any illegal activity;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">You solely control Your credentials (email address, password or other information provided for the purpose of the Website use) and do not act on behalf of any third party.</p></li>
+                        </ul>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.7. No person, employee, agent or entity affiliated in way to any game publisher or developer, including, without limitation, Blizzard Entertainment, Battle.net, Sony Online Entertainment Inc., Sony Computer Entertainment America Inc., Roblox Corporation, NCSoft Corporation, Turbine, Ubisoft, Codemasters, Electronic Arts, CCP Games, Atari, Webzen, Acclaim, Mythic Entertainment, Inc., Lucasfilm Entertainment Company Ltd., and Square Enix CO., LTD., is authorized to use or access this site or to utilize the services provided herein.</p>
+                        <h6>4. Registered Users</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.1. Privacy. By becoming a Registered User, you consent to be governed by our Privacy Policy. You also consent to the inclusion of your personal data in our database, and authorize Eldorado to share such information with other Users in accordance with the purposes set forth in this Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.2. Notwithstanding Section 4.1 above, Eldorado may refuse registration and deny the issuance of an Account and associated User Name and Password to any User for whatever reason or for no reason at all.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.3. By creating an Account, You also consent to receive electronic communications from Eldorado (e.g., via email). These communications may include notices about your Account (e.g., password changes and other transactional information) and are part of your relationship with us. You agree that any notices, agreements, disclosures or other communications that we send to you electronically will satisfy any legal communication requirements, including, but not limited to, that such communications be in writing. You should maintain copies of electronic communications from us by printing a paper copy or saving an electronic copy. We may also send you promotional communications via email, including, but not limited to, newsletters, special offers, surveys and other news and information we think will be of interest to you. You may opt out of receiving these promotional emails at any time by following the respective unsubscribe instructions.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.4. Eldorado may suspend or terminate a Registered User's Account at any time if:</p>
+                        <ul className="ml-[30px] mb-[20px]">
+                          <li><p className="text-[14px] leading-[21px]">In Eldorado's sole and absolute determination, there is any breach of the provisions of this Agreement by the Registered User; or</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Eldorado has reasonable grounds to suspect that information provided by a Registered User is untrue, inaccurate or is not current or complete; or</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Eldorado believes that User conduct is harmful to the interests of the Site, Eldorado, its employees, directors, affiliates, or other Users; or</p></li>
+                          <li><p className="text-[14px] leading-[21px]">For any other reason in Eldorados sole and absolute discretion.</p></li>
+                        </ul>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.5. Prohibition on transferability of Account, User Name, and Password. A Registered User may not sell, attempt to sell, offer to sell, give, assign or otherwise transfer an Account, User Name or Password to a third party without the prior written consent of Eldorado. Eldorado may suspend or terminate the Account of a Registered User or the transferee of a Registered User in the event of a sale, offer to sell, gift, assignment or transfer in violation of this Section.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.6. Without limiting any other remedies, we may suspend, terminate, delete, limit, or modify Accounts or access to the Services or any portions thereof, hold, delay, or remove hosted content, take legal and technical steps to prevent access to the Services, or take other action consistent with these Terms, with or without notice to you, if we suspect or determine, in our sole discretion, that you have failed to comply with any of these Terms or have otherwise engaged in illegal activity or improper use of our Services. This may result in the loss or termination of your Account, information, persona, rankings, benefits, virtual items, in-gamepurchases, subscription, or other losses. We are not and will not be held responsible for any such losses, and are under no obligation to compensate you therefor.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.7. Inactive Accounts. Eldorado reserves the right to charge an inactivity fee of USD 5 per month for any Inactive Account. The inactivity period shall commence from the date of the Users most recent login and shall reset upon each subsequent login. The inactivity fee may be deducted from any available account balance. Eldorado shall not charge inactivity fees exceeding the available account balance. We reserve the right to stop offering and/or supporting our Services or any portion thereof, including but not limited to any particular service, product, or game, at any time for any reason. If this does occur, your license to access or use the applicable Services will automatically terminate. We are not required to notify you in advance of any of these actions, or to provide you with any refunds, compensation, or any material or non-material benefit for discontinued or terminated Services, or any losses resulting therefrom.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.8. You may choose to close your Account for any reason and at any time. If you choose to exercise this right, please inform Eldorado that you wish to close your Account by opening a support ticket requesting that your Account be closed. You understand that if you close your Account, you may no longer have access to information previously associated with your Account.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.9. Single Account. Each User may maintain only one account on the Site, unless expressly authorized in writing by Eldorado. The creation, control, or use of multiple Accounts by the same individual or entity without prior written consent is strictly prohibited. Eldorado reserves the right to suspend or permanently terminate any duplicate Accounts and may withhold funds pending investigation.</p>
+                        <h6>5. Posting on the Site</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.1. You must be a Registered User in order to post information on the Site using the self help submit and edit tools provided by the Site.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2. Each User hereby represents, warrants and agrees:</p>
+                        <ul className="ml-[30px] mb-[20px]">
+                          <li><p className="text-[14px] leading-[21px]">That any information provided by the User to be displayed on the Site is true, accurate, current and complete; and</p></li>
+                          <li><p className="text-[14px] leading-[21px]">That it will maintain and promptly amend all information to keep it true, accurate, current and complete.</p></li>
+                        </ul>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.3. Prohibited behavior. Each User hereby represents, warrants and agrees that information submitted to Eldorado for display on the Site shall not:</p>
+                        <ul className="ml-[30px] mb-[20px]">
+                          <li><p className="text-[14px] leading-[21px]">Contain fraudulent information or make fraudulent offers of items or involve the sale or attempted sale of counterfeit or stolen items or items whose sales and/or marketing is prohibited by applicable law, or otherwise promote other illegal activities;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Be part of a scheme to defraud other Users of the Site or for any other unlawful purpose;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Relate to the sale of products or services that infringe or otherwise abet or encourage the infringement or violation of any Third Party Rights;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Violate any applicable law, statute, ordinance or regulation (including without limitation those governing export control, consumer protection, unfair competition, antidiscrimination or false advertising);</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Be defamatory, libelous, unlawfully threatening or unlawfully harassing;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Be obscene or contain or infer any pornography or sexrelated merchandising or any other content that otherwise promotes sexually explicit materials or is otherwise harmful to minors;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Promote discrimination based on race, sex, religion, nationality, disability, sexual orientation or age;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Contain any material that constitutes unauthorized advertising or harassment (including but not limited to spamming);</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Solicit business from any Users in connection with a commercial activity that competes with Eldorado/the Site;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Contain any computer viruses, Trojan horses, worms or other destructive devices and codes that have the effect of damaging, interfering with, intercepting or expropriating any software or hardware system, data, or personal information;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Involve any countries, entities, individuals or items prohibited by sanctions, embargoes, regulations or orders administered by the United Nations, the European Union, the U.S. Department of Treasurys Office of Foreign Assets Control (OFAC) or other government agencies of the U.S.;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Contain items that have been identified by the U.S. Consumer Products Safety Commission (CPSC) as hazardous to consumers and therefore subject to a recall;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Contain any material related to game cheats or game hacks, including selling accounts created with cheats, boosting with cheats, selling game cheats themselves, or any similar activities;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Be defamatory, trade libelous, unlawfully threatening, unlawfully harassing, impersonate or intimidate any person, or falsely state or otherwise misrepresent your affiliation with any person, through for example, the use of similar email address, nicknames, or creation of false account(s) or any other method or device</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Link directly or indirectly to or include descriptions of goods or services that are prohibited under this Agreement; or</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Otherwise create any liability for Eldorado, its employees, directors or its affiliates.</p></li>
+                        </ul>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.4. Accounts listing restrictions. Sellers must guarantee that all listed accounts were created and used for personal purposes only. Listings involving accounts created and used for commercial means are strictly prohibited; Reselling is only permitted under strict conditions. Resellers must not have used the game themselves and must ensure that any accounts they offer were also created and used solely for private, non- commercial purposes; All listed accounts must remain free of any modification, enhancement, or alteration - such as the use of third-party tools, bots, or hacks - not expressly authorized by the respective game developer.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.5. Third Party Rights. Each User hereby represents, warrants and agrees that it has obtained all necessary third party copyright, trademark, trade secret or patent licenses and permissions, or such other licenses or permissions as may be required in connection with any other personal or proprietary rights of any third party (including but not limited to rights of personality and rights of privacy), for any material or information it posts on the Site or provides to Eldorado/the Site or authorizes Eldorado to display. Each User hereby represents, warrants and agrees that it shall be solely responsible for ensuring that any material or information it posts on the Site or provides to Eldorado or authorizes Eldorado to display does not, and that the products represented thereby do not, violate any Third Party Rights, or is posted with the permission of the owner(s) of such rights. Each User hereby represents, warrants and agrees that it has the right to manufacture, offer, sell, import and distribute the products it offers and displays on the Site, and that such manufacture, offer, sale, importation and/or distribution of those products violates no Third Party Rights.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.6. Grant of license. Each User hereby grants an irrevocable, perpetual, worldwide and royaltyfree, sub licensable (through multiple tiers), assignable license to Eldorado and its affiliates to display and use all information provided by such User in accordance with thepurposes set forth in this Agreement and to exercise the rights the User has in such material or information, including, but not limited to, copyright, publicity, and database rights, in any media now known or not currently known.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.7. Removal of Material. Eldorado reserves the right in its sole and absolute discretion to remove any material displayed on the Site, including material which it believes in its sole and absolute discretion is unlawful, could subject Eldorado to liability, violates this Agreement, or is otherwise deemed inappropriate.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.8. Eldorado reserves the right to cooperate fully with governmental authorities, private investigators, and/or injured third parties in the investigation of any suspected criminal or civil wrongdoing. Furthermore, Eldorado may disclose the identity and contact information of any User if requested to do so by a government or law enforcement body, an injured third party, a subpoena, or any other legal action, and Eldorado shall not be liable for damages or any other consequences thereof. User further agrees that it will not bring any action or claim against Eldorado for such disclosure. In connection with any of the foregoing, Eldorado may suspend or terminate the Account of any User as Eldorado deems appropriate in its sole and absolute discretion. User agrees that Eldorado shall have no liability to User, including liability for consequential or any other damages, in the event Eldorado takes any of the actions mentioned in this Section, and User agrees to bear the risk that Eldorado may take such actions.</p>
+                        <h6>6. Transactions between Buyers and Sellers</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.1. General. Eldorado provides an electronic webbased platform for exchanging information between Buyers and Sellers of products and services. For each transaction, Eldorado requires the parties to complete the transaction (deliver the goods to the Buyer) for Seller to get paid.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.2. Users are solely responsible for all of the terms and conditions of the transactions conducted on, through, or as a result of use of the Site, including, without limitation, terms regarding returns, warranties, shipping, insurance, fees, taxes, title, licenses, fines, permits, handling, transportation and storage.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.3. Listing Description. All listings on the Site must be for sale. By listing an item, the Seller warrants that all aspects of the item comply with the Sites policies and authorizes Eldorado to conclude a sales contract with the Buyer. The Seller also warrants that he has the full rights to sell the item, and that such selling will not violate any legal or contractual obligations to which the Seller may be subject. The Seller must accurately describe the item and all terms of sale. The Sellers listings may only include text descriptions, graphics, pictures and other content relevant to the sale of that item. All items must be listed in an appropriate category with appropriate tags. Each listing must accurately and completely describe the item/items for sale in that listing. The Seller shall immediately notify Eldorado by deleting the listed item from the Site if the listed item is no longer available for sale.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.4. Binding Sale. Sellers are responsible for accurately listing their items, and Buyers are responsible for reading the description of items before making a purchase. All sales are binding. Eldorado notifies the Seller without delay through the Sellers Account about the concluded sale with the Buyer. The Seller is obligated to ship the order, transfer the item, or otherwise complete the transaction with the Buyer in a prompt manner, unless there is an exceptional circumstance, such as: (a) the Buyer fails to meet the terms of the Seller's listing (such as payment method), or (b) the Seller cannot authenticate the Buyer's identity. The Buyer is obligated to deliver appropriate payment for items purchased, unless there is an exceptional circumstance. In exceptional circumstances where the Seller can not complete the order and Eldorado has accepted a respective payment from the Buyer on behalf of the Seller, the Buyer may purchase another item offered on the Site. If the Buyer does not purchase another item within 24 hours after Eldorado has received a payment from the Buyer or theBuyer purchases another item for less than the transferred amount, Eldorado returns funds or part of it to the Buyer. Eldorado keeps the right not to return the funds when the refunded amount is less than USD 1.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]"><b className="font-bold">6.5. In assistance to the Seller concluding a transaction on the Site, Eldorado acts as a disclosed commercial agent of the Seller and is in each case hereby authorized by the respective Seller to accept a respective payment from the Buyer on behalf of the Seller for the goods sold by such Seller to the Buyer. </b>For the avoidance of doubt, such funds received on behalf of the Seller by Eldorado are and at all times remain the property of the Seller. Eldorado transfers the funds to the Seller for the goods sold (after deducting applicable fees) by a payment method selected in the Account by the end of each month or more frequent upon the request of the Seller submitted through his Account. Transfers may only be made to a bank account, payment account, or other financial account registered in the name of the Seller who owns the respective Account. Transfers to third- party accounts are strictly prohibited. Eldorado reserves the right to request verification documentation to confirm ownership of the withdrawal account and may suspend or delay withdrawals pending verification. In any case, Eldorado does not control and is not liable to or responsible for the quality, safety, lawfulness, or availability of the products or services offered for sale on the Site, the ability of Sellers to complete a sale, or the ability of Buyers to complete a purchase. Users are hereby made aware that there may be risks of dealing with other Users acting under false pretenses. Eldorado uses several techniques to verify the accuracy of the information our Users provide to us when they register on the Site. However, because Users identities are established without their physical presence, there is a risk that other User acts under false identity and Eldorado cannot and does not confirm each User's purported identity. We encourage you to use the various tools available on the Site such as the customer support live chat, as well as common sense, to evaluate with whom you are dealing.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.6. Assumption of Risks. Each User acknowledges that it is fully assuming all Transaction Risks when using the Site to conduct transactions, and that it is fully assuming the risks of liability or harm of any kind in connection with using the Site. Each User agrees that Eldorado shall not be liable or responsible for any damages, liabilities, costs, harms, inconveniences, business disruptions, or expenditures of any kind that may arise as a result of or in connection with any Transaction Risks.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.7. Taxes. All listings and their prices on the Site must be placed pursuant to all taxes included principle. Users shall pay all sales and use taxes and all other taxes arising from their use of the Site and the transactions concluded therein. The Users are particularly responsible for paying any due taxes (including VAT from sale of In- game items through the Site), fees or other due amounts required in connection with the agreements they have concluded between each other (including issuing any invoices and provision of any reporting documentation). Eldorado in any case is not liable for settling above fees and taxes and for any filing obligations of the Users.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.8. Refund policy. All sales are final on Eldorado and there are no refunds unless the item is not delivered or not as described. If this is the case, the Buyer will receive a full refund. The Buyer can request a refund by going to the order page and filling in a complaint. Alternatively, the Buyer can contact 24/7 Live Support on the bottom right corner of the Site. The refund can take up to 1 week to process.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.9. Chargeback policy. Once an order has been marked as delivered by the Seller and received by the Buyer, orders are considered Completed, both parties are satisfied, and the sale is final. Customers who issue chargebacks for Completed orders will be permanently banned from the Site. If you face an issue with a non- Completed order - contact the Eldorado support team instead of issuing a chargeback.</p>
+                        <h6>7. Fees and Payments</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.1. Seller fees. Seller fees can be viewed here: https://intercom.help/eldoradogg/en/articles/8409025-fees. Eldorado may change its fees from time to time by posting the changes on the Site and your Account 14 days in advance, but with no advance notice required for temporary promotions.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.2. Buyer and Withdrawal fees. The fees we charge for processing payments are posted on our Fees page here: https://intercom.help/eldoradogg/en/articles/8409025-fees. Eldorado may change its fees from time to time by posting the changes on the Site and your Account 14 calendar days in advance, but with no advance notice required for temporary promotions.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.3. Users must have a payment method on the Account when selling or buying on the Site, and Users must pay all fees and applicable taxes associated with our Services by the payment due date. If your payment method fails or your account is past due, we may collect fees owed using other collection mechanisms. (This includes charging other payment methods on file with us, as well as retaining collection agencies and legal counsel). In addition, Users will be subject to late fees.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.4. When you provide payment information to Eldorado or to one of its payment processors, you represent and warrant that you are the authorized user of such information, including, without limitation, the credit card, PIN, key, or associated account, and you authorize Eldorado and the payment processors to charge you for your purchases, subscriptions, or any other fees incurred by you.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.5. Eldorado, in its sole discretion, may inspect and verify (i) details related to the listing sold on the Site, (ii) the Buyer of the Site listing, and (iii) the Seller of the Site listing. As a part of the verification process, Eldorado may require the Buyer or Seller to provide additional identification information, including, without limitation, a copy of a valid driver's license (or other form of government issued identification) prior to or during the Transaction. Users may also be asked to go through additional security procedures and share additional information to confirm their identity. Eldorado reserves the right to reject any item that we believe (in our sole discretion) may: (i) be fraudulent, invalid, inauthentic or stolen, (ii) have come from an unauthorized or illegal source, (iii) be related to any illegal activity, (iv) be prohibited by sanctions, embargoes, regulations or orders administered by the United Nations, the European Union, the OFAC or other government agencies of the U.S., or (iv) otherwise pose a financial risk to us or our users.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.6. You agree and acknowledge that payment processing services are provided by third parties ("<b className="font-bold">Payment Processors</b>"), and are subject to the respective service agreements (collectively, the "<b className="font-bold">Payment Services Agreement</b>"). By using the Services, you agree to be bound by the terms in this section and the Payment Services Agreement, as the same may be modified by us or by the Payment Processors from time to time. As a condition of selling, you agree to provide Eldorado accurate and complete information about you and your business (if applicable), and you authorize Eldorado to share, in accordance with the Payment Services Agreement, such information and applicable transaction information related to your use of the payment processing services provided by the Payment Processors.</p>
+                        <h6>8. Disputes between Users</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.1. In the event that any User has a dispute with any other User with regard to a transaction on the Site, such User agrees to submit a complaint to Eldorado which investigates the complaints on behalf of the Seller. For the avoidance of doubt, Eldorado investigates the complaints related on to transactions on the Site and does not investigate complaints regarding the quality, safety or legality of items advertised. In order to allow Eldorado to fairly and reasonably conduct investigations, Users agree to refrain from seeking third party arbitration while an order is still open or pending. Users who seek third party intervention (with the exception of Government Investigative Authorities) will be seen as interfering with the investigative process. Eldorado reserves the right to suspend or permanently ban Userswho attempt to interfere with standard operating procedures for orders which are still active or pending.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.2. Obligation to Reimburse. If a Seller is required to reimburse the Buyer or Eldorado, the Seller authorizes Eldorado to remove the reimbursement amount (in same or other currency) from their designated payment method (i.e. PayPal) on the Site. The Seller is required to have a valid payment method on the Site. If there are insufficient funds in the account, the Seller authorizes Eldorado to charge any reimbursement amount owed to the payment method on the Site. Eldorado may also place the reimbursement amount on the Sellers invoice. If Seller does not provide Eldorado with a valid payment method, Eldorado may collect the outstanding sums using other collection mechanisms, including retaining collection agencies.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.3. Fines. In the rare event that Eldorado determines that a User breaches this User Agreement, the breaching User authorizes Eldorado to levy a fine against the Users payment method, up to USD 100. In addition, Eldorado may suspend or ban the Users Account, and/or require a deposit of up to USD 200 to reactive the Users Account.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.4. Release. If you have a dispute with one or more Users, you agree to release and indemnify Eldorado and its officers, directors, employees, agents, affiliates, and subsidiaries from all claims, demands, actions, proceedings, costs, expenses and damages, including without limitation any actual, special, incidental or consequential damages of every kind and nature, known and unknown, arising out of or in any way connected with such dispute. In entering into this release you expressly waive any protections (whether statutory or otherwise) that would otherwise limit the coverage of this release to include only those claims that you may know or suspect to exist in your favor at the time of agreeing to this release.</p>
+                        <h6>9. Disclaimer of Warranties; Limitation of Liability</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.1. The features and services on the Site are provided on an "as is" and "as available" basis, and Eldorado hereby expressly disclaims any and all warranties, express or implied, including but not limited to any warranties of condition, quality, durability, performance, accuracy, reliability, merchantability or fitness for a particular purpose. All such warranties, representations, conditions, undertakings and terms are hereby excluded.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.2. Eldorado makes no representations or warranties about the validity, accuracy, correctness, reliability, quality, stability, completeness or currentness of any information provided on or through the site. Eldorado does not represent or warrant that the manufacture, importation, distribution, offer, display, purchase, sale and/or use of products or services offered or displayed on the site does not violate any third party rights; and Eldorado makes no representations or warranties of any kind concerning any product or service offered or displayed on the site.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.3. Any material downloaded or otherwise obtained through the Site is done at each User's sole discretion and risk, and each User is solely responsible for any damage to its computer system or loss of data that may result from the download of any such material. No advice or information, whether oral or written, obtained by any User from Eldorado or through or from the Site shall create any warranty not expressly stated herein.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.4. Force Majeure. Under no circumstances shall Eldorado be held liable for any delay, failure, or disruption of the content or services delivered through the Site resulting directly or indirectly from acts of nature, forces or causes beyond its reasonable control, including without limitation, Internet failures, computer, telecommunications or any other equipment failures, electrical power failures, strikes, labor disputes, riots, insurrections, civil disturbances, shortages of labor or materials, fires, flood, storms, explosions, Acts of God, war, governmental actions, orders of domestic or foreign courts or tribunals or nonperformance of third parties.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.5. Each User hereby agrees to indemnify and hold harmless Eldorado, its affiliates, directors, officers, and employees, from any and all losses, claims, liabilities (including legal costs on a full indemnity basis) which may arise, directly or indirectly:</p>
+                        <ul className="ml-[30px] mb-[20px]">
+                          <li><p className="text-[14px] leading-[21px]">From such Users use of the Site, including but not limited to the display of such User's information on the Site;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">From such Users breach of any of the terms and conditions of this Agreement; From such Users breach of any representations and warranties made by the User to Eldorado;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">As a result of any claims asserted by Third Party Rights claimants or other third parties relating to products offered or displayed on the Site.</p></li>
+                        </ul>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.6. Eldorado and its affiliates, directors, officers and employees shall not be liable for any special, direct, indirect, punitive, incidental or consequential damages or any damages whatsoever (including but not limited to damages for loss of profits or savings, business interruption, loss of information), whether in contract, negligence, tort, strict liability or otherwise, or any other damages resulting from any of the following:</p>
+                        <ul className="ml-[30px] mb-[20px]">
+                          <li><p className="text-[14px] leading-[21px]">The use or the inability to use the Site;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Any defect in goods, samples, data, information or services purchased or obtained from a User or a third party service provider through the Site;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Any claims or demands that Users manufacture, importation, distribution, offer, display, purchase, sale and/or use of products or services offered or displayed on the Site may violate or may be asserted to violate Third Party Rights; or claims by any party that they are entitled to defense or indemnification in relation to assertions of rights, demands or claims by Third Party Rights claimants;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Unauthorized access by third parties to data or private information of any User;</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Statements, conduct, or material posted by Users of the Site, including defamatory, offensive or illicit material; or</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Any other matter relating to the Site.</p></li>
+                        </ul>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.7. Right to assume defense and control. Eldorado reserves the right, at its own expense, to assume the exclusive defense and control of any matter otherwise subject to indemnification by you, in which event you shall cooperate with Eldorado in asserting any available defenses.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.8. Eldorado reserves the right to limit, deny or create different access to the Site and its features with respect to different Users, or to change any of the features or introduce new features without prior notice. Each User acknowledges that inability to use the Site wholly or partially for whatever reason may have adverse effects on its business. Each User hereby agrees that in no event shall Eldorado or any of its affiliates, directors, officers, or employees be liable to the User or to any third parties for any inability to use the Site (whether due to disruption, limited access, changes to or termination of any features on the Site or otherwise).</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.9. Third-Party Content. Eldorado is not the author of Third Party Content, whether contributed by anonymous users or paid content providers. Neither Eldorado nor any of its affiliates, directors, officers or employees has entered into any sales agency relationship with such third party by virtue of our display of Third Party Content on the Site. Any Third Party Content is the sole responsibility of the party who provided the content. Neither Eldorado nor any of its affiliates, directors, officers or employees is responsible for the accuracy, propriety, lawfulness or truthfulness of any Third Party Content, and shall not be liable to any User in connection with such User's reliance on such Third Party Content. In addition, neither Eldorado nor any of its affiliates, directors, officers or employees is responsible for theconduct of any User's activities on the Site, and shall not be liable to any person in connection with any damage suffered by any person as a result of such User's conduct.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.10. Third-Party Websites. Eldorado may allow Users access to content, products or services offered by third parties through hyperlinks (in the form of word link, banners, channels or otherwise) to such Third Party's website. User acknowledges that Eldorado has no control over such third party websites, does not monitor such websites, and neither Eldorado nor any of its affiliates, directors, officers or employees shall be responsible or liable to anyone for such website, or any content, products or services made available on such website. User is cautioned to read such websites terms and conditions and privacy policies before using such third party websites in order to be aware of the terms and conditions of your use of such websites.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.11. Regardless of the previous provisions, if Eldorado is found to have liability, its liability is limited to the greater of a) the amount of the specific transaction in dispute, b) the amount of fees in dispute not to exceed the total fees which User paid to Eldorado in the 12 months prior to the action giving rise to the liability, or c) USD 100.</p>
+                        <h6>10. Eldorados Intellectual Property Rights</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.1 General. Eldorado is the sole owner or lawful licensee of all the rights to the Site and the Eldorado Content. The Site and the Eldorado Content embody trade secrets and intellectual property rights protected under worldwide copyright and other laws. All title, ownership and intellectual property rights in the Site and the Eldorado Content shall remain with Eldorado, its affiliates, or licensors of the Eldorado Content, as the case may be. All rights not otherwise claimed under this Agreement or by Eldorado are hereby reserved.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.2. Trademarks and Service Marks. "Eldorado and related icons and logos are registered trademarks or trademarks or service marks of Eldorado in various jurisdictions, and are protected under applicable copyright, trademark and other proprietary rights laws. The unauthorized copying, modification, use or publication of these marks is strictly prohibited.</p>
+                        <h6>11. Security</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.1. You are responsible for maintaining the confidentiality and security of your Account and password, and accept responsibility for all activities that occur under your Account or password. You must notify Eldorado immediately in the event that the security of your login or password has been breached or compromised.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.2. You are also responsible for maintaining adequate security and control of any and all identification numbers any other codes that you use to access the Account.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.3. You agree to not hold Eldorado liable for any loss arising out of, or in any way connected to, your failure to properly secure and keep private your Account information, email address, any password and any other identification numbers/codes used in connection with your Account.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.4. Eldorado shall not bear any liability, whatsoever, for any damage or interruptions caused by any computer viruses, spyware, scareware, Trojan horses, worms or other malware that may affect your Account, computer or other equipment, or any phishing, spoofing or other attack.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.5. Eldorado does not guarantee the confidentiality or privacy of any communication or information transmitted on the Site or any site linked to the Site. Eldorado will not be liable for the privacy or security of information, e-mail addresses, registration and identification information, disk space, communications, confidential or proprietary information, or any other content transmitted over networks accessed through the Site, or otherwise connected with your use of the Site.</p>
+                        <h6>12. Notice to Users</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">All notices or demands to or upon a User shall be effective if either delivered personally, uploaded to the Users Account, sent by courier, certified mail, facsimile, or email to the lastknown correspondence, fax or email address provided by the User to Eldorado, or by posting such notice or demand on an area of the Site that is publicly accessible without charge. Notice to a User shall be deemed to be received by such User if and when:</p>
+                        <ul className="ml-[30px] mb-[20px]">
+                          <li><p className="text-[14px] leading-[21px]">Eldorado is able to demonstrate that the communication, whether in physical or electronic form, has been sent to such User; or</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Immediately upon Eldorados posting of such notice on an area of the Site that is publicly accessible without charge.</p></li>
+                        </ul>
+                        <h6>13. Legal Disputes</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">13.1. You and Eldorado agree that any claim or dispute at law or equity that has arisen or may arise between us relating in any way to or arising out of this or previous versions of the Agreement, your use of or access to the Site, the Services, or any products or services sold or purchased through the Sites, services, applications, or tools will be resolved in accordance with the provisions set forth in this Legal Disputes Section. Please read this Section carefully. It affects your rights and will have a substantial impact on how claims you and Eldorado have against each other are resolved.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">13.2. Applicable Law. You agree that the laws of the Republic of Lithuania, without regard to the principles of conflict of laws, will govern this Agreement and any claim or dispute that has arisen or may arise between you and Eldorado, except as otherwise stated in the User Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">13.3. Agreement to Negotiate and Arbitrate. In the event of any dispute, claim, question, or disagreement arising from or relating to this agreement or the breach thereof, the parties hereto shall use their best efforts to settle the dispute, claim, question, or disagreement. To this effect, they shall consult and negotiate with each other in good faith and, recognizing their mutual interests, attempt to reach a just and equitable solution satisfactory to both parties. If they do not reach such solution within a period of 60 calendar days, then, upon notice by either party to the other, all disputes, claims, questions, or differences shall be finally settled by arbitration administered by the Vilnius Commercial Arbitrage, operating under its rules. The place of arbitration shall be Vilnius, Lithuania, and the language of arbitration shall be English.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">13.4. Prohibition of Class and Representative Actions and Non-Individualized Relief. You and Eldorado agree that each of us may bring claims against the other only on an individual basis and not as a plaintiff or class member in any purported class or representative action or proceeding. Unless both you and Eldorado agree otherwise, the arbitrator may not consolidate or join more than one person's or party's claims, and may not otherwise preside over any form of a consolidated, representative, or class proceeding. Also, the arbitrator may award relief (including monetary, injunctive, and declaratory relief) only in favor of the individual party seeking relief and only to the extent necessary to provide relief necessitated by that party's individual claim(s). Any relief awarded cannot affect other sites Users.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">13.5. Consent to Jurisdiction. In the event that the Agreement to Arbitrate above is found not to apply to you or to a particular claim or dispute, you agree that any claim or dispute that has arisen or may arise between you and Eldorado must be resolved exclusively by a competent court of the Republic of Lithuania. You and Eldorado agree to submit to the personal and exclusive jurisdiction of the courts located within the Republic of Lithuania, for the purpose of litigating all such claims or disputes.</p>
+                        <h6>14. Miscellaneous</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.1. This Agreement, the Sites Privacy Policy, and all policies posted on the Site constitute the entire agreement between the User and Eldorado with respect to access to and use of theSite, superseding any prior written or oral agreements in relation to the same subject matter herein.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.2. Eldorado and the User are independent contractors, and no agency, partnership, joint venture, employee employer, or franchiserfranchisee relationship is intended or created by this Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.3. Failure of Eldorado to exercise or enforce any right or provision of the terms of this Agreement shall not constitute a waiver of such right or provision.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.4. If any provision herein is held to be invalid or unenforceable, such provision shall be struck out and shall not affect the validity and enforceability of the remaining provisions of this Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.5. User agrees that there shall be no third party beneficiaries to this agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.6. Headings are for reference purposes only, and in no way define, limit, construe or describe the scope or extent of such section.</p>
+                        <h6>15. Notice of Non-Affiliation and Disclaimer</h6>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">Eldorado is not affiliated, associated, authorized, endorsed by, or in any way officially connected with:</p>
+                        <ul className="ml-[30px] mb-[20px]">
+                          <li><p className="text-[14px] leading-[21px]">Jagex Ltd., RuneScape, Old School RuneScape or any of its subsidiaries or its affiliates. The official RuneScape website can be found at: https://www.runescape.com/</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Blizzard Entertainment Inc., World of Warcraft, World of Warcraft Classic, Overwatch, Diablo, Hearthstone, StarCraft or any of its subsidiaries or its affiliates. The official Blizzard website can be found at: https://www.blizzard.com/</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Epic Games Inc., Fortnite or any of its subsidiaries or its affiliates. The official Fortnite website can be found at: https://epicgames.com/</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Supercell Oy, Clash of Clans, Clash Royale, Brawl Stars or any of its subsidiaries or its affiliates. The official Supercell website can be found at: https://supercell.com/</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Take-Two Interactive, Rockstar Games, Grand Theft Auto, Red Dead Redemption or any of its subsidiaries or its affiliates. The official Rockstar website can be found at: https://www.rockstargames.com/</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Riot Games Inc., League of Legends, Valorant or any of its subsidiaries or its affiliates. The official Riot Games website can be found at: https://www.riotgames.com/</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Roblox Corporation, Roblox or any of its subsidiaries or its affiliates. The official Roblox website can be found at: https://www.roblox.com/</p></li>
+                          <li><p className="text-[14px] leading-[21px]">Any other game developer, game publisher or video game not explicitly listed here. The names RuneScape, Old School RuneScape, and OSRS Gold, World of Warcraft, Overwatch, Hearthstone, Diablo, Fortnite, Clash of Clans, Clash Royale, Brawl Stars, Grand Theft Auto, Red Dead Redemption, League of Legends, Valorant and any other game not explicitly listed here, as well as related names, marks, emblems and images are registered trademarks of their respective owners. Use of trademarks is covered by fair use principles under EU Regulation 2017/1001, Article 14.</p></li>
+                        </ul>
+                        <p className="mb-[16px] text-[14px] leading-[21px]"></p>
+                        <h4 className="font-bold mb-[25px] text-[36px] leading-[40px]">
+                          <b className="font-black">Eldorado.gg New General Terms of Service</b>
+                        </h4>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">Effective from December 1st, 2026</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">1. Scope and structure</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+1.1. These General Terms of Service (<b className="font-bold">General Terms</b>) govern access to and use of the online marketplace available at <a href="http://www.eldorado.gg/" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>www.eldorado.gg</u>
+</a> (<b className="font-bold">Site</b>) and the services, features and tools made available through the Site (<b className="font-bold">Services</b>). These General Terms apply to all Users, whether they use the Services as a Buyer, a Seller, or both.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.2. The Site and the Services are operated by GWD Processing FZCO, a company incorporated under the laws of the United Arab Emirates, licence No. 52076, with its registered address at IFZA Business Park, DDP, PO Box 342001, Dubai, United Arab Emirates (<b className="font-bold">Eldorado</b>).</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.3. Eldorado provides an intermediary service and operates the Site as an online platform within the meaning of Regulation (EU) 2022/2065 (<b className="font-bold">DSA</b>)</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.4. These General Terms, together with the Buyer Terms of Service (<b className="font-bold">Buyer Terms</b>) and/or Seller Terms of Service (<b className="font-bold">Seller Terms</b>), as applicable to the capacity in which you use the Services, constitute the agreement between you and Eldorado governing your use of the Services (<b className="font-bold">Agreement</b>). If you use the Services both as a Buyer and as a Seller, both the Buyer Terms and the Seller Terms apply to you in the relevant capacity.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.5. In the event of any discrepancy between these General Terms and the Buyer Terms and/or Seller Terms, the Buyer Terms and/or Seller Terms, as applicable, shall prevail to the extent of such discrepancy.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.6. Certain policies, rules or guidelines expressly identified in these General Terms, the Buyer Terms or the Seller Terms may apply to specific features, transactions or activities on the Site. Such policies, rules or guidelines form part of the Agreement only where expressly stated.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.7. Eldorado does not own, buy or sell any Items listed on the Site and is not a party to any contract concluded between a Buyer and a Seller in respect of an Item.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.8. By creating an Account, expressly accepting the Agreement, or otherwise using a feature of the Services that requires acceptance of the Agreement, you agree to be bound by the Agreement. If you do not agree to the Agreement, you must not create an Account or use the relevant Services. You must have the legal capacity required under applicable law to enter into the Agreement, subject to Section 3. If you use the Services on behalf of a legal entity, you represent and warrant that you have authority to bind that entity to the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.9. Eldorado may amend the Agreement where reasonably necessary to reflect changes in applicable law or regulatory requirements, changes to the Services, measures relating to security, fraud or abuse prevention, or to clarify or correct the Agreement. Eldorado will notify Users of material amendments before they take effect, in accordance with any notice requirements under applicable law. Where permitted by applicable law, amendments required by law or necessary to address an unforeseen and imminent security, fraud or abuse risk may take effect immediately or on shorter notice. Users who do not agree with an amendment may terminate the Agreement before the amendment takes effect.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">2. Definitions used in these General Terms</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.1.<b className="font-bold"> Account</b>  an account registered by a User on the Site.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.2.<b className="font-bold"> Buyer</b>  a User who uses the Services for the purpose of purchasing Items offered by Sellers.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.3.<b className="font-bold"> Consumer</b>  a natural person acting for purposes outside their trade, business, craft or profession.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.4.<b className="font-bold"> DSA</b>  Regulation (EU) 2022/2065.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.5.<b className="font-bold"> Eldorado Content</b>  any content, information, text, images, graphics, video, software, databases or other materials made available on the Site by or on behalf of Eldorado.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.6.<b className="font-bold"> Illegal Content</b>  any information that, in itself or in relation to an activity, including the sale of products or provision of services, does not comply with applicable EU law or the law of an EU Member State that complies with EU law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.7. <b className="font-bold">Inactive Account</b>  an Account to which the User has not logged in for a continuous period of twelve (12) months.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.8.<b className="font-bold"> Items</b>  gaming-related digital goods and services offered through the Site, including game accounts, in- game currency, virtual items, top-up vouchers and boosting services.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.9. <b className="font-bold">Minor</b>  a natural person under 18 years of age.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.10.<b className="font-bold"> Payment Processor</b>  a third-party payment service provider engaged in connection with the processing, collection or settlement of payments made through the Site.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+2.11.<b className="font-bold"> Privacy Policy</b>  Eldorado's privacy policy <a href="https://www.eldorado.gg/privacy-policy" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>made available on the Site</u>
+</a>.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.12.<b className="font-bold"> Responsible Adult</b>  a parent, legal guardian or other holder of parental responsibility in respect of a Minor.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.13.<b className="font-bold"> Seller</b>  a User who uses the Services for the purpose of offering or selling Items to Buyers.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.14.<b className="font-bold"> Third-Party Rights</b>  any intellectual property, proprietary, privacy, personality or other rights of a third party.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.15.<b className="font-bold"> Trader</b>  a Seller acting, including through another person acting in their name or on their behalf, for purposes relating to their trade, business, craft or profession.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.16.<b className="font-bold"> User</b>  any natural or legal person that has an Account or otherwise uses the Services in a manner subject to the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.17. <b className="font-bold">User Content</b>  any information or content submitted, uploaded, posted, listed or otherwise made available on the Site by a User.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">3. Age requirements and protection of Minors</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.1. The Site is primarily intended for Users aged 18 years or older. Minors may use the Services only in accordance with this Section 3.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.2. A Minor may use the Services only with the prior authorization of their parent, legal guardian or other holder of parental responsibility (<b className="font-bold">Responsible Adult</b>), and only to the extent permitted by applicable law. Where applicable law requires a Responsible Adult to consent to or enter into the Agreement, approve a particular transaction, or authorize the processing of the Minor's personal data, such consent or authorization must be provided. Eldorado may request evidence of such consent or authorization at any time.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.3. The fact that a transaction was made or initiated by a Minor does not, by itself, establish that the transaction was unauthorized or entitle the Minor, the Responsible Adult, the Account holder or the holder of the relevant payment method to a refund. Any claim that a Minor entered into or initiated a transaction without the required authorization will be assessed individually and on a transaction-by-transaction basis, taking into account the requirements of applicable law and all relevant circumstances, including Account access, payment authentication, transaction history, communications, evidence of prior authorization and any subsequent approval or ratification of the transaction.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.4. Any request submitted to Eldorado for a refund on the basis that a transaction was made by a Minor without the required authorization must be submitted within thirty (30) days of the relevant transaction. The thirty-day period applies separately to each individual transaction and is not extended, renewed or restarted by any subsequent transaction. Eldorado may require documentation and other evidence reasonably necessary to assess the request. Requests submitted after the applicable thirty-day period may be refused. This Section does not limit any rights that cannot lawfully be limited or excluded under applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.5. Eldorado may verify the age of any User and may request a government-issued identification document or other information or documentation reasonably necessary to verify the User's age or any consent or authorization required under this Section 3. Where satisfactory verification is not provided when requested, Eldorado may restrict, suspend or terminate the relevant Account or access to the Services.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.6. Eldorado implements appropriate and proportionate technical and organizational measures designed to ensure a high level of privacy, safety and security for Minors using the Services. Eldorado does not present advertisements based on profiling using a User's personal data where Eldorado is aware with reasonable certainty that the User is a Minor. Compliance with this Section does not require Eldorado to process additional personal data solely for the purpose of determining whether a User is a Minor.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">4. Account registration and management</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.1. You must register an Account to conduct transactions or otherwise use features of the Services that require registration. Eldorado may refuse or restrict registration where reasonably necessary to enforce the Agreement, protect the security or integrity of the Services or Users, prevent fraud or abuse, or comply with applicable law or regulatory requirements.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.2. You must provide accurate, complete and current information when registering an Account and keep such information up to date. Eldorado may verify information provided by you and may request information or documentation reasonably necessary for verification purposes, including a valid government-issued identification document.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.3. Each User may maintain only one Account unless expressly authorized by Eldorado. Creating, controlling or using multiple Accounts without such authorization is prohibited. Eldorado may restrict or suspend duplicate Accounts and, where reasonably necessary to investigate suspected fraud, abuse or other breaches of the Agreement, may temporarily restrict transactions or access to funds associated with such Accounts.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.4. An Account is personal to the User and may not be sold, assigned, transferred or otherwise made available to another person without Eldorado's prior authorization.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.5. You are responsible for maintaining the confidentiality and security of your Account credentials and must not disclose or otherwise make them available to any unauthorized person. You are responsible for all activities carried out through your Account by you or by any person whom you have authorized to access or use the Account. You must notify Eldorado without undue delay if you know or reasonably suspect that your Account has been accessed or used without authorization or that the security of your Account credentials has otherwise been compromised. To the fullest extent permitted by applicable law, Eldorado shall not be liable for any loss or damage resulting from your failure to comply with the obligations set out in this Section 4.5 or from the acts or omissions of any person whom you have authorized to access or use your Account, except to the extent such loss or damage was caused by Eldorado's breach of the Agreement or applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.6. Eldorado may send you electronic communications necessary for the administration of your Account, transactions, security and the provision of the Services. Marketing communications will be sent only in accordance with applicable law, and you may opt out of such communications through the means provided in them.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.7. Eldorado may restrict, suspend or terminate an Account or access to all or part of the Services where reasonably necessary because:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.7.1. the User has materially or repeatedly breached the Agreement;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.7.2. information provided by the User is materially inaccurate, false or misleading, or required verification has not been completed;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.7.3. Eldorado reasonably suspects fraud, abuse, unauthorized Account use or conduct that threatens the security or integrity of the Services or other Users;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.7.4. the User's activity creates a material legal, regulatory or financial risk for Eldorado or other Users;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.7.5. Eldorado is required to take such action by applicable law or by a competent authority; or</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.7.6. another ground for restriction, suspension or termination expressly provided in the Agreement applies.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.8. Eldorado will apply such measures in a diligent, objective and proportionate manner, taking into account the nature, severity, frequency and consequences of the relevant conduct.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.9. You may request closure of your Account at any time. Account closure does not affect any rights, obligations, liabilities or transactions accrued or initiated before closure, including any outstanding payment, refund, chargeback, dispute, reserve or settlement obligations, which will continue to be handled in accordance with the applicable terms of the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.10. Where an Account becomes an Inactive Account, Eldorado may charge an inactivity fee of USD 5 per month against the available Account balance. Eldorado will notify the User before the first inactivity fee is charged and provide the User with a reasonable opportunity to prevent the fee from being charged by logging into the Account or withdrawing the available balance. The inactivity fee will not cause the Account balance to become negative and will cease once the available balance reaches zero or the Account is no longer inactive.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">5. Acceptable use of the Services</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.1. You may use the Services only in accordance with the Agreement and applicable law. Except as expressly permitted by Eldorado or applicable law, you may not reproduce, distribute, sell, commercially exploit, systematically extract or reuse Eldorado Content, or use Eldorado Content to create or compile a database, directory or similar collection.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2. You must not use the Services, directly or indirectly, to:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.1. engage in fraud, deception, scams or other unlawful activity;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.2. offer, purchase, sell or otherwise transact in counterfeit, stolen or prohibited Items;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.3. submit, upload, publish or otherwise make available Illegal Content or content that infringes Third-Party Rights;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.4. impersonate any person or entity or misrepresent your identity, authority or affiliation;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.5. submit, upload, publish or otherwise make available content that is defamatory, unlawfully threatening or harassing, obscene, promotes hatred or violence, or unlawfully discriminates against any person or group;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.6. send spam, unsolicited bulk communications or other communications prohibited by applicable law;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.7. introduce malware, viruses or other malicious or destructive code, interfere with the operation or security of the Services, or attempt to gain unauthorized access to any Account, system, network or data;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.8. manipulate or interfere with transactions, reviews, ratings, rankings or other functionality of the Services;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.9. solicit, divert or attempt to divert Users away from Eldorado for the purpose of conducting transactions or offering goods or services that compete with or circumvent the Services;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.10. circumvent or attempt to circumvent fees, payment processes, transaction protections, Account restrictions, verification requirements or other technical or contractual measures implemented by Eldorado;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.11. offer, purchase, sell or otherwise transact in game cheats, hacks, exploits, or Items created, obtained or enhanced through unauthorized means;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.12. link to, promote or facilitate access to goods, services or activities prohibited under the Agreement;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.13. engage in any conduct that Eldorado reasonably determines creates or is likely to create a material legal, regulatory, financial, security or reputational risk to Eldorado, the Services or other Users; or</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2.14. engage in any other activity expressly prohibited under the Agreement or applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.3. The Services are not available to any person who is located in, ordinarily resident in, a national or citizen of, or, in the case of a legal entity, incorporated or established in, any country or territory subject to comprehensive or broad-based sanctions, embargoes or other restrictive measures imposed or administered by the United Nations, the European Union, the United States or the United Kingdom, or otherwise designated by Eldorado as a restricted jurisdiction on the basis of sanctions, anti-money laundering, counter-terrorist financing, export control, security or other material legal or regulatory risks. Such persons must not register or maintain an Account, access or use the Services, or conduct any transaction through the Site. Eldorado may refuse registration, restrict, suspend or terminate an Account, or block or refuse any transaction where Eldorado determines that this Section 5.3 applies.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.4. You must not use the Services if you are subject to any asset freeze, blocking measure, transaction prohibition or other restrictive measure imposed or administered by the United Nations, the European Union, the United States or the United Kingdom. You must not use the Services for the benefit of, on behalf of, or in connection with any such person or entity.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">6. User Content</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.1. You are responsible for any User Content that you submit, upload, post, list or otherwise make available through the Services.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.2. By making User Content available through the Services, you represent and warrant that you have all rights, licences, permissions and authorizations necessary to do so and that such User Content does not infringe Third- Party Rights or otherwise violate the Agreement or applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.3. By submitting, uploading, posting, listing or otherwise making User Content available through the Services, you grant Eldorado and its affiliates an irrevocable, perpetual, worldwide, non-exclusive, royalty-free, transferable and sublicensable licence to use, host, store, reproduce, modify, adapt, translate, publish, distribute, communicate, publicly display, publicly perform and otherwise exploit such User Content, in whole or in part, in any media or format now known or later developed, for the purposes of operating, providing, developing, improving, marketing and promoting the Services, subject to applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.4. Eldorado may remove, disable access to or otherwise moderate User Content where Eldorado reasonably determines that such User Content constitutes Illegal Content, violates the Agreement, infringes Third-Party Rights, creates or is likely to create a material legal, regulatory, financial, security or reputational risk to Eldorado, the Services or other Users, or where such action is required by applicable law or a competent authority. Content moderation measures will be applied in accordance with Section 7 of these General Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.5. Eldorado may preserve, use and disclose information relating to a User or User Content where required or permitted by applicable law, including in response to a valid order or request from a competent judicial, administrative or law enforcement authority.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">7. DSA Compliance</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.1. Eldorado may review, moderate, remove, disable access to or otherwise restrict User Content, and may restrict the use of the Services, in accordance with the Agreement and applicable law. Content moderation may be initiated on the basis of notices submitted by third parties, orders or requests from competent authorities, or Eldorado's own investigations. Content moderation decisions are made by authorized personnel following human review. Eldorado applies content moderation measures in a diligent, objective and proportionate manner, taking into account the nature and severity of the relevant conduct and the rights and legitimate interests of the parties concerned, including the applicable fundamental rights of recipients of the Services as enshrined in the Charter of Fundamental Rights of the European Union.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+7.2. Any individual or entity may notify Eldorado of specific User Content that they consider to constitute Illegal Content through the <a href="https://www.eldorado.gg/dsa" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>DSA notice mechanism</u>
+</a>. A notice should contain:&nbsp;                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.2.1. a sufficiently substantiated explanation of the reasons why the relevant information is alleged to constitute Illegal Content;&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.2.2. a clear indication of the exact electronic location of that information, including the relevant URL or URLs and, where necessary, additional information enabling its identification;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.2.3. the name and email address of the individual or entity submitting the notice, except where such information is not required under the DSA; and&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.2.4. a statement confirming the <i className="italic">bona fide</i> belief that the information and allegations contained in the notice are accurate and complete.&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.3. Where electronic contact details have been provided, Eldorado will confirm receipt of the notice without undue delay and inform the notifying party of its decision and the available redress mechanisms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.4. Where Eldorado takes a decision, on the ground that User Content constitutes Illegal Content or is incompatible with the Agreement, to remove or disable access to such User Content, suspend, terminate or otherwise restrict monetary payments, suspend or terminate the provision of the Services in whole or in part, or suspend or terminate an Account, Eldorado will provide the affected User with a clear and specific statement of reasons where required by the DSA. The statement of reasons will identify the measure taken and, where applicable, its scope and duration; the facts and circumstances relied upon in taking the decision; whether the decision followed a notice, an investigation by Eldorado or an order from a competent authority; the applicable legal or contractual ground and an explanation of its application; and the available redress mechanisms. Where relevant, the statement will also indicate whether automated means were used in detecting or identifying the relevant information. Content moderation decisions are made following human review and are not taken solely on the basis of automated means.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.5. A User, or an individual or entity that submitted a notice under Section 7.2, may lodge a complaint against a decision falling within Article 20(1) DSA or any other decision for which the DSA expressly provides access to the complaint-handling and out-of-court dispute settlement mechanisms under Articles 20 and 21 through the same electronic communication channel through which the relevant notice, complaint or decision was administered. Complaints may be submitted free of charge for at least six (6) months from the date on which the complainant was informed of the relevant decision. Eldorado will handle complaints in a timely, non- discriminatory, diligent and non-arbitrary manner. Complaints will be reviewed by appropriately qualified personnel and will not be decided solely on the basis of automated means. Where a complaint provides sufficient grounds to conclude that the contested decision was unfounded or that the measure taken was not warranted, Eldorado will reverse the decision without undue delay and inform the complainant of the reasoned outcome and available redress mechanisms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.6. Any person or entity entitled to submit a complaint under Section 7.5 may refer a dispute concerning a decision falling within Article 20(1) DSA to an out-of-court dispute settlement body certified under Article 21 DSA. Eldorado will engage in good faith with the selected certified body, except where Eldorado is entitled under the DSA to refuse to engage in the procedure. The outcome of such procedure is not binding on the parties. Nothing in this Section limits the right of either party to seek judicial redress at any time.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.7. Eldorado will, after issuing a prior warning, suspend for a reasonable period the provision of the Services to a User who frequently provides manifestly Illegal Content. Eldorado will likewise suspend, for a reasonable period and after a prior warning, the processing of notices or complaints submitted by an individual or entity that frequently submits manifestly unfounded notices or complaints.&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.8. In determining whether such conduct constitutes misuse and the appropriate duration of any suspension, Eldorado will assess the circumstances on a case-by-case basis, taking into account, in particular:&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.8.1. the number of instances of manifestly Illegal Content or manifestly unfounded notices or complaints within the relevant period;&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.8.2. their proportion relative to the User's overall activity or the total number of notices or complaints submitted;&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.8.3. the nature, gravity and consequences of the misuse; and&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.8.4. where reasonably identifiable, the intention of the person engaging in the misuse.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.9. Where Eldorado uses recommender systems to determine the relative order, prominence or presentation of listings or other information through the Services, the main parameters used by those recommender systems, their relative importance and any options available to Users to modify or influence those parameters are described in Eldorado's Transparency Notice. The Transparency Notice identifies the criteria that are most significant in determining the information presented to Users and explains the reasons for the relative importance of those criteria.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+7.10. Information regarding Eldorado's points of contact under the DSA and Eldorado's legal representative in the European Union is available here: <a href="https://www.eldorado.gg/dsa" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>https://www.eldorado.gg/dsa</u>
+</a>.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">8. Data protection and privacy</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+8.1. Eldorado processes personal data in accordance with applicable data protection laws and the <a href="https://www.eldorado.gg/privacy-policy" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>Privacy Policy</u>
+</a>. The Privacy Policy identifies the relevant data controller or controllers and explains how and for what purposes personal data is collected, used, stored, disclosed and otherwise processed, as well as the rights available to Users in relation to their personal data.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.2. The Privacy Policy is provided for transparency regarding the processing of personal data and does not form part of the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">9. Intellectual property rights</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.1. Eldorado and its licensors retain all right, title and interest in and to the Site, the Services and Eldorado Content, including all intellectual property rights therein. Except for the limited rights expressly granted under the Agreement, no right, title or interest in or to the Site, the Services or Eldorado Content is transferred to any User. All rights not expressly granted are reserved.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.2. Eldorado, the Eldorado name and logo, and other Eldorado names, logos, designs and indicia are trademarks or other protected identifiers of Eldorado or its licensors. You may not use them without Eldorado's prior authorization, except as permitted by applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.3. All third-party game titles, names, trademarks, logos and other identifiers displayed or referred to through the Services remain the property of their respective owners. Eldorado uses such third-party trademarks solely where reasonably necessary to identify, describe or refer to the relevant games, products or services. Such use is intended to constitute lawful referential use under Article 14(1)(c) of Regulation (EU) 2017/1001 and, where United States law applies, nominative fair use under U.S. trademark law and the Lanham Act. Unless expressly stated otherwise, no such use is intended to indicate or imply any affiliation, authorization, sponsorship, endorsement or other commercial connection between Eldorado and the relevant rights holder.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+9.4. Notices concerning alleged infringement of intellectual property rights may be submitted through Eldorado's applicable <a href="https://www.eldorado.gg/dsa" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>DSA reporting mechanism</u>
+</a> or, where United States law applies, through Eldorado's designated <a href="https://www.eldorado.gg/dmca" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>Digital Millennium Copyright Act (</u>
+                            <b className="font-bold">
+                              <u className="underline" style={{"textDecoration":"underline"}}>DMCA</u>
+                            </b>
+                            <u className="underline" style={{"textDecoration":"underline"}}>) reporting mechanism</u>
+</a> for alleged copyright infringement.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.5. Where United States law applies and User Content is removed or access to it is disabled following a notice submitted under the DMCA, the affected User may submit a counter-notification through Eldorado's designated DMCA reporting mechanism in accordance with applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.6. Eldorado may restrict, suspend or terminate Accounts of Users who repeatedly infringe Third-Party Rights. Where United States copyright law applies, Eldorado maintains and reasonably implements a policy providing for the termination, in appropriate circumstances, of Users who are repeat copyright infringers.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">10. Security</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.1. Eldorado shall not be liable for loss or damage caused by malware, phishing, spoofing or other attacks directed at a User's Account, device or systems, except to the extent that such loss or damage results from Eldorado's breach of the Agreement or applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.2. Eldorado may implement technical and organizational measures reasonably necessary to protect the security and integrity of the Services, Accounts, transactions and User data, including measures to detect, prevent and respond to unauthorized access, fraud, abuse and other security threats.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">11. Disclaimers and limitation of liability</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.1. The Services are provided on an as is and as available basis. To the fullest extent permitted by applicable law, Eldorado disclaims all warranties, representations and conditions, whether express or implied, including as to availability, accuracy, reliability, fitness for a particular purpose and non-infringement. Nothing in this Section limits any rights or remedies that cannot lawfully be excluded or limited, including mandatory rights available to Consumers.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.2. Eldorado does not warrant the accuracy, completeness, legality, quality, safety or reliability of User Content or Items offered by Sellers and does not guarantee that any Item will meet a User's expectations or requirements. This Section does not limit any obligation expressly imposed on Eldorado by applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.3. Eldorado shall not be liable for any delay, interruption or failure of the Services to the extent caused by circumstances beyond Eldorado's reasonable control, including failures of telecommunications, internet, hosting, payment or other third-party infrastructure, power failures, governmental measures, war, civil unrest, labour disputes, natural disasters or other events beyond Eldorado's reasonable control.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.4. To the fullest extent permitted by applicable law, you shall indemnify and hold harmless Eldorado, its affiliates and their respective directors, officers, employees and agents from and against any losses, liabilities, damages, claims and reasonable legal costs arising from or in connection with:&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.4.1. your material breach of the Agreement or applicable law;&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.4.2. User Content submitted or made available by you;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.4.3. any Item offered, sold or otherwise made available by you; or&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.4.4. any third-party claim arising from your fraud, misconduct or infringement of Third-Party Rights, except to the extent such loss or liability was caused by Eldorado.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.5. To the fullest extent permitted by applicable law, where you use the Services for purposes relating to your trade, business, craft or profession, Eldorado and its affiliates shall not be liable for any indirect, incidental, special, punitive or consequential loss or damage, including loss of profit, revenue, business, opportunity, goodwill, anticipated savings or data, arising out of or in connection with the Agreement or the Services.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.6. Subject to Section 11.5 and to the fullest extent permitted by applicable law, where you use the Services for purposes relating to your trade, business, craft or profession, Eldorado's aggregate liability arising out of or in connection with the Agreement or the Services shall not exceed the greater of:&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.6.1. the amount of the specific transaction giving rise to the claim;&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.6.2. the total fees paid by you to Eldorado during the twelve (12) months preceding the event giving rise to the claim; or&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.6.3. USD 100.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.7. Eldorado may modify, restrict, suspend or discontinue the Services or any feature thereof where reasonably necessary, subject to any notice or other requirements under the Agreement or applicable law. To the fullest extent permitted by applicable law, Eldorado shall not be liable solely as a result of such modification, restriction, suspension or discontinuation.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.8. Eldorado may, at its own expense, assume the exclusive defence and control of any matter subject to indemnification under Section 11.4, in which case you shall reasonably cooperate with Eldorado in the defence of that matter.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.9. The Services may contain links to websites, services or resources operated by third parties. Eldorado does not control such third-party websites, services or resources and, to the fullest extent permitted by applicable law, is not responsible for their availability, content, products, services, security or practices. Your use of any third-party website, service or resource is subject to the terms and policies applicable to that third party.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">12. Governing law and dispute resolution</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">12.1. The Agreement and any dispute, controversy or claim arising out of or relating to the Agreement shall be governed by and construed in accordance with the laws of the Republic of Lithuania, without regard to its conflict of laws principles. Where a User is a Consumer, this choice of law shall not deprive the Consumer of any protection afforded by mandatory provisions of the law that would apply in the absence of such choice.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">12.2. The parties may seek to resolve any dispute, controversy or claim arising out of or relating to the Agreement amicably before commencing arbitration or court proceedings. Any attempt to resolve a dispute amicably is voluntary and does not prevent either party from commencing arbitration or court proceedings at any time, seeking urgent interim, conservatory or protective measures, or exercising any right to redress available under the DSA or other mandatory applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">12.3. Except where applicable law prohibits the relevant dispute from being submitted to arbitration, any dispute, controversy or claim arising out of or relating to the Agreement, including any question regarding its existence, validity, interpretation, performance, breach or termination, shall be finally settled by arbitration in the Vilnius Court of Commercial Arbitration in accordance with its Rules of Arbitration. The arbitral tribunal shall consist of one arbitrator. The seat of arbitration shall be Vilnius, Lithuania. The language of the arbitration shall be English. The substantive law applicable to the dispute shall be the law of the Republic of Lithuania.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">12.4. Notwithstanding Section 12.3, a dispute arising from an agreement with a Consumer shall not be subject to the arbitration agreement in Section 12.3 where applicable law prohibits the submission of such dispute to arbitration by an agreement concluded before the dispute arose. A Consumer and Eldorado may agree to submit such dispute to arbitration after the dispute has arisen, to the extent permitted by applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">12.5. Any dispute that is not capable of settlement by arbitration under applicable law, or in respect of which the arbitration agreement in Section 12.3 is invalid or unenforceable, shall be subject to the jurisdiction of the competent courts of the Republic of Lithuania, except where mandatory rules of applicable law provide otherwise.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">13. Notices</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">13.1. Eldorado may provide notices and other communications to a User electronically, including by email to the email address associated with the Account, through the Account or by another electronic communication method made available through the Services. Where applicable law requires a notice to be provided on a durable medium or in another particular form, Eldorado will provide the notice in accordance with such requirement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">13.2. Eldorado may publish general announcements, updates or other information relating to the Services on the Site. Publication on the Site alone does not constitute individual notice where the Agreement or applicable law requires Eldorado to notify a User individually.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">13.3. Notices or other communications from a User to Eldorado must be submitted through the applicable contact channel specified on the Site or through any specific communication channel designated for the relevant matter under the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">14. Miscellaneous</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.1. The Agreement constitutes the entire agreement between you and Eldorado in relation to its subject matter and supersedes all prior agreements, understandings and communications, whether written or oral, relating to the same subject matter.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.2. You and Eldorado are independent contracting parties. Nothing in the Agreement creates any partnership, joint venture, employment, franchise or agency relationship between you and Eldorado, except for any agency relationship expressly established under the Seller Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.3. Any failure or delay by Eldorado to exercise or enforce any right or remedy under the Agreement does not constitute a waiver of that or any other right or remedy.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.4. If any provision of the Agreement is held to be invalid, illegal or unenforceable, that provision shall be deemed modified to the minimum extent necessary to make it valid and enforceable or, where such modification is not possible, severed from the Agreement. The remaining provisions shall remain in full force and effect.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.5. Except where expressly provided otherwise in the Agreement, no person other than you and Eldorado has any right to enforce any provision of the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.6. Eldorado may assign or transfer the Agreement, or any of its rights or obligations under the Agreement, to an affiliate or in connection with a merger, reorganization, acquisition, sale of business or assets, or similar corporate transaction, provided that such assignment or transfer does not reduce any rights that cannot lawfully be limited. You may not assign or transfer the Agreement or any rights or obligations under it without Eldorado's prior written consent.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.7. Section headings are for convenience only and do not affect the interpretation of the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">14.8. The Agreement is drawn up in English. Any translation is provided for convenience only. In the event of any inconsistency between the English version and a translation, the English version shall prevail, except where applicable law requires otherwise.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]"></p>
+                        <h4 className="font-bold mb-[25px] text-[36px] leading-[40px]">
+                          <b className="font-black">Eldorado.gg New Buyer Terms of Service</b>
+                        </h4>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">Effective from December 1st, 2026</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">1. Scope and structure</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.1. These Buyer Terms apply to any User who uses the Services as a Buyer, including by purchasing or attempting to purchase Items from Sellers.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.2. These Buyer Terms form part of the Agreement and apply together with the General Terms. Capitalized terms not defined in these Buyer Terms have the meanings given to them in the General Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.3. In the event of any discrepancy between these Buyer Terms and the General Terms, these Buyer Terms shall prevail to the extent of such discrepancy in relation to the User's activities as a Buyer.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.4. If you use the Services both as a Buyer and as a Seller, the Buyer Terms apply to your activities as a Buyer and the Seller Terms apply to your activities as a Seller.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">2. Minors policy</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.1. Minors may use the Services as Buyers only in accordance with Section 3 of the General Terms and applicable law. Where applicable law requires the consent or authorization of a Responsible Adult, the Minor must have such consent or authorization before purchasing an Item.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.2. The fact that a purchase was made by a Minor, or using an Account or payment method belonging to a Responsible Adult, does not by itself establish that the transaction was unauthorized or create an automatic entitlement to a refund. Any request to unwind or refund such purchase will be assessed in respect of each transaction individually in accordance with Section 3 of the General Terms, Section 8 of these Buyer Terms and mandatory applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">3. Eldorado operational model</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.1. The Site enables Buyers to purchase Items offered by independent Sellers. The contract for the purchase of an Item is concluded between the Buyer and the Seller. Eldorado facilitates the transaction but is not the seller of the Item and does not acquire ownership of the Item.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.2. Payments for Items are made through the payment methods supported by Eldorado and may be collected by Eldorado or an entity designated by Eldorado to collect payments on behalf of Sellers. Payment received by Eldorado or its designated collection agent in respect of a transaction discharges your corresponding payment obligation to the Seller.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.3. Items available through the Services may include game accounts, in-game currency, virtual items, top-ups, vouchers, boosting services and other gaming-related digital goods or services made available through the Site.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.4. Where a Seller acts as a Trader, Eldorado will make available the Trader information required under Article 30(7) DSA in accordance with Section 9 of the Seller Terms, enabling Buyers to identify the Trader and, where applicable, exercise their statutory rights directly against the Trader.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">4. Buyers pre-purchase obligations</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.1. Before completing any purchase, you are solely responsible for:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.1.1. reading and understanding the full description of the Item in the Seller's listing, including all stated conditions, requirements and restrictions;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.1.2. satisfying yourself that the Item meets your requirements and is suitable for your intended use; and</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.1.3. ensuring that your purchase and intended use of the Item comply with applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.2. You acknowledge that the purchase or use of certain Items, including, but not limited to, game accounts, in- game currency, virtual items and boosting services, may involve risks arising from the rules or actions of the relevant game developer, publisher or platform, including restrictions, suspension or termination of a game account, loss of in-game progress or assets, or limitations on the use or transfer of the Item.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">5. Making a purchase</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.1. By completing a purchase through the Services, you enter into a binding contract with the Seller for the purchase and supply of the relevant Item on the terms of the Seller's listing and the Agreement. Subject to Section 8 of these Buyer Terms and any rights available to you under mandatory applicable law, purchases are binding once confirmed.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2. Following confirmation of the transaction and receipt of payment, the Seller must deliver the Item within the delivery period stated in the listing. Delivery details and instructions may be communicated through the order page or other functionality made available through the Services. An order is treated as completed when you confirm receipt by selecting Order Received or when the order otherwise becomes completed in accordance with the applicable order process communicated through the Services. Completion closes the order for the purposes of Eldorado's ordinary transaction administration, without limiting any rights available under Sections 7 and 8 of these Buyer Terms or mandatory applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.3. If the Seller is unable to fulfil your order within the delivery time indicated through the Services, the amount paid for the unfulfilled order will be refunded to your balance available through the Services.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">6. Payment</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.1. You must use a valid payment method supported by Eldorado to make purchases through the Services. Before you complete a transaction, Eldorado will disclose the price of the Item and any applicable fees, taxes or other charges payable through the Services in connection with that transaction. Eldorado may change applicable Buyer fees from time to time, provided that the fees applicable to a transaction are disclosed before you confirm the purchase. Eldorado is not responsible for currency conversion fees or other charges independently imposed by your bank, card issuer or payment provider.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.2. By providing payment information to Eldorado or a Payment Processor, you represent and warrant that you are authorized to use the relevant payment method and authorize the charging of the amounts disclosed to you in connection with the relevant transaction.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.3. Payment processing may be provided by third-party Payment Processors and may be subject to their applicable terms and conditions. To the fullest extent permitted by applicable law, Eldorado is not responsible for errors, failures or delays attributable solely to a Payment Processor or other third-party payment infrastructure.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.4. If a payment is declined, reversed or otherwise not successfully completed, Eldorado may refuse or cancel the relevant transaction, restrict access to purchasing functionality, or require payment of any amount validly due under the Agreement before permitting further purchases. Eldorado may recover outstanding amounts through lawful means.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.5. Eldorado may require verification of your identity, age, payment method or other information reasonably necessary in connection with a transaction, including by requesting identification or supporting documentation. Eldorado may delay or refuse a transaction or temporarily restrict relevant Account functionality until the required verification has been completed.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">7. Consumer rights</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.1. This Section applies where you act as a Consumer and purchase an Item from a Seller who acts as a Trader. Where either condition is not met, the statutory consumer rights described in this Section may not apply.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.2. Depending on its nature, an Item may constitute digital content, a digital service or another type of product or service for the purposes of applicable consumer protection law, including Directive 2011/83/EU on consumer rights, as amended by Directive (EU) 2019/2161 (<b className="font-bold">Consumer Rights Directive</b>). The classification of an Item and the rights applicable to it are determined by applicable law and the nature of the relevant transaction.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.3. Under Article 9 of the Consumer Rights Directive, Consumers generally have a 14-day right of withdrawal from distance contracts without giving any reason.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.4. The right of withdrawal may cease before the end of the 14-day withdrawal period in the circumstances permitted by the Consumer Rights Directive. In particular, where an Item constitutes digital content not supplied on a tangible medium, you may lose the right of withdrawal once supply begins, provided that you have expressly consented to the supply beginning during the withdrawal period and acknowledged that this will result in the loss of your right of withdrawal. Where an Item constitutes a service or digital service, you may lose the right of withdrawal once the service has been fully performed, provided that the applicable requirements for your prior express consent and acknowledgement have been satisfied.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.5. Where an Item constitutes digital content or a digital service and Directive (EU) 2019/770 applies, the Trader is responsible for supplying the Item and ensuring that it conforms to the contract. Where the Item is not supplied or does not conform to the contract, you are entitled to the remedies provided by applicable law, which may include having the Item brought into conformity, a proportionate reduction in price or termination of the contract.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.6. Nothing in these Buyer Terms limits or excludes any rights or remedies available to you under the Consumer Rights Directive, Directive (EU) 2019/770 or other mandatory consumer protection law applicable to the relevant transaction.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">8. Refund policy</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.1. Following delivery of an Item, you may raise a dispute through Eldorado during the applicable buyer protection period (<b className="font-bold">Buyer Protection Period</b>). The applicable Buyer Protection Period depends on the relevant game or Item category and is stated in the applicable listing, game category page or otherwise communicated through the Services. Once the applicable Buyer Protection Period has expired without a dispute being raised, or once you confirm receipt by selecting Order Received, Eldorado's ordinary buyer protection for the transaction ends, without prejudice to any rights available to you under Section 7 of these Buyer Terms or mandatory applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.2. During the applicable Buyer Protection Period, you may be entitled to a refund where:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.2.1. the Item has not been delivered within the applicable delivery period;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.2.2. the Item delivered materially differs from the Seller's listing; or</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.2.3. in the case of a game account, fraud, loss of access or an unauthorized material alteration affecting the account is identified within the applicable Buyer Protection Period.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.3. To request a refund or other resolution under this Section, you must use Raise a Dispute on the relevant order page or contact Eldorado through the support functionality made available through the Services. A request under Eldorado's buyer protection must be submitted during the applicable Buyer Protection Period.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.4. Eldorado will assess the request on the basis of the information and evidence available in relation to the transaction and may request additional information from the Buyer or Seller. Eldorado will communicate the outcome following completion of the relevant review and, where a refund is approved, process the refund through the applicable payment method within a reasonable time.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.5. Eldorado's buyer protection does not provide a refund solely because:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.5.1. you changed your mind after the applicable right of withdrawal has ceased;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.5.2. you confirmed receipt of an Item that materially conformed to the listing; or</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.5.3. loss or dissatisfaction results solely from risks inherent in the use of the relevant Item, including action taken by a game developer, publisher or platform, and is not attributable to the Seller's breach of the transaction terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.6. Requests concerning purchases allegedly made by Minors without the required consent or authorization are governed by Section 3 of the General Terms and Section 2 of these Buyer Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">9. Chargeback</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.1. You must not knowingly initiate a fraudulent, abusive or otherwise unjustified chargeback, payment reversal or similar payment dispute in relation to a transaction conducted through the Services, including where the relevant Item was delivered in accordance with the transaction and you have no legitimate basis for disputing the payment.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.2. If you experience a problem with an Item or transaction, you should first use the dispute and refund mechanisms made available by Eldorado under Sections 8 and 10 of these Buyer Terms where reasonably practicable. Nothing in this Section requires you to exhaust Eldorado's internal procedures before exercising any right to dispute a payment that is available to you under applicable law or the rules of your bank, card issuer or Payment Processor.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.3. Where Eldorado reasonably determines, following review, that you have initiated a fraudulent, abusive or otherwise unjustified chargeback or payment reversal, Eldorado may restrict or suspend your Account, recover the amount of the reversed payment and any directly related costs for which you are responsible under the Agreement, and take any other action permitted under the Agreement. A serious or repeated abuse of chargeback or payment reversal mechanisms may result in termination of your Account.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.4. Nothing in this Section limits any right available to you under applicable law or the rules applicable to your payment method, including in cases of unauthorized use of your payment method, non-delivery or other circumstances giving rise to a lawful right to dispute the payment.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">10. Disputes with Sellers</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.1. If you have a dispute with a Seller in connection with a specific transaction, you must use the Raise a Dispute function on the relevant order page or contact Eldorado through the support functionality made available through the Services. Eldorado may investigate and resolve the dispute in accordance with the Agreement and on the basis of the information and evidence available in relation to the transaction.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.2. You must not obstruct, manipulate or otherwise interfere with Eldorado's investigation or resolution of a transaction dispute, including by knowingly providing false or misleading information or evidence, concealing material information or improperly attempting to influence the Seller in connection with the dispute.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.3. Eldorado's transaction dispute process does not limit any rights or remedies available to you under Section 7 of these Buyer Terms, applicable law or the rules applicable to your payment method.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">11. Buyers rights under the DSA</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.1. Where advertisements are presented through the Services, Eldorado will provide the information required under Article 26 DSA, including information identifying the advertisement, the person on whose behalf it is presented and, where applicable, the person who paid for it, together with meaningful information about the main parameters used to determine the recipient to whom the advertisement is presented.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.2. Where a Seller acts as a Trader, you are entitled to the Trader information made available by Eldorado under Article 30(7) DSA and to the pre-contractual, compliance and safety information provided through the functionality made available by Eldorado in accordance with Article 31 DSA and Section 9 of the Seller Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.3. Where Eldorado becomes aware that an Item constituting an illegal product or service has been offered by a Trader to Consumers located in the European Union, Eldorado will, where required by Article 32 DSA, inform affected Consumers who purchased it during the preceding six months, insofar as Eldorado has their contact details, of the illegality, the identity of the Trader and any relevant means of redress. Where Eldorado does not have the contact details of all affected Consumers, Eldorado will make that information publicly and easily accessible through the Services.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.4. Where you are a Minor, the protections described in Section 3 of the General Terms and Section 2 of these Buyer Terms apply, including the protections required under Article 28 DSA concerning the privacy, safety and security of Minors and restrictions on profiling-based advertising.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]"></p>
+                        <h4 className="font-bold mb-[25px] text-[36px] leading-[40px]">
+                          <b className="font-black">Eldorado.gg New Seller Terms of Service</b>
+                        </h4>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">Effective from December 1st, 2026</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">1. Scope and structure</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.1. These Seller Terms apply to any User who uses the Services as a Seller, including by listing, offering or selling Items to Buyers.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.2. These Seller Terms form part of the Agreement and apply together with the General Terms. Capitalized terms not defined in these Seller Terms have the meanings given to them in the General Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.3. In the event of any discrepancy between these Seller Terms and the General Terms, these Seller Terms shall prevail to the extent of such discrepancy in relation to the User's activities as a Seller.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">1.4. If you use the Services both as a Seller and as a Buyer, the Seller Terms apply to your activities as a Seller and the Buyer Terms apply to your activities as a Buyer.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">2. Role of Eldorado</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.1. By listing an Item through the Services, you authorize Eldorado to facilitate and, where necessary for the operation of the Services, conclude a contract between you and a Buyer on your behalf in accordance with the terms of your listing and the Agreement. Any such contract is concluded exclusively between you and the Buyer. Eldorado is not a party to that contract and does not acquire any ownership interest in the Item.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.2. You appoint Eldorado, and any entity designated by Eldorado for payment collection purposes, as your limited collection agent to receive and collect payments from Buyers in connection with transactions concluded through the Services. Payment made by a Buyer to Eldorado or its designated collection agent shall, to the extent actually received, discharge the Buyer's corresponding payment obligation to you. Eldorado may engage Payment Processors and other service providers in connection with the processing, collection and settlement of such payments.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.3. Amounts collected in connection with your transactions are credited to your Seller Balance and administered in accordance with Section 6 of these Seller Terms. Amounts credited to your Seller Balance remain subject to any applicable fees, refunds, chargebacks, reserves, deductions, set-off rights, verification requirements and other adjustments permitted under the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.4. You authorize Eldorado to administer transactions concluded through the Services, including order confirmation, delivery status, transaction holds, Buyer complaints, disputes, refunds, chargebacks and other transaction adjustments, in each case in accordance with the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">2.5. You remain solely responsible for each Item you list, offer, sell or deliver through the Services, including its quality, safety, legality, authenticity, availability, accuracy and conformity with the listing and applicable law. Eldorado's facilitation or administration of a transaction does not transfer any such responsibility to Eldorado.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">3. Trader status</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.1. You must accurately indicate whether you act as a Trader when requested by Eldorado and promptly update the information provided if your circumstances or selling activities change.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.2. Eldorado may assess or verify your Trader status on the basis of information available to Eldorado, your selling activity and any additional information or documentation reasonably requested from you. Where Eldorado reasonably determines that you act as a Trader, Eldorado may classify or reclassify you accordingly.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">3.3. If you are a Trader, you must complete the verification requirements set out in Section 9 of these Seller Terms before you are permitted to offer Items to Buyers.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">4. Listing requirements</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.1. By listing an Item through the Services, you represent and warrant that you own the Item or otherwise have all rights and authorizations necessary to offer, sell, transfer and deliver the Item to a Buyer, and that the listing, sale, transfer and delivery of the Item do not violate applicable law, Third-Party Rights or the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+4.2. You must comply with Eldorado <a href="https://support.eldorado.gg/en/articles/8408997-seller-rules" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>Seller Rules</u>
+</a>, which form part of the Agreement. In the event of a conflict, these Seller Terms and the General Terms shall prevail over the Seller Rules.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.3. Each listing must be accurate, complete and not misleading and must include all material information reasonably necessary for a Buyer to understand the nature and characteristics of the Item, the applicable delivery terms and any material conditions or restrictions relating to the Item. The listing must be placed in the appropriate category, use accurate tags and state the applicable price, including taxes where required by applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.4. You may list only Items that are available or that you are reasonably able to source and deliver within the delivery period stated in the listing. You must promptly update or remove a listing if the Item is no longer available or cannot be delivered as described. If you become unable to fulfil an order after it has been placed, you must notify Eldorado without undue delay.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.5. You must not list, offer or sell any Item that is counterfeit, stolen, fraudulently obtained, prohibited under the Agreement or applicable law, or that otherwise falls within the prohibited activities set out in Section 5.2 of the General Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.6. In respect of game account listings, where you act as a Trader, you must only list accounts that were created and previously used for personal, non-commercial gameplay. You must not list, offer or sell any account that was created, developed, farmed, maintained or otherwise used for commercial resale or any other commercial purpose. In addition, you must not list, offer or sell any account that has been created, levelled, enhanced, farmed or otherwise developed using bots, cheats, hacks, unauthorized automation or other tools or methods prohibited by the relevant game developer or publisher, also accounts, that are age-verified. Where you act as a Trader, you must ensure that the source and history of each game account offered by you comply with this Section and must, upon Eldorado's request, provide information or evidence reasonably necessary to demonstrate such compliance.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">4.7. Where Eldorado identifies a listing that may infringe Third-Party Rights, violate the Agreement or otherwise require review, Eldorado may, where appropriate, give you an opportunity to voluntarily remove or modify the listing within the period specified by Eldorado before deciding whether any further action is necessary. Where you voluntarily remove or modify the listing without Eldorado imposing a restriction, such action does not constitute a restriction imposed by Eldorado under Section 7 of the General Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">5. Seller obligations</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.1. Once a transaction has been confirmed through the Services, you must deliver the Item to the Buyer within the delivery period stated in the listing and otherwise in accordance with the listing and the Agreement, unless the transaction is cancelled, suspended or otherwise prevented from proceeding in accordance with the Agreement or Eldorado expressly authorizes otherwise.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.2. Each Item delivered by you must materially conform to the relevant listing and must be authentic, lawfully obtained and capable of being transferred or provided to the Buyer in the manner described in the listing. You remain responsible for ensuring that the Item and its delivery comply with applicable law and the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.3. You must retain and, upon Eldorado's request, provide information or evidence reasonably necessary to demonstrate that an Item was delivered in accordance with the listing and the Agreement, including information relevant to the resolution of a Buyer complaint, dispute, refund or chargeback.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">5.4. You must promptly notify Eldorado if you become aware of any circumstance that prevents or is reasonably likely to prevent you from delivering an Item in accordance with the relevant transaction.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">6. Seller fees, balance and payouts</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+6.1. Eldorado charges fees in connection with transactions completed through the Services. The applicable Seller fees are set out on the <a href="https://intercom.help/eldoradogg/en/articles/8409025-seller-fees" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>Fees page</u>
+</a>, which forms part of the Agreement. Eldorado may amend applicable fees in accordance with the Agreement and applicable law. Any temporary promotional reduction or waiver of fees may be introduced or withdrawn without prior notice, unless applicable law requires otherwise.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.2. Amounts collected in connection with your transactions, after deduction of applicable fees and other amounts permitted under the Agreement, are credited to the balance recorded in your Account (<b className="font-bold">Seller Balance</b>). The Seller Balance represents amounts attributable to your selling activity and may be subject to applicable holding periods, reserves, refunds, chargebacks, disputes, verification requirements, deductions, set-off and other adjustments under the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.3. Amounts credited to your Seller Balance become available for withdrawal after expiry of the applicable holding period and satisfaction of any other requirements applicable to the relevant transaction or Account. The standard holding period is between five (5) and ten (10) business days from the date of delivery. Eldorado may apply a longer holding period for certain Items, games, Sellers or transactions where reasonably necessary having regard to the nature of the Item, fraud risk, chargeback risk, refund risk, transaction history or other relevant circumstances. Where a longer holding period applies, the applicable period will be communicated to the Seller through the Services or in connection with the relevant Item, game or transaction.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.4. Eldorado may establish, maintain or adjust a reserve from your Seller Balance where reasonably necessary to cover actual or reasonably anticipated refunds, chargebacks, disputes, liabilities or other amounts for which you may be responsible under the Agreement. The amount and duration of any reserve may be determined taking into account your transaction history, chargeback and refund rates, the nature of Items sold, Account activity and other relevant risk factors.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.5. Eldorado may deduct from or set off against your Seller Balance any fees, refunds, chargebacks, reimbursements, amounts payable to Buyers, liabilities or other amounts owed by you to Eldorado under the Agreement. Where your Seller Balance is insufficient, Eldorado may recover the outstanding amount in accordance with Section 7 of these Seller Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.6. You may withdraw amounts available for withdrawal from your Seller Balance using a payout method supported by Eldorado and registered in your Account. Payouts may be subject to minimum or maximum amounts, processing periods and other operational requirements communicated through the Services.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.7. Payouts can only be made to a bank account, payment account or other supported financial account held in the Seller's own name. Payouts to accounts held in the name of any third party are not permitted. Eldorado may require information or documentation reasonably necessary to verify ownership of the payout account and may restrict or delay a payout until such verification is completed.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.8. Eldorado may restrict or delay the withdrawal or payout of any amount from the Seller Balance where:&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.8.1. the relevant amount remains subject to a holding period or reserve;&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.8.2. a transaction, complaint, dispute, chargeback or investigation remains pending;&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.8.3. required identity, KYC, Trader or other verification has not been completed or any information or supporting documentation requested by Eldorado has not been provided;&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.8.4. Eldorado reasonably suspects fraud, abuse or a breach of the Agreement;&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.8.5. the amount may be required to satisfy an existing or reasonably anticipated liability under the Agreement; or&nbsp;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.8.6. such restriction or delay is required or permitted by applicable law or by a competent authority.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.9. Where any of the circumstances in Section 6.8 apply, resulting in the termination of the Seller's Account under Section 7.3, Eldorado may continue to restrict withdrawals or payouts from the Seller Balance for an initial period of up to 30 days in order to:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.9.1. carry out any investigation it reasonably considers necessary;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.9.2. assess any refunds, reimbursements, chargebacks, disputes or other liabilities arising from transactions on the Seller's Account; and</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.9.3. request and review any information or supporting documentation it reasonably requires. This may include, but is not limited to, proof of identity or address, proof of ownership of payment methods, and evidence relating to specific transactions or to the origin of the goods or services sold. assess any refunds, reimbursements, chargebacks, disputes or other liabilities arising from transactions completed before the termination of the Sellers account.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.10.Eldorado may extend the restriction in further periods of up to 30 days, where, following an individual review, the matters described in Section 6.9 remain unresolved. This includes where the Seller has not provided the requested information or documentation. The total restriction period will not exceed 180 days unless a longer period is required by applicable law, a competent authority, a Payment Processor or a pending chargeback, dispute or investigation.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.11. During the restriction period, Eldorado may apply amounts from the Seller Balance against amounts due from the Seller under the Agreement, including refunds or reimbursements under Section 7.1. Once the grounds for the restriction cease to apply, the withdrawal restriction will be lifted, subject to completion of any required identity, KYC or other verification and any applicable set-off under the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.12. Notwithstanding Section 6.10, where any required identity, KYC or other verification has not been completed, or any information or supporting documentation requested by Eldorado has not been provided, Eldorado may continue to restrict withdrawals or payouts from the Seller Balance beyond 180 days until that verification is completed to Eldorado's reasonable satisfaction. This applies in particular where Eldorado has reasonable grounds to believe that:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.12.1. the Account has been sold, assigned, transferred or otherwise made available to another person without Eldorados prior authorization acting in breach of Section 4.4 of the General Terms; or</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.12.2. the Account has been accessed or used without the authorization of the Account holder and the identity of the original Account holder cannot be verified.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.13. Any restriction under Section 6.12 is applied to protect the security of the Account and the Seller Balance, and to prevent fraud and money laundering. It does not result in forfeiture of the Seller Balance. Eldorado will release funds only to the verified Account holder, using a payment method held in that person's name. Where funds remain unclaimed, Eldorado will deal with them in accordance with applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+6.14. You authorize Eldorado to provide Payment Processors and other service providers involved in payment collection, processing and settlement with information and transaction data reasonably necessary to provide such services, subject to the <a href="https://www.eldorado.gg/privacy-policy" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>Privacy Policy</u>
+</a> and applicable law.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">6.15. You are responsible for determining, reporting and paying any taxes arising from your selling activity, including VAT or equivalent taxes where applicable, and for issuing any invoices or other tax documentation required by applicable law. Eldorado does not provide tax advice and does not assume responsibility for your tax obligations, except to the extent applicable law expressly provides otherwise.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">7. Seller financial liability</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.1. Where, following a Buyer complaint, dispute or other review under the Agreement, Eldorado determines that an amount is required to be refunded or reimbursed in connection with a transaction for which you are responsible, you must reimburse that amount. Eldorado may deduct or set off the relevant amount against your Seller Balance or any other amounts payable to you. Where such amounts are insufficient, you must pay the outstanding amount to Eldorado upon request.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.2. You shall indemnify and reimburse Eldorado in full for any losses, liabilities, costs or expenses reasonably incurred by Eldorado as a direct result of your fraud, material breach of the Agreement or other unlawful or improper conduct, including reasonable legal and professional costs incurred in investigating, mitigating or enforcing the relevant matter.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.3. Where Eldorado determines, following review, that a Seller has committed a serious breach or repeated breaches of the Agreement, including fraud, scam or other deliberate deceptive conduct, Eldorado will terminate the Seller's Account without any possibility of reinstatement. The termination will take effect immediately where permitted under Section 10.7 or otherwise by applicable law. Any restriction on the withdrawal of the Seller Balance following such decision is governed separately by Section 6.8.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.4. Where a Buyer or other payer initiates a chargeback, payment reversal or similar payment dispute in respect of a transaction involving an Item sold by you, you are responsible for the resulting transaction amount and any related amounts for which you are liable under the Agreement. Eldorado may deduct or set off such amounts against your Seller Balance or other amounts payable to you and, where insufficient, recover the outstanding amount from you. Eldorado may determine, having regard to the available evidence, applicable payment scheme rules, costs and prospects of recovery, whether to accept, contest or otherwise resolve a chargeback or payment reversal.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">7.5. You must provide any information, evidence or documentation reasonably requested by Eldorado in connection with a chargeback, payment reversal, Buyer refund or other payment dispute within the timeframe specified by Eldorado. Failure to provide the requested information within that timeframe may result in Eldorado resolving the relevant matter on the basis of the information then available.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">8. Disputes with Buyers</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.1. Where a Buyer raises a dispute in connection with a transaction, Eldorado may investigate and resolve the dispute in accordance with the Agreement and the information and evidence available to it. Eldorado's transaction dispute process applies to disputes relating to specific transactions and does not constitute adjudication of general claims or disputes unrelated to a particular transaction.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.2. You must not obstruct, manipulate or otherwise interfere with Eldorado's investigation or resolution of a transaction dispute, including by knowingly providing false or misleading information or evidence, concealing material information, or attempting to improperly influence the Buyer in connection with the dispute. Any serious or repeated breach of this Section may result in action under Section 7.3 of these Seller Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">8.3. To the fullest extent permitted by applicable law, Eldorado is not responsible for the acts or omissions of a Buyer or any other User in connection with a dispute between Users, except to the extent that the relevant loss or damage results from Eldorado's breach of the Agreement or applicable law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">9. DSA Trader obligations</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.1. Before you are permitted to offer Items as a Trader to Buyers, you must provide Eldorado with the following information in addition to information required under Section 11, where applicable:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.1.1. your name, address, telephone number and email address;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.1.2. a copy of your identification document or other electronic identification accepted by Eldorado;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.1.3. your payment account details;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.1.4. where you are registered in a trade register or similar public register, the name of that register and your registration number or equivalent means of identification in that register; and</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.1.5. a self-certification committing to offer only Items that comply with applicable rules of European Union law.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.2. You must ensure that the information provided under Section 9.1 is accurate, complete and up to date and must promptly notify Eldorado of, and provide updated information concerning, any change affecting that information.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.3. Eldorado may verify the information provided under Section 9.1 by reference to official databases or other reliable sources and may require supporting information or documentation reasonably necessary for that purpose. Where Eldorado has reason to believe that any such information is inaccurate, incomplete or no longer up to date, Eldorado may require you to correct or complete it within the period specified by Eldorado. If you fail to do so, Eldorado may suspend your ability to list, offer or sell Items through the Services until the required information has been provided and satisfactorily verified.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.4. A Trader affected by a refusal or suspension under this Section may challenge the decision through the complaint-handling and out-of-court dispute settlement mechanisms described in Sections 7.5 and 7.6 of the General Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.5. Where required by Article 30(7) DSA, Eldorado will make the following Trader information available to Users in a clear, easily accessible and comprehensible manner through the Site, including at least where information concerning the relevant Item is presented:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.5.1. the information referred to in Section 9.1.1;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.5.2. the trade register information referred to in Section 9.1.4;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.5.3. the self-certification referred to in Section 9.1.5.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.6. Where you offer or sell Items to Consumers, you must, by means of the functionality and information fields made available by Eldorado through the Services, comply with all mandatory consumer protection requirements applicable to the relevant transaction. This includes, where applicable, providing before the purchase all information required for the clear and unambiguous identification of the Item and all applicable pre-contractual, compliance and safety information, including information required under Articles 6 and 8 of Directive 2011/83/EU, Article 7 of Directive 2005/29/EC, Articles 5 and 6 of Directive 2000/31/EC and Article 3 of Directive 98/6/EC, as well as complying with any applicable rights of withdrawal, conformity requirements, statutory remedies and complaint-handling obligations.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">9.7. You must ensure that the information referred to in Section 9.5 of these Seller Terms is accurate, complete and up to date before the Item is offered through the Services and must promptly correct or update it where necessary.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">10. Platform-to-Business compliance</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.1. This Section applies to Traders who have their place of establishment or residence in the European Union and fall within the scope of Regulation (EU) 2019/1150 (<b className="font-bold">P2B Regulation</b>).</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.2. Eldorado will notify you on a durable medium of any proposed amendment to the Agreement at least fifteen (15) days before the amendment takes effect. A longer notice period will be provided where reasonably necessary to allow you to make technical or commercial adaptations required by the proposed amendment. You may terminate the Agreement before the expiry of the applicable notice period. The notice period does not apply where Eldorado is required by law or regulation to implement an amendment without observing that period, or where an amendment is exceptionally necessary to address an unforeseen and imminent danger relating to fraud, malware, spam, data breaches or other cybersecurity risks. Eldorado will not apply amendments retroactively except where required by a legal or regulatory obligation or where the amendment is beneficial to you.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.3. The main parameters determining the ranking of listings through the Services, the reasons for the relative importance of those parameters and, where applicable, the manner in which remuneration may influence ranking are described in Eldorado's Transparency Notice. For the purposes of the P2B Regulation, the relevant provisions of the Transparency Notice are incorporated into these Seller Terms.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+10.4. Eldorado's practices regarding the categories of data you may access through the Site, and which Eldorado may process for its own purposes or share with third parties, are described in the <a href="https://www.eldorado.gg/privacy-policy" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>Privacy Policy</u>
+</a>.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.5. Eldorado may offer Buyers optional ancillary services in connection with Items offered by Traders, including extended warranty or buyer protection services relating to game accounts. Such services are offered by Eldorado separately from the Item offered by the Trader and may be subject to an additional fee payable to Eldorado.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.6. The effect of the Agreement on the ownership and control of intellectual property rights relating to content provided by Traders is set out in Sections 6 and 9 of the General Terms. Except for the licences expressly granted under the Agreement, the Agreement does not transfer ownership of a Trader's intellectual property rights to Eldorado.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.7. Where Eldorado restricts or suspends the provision of the Services to you in relation to individual Items or selling activities, Eldorado will provide you, on a durable medium, with a statement of reasons before or at the time the restriction or suspension takes effect. Where Eldorado terminates the provision of the Services to you in their entirety, Eldorado will provide you, on a durable medium, with a statement of reasons at least thirty (30) days before the termination takes effect, unless the notice period does not apply under Article 4(4) of the P2B Regulation. Where the notice period does not apply, the statement of reasons will be provided without undue delay, except where applicable law permits Eldorado not to provide such reasons.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+10.8. You may submit complaints concerning Eldorado's compliance with the P2B Regulation, technological issues directly related to the provision of the Services, or measures taken or conduct by Eldorado directly relating to the Services and affecting you, by contacting <a href="mailto:support@eldorado.gg" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>support@eldorado.gg</u>
+</a> with the subject line P2B Complaint. The complaint-handling mechanism is free of charge. Complaints will be handled within a reasonable timeframe in a transparent and proportionate manner and on the basis of equal treatment of equivalent situations. Eldorado will communicate the outcome of the complaint and the reasons for it.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">10.9. Where you are subject to a restriction, suspension or termination, you may use the complaint-handling mechanism under Section 10.8 of these Seller Terms to clarify the relevant facts and circumstances. Where Eldorado revokes such a decision, Eldorado will reinstate the affected Services without undue delay and restore any applicable access to data available before the decision took effect.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+10.10. For the purposes of Article 12 of the P2B Regulation, Eldorado is willing to engage in mediation with mediators made available through <a href="https://www.cedr.com/mediation-services" className="text-[rgb(45,_94,_173)]">
+                            <u className="underline" style={{"textDecoration":"underline"}}>CEDR</u>
+</a>. Eldorado and the Trader will engage in any mediation in good faith. Eldorado will bear a reasonable proportion of the total costs of mediation in accordance with Article 12(4) of the P2B Regulation. Mediation does not affect either party's right to initiate arbitration or judicial proceedings before, during or after the mediation process.                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">
+                          <b className="font-bold">11. Seller verification</b>
+                        </p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.1. Successful completion of the verification required by Eldorado is a mandatory condition for becoming and remaining a Seller. You will not be approved or activated as a Seller and may not list, offer or sell Items through the Services unless and until all verification requirements applicable to you have been successfully completed. The submission of documents or information does not in itself constitute successful verification or guarantee approval as a Seller.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.2. If you are an individual, you must provide the following information and documents for verification:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.2.1. a valid passport or national identity card containing your full name, date of birth, photograph and document number;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.2.2. proof of your current residential address, issued no more than three (3) months before submission, in the form of a bank or payment account statement, utility bill, tax document, government-issued correspondence or other official document accepted by Eldorado;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.2.3. any photograph, selfie, liveness check or other identity-matching information required through Eldorado's verification process; and</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.2.4. evidence that the bank account, payment account or other financial account designated for payouts is held in your name, where requested by Eldorado.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.3. Where you act as a Trader, you must, in addition to the verification requirements under this Section, complete the Trader Verification requirements set out in Section 9.1 of these Seller Terms before you are permitted to offer Items to Buyers as a Trader.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.4. All documents and information submitted for verification must be valid, current, complete, accurate, legible and unaltered and must correspond with the information registered in your Account. You must not conceal, redact, manipulate or otherwise modify any material information contained in a document, except where Eldorado expressly permits you to do so. Eldorado may require an original electronic document, a higher-quality copy, a certified copy or a translation where reasonably necessary to verify the information provided.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.5. Eldorado may require additional verification where reasonably necessary having regard to the Seller, the Seller's activity, transaction volume, risk indicators or applicable legal or compliance requirements. Such additional verification may include information or documentary evidence concerning:</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.5.1. the source, ownership or provenance of Items offered or sold through the Services, including purchase receipts, invoices, transaction records, account records or other evidence demonstrating how the Items were acquired;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.5.2. the source of funds or source of wealth associated with the Seller or transactions conducted through the Services, including bank or payment account statements, transaction records, invoices, contracts or other supporting documentation;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.5.3. the ownership or control of any payment or payout account;</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.5.4. the Seller's business activities, ownership and control structure, directors, authorized representatives or ultimate beneficial owners, including documents evidencing ownership, control or authority to act on behalf of the Seller; or</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.5.5. any transaction, Account activity or other circumstance relevant to the prevention or investigation of fraud, money laundering, terrorist financing, sanctions violations or other unlawful activity.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.6. You must complete each verification step and provide all requested information or documentation within the timeframe specified by Eldorado. Eldorado may reject a document or verification submission where the information cannot be reliably verified, is inconsistent with other information available to Eldorado, is incomplete, inaccurate, expired, illegible or appears to have been altered, falsified or obtained unlawfully. Eldorado may require you to repeat or supplement the verification process where necessary to resolve such concerns.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.7. If you do not successfully complete the verification required before Seller activation, you will not be permitted to become a Seller or to list, offer or sell Items through the Services. Eldorado is under no obligation to activate Seller functionality merely because you have submitted the requested information or documents.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.8. Eldorado may require an existing Seller to complete re-verification or additional verification at any time where reasonably necessary, including where information previously provided has changed or expired, where the Seller's activity or risk profile has materially changed, or where verification is required by applicable law, a Payment Processor or another service provider involved in the provision of the Services. Until the required verification has been successfully completed, Eldorado may restrict selling functionality, delay or refuse transactions or payouts, remove or suspend listings, or suspend the Account in accordance with the Agreement.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.9. You must promptly notify Eldorado of any material change to information previously provided for verification and provide updated information or documentation where required.</p>
+                        <p className="mb-[16px] text-[14px] leading-[21px]">11.10. Eldorado may process, verify, retain and disclose verification information in accordance with the Privacy Policy and applicable law, including by using third-party identity verification, fraud prevention, payment and compliance service providers. Eldorado may disclose information or report activity to competent authorities where required or permitted by applicable law.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+          <div>
+            <footer className="bg-[rgb(20,_19,_26)] rounded-tl-lg rounded-tr-lg min-h-[330px]">
+              <div className="ml-auto mr-auto max-w-full relative w-[1208px] pt-0 pr-6 pb-0 pl-6">
+                <div className="items-center flex justify-between gap-[24px] pt-6 pr-0 pb-0 pl-0">
+                  <div className="items-center flex justify-items-center gap-[10px]">
+                    <div className="overflow-hidden h-7 shrink-[0]">
+                      <img alt="PayPal" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fbe26f9578d36fbec1ea541e216be0baffb24b6eb.svg?generation=1788944034715505&amp;alt=media" className="block object-cover overflow-clip align-middle w-[42px] h-7 aspect-[auto_42_/_28]" />
+                    </div>
+                    <div className="overflow-hidden h-7 shrink-[0]">
+                      <img alt="Mastercard" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Ff69b4c15c76748a27bdc5c66d38995139aa6cb34.svg?generation=1788944034829683&amp;alt=media" className="block object-cover overflow-clip align-middle w-[42px] h-7 aspect-[auto_42_/_28]" />
+                    </div>
+                    <div className="overflow-hidden h-7 shrink-[0]">
+                      <img alt="AMEX" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fedd87f1b6f3fc2910a0c603d67d014e2c36eaa9d.svg?generation=1788944034855851&amp;alt=media" className="block object-cover overflow-clip align-middle w-[42px] h-7 aspect-[auto_42_/_28]" />
+                    </div>
+                    <div className="overflow-hidden h-7 shrink-[0]">
+                      <img alt="Discover" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F1fa660f72e7353bef906ba3149193a8075c4614d.svg?generation=1788944034846618&amp;alt=media" className="block object-cover overflow-clip align-middle w-[42px] h-7 aspect-[auto_42_/_28]" />
+                    </div>
+                    <div className="overflow-hidden h-7 shrink-[0]">
+                      <img alt="Bitcoin" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fa7aa571e539964d3cec5895a814f6c4a1b50c5f9.svg?generation=1788944034846697&amp;alt=media" className="block object-cover overflow-clip align-middle w-[42px] h-7 aspect-[auto_42_/_28]" />
+                    </div>
+                    <div className="overflow-hidden h-7 shrink-[0]">
+                      <img alt="Google Pay" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F8056a8d2173e39a6ec2002f1a8a5937440c1f78d.svg?generation=1788944034895191&amp;alt=media" className="block object-cover overflow-clip align-middle w-[42px] h-7 aspect-[auto_42_/_28]" />
+                    </div>
+                    <div className="overflow-hidden h-7 shrink-[0]">
+                      <img alt="Apple Pay" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F761051c3cd234ce085583b8c2c0fd608b7405999.svg?generation=1788944034867435&amp;alt=media" className="block object-cover overflow-clip align-middle w-[42px] h-7 aspect-[auto_42_/_28]" />
+                    </div>
+                    <span className="block text-[rgb(137,_138,_147)] text-[14px] leading-[normal]">+15 more</span>
+                  </div>
+                  <div role="button" className="items-center flex font-bold justify-center h-9 bg-[rgb(34,_33,_39)] text-white text-[14px] gap-[6px] leading-[21px] pt-0 pr-4 pb-0 pl-4 rounded-lg">
+                    <div>
+                      <div className="overflow-hidden w-6 h-6">
+                        <span className="block font-normal w-6 h-6 text-[24px] leading-[24px]" style={{"fontFamily":"icomoon"}}>
+                          <span className="origin-[0px_0px] content-[&quot;&quot;]" style={{"textDecoration":"rgb(255, 255, 255)"}}></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex gap-[4px]">
+                        <span className="block">English</span>
+                        <span className="block">|</span>
+                        <span className="block">EUR - </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="grid mb-[72px] gap-[24px] leading-[normal] pt-[54px] pr-0 pb-0 pl-0" style={{"gridTemplateColumns":"repeat(4, auto)"}}>
+                  <div className="flex flex-col text-white gap-[24px] max-w-[255px]" style={{"gridArea":"1 / 1 / 2 / 2"}}>
+                    <a href="https://www.eldorado.gg/" aria-label="Eldorado logo" className="block text-[rgb(45,_94,_173)] text-[14px]">
+                      <div className="flex">
+                        <div className="overflow-hidden align-middle w-[164px] h-10">
+                          <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F7734e6073ca7dfd9d5fdd68249772f174399fe21.svg?generation=1793802851167780&amp;alt=media" className="block size-full" />
+                        </div>
+                      </div>
+                    </a>
+                    <div>Join us today to level up your gaming experience.</div>
+                    <div className="flex gap-[16px]">
+                      <div>
+                        <a href="https://www.reddit.com/r/EldoradoGG/" aria-label="Reddit" className="text-[rgb(45,_94,_173)] text-[14px]">
+                          <div className="inline overflow-hidden h-6">
+                            <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F874ff5c4c31fd59bc91edcac731a65794471d45a.svg?generation=1793799832633584&amp;alt=media" className="block object-cover overflow-clip align-middle w-6 h-6 aspect-[auto_24_/_24]" />
+                          </div>
+                        </a>
+                      </div>
+                      <div>
+                        <a href="https://www.tiktok.com/@eldoradogg1" aria-label="TikTok" className="text-[rgb(45,_94,_173)] text-[14px]">
+                          <div className="inline overflow-hidden h-6">
+                            <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F1d6701a1f5e3654bd30e9163fe2fbf771f40b95d.svg?generation=1793799832647488&amp;alt=media" className="block object-cover overflow-clip align-middle w-6 h-6 aspect-[auto_24_/_24]" />
+                          </div>
+                        </a>
+                      </div>
+                      <div>
+                        <a href="https://x.com/EldoradoGg" aria-label="Twitter" className="text-[rgb(45,_94,_173)] text-[14px]">
+                          <div className="inline overflow-hidden h-6">
+                            <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fe642ccca2c36b2d9683fec530428cff0a0cce74b.svg?generation=1793799832637718&amp;alt=media" className="block object-cover overflow-clip align-middle w-6 h-6 aspect-[auto_24_/_24]" />
+                          </div>
+                        </a>
+                      </div>
+                      <div>
+                        <a href="https://www.facebook.com/eldoradogg.official/" aria-label="Facebook" className="text-[rgb(45,_94,_173)] text-[14px]">
+                          <div className="inline overflow-hidden h-6">
+                            <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F615397722f97e076c0153ae289c1f3db3e40d21f.svg?generation=1793799832659338&amp;alt=media" className="block object-cover overflow-clip align-middle w-6 h-6 aspect-[auto_24_/_24]" />
+                          </div>
+                        </a>
+                      </div>
+                      <div>
+                        <a href="https://www.instagram.com/eldoradogg_official/" aria-label="Instagram" className="text-[rgb(45,_94,_173)] text-[14px]">
+                          <div className="inline overflow-hidden h-6">
+                            <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F38eff833bf793644ab44c184886c1b1a0a80ab2e.svg?generation=1793799832638135&amp;alt=media" className="block object-cover overflow-clip align-middle w-6 h-6 aspect-[auto_24_/_24]" />
+                          </div>
+                        </a>
+                      </div>
+                      <div>
+                        <a href="https://www.youtube.com/@Eldorado.gg_Official" aria-label="Youtube" className="text-[rgb(45,_94,_173)] text-[14px]">
+                          <div className="inline overflow-hidden h-6">
+                            <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F09b8aa55b8e446883f6c0186cfbd9d2c94f33466.svg?generation=1793799832969171&amp;alt=media" className="block object-cover overflow-clip align-middle w-6 h-6 aspect-[auto_24_/_24]" />
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                    <a href="https://google.com/preferences/source" aria-label="Add as preferred source on Google" className="block w-fit text-[rgb(45,_94,_173)] text-[14px]">
+                      <div className="inline overflow-hidden h-11">
+                        <img alt="Add as preferred source on Google" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F2deabf39831e30f8ba1ec9267dedc492298cedb8.png?generation=1793707882192205&amp;alt=media" className="block object-cover overflow-clip align-middle w-[140px] h-11 aspect-[auto_140_/_44]" />
+                      </div>
+                    </a>
+                  </div>
+                  <div style={{"gridArea":"1 / 2 / 2 / 3"}}>
+                    <div className="flex flex-col gap-[16px]">
+                      <div>
+                        <a href="https://support.eldorado.gg/" className="font-bold text-[rgb(137,_138,_147)] leading-[24px]">Help center</a>
+                      </div>
+                      <div>
+                        <a href="https://www.eldorado.gg/contact-us" className="font-bold text-[rgb(137,_138,_147)] leading-[24px]">Contact us</a>
+                      </div>
+                      <div>
+                        <a href="https://www.eldorado.gg/about-us" className="font-bold text-[rgb(137,_138,_147)] leading-[24px]">About us</a>
+                      </div>
+                      <div>
+                        <a href="https://careers.eldorado.gg/" className="font-bold text-[rgb(137,_138,_147)] leading-[24px]">Careers</a>
+                      </div>
+                      <div>
+                        <a href="https://www.eldorado.gg/bug-bounty" className="font-bold text-[rgb(137,_138,_147)] leading-[24px]">Bug bounty</a>
+                      </div>
+                      <div>
+                        <a href="https://www.eldorado.gg/blog/" className="font-bold text-[rgb(137,_138,_147)] leading-[24px]">Blog</a>
+                      </div>
+                      <div>
+                        <a href="https://www.eldorado.gg/influencer-program" className="font-bold text-[rgb(137,_138,_147)] leading-[24px]">Influencer program</a>
+                      </div>
+                      <div>
+                        <a href="https://affiliates.eldorado.gg/" className="font-bold text-[rgb(137,_138,_147)] leading-[24px]">Become an affiliate</a>
+                      </div>
+                      <div>
+                        <a href="https://www.eldorado.gg/become-seller" className="font-bold text-[rgb(137,_138,_147)] leading-[24px]">Become a seller</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{"gridArea":"1 / 3 / 2 / 4"}}>
+                    <div className="flex flex-col gap-[16px]">
+                      <div>
+                        <a href="https://support.eldorado.gg/en/articles/8408988-account-warranty" className="text-[rgb(137,_138,_147)] leading-[24px]">Account warranty</a>
+                      </div>
+                      <div>
+                        <a href="https://support.eldorado.gg/en/articles/8408994-tradeshield-buying" className="text-[rgb(137,_138,_147)] leading-[24px]">TradeShield (buying)</a>
+                      </div>
+                      <div>
+                        <a href="https://support.eldorado.gg/en/articles/8409006-tradeshield-selling" className="text-[rgb(137,_138,_147)] leading-[24px]">TradeShield (selling)</a>
+                      </div>
+                      <div>
+                        <a href="https://support.eldorado.gg/en/articles/8409026-withdrawals" className="text-[rgb(137,_138,_147)] leading-[24px]">Withdrawals</a>
+                      </div>
+                      <div>
+                        <a href="https://support.eldorado.gg/en/articles/8408996-account-seller-rules" className="text-[rgb(137,_138,_147)] leading-[24px]">Account seller rules</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{"gridArea":"1 / 4 / 2 / 5"}}>
+                    <div className="flex flex-col gap-[16px]">
+                      <div>
+                        <a href="https://support.eldorado.gg/en/articles/8408997-seller-rules" className="text-[rgb(137,_138,_147)] leading-[24px]">Seller rules</a>
+                      </div>
+                      <div>
+                        <a href="https://support.eldorado.gg/en/articles/8409011-changing-username" className="text-[rgb(137,_138,_147)] leading-[24px]">Changing username</a>
+                      </div>
+                      <div>
+                        <a href="https://support.eldorado.gg/en/articles/8409025-fees" className="text-[rgb(137,_138,_147)] leading-[24px]">Fees</a>
+                      </div>
+                      <div>
+                        <a href="https://support.eldorado.gg/en/articles/8409020-refund-policy" className="text-[rgb(137,_138,_147)] leading-[24px]">Refund Policy</a>
+                      </div>
+                      <button className="text-center w-fit bg-black/0 text-[rgb(137,_138,_147)] leading-[24px]" style={{"appearance":"button"}}>App on iPhone (PWA)</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="items-center flex flex-wrap ml-auto mr-auto max-w-full relative w-[1208px] gap-[16px] pt-4 pr-6 pb-4 pl-6">
+                <span className="block text-[rgb(137,_138,_147)] leading-[normal]"> 2026. The eldorado.gg website is operated by GWD Processing FZCO.</span>
+                <div>
+                  <a href="https://www.eldorado.gg/terms-of-service" className="text-white">Terms of Service</a>
+                </div>
+                <div>
+                  <a href="https://www.eldorado.gg/privacy-policy" className="text-[rgb(137,_138,_147)]">Privacy Policy</a>
+                </div>
+                <div>
+                  <a href="https://www.eldorado.gg/dmca" className="text-[rgb(137,_138,_147)]">DMCA</a>
+                </div>
+                <div>
+                  <a href="https://www.eldorado.gg/dsa" className="text-[rgb(137,_138,_147)]">DSA</a>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </div>
+      <div className="inline isolate relative z-[3]"></div>
+      <div className="inline isolate relative z-[4]"></div>
+      <div className="inline isolate relative z-[5]"></div>
+      <div className="inline relative z-[6]">
+        <div className="items-end flex flex-col pointer-events-none fixed text-center top-5 right-[10px] mt-[82px] gap-[20px] max-w-[500px] min-w-[180px]"></div>
+      </div>
+      <div className="inline relative z-[7]"></div>
+      <div></div>
+    </div>
+    <div style={{"fontFamily":"ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""}}>
+      <div>
+        <div style={{"fontFamily":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\""}}>
+          <div className="absolute left-0 top-0 z-[2147483647]">
+            <div className="flex pointer-events-none fixed left-0 top-0 right-0 bottom-0 z-[6]"></div>
+            <div className="fixed left-0 top-0 z-[5001]"></div>
+            <div className="fixed top-0 z-[5000]"></div>
+            <div className="fixed top-20 right-7"></div>
+            <div className="relative text-left z-[-1]"></div>
+            <div className="fixed w-0 h-0 left-0 top-0 z-[5000]"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="fixed w-0 h-0 top-[39345.4px] z-[1]" style={{"fontFamily":"system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\""}}>
+      <div aria-label="Open Intercom Messenger" role="button" className="fixed w-12 h-12 right-5 bottom-5 bg-[rgb(255,_201,_80)] shadow-[rgba(0,0,0,0.06)_0px_1px_6px_0px,_rgba(0,0,0,0.16)_0px_2px_32px_0px] max-h-12 max-w-12 z-[2147483003] rounded-[50%]">
+        <div className="items-center flex justify-center absolute w-12 h-12 left-0 top-0">
+          <div className="overflow-hidden align-middle w-6 h-6">
+            <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Ff03ae8ac03aaf933fa478f8d3c3d0e7322570965.svg?generation=1793802851208985&amp;alt=media" className="block size-full" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> );
+}
+#(App1:551:55default	$,Guidelines.md0:960:96guidelines
+%(Guidelines.md 11:551:55textCode layer
+		
+Code layer
+		
+Text	default&,globals.css0:960:96
+@font-face {
+font-display: swap;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-stretch: normal;
+unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+src: url('https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Ffcd4136085f2a03481d9958cc6793a5ed98e714c.woff2?generation=1778054403296909&alt=media') format('woff2');
+}
+
+@font-face {
+font-display: swap;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700;
+font-stretch: normal;
+unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+src: url('https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F2ac78601179c3a63ba3f3f3081556b12ddcaf655.woff2?generation=1778057801069581&alt=media') format('woff2');
+}
+
+@font-face {
+font-display: block;
+font-family: 'icomoon';
+font-style: normal;
+font-weight: 400;
+font-stretch: normal;
+unicode-range: U+0-10FFFF;
+src: url('https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fd771c1329f35bbd6cc9250a04649d2ebec62798b.woff?generation=1793707881240419&alt=media') format('woff2');
+}
+
+
+
+
+
+@font-face {
+font-display: swap;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-stretch: normal;
+unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+src: url('https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Ffcd4136085f2a03481d9958cc6793a5ed98e714c.woff2?generation=1778054403296909&alt=media') format('woff2');
+}
+
+@font-face {
+font-display: swap;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700;
+font-stretch: normal;
+unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+src: url('https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F2ac78601179c3a63ba3f3f3081556b12ddcaf655.woff2?generation=1778057801069581&alt=media') format('woff2');
+}
+
+@font-face {
+font-display: block;
+font-family: 'icomoon';
+font-style: normal;
+font-weight: 400;
+font-stretch: normal;
+unicode-range: U+0-10FFFF;
+src: url('https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fd771c1329f35bbd6cc9250a04649d2ebec62798b.woff?generation=1793707881240419&alt=media') format('woff2');
+}
+styles
