@@ -19,8 +19,12 @@ const articles = slugs.map((s, i) => ({ category: cats[i], slug: s }));
 
 const ROUTES = ["/blog"];
 for (const a of articles) ROUTES.push(`/blog/${a.category}/${a.slug}/`);
+/* session 15: the 6 internal category archive routes */
+const CATS = [...new Set(cats)];
+for (const c of CATS) ROUTES.push(`/blog/${c}/`);
 const LANDING_WIDTHS = [1920, 1536, 1024, 768, 390];
 const ARTICLE_WIDTHS = [1920, 1536, 390];
+const CATEGORY_WIDTHS = [1920, 1536, 390];
 
 (async () => {
   const browser = await chromium.launch();
@@ -65,8 +69,13 @@ const ARTICLE_WIDTHS = [1920, 1536, 390];
     await page.close();
   }
 
-  for (const w of LANDING_WIDTHS) await probe("/blog", w);
-  for (const r of ROUTES.slice(1)) for (const w of ARTICLE_WIDTHS) await probe(r, w);
+  const plan = [{ route: "/blog", widths: LANDING_WIDTHS }];
+  const catSet = new Set(CATS);
+  for (const r of ROUTES.slice(1)) {
+    const c = r.split("/")[2];
+    plan.push({ route: r, widths: catSet.has(c) ? CATEGORY_WIDTHS : ARTICLE_WIDTHS });
+  }
+  for (const { route, widths } of plan) for (const w of widths) await probe(route, w);
 
   await browser.close();
   console.log(`\nProbed ${total} route-width combos`);
