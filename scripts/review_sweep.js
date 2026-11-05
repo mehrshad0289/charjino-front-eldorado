@@ -3,7 +3,7 @@
    settle), console/page errors. Rebuilt 2026-11-04 (recycle lost previous). */
 const { chromium } = require('playwright');
 
-const BASE = 'http://localhost:3112';
+const BASE = process.env.BASE || 'http://localhost:3112';
 const WIDTHS = [1920, 768, 390];
 
 async function settleLazy(page) {

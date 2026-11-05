@@ -1765,3 +1765,39 @@ actual files and Git history — never trust previous AI claims.
     /blog/ trailing-slash artifact, visual: chat 1920+390,
     notifications, my-requests, fortnite-vbucks 1920 (template
     anatomy), ea-fc-coins 390.
+
+- 2026-11-04 (session 27) — "messages mobile is terrible, be precise,
+  review again" (user feedback on the session-26 chat). Probe with
+  scripts/probe_messages_mobile.cjs + scripts/probe_messages_flow.cjs
+  confirmed: the conversation list was a 220px internally-scrolled box
+  that cut the 4th row in half, the list and thread were stacked
+  inside the desktop's fixed 900px box (Send row below the fold, page
+  3313px tall), the chip row wrapped onto two lines, and 768–1023 used
+  the cramped two-pane grid while the dashboard shell already stacks
+  its sidebar below lg. Fixes:
+  - MessagesChat.js: below lg the chat is now a single-pane flow —
+    conversation list at natural height (no cut rows, no internal
+    scroll), tapping a conversation opens the thread (70vh, max 640px,
+    auto-scrolled to the newest message via a ref+useEffect), thread
+    header has a back button (lg:hidden) returning to the list.
+    threadOpen only affects <lg (desktop two-pane untouched). Break-
+    point moved max-md → max-lg so tablets get the same flow as the
+    stacked sidebar. Verified flow: open CNLTeam → thread scrolled to
+    bottom; back → list; send on PowerXhub appends + stays at bottom.
+  - DashboardMessagesPanel.js: chip row is a single-line horizontal
+    scroll row below lg (borderless scrollbar via
+    [scrollbar-width:none]), lg keeps the capture's wrap layout.
+  - messages/page.js: the 900px wrapper (capture height) now applies
+    from lg only; below lg the column flows at natural height (mobile
+    page 3313px → 2861px).
+  - The "Add as preferred browser / Google Chrome" white card visible
+    in an earlier session's 390px screenshot is NOT in the page DOM
+    (probe: body.innerText has no such text) — it was a headless-
+    browser artifact in that screenshot, not site content; nothing
+    removed.
+  - Verified: build green (90 pages), eslint 0 errors (1 pre-existing
+    no-img-element warning, project-wide convention), review_sweep 75
+    routes x 1920/768/390 problems: 0, sweep_all_routes 41 x 2 ALL
+    PASS, review_sweep_dashboard 21 combos ALL PASS, no horizontal
+    overflow at 390/768, console errors 0, desktop 1920 two-pane
+    unchanged (aside 300px, chat 786px).
