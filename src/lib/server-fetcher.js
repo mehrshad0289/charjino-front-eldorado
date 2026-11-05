@@ -38,6 +38,9 @@ async function readPayload(response) {
 export async function serverFetch(path, init = {}) {
   const { headers: initHeaders, ...requestInit } = init;
   const headers = new Headers(initHeaders);
+  if (!headers.has("Accept")) {
+    headers.set("Accept", "application/json");
+  }
   if (requestInit.body && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }

@@ -1,33 +1,29 @@
 import { NextResponse } from "next/server";
-import { getBackendUrl } from "../../../lib/env";
+import { serverFetch, ApiError } from "../../../lib/server-fetcher";
+import { apiPaths } from "../../../lib/api-paths";
 import { rewriteGiftSearchItems } from "../../../lib/gift-card-shop";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const instant = false;
 
 export async function GET(request) {
   const incoming = new URL(request.url);
   const q = (incoming.searchParams.get("q") ?? "").slice(0, 100);
-  const page = incoming.searchParams.get("page") ?? "1";
-  const perPage = incoming.searchParams.get("per_page") ?? "10";
+  const page = Number(incoming.searchParams.get("page") ?? "1") || 1;
+  const perPage = Number(incoming.searchParams.get("per_page") ?? "10") || 10;
   const mode = incoming.searchParams.get("mode") ?? "auto";
-  const search = new URLSearchParams({ q, page, per_page: perPage, mode });
 
   try {
-    const response = await fetch(`${getBackendUrl()}/catalog/smart-search?${search}`, {
-      headers: { Accept: "application/json" },
-      cache: "no-store",
+    const data = await serverFetch(apiPaths.smartSearch({ q, page, perPage, mode }));
+    const items = Array.isArray(data?.items) ? rewriteGiftSearchItems(data.items) : data?.items;
+    return NextResponse.json({
+      success: true,
+      data: data && typeof data === "object" ? { ...data, items } : data,
     });
-    const payload = await response.json().catch(() => ({
-      success: false,
-      message: "پاسخ سرچ نامعتبر بود",
-    }));
-    const data = payload?.data;
-    if (data && typeof data === "object" && Array.isArray(data.items)) {
-      payload.data = { ...data, items: rewriteGiftSearchItems(data.items) };
-    }
-    return NextResponse.json(payload, { status: response.status });
-  } catch {
-    return NextResponse.json(
-      { success: false, message: "اتصال به سرور برقرار نشد" },
-      { status: 503 },
-    );
+  } catch (error) {
+    const message = error instanceof ApiError ? error.message : "اتصال به سرور برقرار نشد";
+    const status = error instanceof ApiError && error.statusCode ? error.statusCode : 503;
+    return NextResponse.json({ success: false, message }, { status });
   }
 }

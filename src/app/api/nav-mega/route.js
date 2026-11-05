@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { buildNavMegaCached, NAV_VERTICALS } from "../../../lib/nav-mega";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const instant = false;
+
 export async function GET(request) {
   const vertical = new URL(request.url).searchParams.get("vertical") || "";
   if (!NAV_VERTICALS[vertical]) {
