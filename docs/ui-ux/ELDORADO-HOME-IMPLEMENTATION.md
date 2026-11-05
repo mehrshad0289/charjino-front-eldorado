@@ -9,7 +9,11 @@ actual files and Git history — never trust previous AI claims.
 ## Current Checkpoint
 
 - Current page: Home + desktop mega menu + `/efootball-accounts` +
-  `/xbox-game-pass` + `/xbox-gift-card` + product-single
+  `/xbox-game-pass` + `/xbox-gift-card` + `/amazon-prime` +
+  `/playstation-plus` + `/cod-points` + support article
+  `/support/articles/8408997-seller-rules` (session 24) +
+  `/sab-values/garama-and-madundung` (Roblox items price history,
+  session 24 tail) + product-single
   `/efootball-accounts/oa/[id]` + dashboard `/dashboard/offers/Account`
   + `/login` + `/blog` + `/blog/[category]/[slug]` + `/blog/[category]`
   + `/about-us` + `/contact-us` + `/bug-bounty` + `/pagelist` +
@@ -23,8 +27,10 @@ actual files and Git history — never trust previous AI claims.
   `/verify/status` (session 20) + `/xbox-game-pass` responsive
   re-verification (session 21 — COMPLETE) + `/dashboard/messages`
   rebuilt to the not-empty capture (session 23 — COMPLETE) +
-  `/xbox-game-pass` capture-exact card anatomy (session 25 — COMPLETE)
-  + `/support/articles/8408997-seller-rules` (parallel session 25)
+  `/xbox-game-pass` capture-exact card anatomy (session 25 — COMPLETE) + `/amazon-prime` + `/playstation-plus` +
+  `/cod-points` (session 24)
+  + `/support/articles/8408997-seller-rules` (session 24 —
+  implemented first, canonical route)
 - Current section: session 25 — gift-card shop page (gamepass
   capture) re-verified mobile->desktop and made capture-exact. The
   user-pushed `ui ux/shop-giftcart-gamepass-xbox/…xbox-ultimate-1-month
@@ -55,6 +61,98 @@ actual files and Git history — never trust previous AI claims.
   Probe scripts: probe_session25_gamepass.js (3-width sweep),
   probe_session25_card_anatomy.js (live DOM anatomy),
   crop_session25_pair.py (local|live composites).
+
+- Previous section: session 24 — "هر چیزی هست چک کن کامل و تمیز باشد و
+  هر آنچه مونده انجام بده" executed as a full health check + the 4
+  remaining user-pushed captures implemented.
+  0) RECOVERY + CLEANUP: repo verified synced (main==origin/main), build
+  green, placeholder scan clean (0 TODO/XXX/【】), 8
+  no-html-link-for-pages eslint errors FIXED (internal <a> -> next/link:
+  HeaderBar logo, Footer brand, checkout/influencer/blog breadcrumbs —
+  rendering identical, Link renders an anchor; eslint --quiet now 0
+  errors; the 118 no-img-element warnings are the deliberate
+  capture-verbatim <img> convention). One stale-server incident (an old
+  next-server kept port 3100 from a previous session and 500ed every
+  chunk — killed, restarted, sweep ALL PASS).
+  1) 3 top-up shop pages (same ELD-TOP-UP-USP template family as
+  /xbox-game-pass): `/amazon-prime` (shop-Subscription capture
+  primevideo-1920px-light-{1,2}: 2 variants, Popular tab-chip cards,
+  sidebar featured offer w/ "Game region: Global" row + ArsenicStore,
+  Other sellers (13) numbered 1/2/3 pagination + Go-to-page, artwork
+  465px + 340px fade — capture AND live @390 both render it here),
+  `/playstation-plus` (shop-Nothing-found capture psplus-1920px-light-
+  {1,2}: the NO-OFFERS state — region chips NA/UK/Turkey/India/Germany*
+  /Ukraine + "No amount selected" + empty grid + Nothing-found block,
+  single column, NO sidebar; live currently serves offers — documented
+  divergence, capture wins), `/cod-points` (shop-CoD-Points capture
+  codpoints-1920px-light-{1,2}: "Game platform" chips
+  Xbox*/Battlenet/PlayStation + 10 variants (2400 Popular, -51%*) +
+  PowerXhub sidebar + Other sellers (8) numbered pagination). Reused +
+  generalized the gamepass components via props (defaults untouched for
+  the xbox pages): GiftCardBanner (gameName/gameIcon/tabs),
+  GamePassRegionChips (label/hint/regions/inlineMobile/scrollMobile —
+  live psplus @390 shows the inline "Game region: Germany" header and a
+  single scrolling chip row), GamePassOffers (sellers/count/pages/
+  numbered; reviews link color fixed to the capture blue rgb(45,94,173)
+  — the gamepass capture has it too). NEW components:
+  ShopAmountCards (top-up card anatomy: Popular tab-chip rounded-bl/br
+  in-flow, price styling split — discounted = green bold 16px + chip +
+  strike/info row, non-discounted = plain 14px ink, NO per-month
+  footer), ShopFeaturedOffer (Popular tab chip, optional region row,
+  stepper desktop-only — live @390 renders no stepper on this page
+  family, Buy now carries the price below lg per live), ShopNoResults.
+  Live probes (scripts/probe_shop_*_live.js): FAQ = 5 generic questions
+  with live-scraped answers (the capture's 6th "Why trust Eldorado?"
+  row is the trust-card heading that follows — live shows 5 answer
+  blocks, probed), live titles pulled for metadata, featured-card 400px
+  + amount-card 736px verified pixel-exact vs live @1920.
+  2) support article `/support/articles/8408997-seller-rules`
+  (shop-Seller rules capture sellerrules-1920px-light-{1,2}):
+  SupportSellerRulesPage + sellerRulesData verbatim — fixed black 60px
+  header (logo, Explore Eldorado / Contact us / EN globe / Ctrl-K
+  search pill), 260|1fr|240 grid, docs-nav accordion tree (capture
+  state, client-side toggles, active article blue rgb(2,88,217) + 2px
+  bar), 830px article column (breadcrumb, 36px h1, description, updated
+  + Copy-for-LLM actions, 22px h2 sections, bold-lead lists, dispute
+  response table, feedback thumbs, related articles), On-this-page TOC.
+  Gotchas fixed: React hydration error #418 (nested <ul> inside <p> —
+  moved the nested list out of the paragraph), and the fixed aside
+  dropping out of the grid flow (the capture wraps it in a
+  self-stretch placeholder div — replicated). Route named to the
+  capture-faithful slug (parallel session-25 announced the same
+  capture — consolidating on this canonical path; its decode +
+  announcement commit f33c4e0 predates that rename).
+  3) VERIFICATION: verify_session24_pages.js (3 pages × 1920/1536/390:
+  status/overflow/broken/errors/needles + interactions — amount card
+  select updates the Amount label, platform chips aria-pressed, FAQ
+  toggles, sidebar collapses); full-site sweep re-run on 40 routes × 2
+  widths (80 page-loads): ALL PASS; build green (72 pages).
+  Screenshots session24 (local 1920/1536/390 + live 1920/390 refs +
+  cmp composites).
+  4) SESSION-24 TAIL (after the parallel merges): the 5th capture
+  implemented — `/sab-values/garama-and-madundung` (Roblox items price
+  history, robloxprice-1920px-light-{1,2}): robloxPriceHistoryData +
+  page — 465px artwork, 36px icon + 30px h1 + subtitle, filter card
+  (Game chip scroller w/ 24px icons, Steal a Brainrot active;
+  Brainrot/Mutations comboboxes), price card (104px outlined thumb,
+  0.60 lowest + dark Buy now + blue TradeShield row), 3-col stats grid
+  (90-day change green 2.17% / high 0.55 / low 0.04; up-arrow SVG
+  stand-in for the empty icomoon glyph), chart card = the capture's
+  own pre-rendered 1112x250 PNG, SEO h1 + verbatim paragraph, NO
+  ChatBubble per capture; pagelist +1; sweep 41 routes x 2 = ALL PASS
+  (82 loads), build green 73 pages. Vercel: /amazon-prime,
+  /playstation-plus, /cod-points and the support article all serve 200
+  after the deploy cycle (~17 min); /sab-values verified local 200 and
+  pending its deploy window at wrap-up. Doc hygiene: the stray
+  session-22 merge-conflict markers (<<<<<<< HEAD / ======= /
+  >>>>>>> f0b896c) removed — both log entries kept, ONE Backup Status;
+  sweep route list deduped to the clean 41-route set after the
+  parallel session-25 added the same routes.
+  Pushes: 111bc77 (link fixes) → 35f3742 (decode) →
+  6a13f12/ab9bcf9/ed44a35 (analysis/components/pages) → 8b6d84c
+  (comparison round) → f67a538 (seller-rules decode) → 467467f
+  (support page) → 1acab47 (route rename); rebased over the parallel
+  session's pushes twice, never force.
 - Previous section: session 23 — the two user-pushed "add file"
   captures (commits 8111ede + 9f6e420) decoded and implemented.
   1) `ui ux/messages-notempty/…(1).make` (46066 bytes; the implemented
@@ -591,7 +689,6 @@ actual files and Git history — never trust previous AI claims.
   candidates are re-scraping categories when live adds articles, the
   capture-less areas (cart, dashboard orders/wallet, game pages), or a
   pixel pass on any page against live
-
 
 ## Session 15 (blog article live-verified pass)
 
@@ -1406,7 +1503,11 @@ actual files and Git history — never trust previous AI claims.
   screenshots compared side-by-side (top, grid+sidebar, sellers,
   reviews/process/FAQ/SEO @1920; 7 strips @390). Push chain:
   502ffe7 checkpoint → 316668a merge → 32373be fixes → 2daa1b4
-  merge → this doc commit.
+  merge → 1d7f967 this doc commit. Vercel: deployment PENDING for
+  ~17 min after push, then verified DEPLOYED — /xbox-game-pass 200
+  with the new markup live (Popular-tab class present, Best Value
+  gone; /xbox-gift-card + /support/articles/8408997-seller-rules
+  also 200).
 - 2026-11-05 (session 23) — the two user-pushed "add file" captures
   (8111ede messages-notempty + 9f6e420 Boosting-Champions-Finals)
   decoded, implemented, verified and pushed. Full anatomy in the
@@ -1443,6 +1544,62 @@ actual files and Git history — never trust previous AI claims.
   appendix only). Anatomy fully extracted; implementation NEXT
   (session 25). Route decision: /support/articles/8408997-seller-rules
   (mirrors the live URL minus domain).
+
+- 2026-11-04 (session 25, Seller rules) — the user pushed the Help
+  Center capture `ui ux/Seller rules/
+  support_eldorado_gg_en_articles_8408997-seller-rules_…make` (origin
+  8d5dd29); BOTH parallel sessions decoded it (this session's
+  decode_session25_sellerrules.py → sellerrules-1920px-light-{1,2};
+  the parallel session-25 claimed + implemented it the same minutes)
+  and consolidated on the announced canonical route
+  /support/articles/8408997-seller-rules (this session's route note;
+  the parallel session renamed its page to match — commit 1acab47).
+  Anatomy (session 25's decode): support.eldorado.gg Help Center,
+  Lato, fixed black 60px header (logo c4167a01, Explore Eldorado /
+  Contact us, EN globe 483fb55d + chevron 862fa312, white/5 search
+  pill "Search | Ctrl K" in JetBrains Mono), body grid
+  260px | 1fr | 240px gap-48 px-4: FIXED 276px docs-nav accordion
+  (top-60, border-r; 6 png collection icons + 14 per-row chevron
+  svgs; Getting started / Buying [expanded: Buying and receiving
+  orders + Payments] / Selling [expanded: Seller verification 4
+  articles + Rules and guidelines 10 articles, "Seller rules" ACTIVE
+  blue rgb(2,88,217) + 2px bar left-[-26.5px]; Refunds / Eldorado
+  account / Game guides top-level collapsed]) + article column
+  (breadcrumb All Collections > Rules and guidelines > Seller rules,
+  36px/40.32 semibold h1, 18px/27.9 gray description, "Updated over
+  a week ago" 13px + Copy-for-LLM + more-actions group, 8 h2
+  sections 22/27.5 with the capture's h_ anchor hashes, dispute
+  table 3x3 with rgba(232,232,232,.5) header cells, feedback
+  fieldset with 2 thumbs buttons, Related: Start selling) + fixed
+  240px "On this page" TOC (right-4 top-60; 13px semibold title,
+  12px/16.8 items gap-8 pl-3, FIRST item active blue + 2px bar
+  left-[-17.5px]). This session then QA'd the parallel
+  implementation against the decode and fixed the capture-fidelity
+  gaps: sidebar hrefs corrected to the capture's verbatim URLs
+  (8408996/13859407/11703747/12032614/13859389/13917635/13917846/
+  10183840/11130882/9896838/11928248/16860239/11315779 + collection
+  ids), Refunds/Eldorado-account/Game-guides moved back to TOP level
+  with icons, 6 collection pngs + 14 chevron svgs (per-row capture
+  assets) added, Buying's children made collapsible collections,
+  invented "All Collections" sidebar row removed (breadcrumb-only),
+  invented "Selling" breadcrumb item + Submit feedback button
+  removed, intro paragraph bold+justify per capture, "Initial
+  response" bold moved to "If theres no communication…" (API
+  sentence regular), "This includes charges like:" de-bolded +
+  Exception paragraph restored INSIDE the No-extra-fees li, td
+  padding pt-2/pb-2 + border color rgba(26,26,26,.15), TOC rebuilt
+  capture-exact (8 items — 2 were missing — with h_ hash anchors,
+  active first item + bar, fixed right-4 top-60 w-60), related-row
+  arrow + more-actions use the capture svgs. Verify
+  scripts/verify_session25_support.js: 35 checks ALL PASS (geometry
+  vs capture numbers, sidebar collapse/re-expand interactions, @390
+  overflow 0 / TOC hidden / aside static); screenshots 1920+390.
+  Sweep route list 39 -> 40; full sweep 40 x 2 = 80 page-loads ALL
+  PASS; build green (72 pages). Below 1024 the columns stack and the
+  fixed aside/TOC go static/hidden (no capture reference —
+  documented). Responsive title/metadata: <title> Seller rules |
+  Eldorado Help Center (assumption — live title not verifiable from
+  the capture).
 
 - 2026-11-04 (session 22, user captures round) — mid-session the user
   pushed TWO second-state captures of already-implemented pages (the
@@ -1507,14 +1664,24 @@ actual files and Git history — never trust previous AI claims.
 
 ## Backup Status
 
-- Last successful push timestamp: 2026-11-05, session 25 (gamepass
-  capture-exact card-anatomy round; this doc commit is the last push)
-- Hash of last pushed commit: this docs commit, preceded by `2daa1b4`
-  (merge of the parallel session-25 Seller-rules article), `32373be`
-  (gamepass capture-exact fixes), `316668a` (merge of the parallel
-  session-24 comparison round), `502ffe7` (session-25 decode
-  checkpoint). Every push verified by empty `git log origin/main..HEAD`
-  immediately after; two rejections resolved fetch+merge (never force).
+- Last successful push timestamp: 2026-11-05, session 24 tail
+  (Roblox price-history page + doc; this doc commit is the last push;
+  the session-25 gamepass round is merged in the same chain)
+- Hash of last pushed commit: this docs commit, preceded by
+  `0a0d8b9` (sweep-list cleanup), `4912f12`/`3847ae4` (rebase
+  residue cleanup), `56dce18` (sab-values page), and earlier the
+  session-24 doc commit, `2daa1b4` (merge of the parallel session-25
+  Seller-rules article), `32373be` (gamepass capture-exact fixes),
+  `316668a` (merge of the parallel session-24 comparison round),
+  `502ffe7` (session-25 decode checkpoint), and on the session-24
+  branch: `1acab47` (support route rename), `467467f` (support
+  article page), `f67a538` (seller-rules decode), `8b6d84c`
+  (comparison round), `ed44a35` (3 top-up shop pages), `ab9bcf9`
+  (top-up components), `6a13f12` (analysis), `35f3742` (decode),
+  `111bc77` (no-html-link fixes). Every push verified by an empty
+  `git log origin/main..HEAD` immediately after; multiple rejections
+  (concurrent sessions pushing), all resolved with fetch + rebase or
+  merge (never force).
 - Push auth: the session PAT lives in the origin URL in this sandbox
   only (transient; never committed). Future sessions without a token
   need a fine-grained PAT (Contents: read/write) or pushes fail with
@@ -1544,3 +1711,93 @@ actual files and Git history — never trust previous AI claims.
   2. Read this file; verify state per the protocol checklist (git status,
      local vs origin, build)
   3. Continue from "Next exact action"
+
+- 2026-11-04 (post-merge fix) — /ea-fc-boosting/b/142-4 responsive
+  overflow: md:w-[1208px] (fixed width at 768–1207px, a band the
+  original probes never covered) → md:max-w-[1208px] + SubNav
+  contentWidth "md:w-full md:max-w-[1208px]" (desktop rendering
+  unchanged); found by the rebuilt pagelist-scraping review_sweep.js
+  (59 routes x 1920/768/390 = 0 problems incl. this page after fix).
+
+- 2026-11-04 (session 26) — "every linked page must exist + be linked
+  from /pagelist" (user request after spotting the empty chat panel).
+  Audit fix: the href-vs-route sweep now also matches `href: "…"`
+  object properties (the old pattern only caught `href="…"` JSX attrs —
+  that hole hid 19 unbuilt routes). Built:
+  - CHAT: the aria-label="Chat" container on /dashboard/messages was
+    left EMPTY by design (messages-notempty capture renders it empty,
+    "nothing invented") — user asked for it, so MessagesChat.js now
+    renders a two-pane client chat in the dashboard tokens: conversation
+    list (active blue-tinted row, green online dots, yellow unread
+    badges), thread (date separators, gray incoming / brand-blue
+    outgoing bubbles, offer attachment card, Seen receipts), Send row
+    (attach/emoji/input/send, appends locally). Content:
+    messagesChatData.js — partners = the capture-verbatim seller pool,
+    threads = user-requested sample content (documented, NOT capture
+    data).
+  - /dashboard/notifications (sidebar link had no page): chip-filtered
+    notification list in the messages-capture chip pattern; texts reuse
+    the settings capture's own product vocabulary.
+    /dashboard/boosting/my-requests (sidebar Boosting child, no page):
+    page header + yellow "New request" action + shared EmptyState.
+    Data: dashboardExtraData.js (template-generated, documented). +
+    notifications/boosting icons in DashboardPageHeader's ICONS (same
+    empty-glyph inline-SVG convention).
+  - 15 GAME SHOP PAGES for the internal links that pointed at live
+    eldorado.gg routes (SearchOverlay results + related links):
+    /aion-2-kinah/g/360 /arc-raiders-items/i/319 /buy-robux
+    /donutsmp-money/g/278 /ea-fc-coins/g/142-0-0 /fortnite-vbucks/t/16
+    /mm2-shop/i/204-2-0 /pokemon-go-pokecoins/t/57 /razer-gold/v/260
+    /roblox-accounts-for-sale /roblox-boosting /roblox-gift-card
+    /steal-a-brainrot-brainrots/i/259 /top-up-roblox
+    /valorant-accounts/a/32-1-0. ONE generic component
+    (GameShopPage.js = the capture-built cod-points wiring,
+    parameterized) fed from gamePagesData.js (15 configs; wrappers
+    generated by scripts/gen_game_pages.cjs). Data provenance
+    documented in the file: no captures exist for these routes —
+    seller pool is the capture-verbatim names/avatars, amounts follow
+    official store tiers where public (V-Bucks, PokéCoins, Razer Gold,
+    Robux), rest is template-generated; sibling-shop tabs keep live
+    URLs. /pagelist +15 Shop rows (meta "Template") +2 Account rows.
+  - Verified: eslint 0 errors on all new files, build green (90 static
+    pages, was 73), full sweep 75 routes x 1920/768/390 = 0 problems,
+    href-vs-route audit (both patterns, optional-catchall regex) = only
+    /blog/ trailing-slash artifact, visual: chat 1920+390,
+    notifications, my-requests, fortnite-vbucks 1920 (template
+    anatomy), ea-fc-coins 390.
+
+- 2026-11-04 (session 27) — "messages mobile is terrible, be precise,
+  review again" (user feedback on the session-26 chat). Probe with
+  scripts/probe_messages_mobile.cjs + scripts/probe_messages_flow.cjs
+  confirmed: the conversation list was a 220px internally-scrolled box
+  that cut the 4th row in half, the list and thread were stacked
+  inside the desktop's fixed 900px box (Send row below the fold, page
+  3313px tall), the chip row wrapped onto two lines, and 768–1023 used
+  the cramped two-pane grid while the dashboard shell already stacks
+  its sidebar below lg. Fixes:
+  - MessagesChat.js: below lg the chat is now a single-pane flow —
+    conversation list at natural height (no cut rows, no internal
+    scroll), tapping a conversation opens the thread (70vh, max 640px,
+    auto-scrolled to the newest message via a ref+useEffect), thread
+    header has a back button (lg:hidden) returning to the list.
+    threadOpen only affects <lg (desktop two-pane untouched). Break-
+    point moved max-md → max-lg so tablets get the same flow as the
+    stacked sidebar. Verified flow: open CNLTeam → thread scrolled to
+    bottom; back → list; send on PowerXhub appends + stays at bottom.
+  - DashboardMessagesPanel.js: chip row is a single-line horizontal
+    scroll row below lg (borderless scrollbar via
+    [scrollbar-width:none]), lg keeps the capture's wrap layout.
+  - messages/page.js: the 900px wrapper (capture height) now applies
+    from lg only; below lg the column flows at natural height (mobile
+    page 3313px → 2861px).
+  - The "Add as preferred browser / Google Chrome" white card visible
+    in an earlier session's 390px screenshot is NOT in the page DOM
+    (probe: body.innerText has no such text) — it was a headless-
+    browser artifact in that screenshot, not site content; nothing
+    removed.
+  - Verified: build green (90 pages), eslint 0 errors (1 pre-existing
+    no-img-element warning, project-wide convention), review_sweep 75
+    routes x 1920/768/390 problems: 0, sweep_all_routes 41 x 2 ALL
+    PASS, review_sweep_dashboard 21 combos ALL PASS, no horizontal
+    overflow at 390/768, console errors 0, desktop 1920 two-pane
+    unchanged (aside 300px, chat 786px).

@@ -1,8 +1,9 @@
 function storageOrigin() {
-  const api = (process.env.BACKEND_URL || "http://127.0.0.1:3000/api")
+  const fallback = process.env.VERCEL ? "https://api.charjino.ir/api" : "http://127.0.0.1:3000/api";
+  const api = (process.env.BACKEND_URL || fallback)
     .replace(/\/+$/, "")
     .replace("://localhost", "://127.0.0.1");
-  return api.replace(/\/api$/i, "") || "http://127.0.0.1:3000";
+  return api.replace(/\/api$/i, "") || (process.env.VERCEL ? "https://api.charjino.ir" : "http://127.0.0.1:3000");
 }
 
 /** @type {import('next').NextConfig} */

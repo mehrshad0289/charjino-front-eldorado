@@ -23,7 +23,10 @@ import {
    icon and '9+' on Favorites (HeaderBar notiCount + favCount). The red
    bottom-right fixed alert in the capture contains only the stray text
    "noindex ." (a capture artifact, not page copy) — not implemented.
-   Sidebar active row: Messages. */
+   Sidebar active row: Messages. Session 27: the 900px wrapper height
+   (capture, chat container) applies from lg up only — below lg the
+   column flows at natural height so the single-pane MessagesChat is
+   not forced into the desktop-sized box. */
 
 export const metadata = {
   title: "Dashboard Messages - Eldorado",
@@ -39,7 +42,7 @@ export default function DashboardMessagesPage() {
       <main className="isolate">
         <DashboardShell active="Messages">
           <DashboardPageHeader icon={icon} title={title} />
-          <div className="relative mt-[14px] h-[900px] max-w-[1048px] px-6">
+          <div className="relative mt-[14px] max-w-[1048px] px-6 lg:h-[900px]">
             <DashboardMessagesPanel chips={chips} unreadToggleLabel={unreadToggleLabel} />
           </div>
         </DashboardShell>

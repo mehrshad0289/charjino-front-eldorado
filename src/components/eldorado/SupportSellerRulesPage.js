@@ -19,14 +19,6 @@ import {
    Below 1024 the capture has no reference — the columns stack in DOM
    order and the fixed aside becomes a static block (documented). */
 
-function ChevronDown({ className = "" }) {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
-      <path d="M4 8.5h16L12 17.5 4 8.5Z" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 function Segments({ segments }) {
   return segments.map((s, i) => {
     if (typeof s === "string") return <span key={i}>{s}</span>;
@@ -49,16 +41,20 @@ function BodyBlock({ block }) {
   }
   if (block.type === "p") {
     return (
-      <p className="mb-[16px] text-left text-[15px] leading-[23.25px]">
-        <Segments segments={block.segments} />
+      <p
+        className={`mb-[16px] min-h-[22.95px] text-[15px] leading-[23.25px] ${
+          block.justify ? "text-justify" : "text-left"
+        }`}
+      >
+        {block.bold ? <b className="font-bold"><Segments segments={block.segments} /></b> : <Segments segments={block.segments} />}
       </p>
     );
   }
   if (block.type === "links") {
     return (
-      <ul className="mb-[16px] list-disc pl-6 text-left">
+      <ul className="mb-[16px] mt-[16px] list-disc pl-6 text-left">
         {block.items.map((it) => (
-          <li key={it.label} className="mb-[8px]">
+          <li key={it.label} className="mb-[8px] min-h-[22.95px]">
             <a href={it.href} className="text-left underline text-[rgb(2,_88,_217)]">
               {it.label}
             </a>
@@ -69,22 +65,33 @@ function BodyBlock({ block }) {
   }
   if (block.type === "ul") {
     return (
-      <ul className="mb-[16px] list-disc pl-6 text-left">
+      <ul className="mb-[16px] mt-[16px] list-disc pl-6 text-left">
         {block.items.map((it, i) => (
           <li key={i} className="mb-[8px]">
-            <p className="text-left text-[15px] leading-[23.25px]">
+            <p className="text-left min-h-[22.95px]">
               {it.lead && <b className="font-bold">{it.lead}</b>}
               <Segments segments={it.segments} />
             </p>
+            {(it.paras ?? []).map((p, j) => (
+              <p key={j} className="text-left min-h-[22.95px]">
+                {p}
+              </p>
+            ))}
             {it.nested && (
-              <ul className="mb-[16px] mt-[8px] list-disc pl-6">
+              <ul className="mb-[16px] mt-[16px] list-disc pl-6">
                 {it.nested.map((n) => (
                   <li key={n} className="mb-[8px]">
-                    {n}
+                    <p className="text-left min-h-[22.95px]">{n}</p>
                   </li>
                 ))}
               </ul>
             )}
+            {(it.tail ?? []).map((t, j) => (
+              <p key={j} className="text-left min-h-[22.95px]">
+                {t.lead && <b className="font-bold">{t.lead}</b>}
+                <Segments segments={t.segments} />
+              </p>
+            ))}
           </li>
         ))}
       </ul>
@@ -92,13 +99,13 @@ function BodyBlock({ block }) {
   }
   if (block.type === "table") {
     return (
-      <table className="mb-[24px] w-full table rounded-md border-[0.8px] border-[rgba(9,9,11,0.15)] text-left text-[14px] leading-[21px]">
+      <table className="mb-[24px] w-full table rounded-md border-[0.8px] border-[rgba(26,_26,_26,_0.15)] text-left text-[14px] leading-[21px]">
         <tbody className="table-row-group align-top">
           <tr className="table-row align-top">
             {block.head.map((h) => (
               <th
                 key={h}
-                className="table-cell border-b-[0.8px] border-r-[0.8px] border-[rgba(9,9,11,0.15)] bg-[rgba(232,_232,_232,_0.5)] py-1 pl-3 pr-3 pt-1 font-semibold align-top first:rounded-tl-[5px] last:rounded-tr-[5px] last:border-r-0"
+                className="table-cell border-b-[0.8px] border-r-[0.8px] border-[rgba(26,_26,_26,_0.15)] bg-[rgba(232,_232,_232,_0.5)] pb-1 pl-3 pr-3 pt-1 font-semibold align-top first:rounded-tl-[5px] last:rounded-tr-[5px] last:border-r-0"
               >
                 {h}
               </th>
@@ -109,7 +116,7 @@ function BodyBlock({ block }) {
               {row.map((cell, ci) => (
                 <td
                   key={ci}
-                  className={`table-cell border-b-[0.8px] border-[rgba(9,9,11,0.15)] py-1 pl-3 pr-3 align-top ${
+                  className={`table-cell border-b-[0.8px] border-[rgba(26,_26,_26,_0.15)] pb-2 pl-3 pr-3 pt-2 align-top ${
                     ci === 0 ? "border-r-[0.8px]" : ""
                   } ${ri === block.rows.length - 1 ? "border-b-0" : ""}`}
                 >
@@ -125,6 +132,20 @@ function BodyBlock({ block }) {
   return null;
 }
 
+function RowChevron({ open, src }) {
+  return (
+    <button
+      type="button"
+      aria-label={`${open ? "Collapse" : "Expand"}`}
+      className="mr-[4px] flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black/0 text-[color(srgb_0.34902_0.34902_0.34902_/_0.68)]"
+    >
+      <span className={`flex h-4 w-4 text-center ${open ? "rotate-90" : ""}`}>
+        <img alt="" src={src} className="block h-4 w-4 max-w-full fill-none overflow-hidden align-middle" />
+      </span>
+    </button>
+  );
+}
+
 function DocsNav() {
   const [state, setState] = useState(() =>
     Object.fromEntries(
@@ -137,109 +158,111 @@ function DocsNav() {
     )
   );
   const toggle = (label) => setState((s) => ({ ...s, [label]: !s[label] }));
+  const articleLink = (ch) => (
+    <a
+      key={ch.label}
+      href={ch.href}
+      className={`block w-full rounded-lg p-2 text-[14px] leading-[21.7px] ${
+        ch.active ? "text-[rgb(2,_88,_217)]" : "text-[rgb(89,_89,_89)] hover:bg-[rgb(244,_244,_245)]"
+      }`}
+    >
+      {ch.active && (
+        <span
+          aria-hidden="true"
+          className="absolute left-[-26.5px] top-[18.85px] h-4 w-[2px] rounded-[1px] bg-[rgb(2,_88,_217)]"
+        />
+      )}
+      {ch.label}
+    </a>
+  );
 
   return (
-    <div className="flex flex-col gap-[2px] py-4 pl-2 pr-2">
-      <a
-        href="https://support.eldorado.gg/en/"
-        className="flex items-center gap-[6px] rounded-lg p-2 text-[14px] font-semibold leading-[20px] text-[rgb(26,_26,_26)] hover:bg-[rgb(244,_244,_245)]"
-      >
-        All Collections
-        <span className="flex text-[color(srgb_0.34902_0.34902_0.34902_/_0.68)]">
-          <img alt="" src={SUPPORT_IMAGES.collectionIcon} className="block size-3" />
-        </span>
-      </a>
+    <ul className="flex list-none flex-col gap-[2px] pb-8 pl-4 pr-4 pt-6">
       {SUPPORT_NAV.map((c) => {
         const open = state[c.label];
         return (
-          <div key={c.label}>
-            <div className="flex items-center">
+          <li key={c.label} className="relative isolate">
+            <div className="flex items-start gap-[4px] rounded-lg">
               <a
                 href={c.href}
-                className="block grow basis-0 rounded-lg p-2 text-[14px] font-semibold leading-[20px] text-[rgb(26,_26,_26)] hover:bg-[rgb(244,_244,_245)]"
+                className="flex grow basis-0 items-start gap-[8px] rounded-lg p-2 text-[14px] font-semibold leading-[20px] text-[rgb(26,_26,_26)] hover:bg-[rgb(244,_244,_245)]"
               >
-                {c.label}
+                {c.icon && (
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+                    <img alt="" src={c.icon} className="block size-full" />
+                  </span>
+                )}
+                <span>{c.label}</span>
               </a>
-              <button
-                type="button"
-                aria-label={`${open ? "Collapse" : "Expand"} ${c.label}`}
-                onClick={() => toggle(c.label)}
-                className="mr-[4px] flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black/0 text-[rgb(89,_89,_89)]/68"
-              >
-                <ChevronDown className={open ? "" : "-rotate-90"} />
-              </button>
+              {c.chevron && (
+                <button
+                  type="button"
+                  aria-label={`${open ? "Collapse" : "Expand"} ${c.label}`}
+                  onClick={() => toggle(c.label)}
+                  className="mr-[4px] flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black/0 text-[color(srgb_0.34902_0.34902_0.34902_/_0.68)]"
+                >
+                  <span className={`flex h-4 w-4 text-center ${open ? "rotate-90" : ""}`}>
+                    <img alt="" src={c.chevron} className="block h-4 w-4 max-w-full fill-none overflow-hidden align-middle" />
+                  </span>
+                </button>
+              )}
             </div>
-            {open && (
-              <div className="overflow-hidden">
-                <ul className="flex flex-col gap-[1px] pl-4">
-                  {c.articles.map((a) => {
-                    if (a.collection) {
-                      const subOpen = state[a.label];
-                      return (
-                        <li key={a.label} className="list-none">
-                          <div className="flex items-center">
-                            <a
-                              href={a.href}
-                              className="block grow basis-0 rounded-lg p-2 text-[14px] font-semibold leading-[20px] text-[rgb(26,_26,_26)] hover:bg-[rgb(244,_244,_245)]"
-                            >
-                              {a.label}
-                            </a>
+            {open && c.articles && c.articles.length > 0 && (
+              <ul className="relative flex list-none flex-col gap-[1px] pl-7">
+                {c.articles.map((a) => {
+                  if (a.collection) {
+                    const subOpen = state[a.label];
+                    return (
+                      <li key={a.label} className="relative isolate">
+                        <div className="flex items-center gap-[4px] rounded-lg">
+                          <a
+                            href={a.href}
+                            className="block grow basis-0 rounded-lg p-2 text-[14px] font-semibold leading-[20px] text-[rgb(26,_26,_26)] hover:bg-[rgb(244,_244,_245)]"
+                          >
+                            {a.label}
+                          </a>
+                          {a.chevron && (
                             <button
                               type="button"
                               aria-label={`${subOpen ? "Collapse" : "Expand"} ${a.label}`}
                               onClick={() => toggle(a.label)}
-                              className="mr-[4px] flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black/0 text-[rgb(89,_89,_89)]/68"
+                              className="mr-[4px] flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black/0 text-[color(srgb_0.34902_0.34902_0.34902_/_0.68)]"
                             >
-                              <ChevronDown className={subOpen ? "" : "-rotate-90"} />
+                              <span className={`flex h-4 w-4 text-center ${subOpen ? "rotate-90" : ""}`}>
+                                <img alt="" src={a.chevron} className="block h-4 w-4 max-w-full fill-none overflow-hidden align-middle" />
+                              </span>
                             </button>
-                          </div>
-                          {subOpen && (
-                            <div className="overflow-hidden">
-                              <ul className="flex flex-col gap-[1px] pl-4">
-                                {a.children.map((ch) => (
-                                  <li key={ch.label} className="list-none relative">
-                                    {ch.active && (
-                                      <span
-                                        aria-hidden="true"
-                                        className="absolute left-[-26.5px] top-[10px] h-4 w-[2px] rounded-[1px] bg-[rgb(2,_88,_217)]"
-                                      />
-                                    )}
-                                    <a
-                                      href={ch.href}
-                                      className={`block w-full rounded-lg p-2 text-[14px] leading-[21.7px] ${
-                                        ch.active
-                                          ? "text-[rgb(2,_88,_217)]"
-                                          : "text-[rgb(89,_89,_89)] hover:bg-[rgb(244,_244,_245)]"
-                                      }`}
-                                    >
-                                      {ch.label}
-                                    </a>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
                           )}
-                        </li>
-                      );
-                    }
-                    return (
-                      <li key={a.label} className="list-none">
-                        <a
-                          href={a.href}
-                          className="block w-full rounded-lg p-2 text-[14px] leading-[21.7px] text-[rgb(89,_89,_89)] hover:bg-[rgb(244,_244,_245)]"
-                        >
-                          {a.label}
-                        </a>
+                        </div>
+                        {subOpen && a.children && a.children.length > 0 && (
+                          <ul className="flex list-none flex-col gap-[1px] pl-4">
+                            {a.children.map((ch) => (
+                              <li key={ch.label} className="list-none relative">
+                                {articleLink(ch, true)}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
                       </li>
                     );
-                  })}
-                </ul>
-              </div>
+                  }
+                  return (
+                    <li key={a.label} className="list-none">
+                      <a
+                        href={a.href}
+                        className="block w-full rounded-lg p-2 text-[14px] leading-[21.7px] text-[rgb(89,_89,_89)] hover:bg-[rgb(244,_244,_245)]"
+                      >
+                        {a.label}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
             )}
-          </div>
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 }
 
@@ -329,25 +352,24 @@ export default function SupportSellerRulesPage() {
             aria-label="Breadcrumb"
             className="mb-6 flex flex-wrap items-center gap-2 text-[14px] text-[rgb(89,_89,_89)]"
           >
-            {art.breadcrumb.map((b) => (
+            {art.breadcrumb.map((b, bi) => (
               <span key={b.label} className="flex items-center gap-2">
                 <a href={b.href} className="block max-w-full truncate hover:underline">
                   {b.label}
                 </a>
                 <span className="flex text-[color(srgb_0.34902_0.34902_0.34902_/_0.68)]">
-                  <img alt="" src={SUPPORT_IMAGES.breadcrumbChevron} className="block size-3" />
+                  <img
+                    alt=""
+                    src={bi === 0 ? SUPPORT_IMAGES.breadcrumbChevron : SUPPORT_IMAGES.breadcrumbChevron2}
+                    className="block size-3"
+                  />
                 </span>
               </span>
             ))}
-            <span className="flex items-center gap-2">
-              <span className="flex text-[color(srgb_0.34902_0.34902_0.34902_/_0.68)]">
-                <img alt="" src={SUPPORT_IMAGES.breadcrumbCurrent} className="block size-3" />
-              </span>
-              <span className="block max-w-[301.6px] truncate text-[rgb(26,_26,_26)]">{art.current}</span>
-            </span>
+            <span className="block max-w-[301.6px] truncate text-[rgb(26,_26,_26)]">{art.current}</span>
           </nav>
 
-          <header className="mb-[32px] border-b-[0.8px] border-[rgba(9,9,11,0.15)] pb-8">
+          <header className="mb-[32px] border-b-[0.8px] border-[rgba(26,_26,_26,_0.15)] pb-8">
             <h1 className="mb-[12px] text-[36px] font-semibold leading-[40.32px]">{art.title}</h1>
             <p className="mb-[24px] text-[18px] leading-[27.9px] text-[rgb(89,_89,_89)]">{art.description}</p>
             <div className="flex items-center justify-between gap-4">
@@ -360,7 +382,7 @@ export default function SupportSellerRulesPage() {
                 <div aria-label="Article actions" role="group" className="inline-flex max-w-full items-stretch">
                   <button
                     type="button"
-                    className="flex h-8 items-center gap-1 whitespace-nowrap rounded-bl-lg rounded-tl-lg border-[0.8px] border-[rgba(9,9,11,0.15)] bg-white pl-3 pr-3 text-[12px] font-bold leading-[12px]"
+                    className="flex h-8 items-center gap-1 whitespace-nowrap rounded-bl-lg rounded-tl-lg border-[0.8px] border-[rgba(26,_26,_26,_0.15)] bg-white pl-3 pr-3 text-[12px] font-bold leading-[12px]"
                   >
                     <span className="flex shrink-0">
                       <img alt="" src={SUPPORT_IMAGES.copyLlm} className="block size-4" />
@@ -371,13 +393,9 @@ export default function SupportSellerRulesPage() {
                     type="button"
                     aria-label="More article actions"
                     aria-haspopup="menu"
-                    className="-ml-px flex h-8 items-center justify-center rounded-br-lg rounded-tr-lg border-[0.8px] border-[rgba(9,9,11,0.15)] bg-white px-2 text-[rgb(89,_89,_89)]"
+                    className="-ml-px flex h-8 items-center justify-center rounded-br-lg rounded-tr-lg border-[0.8px] border-[rgba(26,_26,_26,_0.15)] bg-white px-2 text-[rgb(89,_89,_89)]"
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <circle cx="5" cy="12" r="1.6" />
-                      <circle cx="12" cy="12" r="1.6" />
-                      <circle cx="19" cy="12" r="1.6" />
-                    </svg>
+                    <img alt="" src={SUPPORT_IMAGES.moreActions} className="block size-4" />
                   </button>
                 </div>
               </div>
@@ -391,7 +409,7 @@ export default function SupportSellerRulesPage() {
           </article>
 
           {/* feedback fieldset (mt-48 pt-8 border-t per capture) */}
-          <div className="mt-[48px] border-t-[0.8px] border-[rgba(9,9,11,0.15)] pt-8">
+          <div className="mt-[48px] border-t-[0.8px] border-[rgba(26,_26,_26,_0.15)] pt-8">
             <fieldset>
               <legend className="mb-[12px] text-[14px] leading-[21.7px] text-[rgb(89,_89,_89)]">
                 Did this answer your question?
@@ -400,24 +418,18 @@ export default function SupportSellerRulesPage() {
                 <button
                   type="button"
                   aria-label="Yes, this answered my question"
-                  className="flex h-10 w-10 items-center justify-center rounded-md border-[0.8px] border-[rgba(9,9,11,0.15)] bg-black/0 text-[rgb(89,_89,_89)] hover:bg-[rgb(244,_244,_245)]"
+                  className="flex h-10 w-10 items-center justify-center rounded-md border-[0.8px] border-[rgba(26,_26,_26,_0.15)] bg-black/0 text-[rgb(89,_89,_89)] hover:bg-[rgb(244,_244,_245)]"
                 >
                   <img alt="" src={SUPPORT_IMAGES.feedbackUp} className="block size-[22px]" />
                 </button>
                 <button
                   type="button"
                   aria-label="No, this did not answer my question"
-                  className="flex h-10 w-10 items-center justify-center rounded-md border-[0.8px] border-[rgba(9,9,11,0.15)] bg-black/0 text-[rgb(89,_89,_89)] hover:bg-[rgb(244,_244,_245)]"
+                  className="flex h-10 w-10 items-center justify-center rounded-md border-[0.8px] border-[rgba(26,_26,_26,_0.15)] bg-black/0 text-[rgb(89,_89,_89)] hover:bg-[rgb(244,_244,_245)]"
                 >
                   <img alt="" src={SUPPORT_IMAGES.feedbackDown} className="block size-[22px]" />
                 </button>
-                <button
-                  type="button"
-                  aria-label="Submit feedback"
-                  className="flex h-10 items-center justify-center rounded-md border-[0.8px] border-[rgba(9,9,11,0.15)] bg-black/0 px-3 text-[14px] font-semibold text-[rgb(26,_26,_26)] hover:bg-[rgb(244,_244,_245)]"
-                >
-                  Submit
-                </button>
+                
               </div>
             </fieldset>
 
@@ -433,7 +445,7 @@ export default function SupportSellerRulesPage() {
                     style={{ gridTemplateColumns: "minmax(0px, 1fr) 20px" }}
                   >
                     <span className="block truncate text-[14px] font-semibold leading-[21.7px]">{r.label}</span>
-                    <ChevronDown className="-rotate-90 text-[rgb(89,_89,_89)]" />
+                    <img alt="" src={SUPPORT_IMAGES.relatedArrow} className="block size-full" />
                   </a>
                 ))}
               </div>
@@ -441,19 +453,36 @@ export default function SupportSellerRulesPage() {
           </div>
         </main>
 
-        {/* On this page TOC (240px column) */}
-        <div className="hidden pt-8 xl:block">
-          <div className="sticky top-[84px] text-[14px]">
-            <div className="mb-[10px] font-semibold text-[rgb(26,_26,_26)]">On this page</div>
-            <ul className="flex flex-col gap-[6px] border-l-[0.8px] border-l-[rgb(229,_231,_235)] pl-3">
-              {art.toc.map((t) => (
-                <li key={t}>
-                  <a href={`#${t.toLowerCase().replace(/[^a-z]+/g, "-")}`} className="block text-[rgb(89,_89,_89)] hover:text-[rgb(26,_26,_26)] hover:underline">
-                    {t}
-                  </a>
-                </li>
-              ))}
-            </ul>
+        {/* On this page TOC — capture: fixed w-60 top-[60px] right-4 */}
+        <div className="hidden max-xl:hidden xl:block">
+          <div className="fixed top-[60px] right-4 w-60 overflow-auto pb-8" style={{ gridArea: "1 / 3 / 2 / 4" }}>
+            <nav
+              aria-label="On this page"
+              className="border-l-[0.8px] pb-4 pl-4 pt-8"
+              style={{ borderLeftColor: "color(srgb 0.101961 0.101961 0.101961 / 0.12)" }}
+            >
+              <div className="mb-[12px] text-[13px] font-semibold leading-[20.15px] text-[rgb(26,_26,_26)]">On this page</div>
+              <ul className="flex flex-col gap-[8px]">
+                {art.toc.map((t) => (
+                  <li key={t.anchor} className="relative list-none">
+                    {t.active && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute left-[-17.5px] top-[8.4px] h-4 w-[2px] rounded-[1px] bg-[rgb(2,_88,_217)]"
+                      />
+                    )}
+                    <a
+                      href={`#${t.anchor}`}
+                      className={`block pl-3 text-[12px] leading-[16.8px] ${
+                        t.active ? "text-[rgb(2,_88,_217)]" : "text-[rgb(89,_89,_89)] hover:text-[rgb(26,_26,_26)] hover:underline"
+                      }`}
+                    >
+                      {t.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

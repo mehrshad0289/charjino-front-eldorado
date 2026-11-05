@@ -1,11 +1,13 @@
 /
 /about-us
+/amazon-prime
 /become-seller
 /blog
 /blog/[category]
 /blog/[category]/[slug]
 /bug-bounty
 /checkout
+/cod-points
 /contact-us
 /dashboard/feedback
 /dashboard/loyalty
@@ -27,8 +29,11 @@
 /influencer-program
 /login
 /pagelist
+/playstation-plus
 /privacy-policy
 /roblox-items
+/sab-values/garama-and-madundung
+/support/articles/8408997-seller-rules
 /terms-of-service
 /users/[username]/[[...tab]]
 /verify/status

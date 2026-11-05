@@ -63,6 +63,21 @@ const ICONS = {
       />
     </svg>
   ),
+  /* Session 26: /dashboard/notifications + /dashboard/boosting/my-requests
+     header icons — same empty-glyph convention, mirroring the sidebar's
+     notifications / boosting icons. */
+  notifications: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M18 16V10.5a6 6 0 1 0-12 0V16l-1.8 2.4h15.6L18 16Z" {...stroke} />
+      <path d="M10 20.5a2.2 2.2 0 0 0 4 0" {...stroke} />
+    </svg>
+  ),
+  boosting: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12.5 15.5c4.5-3 6.8-6.5 7-11-4.5.2-8 2.5-11 7l-3.5.8L4 14l3.5.5L8 18l1.7 1 1.5-3.5h1.3Z" {...stroke} />
+      <circle cx="14" cy="9.5" r="1.3" fill="currentColor" />
+    </svg>
+  ),
 };
 
 /* Dashboard page title row: yellow icon + H1 (semibold 30/36) + dark
