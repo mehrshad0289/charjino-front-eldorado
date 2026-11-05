@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { FA } from "./data/faCopy";
 
 const CDN = "https://assetsdelivery.eldorado.gg/v7/_assets_";
 const GCS =
@@ -43,41 +44,43 @@ const CARDS = [
   },
 ];
 
-export default function PopularCards() {
+export default function PopularCards({ items }) {
   const trackRef = useRef(null);
   const [active, setActive] = useState(0);
+  const cards = Array.isArray(items) && items.length > 0 ? items : CARDS;
 
-  /* mobile dot indicators follow the swipe position (live reference @390) */
   const onTrackScroll = () => {
     const el = trackRef.current;
     if (!el) return;
     const card = el.querySelector("a");
     const step = card ? card.offsetWidth + 24 : 1;
-    setActive(Math.min(CARDS.length - 1, Math.max(0, Math.round(el.scrollLeft / step))));
+    setActive(Math.min(cards.length - 1, Math.max(0, Math.round(el.scrollLeft / step))));
   };
 
   return (
-    <section className="relative z-10 mt-6 mb-12">
+    <section className="relative z-10 mb-6 mb-12 pt-6">
       <div className="mx-auto max-w-[1208px] px-4 md:px-6">
-        <span className="block text-lg font-bold leading-[27px]">Popular</span>
+        <span className="block text-lg font-bold leading-[27px]">{FA.popular}</span>
         <div className="mt-4 flex overflow-hidden">
           <div
             ref={trackRef}
             onScroll={onTrackScroll}
-            className="flex w-full overflow-x-auto overflow-y-hidden whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex w-full gap-6 overflow-x-auto overflow-y-hidden whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {CARDS.map((c, i) => (
-              <div key={c.item} className={`shrink-0 ${i > 0 ? "pl-6" : ""}`}>
+            {cards.map((c, i) => (
+              <div key={c.key || c.item} className="shrink-0">
                 <a
                   href={c.href}
                   className="relative flex h-[336px] w-[272px] flex-col justify-end gap-2.5 overflow-hidden rounded-lg p-6 text-sm leading-[21px] text-white md:h-80"
                 >
-                  <img
-                    src={c.img}
-                    alt={c.item}
-                    loading={i < 2 ? "eager" : "lazy"}
-                    className="pointer-events-none absolute left-0 top-0 size-full object-cover object-top"
-                  />
+                  {c.img ? (
+                    <img
+                      src={c.img}
+                      alt={c.item}
+                      loading={i < 2 ? "eager" : "lazy"}
+                      className="pointer-events-none absolute left-0 top-0 size-full object-cover object-top"
+                    />
+                  ) : null}
                   <div
                     className="absolute inset-0"
                     style={{
@@ -86,14 +89,16 @@ export default function PopularCards() {
                     }}
                   />
                   <div className="relative flex items-center gap-1">
-                    <img
-                      src={c.gameIcon}
-                      alt={c.game}
-                      width="20"
-                      height="20"
-                      loading="lazy"
-                      className="h-5 w-5 shrink-0 rounded-sm object-cover"
-                    />
+                    {c.gameIcon ? (
+                      <img
+                        src={c.gameIcon}
+                        alt={c.game}
+                        width="20"
+                        height="20"
+                        loading="lazy"
+                        className="h-5 w-5 shrink-0 rounded-sm object-cover"
+                      />
+                    ) : null}
                     <span className="block truncate text-xs font-bold leading-[16.8px]">
                       {c.game}
                     </span>
@@ -116,10 +121,9 @@ export default function PopularCards() {
                       <span className="block text-xl font-bold leading-[30px]">{c.price}</span>
                     )}
                   </div>
-                  {/* mobile-only CTA per the live @390 cards */}
                   <div className="relative mt-1 md:hidden">
                     <span className="flex h-9 items-center justify-center rounded-lg bg-brand text-sm font-bold text-ink">
-                      Buy now
+                      {FA.buyNow}
                     </span>
                   </div>
                 </a>
@@ -127,11 +131,10 @@ export default function PopularCards() {
             ))}
           </div>
         </div>
-        {/* mobile dot indicators */}
         <div className="mt-3 flex justify-center gap-1.5 md:hidden">
-          {CARDS.map((c, i) => (
+          {cards.map((c, i) => (
             <span
-              key={c.item}
+              key={c.key || c.item}
               className={`h-1.5 w-1.5 rounded-full ${i === active ? "bg-ink" : "bg-cardborder"}`}
             />
           ))}

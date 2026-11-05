@@ -54,6 +54,7 @@ export default function GiftCardSeoText({
       <div className="pb-5">
         <h1 className="mb-2.5 text-[24px] font-bold leading-[33.6px]">{title}</h1>
       </div>
+      {orders ? (
       <div className="mb-5 flex">
         <div
           className="flex h-[43px] min-w-[246px] items-center rounded-lg pr-3"
@@ -71,6 +72,7 @@ export default function GiftCardSeoText({
           </p>
         </div>
       </div>
+      ) : null}
       {blocks.map((block, i) =>
         block.h2 ? (
           <h2 key={i} className="font-bold leading-[19px]">

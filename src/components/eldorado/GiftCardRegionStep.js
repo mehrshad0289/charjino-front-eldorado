@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { GIFT_CARD_REGIONS } from "./data/giftCardData";
+import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
 
 /* Step 1 of the buying flow (giftcard .make capture): white card with a
    yellow→pink gradient border, yellow number badge pinned to the top-left
@@ -24,10 +25,17 @@ function Chevron({ open }) {
   );
 }
 
-export default function GiftCardRegionStep() {
+export default function GiftCardRegionStep({
+  regions = GIFT_CARD_REGIONS,
+  value = null,
+  onChange,
+  selectLabel = GIFT_SHOP_CHROME.selectRegion,
+  placeholder = GIFT_SHOP_CHROME.regionPlaceholder,
+}) {
   const [open, setOpen] = useState(false);
-  const [region, setRegion] = useState(null);
+  const [region, setRegion] = useState(value);
   const rootRef = useRef(null);
+  const selected = onChange ? value : region;
 
   useEffect(() => {
     if (!open) return;
@@ -37,6 +45,12 @@ export default function GiftCardRegionStep() {
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
   }, [open]);
+
+  const choose = (next) => {
+    if (onChange) onChange(next);
+    else setRegion(next);
+    setOpen(false);
+  };
 
   return (
     <div className="relative z-[1] mb-8 rounded-2xl p-px" style={{ backgroundImage: "linear-gradient(to right, rgb(255, 201, 80), rgb(210, 123, 185))" }}>
@@ -48,7 +62,8 @@ export default function GiftCardRegionStep() {
       </div>
       <div className="rounded-2xl bg-white p-4">
         <label className="mb-3 mt-3 inline-block text-[16px] font-bold leading-[27px] lg:text-[18px]">
-          Select region<span className="text-[rgb(212,_25,_20)]">*</span>
+          {selectLabel}
+          <span className="text-[rgb(212,_25,_20)]">*</span>
         </label>
         <div className="relative w-full" ref={rootRef}>
           <button
@@ -59,25 +74,22 @@ export default function GiftCardRegionStep() {
             onClick={() => setOpen((v) => !v)}
             className="flex min-h-[42px] w-full items-center justify-between overflow-hidden rounded-lg bg-inputgray px-[14px] py-2 text-left leading-[19.6px] shadow-[rgba(0,0,0,0)_0px_0px_0px_1px_inset]"
           >
-            <span className={`block truncate ${region ? "text-ink" : "text-filtertext"}`}>{region ?? "Region"}</span>
+            <span className={`block truncate ${selected ? "text-ink" : "text-filtertext"}`}>{selected ?? placeholder}</span>
             <Chevron open={open} />
           </button>
           {open && (
             <ul
               role="listbox"
-              className="absolute inset-x-0 top-[calc(100%+4px)] z-20 overflow-hidden rounded-lg border border-cardborder bg-white py-1 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]"
+              className="absolute inset-x-0 top-[calc(100%+4px)] z-20 max-h-72 overflow-auto rounded-lg border border-cardborder bg-white py-1 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]"
             >
-              {GIFT_CARD_REGIONS.map((r) => (
+              {regions.map((r) => (
                 <li key={r}>
                   <button
                     type="button"
                     role="option"
-                    aria-selected={region === r}
-                    onClick={() => {
-                      setRegion(r);
-                      setOpen(false);
-                    }}
-                    className={`block w-full px-[14px] py-2 text-left text-[14px] hover:bg-inputgray ${region === r ? "font-bold" : ""}`}
+                    aria-selected={selected === r}
+                    onClick={() => choose(r)}
+                    className={`block w-full px-[14px] py-2 text-left text-[14px] hover:bg-inputgray ${selected === r ? "font-bold" : ""}`}
                   >
                     {r}
                   </button>

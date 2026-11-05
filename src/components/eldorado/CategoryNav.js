@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MegaMenu from "./MegaMenu";
+import { CATEGORY_NAV, FA } from "./data/faCopy";
+import { loadNavMega, peekNavMega, prefetchNavMegas } from "./nav-mega-client";
 
 function HeadsetIcon() {
   return (
@@ -59,26 +61,32 @@ function MoonIcon() {
   );
 }
 
-/* WIRING (user request: «روی هر کدام زد دسته اکانت همین باز شود»): every
-   category routes to the accounts shop page — the shop_account capture is the
-   template for all categories until their own captures exist. */
-const SHOP_ACCOUNTS = "/efootball-accounts";
-
-const CATEGORIES = ["Currency", "Accounts", "Top ups", "Items", "Boosting", "Gift cards"];
-
 export default function CategoryNav({ activeCategory = null }) {
   const [openCategory, setOpenCategory] = useState(null);
   const [pinned, setPinned] = useState(false);
+  const [settled, setSettled] = useState({});
 
-  const openMenu = (name) => {
-    if (name === "Accounts") {
-      setOpenCategory("Accounts");
-    }
+  const markSettled = (key) => {
+    setSettled((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
+  };
+
+  useEffect(() => {
+    const keys = CATEGORY_NAV.map((item) => item.key);
+    prefetchNavMegas(keys);
+    keys.forEach((key) => {
+      loadNavMega(key).finally(() => markSettled(key));
+    });
+  }, []);
+
+  const openMenu = (key) => {
+    setOpenCategory(key);
+    loadNavMega(key).finally(() => markSettled(key));
   };
   const closeMenu = () => {
     setOpenCategory(null);
     setPinned(false);
   };
+  const showMega = Boolean(openCategory && (peekNavMega(openCategory) || settled[openCategory]));
 
   return (
     <nav
@@ -90,29 +98,26 @@ export default function CategoryNav({ activeCategory = null }) {
       }}
     >
       <div className="flex h-10 items-center justify-between lg:px-6">
-        <ul className="ml-3 flex items-center overflow-x-auto whitespace-nowrap">
-          {CATEGORIES.map((c) => {
-            const active = openCategory === c || activeCategory === c;
-            const isAccounts = c === "Accounts";
+        <ul className="ms-3 flex items-center overflow-x-auto whitespace-nowrap">
+          {CATEGORY_NAV.map((c) => {
+            const active = openCategory === c.key || activeCategory === c.key;
             return (
-              <li key={c}>
+              <li key={c.key}>
                 <a
-                  href={SHOP_ACCOUNTS}
-                  aria-expanded={isAccounts ? openCategory === "Accounts" : undefined}
-                  aria-haspopup={isAccounts ? "true" : undefined}
-                  onMouseEnter={() => openMenu(c)}
+                  href={c.href}
+                  aria-expanded={openCategory === c.key}
+                  aria-haspopup="true"
+                  onMouseEnter={() => openMenu(c.key)}
                   onClick={(e) => {
-                    if (isAccounts) {
-                      e.preventDefault();
-                      setOpenCategory("Accounts");
-                      setPinned(true);
-                    }
+                    e.preventDefault();
+                    openMenu(c.key);
+                    setPinned(true);
                   }}
                   className={`flex h-10 items-center gap-1 px-3 pb-0.5 text-sm font-bold tracking-[0.48px] ${
                     active ? "rounded-t-sm bg-catactive text-white" : "text-white hover:text-brand"
                   }`}
                 >
-                  {c}
+                  {c.label}
                   <svg
                     width="12"
                     height="12"
@@ -136,14 +141,14 @@ export default function CategoryNav({ activeCategory = null }) {
         </ul>
 
         <div className="hidden items-center gap-2 text-sm lg:flex">
-          <a href="#" className="flex h-10 items-center gap-2 px-[14px] text-navgray hover:text-brand">
+          <a href="/contact-us" className="flex h-10 items-center gap-2 px-[14px] text-navgray hover:text-brand">
             <HeadsetIcon />
-            24/7 live support
+            {FA.support}
           </a>
           <button type="button" className="flex h-10 items-center gap-2 px-1.5 text-navgray hover:text-brand">
             <GlobeIcon />
             <span>
-              English <span className="opacity-60">|</span> EUR - €
+              {FA.language} <span className="opacity-60">|</span> {FA.toman}
             </span>
           </button>
           <button
@@ -159,7 +164,14 @@ export default function CategoryNav({ activeCategory = null }) {
         </div>
       </div>
 
-      {openCategory === "Accounts" && <MegaMenu onClose={closeMenu} />}
+      {showMega ? (
+        <MegaMenu
+          key={openCategory}
+          categoryKey={openCategory}
+          onClose={closeMenu}
+          fallbackHref={CATEGORY_NAV.find((c) => c.key === openCategory)?.href}
+        />
+      ) : null}
     </nav>
   );
 }

@@ -59,7 +59,7 @@ function BannerIcon({ alt, src }) {
 const DEFAULT_TABS = [
   { key: "Accounts", href: "https://www.eldorado.gg/xbox-accounts/a/103-1-0" },
   { key: "Game Pass", href: "/xbox-game-pass" },
-  { key: "Gift cards", href: "/xbox-gift-card" },
+  { key: "Gift cards", href: "/gift-card/xbox" },
 ];
 
 export default function GiftCardBanner({

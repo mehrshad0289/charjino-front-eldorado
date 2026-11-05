@@ -12,7 +12,7 @@ function Card({ bg, image, imageAlt, title, text, buttonText, href, imgClass }) 
         loading="lazy"
         className={`h-28 w-auto shrink-0 md:h-[154px] ${imgClass || ""}`}
       />
-      <div className="ml-5 md:ml-[43px]">
+      <div className="ms-5 md:ms-[43px]">
         <div className="mb-6">
           <h3 className="mb-3.5 text-2xl font-bold text-ink">{title}</h3>
           <p className="leading-[21px] text-ink">{text}</p>
@@ -38,10 +38,10 @@ export default function GuaranteeCards() {
               bg="var(--color-guarantee)"
               image="trade-shield.svg?q=40"
               imageAlt="Trade shield"
-              title="Money-back guarantee"
-              text="Receive your order or get a refund. Feel safe with full trading protection."
-              buttonText="Learn more"
-              href="https://support.eldorado.gg/en/articles/8408994-tradeshield-buying"
+              title="تضمین بازگشت پول"
+              text="سفارش را دریافت می‌کنید یا پول برمی‌گردد. با پوشش کامل معامله، با خیال راحت بخرید."
+              buttonText="بیشتر بدانید"
+              href="/terms-of-service"
             />
           </div>
           <div className="w-full">
@@ -49,10 +49,10 @@ export default function GuaranteeCards() {
               bg="var(--color-support)"
               image="chat-support.svg"
               imageAlt="24/7 live support"
-              title="24/7 live support"
-              text="Eldorado support works around the clock. Contact us at any time."
-              buttonText="Chat now"
-              href="#"
+              title="پشتیبانی شبانه‌روزی"
+              text="پشتیبانی شارژینو همیشه در دسترس است. هر زمان پیام بدهید."
+              buttonText="گفتگو"
+              href="/contact-us"
               imgClass="md:h-36"
             />
           </div>

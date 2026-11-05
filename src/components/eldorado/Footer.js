@@ -130,7 +130,7 @@ export default function Footer({ showLang = true }) {
             >
               <GlobeIcon />
               <span>
-                English <span className="opacity-60">|</span> EUR - €
+                فارسی <span className="opacity-60">|</span> تومان
               </span>
             </button>
           )}
@@ -143,7 +143,7 @@ export default function Footer({ showLang = true }) {
               <Logo color="#FFFFFF" />
             </Link>
             <p className="text-base leading-normal text-white">
-              Join us today to level up your gaming experience.
+              همین امروز بپیوندید و تجربهٔ بازی‌تان را بالا ببرید.
             </p>
             <div className="flex items-center gap-4">
               {SOCIALS.map((s) => (

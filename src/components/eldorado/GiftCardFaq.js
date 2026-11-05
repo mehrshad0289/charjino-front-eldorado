@@ -26,6 +26,8 @@ function Chevron({ open }) {
 }
 
 function Answer({ item }) {
+  const paragraphs = (item.paragraphs || []).filter(Boolean);
+  if (!item.intro && !item.steps && paragraphs.length === 0 && !item.after) return null;
   return (
     <div className="pt-6 text-[14px] leading-[21px] text-graytext">
       {item.intro && <p>{item.intro}</p>}
@@ -36,7 +38,7 @@ function Answer({ item }) {
           ))}
         </ol>
       )}
-      {item.paragraphs?.map((p, i) => (
+      {paragraphs.map((p, i) => (
         <p key={i} className={i > 0 ? "mt-2" : ""}>
           {p}
         </p>
@@ -46,13 +48,13 @@ function Answer({ item }) {
   );
 }
 
-export default function GiftCardFaq({ items = GIFT_CARD_FAQ }) {
+export default function GiftCardFaq({ items = GIFT_CARD_FAQ, title = "Frequently Asked Questions" }) {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
     <div className="mb-10 lg:mb-16">
       <div className="mb-6 text-left text-[24px] font-bold leading-[36px] lg:mb-8 lg:text-center lg:text-[30px]">
-        Frequently Asked Questions
+        {title}
       </div>
       <div className="flex flex-col gap-2">
         {items.map((item, i) => {

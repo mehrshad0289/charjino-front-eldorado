@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { GIFT_CARD_AMOUNTS, GIFT_CARD_MOBILE_PREVIEW_COUNT } from "./data/giftCardData";
+import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
 
 /* Step 2 of the buying flow (giftcard .make capture): "Select amount *" with
    a number badge and a grid of amount cards (white, hairline border, card
@@ -12,7 +13,7 @@ import { GIFT_CARD_AMOUNTS, GIFT_CARD_MOBILE_PREVIEW_COUNT } from "./data/giftCa
    its top-left corner, single-column gray rows inside (first 8 + a centered
    "View more" toggle). Clicking a card selects it. */
 
-function Row({ amount, selected, onSelect, horizontal }) {
+function Row({ amount, selected, onSelect, horizontal, valueLabel, fromLabel, imgAlt }) {
   return (
     <button
       type="button"
@@ -31,17 +32,17 @@ function Row({ amount, selected, onSelect, horizontal }) {
     >
       <div className="h-9 shrink-0 overflow-hidden">
         <img
-          alt={`Xbox ${amount.label}`}
+          alt={imgAlt}
           src={amount.img}
           className="block h-9 w-9 rounded-sm object-cover align-middle"
         />
       </div>
       <div className="min-w-0 grow lg:mt-3">
         <div className="text-[14px] leading-[19.6px]">{amount.label}</div>
-        <div className="text-[12px] leading-[18px] text-graytext">Value</div>
+        <div className="text-[12px] leading-[18px] text-graytext">{valueLabel}</div>
       </div>
       <div className={horizontal ? "shrink-0 text-[14px] leading-[21px]" : "mt-6 shrink-0 text-[14px] leading-[21px]"}>
-        <span>From</span>
+        <span>{fromLabel}</span>
         <span> {amount.from}</span>
       </div>
     </button>
@@ -59,9 +60,25 @@ function AmountBadge() {
   );
 }
 
-export default function GiftCardAmountGrid() {
+export default function GiftCardAmountGrid({
+  amounts = GIFT_CARD_AMOUNTS,
+  selectedKey = null,
+  onSelect,
+  selectLabel = GIFT_SHOP_CHROME.selectAmount,
+  valueLabel = GIFT_SHOP_CHROME.value,
+  fromLabel = GIFT_SHOP_CHROME.from,
+  viewMore = GIFT_SHOP_CHROME.viewMore,
+  viewLess = GIFT_SHOP_CHROME.viewLess,
+}) {
   const [selected, setSelected] = useState(null);
   const [expanded, setExpanded] = useState(false);
+  const current = onSelect ? selectedKey : selected;
+
+  const pick = (amount) => {
+    const key = amount.key || amount.label;
+    if (onSelect) onSelect(amount);
+    else setSelected(key);
+  };
 
   return (
     <div className="relative mb-8">
@@ -72,12 +89,20 @@ export default function GiftCardAmountGrid() {
           <div className="mr-[10px]">
             <AmountBadge />
           </div>
-          <span className="block">Select amount</span>
+          <span className="block">{selectLabel}</span>
           <span className="block text-[rgb(212,_25,_20)]">*</span>
         </div>
         <div className="grid grid-cols-4 gap-4">
-          {GIFT_CARD_AMOUNTS.map((a) => (
-            <Row key={a.label} amount={a} selected={selected === a.label} onSelect={() => setSelected(a.label)} />
+          {amounts.map((a) => (
+            <Row
+              key={a.key || a.label}
+              amount={a}
+              selected={current === (a.key || a.label)}
+              onSelect={() => pick(a)}
+              valueLabel={valueLabel}
+              fromLabel={fromLabel}
+              imgAlt={a.label}
+            />
           ))}
         </div>
       </div>
@@ -91,39 +116,45 @@ export default function GiftCardAmountGrid() {
           <span className="block text-[28px] leading-[42px]">2</span>
         </div>
         <div className="mb-3 text-[16px] font-bold leading-[27px] lg:text-[18px]">
-          Select amount<span className="text-[rgb(212,_25,_20)]">*</span>
+          {selectLabel}
+          <span className="text-[rgb(212,_25,_20)]">*</span>
         </div>
         <div className="flex flex-col gap-2">
-          {GIFT_CARD_AMOUNTS.map((a, i) => {
+          {amounts.map((a, i) => {
             if (!expanded && i >= GIFT_CARD_MOBILE_PREVIEW_COUNT) return null;
             return (
               <Row
-                key={a.label}
+                key={a.key || a.label}
                 amount={a}
                 horizontal
-                selected={selected === a.label}
-                onSelect={() => setSelected(a.label)}
+                selected={current === (a.key || a.label)}
+                onSelect={() => pick(a)}
+                valueLabel={valueLabel}
+                fromLabel={fromLabel}
+                imgAlt={a.label}
               />
             );
           })}
         </div>
-        <button
-          type="button"
-          onClick={() => setExpanded((v) => !v)}
-          className="mx-auto mt-1 flex items-center gap-1 py-2 text-[14px] font-bold"
-        >
-          {expanded ? "View less" : "View more"}
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-            className={`transition-transform ${expanded ? "rotate-180" : ""}`}
+        {amounts.length > GIFT_CARD_MOBILE_PREVIEW_COUNT ? (
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="mx-auto mt-1 flex items-center gap-1 py-2 text-[14px] font-bold"
           >
-            <path d="M4 8.5h16L12 17.5 4 8.5Z" fill="#14131a" stroke="#14131a" strokeWidth="2" strokeLinejoin="round" />
-          </svg>
-        </button>
+            {expanded ? viewLess : viewMore}
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+              className={`transition-transform ${expanded ? "rotate-180" : ""}`}
+            >
+              <path d="M4 8.5h16L12 17.5 4 8.5Z" fill="#14131a" stroke="#14131a" strokeWidth="2" strokeLinejoin="round" />
+            </svg>
+          </button>
+        ) : null}
       </div>
     </div>
   );

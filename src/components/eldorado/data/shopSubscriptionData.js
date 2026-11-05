@@ -114,7 +114,7 @@ export const PS_PLUS_BANNER = {
   tabs: [
     { key: "Accounts", href: "https://www.eldorado.gg/psn-accounts/a/104-1-0" },
     { key: "Subscription", href: "/playstation-plus" },
-    { key: "Gift cards", href: "https://www.eldorado.gg/psn-gift-card/v/104" },
+    { key: "Gift cards", href: "/gift-card/playstation" },
   ],
   active: "Subscription",
 };

@@ -5,8 +5,8 @@ const GCS =
 export default function ChatBubble() {
   return (
     <a
-      href="#"
-      aria-label="Open chat"
+      href="/contact-us"
+      aria-label="گفتگو"
       className="fixed bottom-5 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-brand shadow-[0_1px_6px_rgba(0,0,0,0.06),0_2px_32px_rgba(0,0,0,0.16)]"
     >
       <img

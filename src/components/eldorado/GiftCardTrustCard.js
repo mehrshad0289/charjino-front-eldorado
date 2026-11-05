@@ -5,7 +5,11 @@ import { GIFT_CARD_IMAGES, GIFT_CARD_TRUST_ROWS } from "./data/giftCardData";
    then a 2-column checklist with hairline dividers (single column on
    mobile per live @390). Check icons are the capture's own SVG asset. */
 
-export default function GiftCardTrustCard() {
+export default function GiftCardTrustCard({
+  title = "Why trust Eldorado?",
+  subtitle = "From start to finish, your purchase experience is supervised and safe",
+  rows = GIFT_CARD_TRUST_ROWS,
+}) {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-cardborder bg-white px-5 pb-6 pt-6">
       <img
@@ -15,11 +19,11 @@ export default function GiftCardTrustCard() {
         className="pointer-events-none absolute left-0 top-0 block h-auto w-full max-w-full object-cover object-top"
       />
       <div className="relative mb-6">
-        <div className="mb-2 text-[24px] font-bold leading-[normal]">Why trust Eldorado?</div>
-        <div className="text-graytext">From start to finish, your purchase experience is supervised and safe</div>
+        <div className="mb-2 text-[24px] font-bold leading-[normal]">{title}</div>
+        <div className="text-graytext">{subtitle}</div>
       </div>
       <div className="relative grid grid-cols-1 gap-x-8 sm:grid-cols-2">
-        {GIFT_CARD_TRUST_ROWS.map((row, i) => (
+        {rows.map((row, i) => (
           <div
             key={row}
             className={`flex items-center gap-2 border-b border-cardborder py-[15px] ${

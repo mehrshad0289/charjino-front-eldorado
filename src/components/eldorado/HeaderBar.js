@@ -5,6 +5,7 @@ import Link from "next/link";
 import Logo from "./Logo";
 import SearchOverlay from "./SearchOverlay";
 import MobileMenu from "./MobileMenu";
+import { FA } from "./data/faCopy";
 
 function SearchIcon({ className = "", stroke = "#ffffff", size = 24 }) {
   return (
@@ -168,9 +169,9 @@ export default function HeaderBar({
       <div className="flex items-center px-4 pt-2.5 lg:h-[60px] lg:px-6 lg:pt-0">
         <button
           type="button"
-          aria-label="Open menu"
+          aria-label={FA.menu}
           onClick={() => setMenuOpen(true)}
-          className="mr-1 flex h-[42px] w-[42px] items-center justify-center text-white lg:hidden"
+          className="me-1 flex h-[42px] w-[42px] items-center justify-center text-white lg:hidden"
         >
           <BurgerIcon />
         </button>
@@ -184,24 +185,24 @@ export default function HeaderBar({
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            className="flex h-[42px] w-full max-w-[1178px] items-center gap-2 rounded-lg border-2 border-searchstroke bg-searchbg px-3 text-left text-sm"
+            className="flex h-[42px] w-full max-w-[1178px] items-center gap-2 rounded-lg border-2 border-searchstroke bg-searchbg px-3 text-start text-sm"
           >
             <SearchIcon />
-            <span className="truncate text-placehold">Search for games, keywords, sellers...</span>
+            <span className="truncate text-placehold">{FA.search}</span>
           </button>
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-1">
+        <div className="ms-auto flex shrink-0 items-center gap-1">
           {loggedIn ? (
             <LoggedInActions user={user} notiCount={notiCount} favCount={favCount} avatarAlert={avatarAlert} />
           ) : (
             <>
-              <button
-                type="button"
-                className="h-[42px] min-w-[70px] rounded-lg bg-brand px-4 text-sm font-bold text-ink"
+              <Link
+                href="/login"
+                className="inline-flex h-[42px] min-w-[70px] items-center justify-center rounded-lg bg-brand px-4 text-sm font-bold text-ink"
               >
-                Log in
-              </button>
+                {FA.login}
+              </Link>
               <button
                 type="button"
                 aria-label="Settings"
@@ -220,10 +221,10 @@ export default function HeaderBar({
         <button
           type="button"
           onClick={() => setSearchOpen(true)}
-          className="flex h-[42px] w-full items-center gap-2.5 rounded-lg border-2 border-searchstroke bg-searchbg px-3 text-left text-sm"
+          className="flex h-[42px] w-full items-center gap-2.5 rounded-lg border-2 border-searchstroke bg-searchbg px-3 text-start text-sm"
         >
           <SearchIcon stroke="#a0a0aa" size={20} />
-          <span className="truncate text-white/60">Search for games, keywords, sellers...</span>
+          <span className="truncate text-white/60">{FA.search}</span>
         </button>
       </div>
 

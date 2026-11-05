@@ -1,14 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { ALL_GAMES } from "./data/referenceData";
+import { CATEGORY_NAV, FA, SHOP_ACCOUNTS_HREF } from "./data/faCopy";
+import MobileCategorySheet from "./MobileCategorySheet";
+import { prefetchNavMegas } from "./nav-mega-client";
 
-/* Mobile burger menu (mobile has no captured design — structured after the
-   live eldorado.gg mobile menu patterns: category list + popular games rows).
-   WIRING per user request: every entry routes to the accounts shop page
-   /efootball-accounts (the shop_account capture is the template). */
-
-const SHOP_ACCOUNTS = "/efootball-accounts";
-const CATEGORIES = ["Currency", "Accounts", "Top ups", "Items", "Boosting", "Gift cards"];
 const POPULAR = ALL_GAMES.slice(0, 8);
 
 function ChevronRight() {
@@ -28,13 +25,47 @@ function CloseIcon() {
 }
 
 export default function MobileMenu({ onClose }) {
+  const [popular, setPopular] = useState(POPULAR);
+  const [openCategory, setOpenCategory] = useState(null);
+
+  useEffect(() => {
+    prefetchNavMegas(CATEGORY_NAV.map((item) => item.key));
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/catalog-categories")
+      .then((res) => res.json())
+      .then((payload) => {
+        if (payload?.success && Array.isArray(payload.data) && payload.data.length > 0) {
+          setPopular(
+            payload.data.slice(0, 8).map((row) => ({
+              name: row.name,
+              img: row.icon,
+              href: row.href,
+            })),
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  if (openCategory) {
+    return (
+      <MobileCategorySheet
+        category={openCategory}
+        onBack={() => setOpenCategory(null)}
+        onClose={onClose}
+      />
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white" role="dialog" aria-modal="true">
       <div className="sticky top-0 flex h-[60px] items-center justify-between bg-headerdark px-4">
-        <p className="text-lg font-bold text-white">Menu</p>
+        <p className="text-lg font-bold text-white">{FA.menu}</p>
         <button
           type="button"
-          aria-label="Close menu"
+          aria-label={FA.close}
           onClick={onClose}
           className="flex h-10 w-10 items-center justify-center text-white"
         >
@@ -43,37 +74,46 @@ export default function MobileMenu({ onClose }) {
       </div>
 
       <ul className="px-4 pt-4">
-        {CATEGORIES.map((c) => (
-          <li key={c} className="mb-2">
-            <a
-              href={SHOP_ACCOUNTS}
-              className="flex h-14 items-center justify-between rounded-lg bg-page px-5 text-base text-ink"
+        {CATEGORY_NAV.map((c) => (
+          <li key={c.key} className="mb-2">
+            <button
+              type="button"
+              onClick={() => setOpenCategory(c)}
+              className="flex h-14 w-full items-center justify-between rounded-lg bg-page px-5 text-start text-base text-ink"
             >
-              {c}
-              <ChevronRight />
-            </a>
+              {c.label}
+              <span className="rtl:rotate-180">
+                <ChevronRight />
+              </span>
+            </button>
           </li>
         ))}
       </ul>
 
-      <p className="px-5 pb-1 pt-5 text-sm font-bold tracking-[0.14px] text-ink">Popular games</p>
+      <p className="px-5 pb-1 pt-5 text-sm font-bold tracking-[0.14px] text-ink">{FA.popularGames}</p>
       <ul className="px-4 pb-6">
-        {POPULAR.map((g) => (
-          <li key={g.name}>
+        {popular.map((g) => (
+          <li key={g.href || g.name}>
             <a
-              href={SHOP_ACCOUNTS}
+              href={g.href || SHOP_ACCOUNTS_HREF}
               aria-label={g.name}
               className="flex h-[52px] items-center gap-3 rounded-lg px-1 text-base text-ink active:bg-page"
             >
-              <img
-                src={g.img}
-                alt=""
-                width="32"
-                height="32"
-                className="h-8 w-8 shrink-0 rounded-sm object-cover"
-              />
+              {g.img ? (
+                <img
+                  src={g.img}
+                  alt=""
+                  width="32"
+                  height="32"
+                  className="h-8 w-8 shrink-0 rounded-sm object-cover"
+                />
+              ) : (
+                <span className="h-8 w-8 shrink-0 rounded-sm bg-badgebg" />
+              )}
               <span className="min-w-0 flex-1 truncate">{g.name}</span>
-              <ChevronRight />
+              <span className="rtl:rotate-180">
+                <ChevronRight />
+              </span>
             </a>
           </li>
         ))}

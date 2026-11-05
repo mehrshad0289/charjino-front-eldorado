@@ -5,17 +5,15 @@ export default function TradingSection() {
     <section className="mb-16 bg-white">
       <div className="mx-auto flex max-w-[1208px] flex-col items-center justify-center gap-12 overflow-hidden px-4 py-10 md:flex-row md:gap-16 md:px-6 md:py-0">
         <div className="w-full md:w-1/2">
-          <h2 className="mb-6 text-3xl font-bold text-ink">Safe and easy trading</h2>
+          <h2 className="mb-6 text-3xl font-bold text-ink">معاملهٔ امن و ساده</h2>
           <div className="flex flex-col gap-4 text-base text-graytext md:text-xl">
             <span>
-              Trade without fear - Eldorado guarantees that all trades are legit
-              and keeps you safe from scammers.
+              بدون ترس معامله کنید — شارژینو تضمین می‌کند معامله‌ها معتبرند و شما را از کلاهبرداری دور نگه می‌دارد.
             </span>
             <span>
-              It&apos;s quick and easy - find the best product for your favorite
-              game, make a payment, receive your order, and get back to playing.
+              سریع و ساده است — محصول بازی‌تان را پیدا کنید، پرداخت کنید، تحویل بگیرید و برگردید به بازی.
             </span>
-            <span>Join us today to level up your gaming experience.</span>
+            <span>همین امروز بپیوندید و تجربهٔ بازی‌تان را بالا ببرید.</span>
           </div>
         </div>
 
