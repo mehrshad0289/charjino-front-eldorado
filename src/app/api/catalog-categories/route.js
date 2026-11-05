@@ -1,13 +1,13 @@
+import { connection } from "next/server";
 import { NextResponse } from "next/server";
 import { serverFetch, ApiError } from "../../../lib/server-fetcher";
 import { apiPaths } from "../../../lib/api-paths";
 import { mapCategorySuggestions } from "../../../lib/catalog-home";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
 export const instant = false;
 
 export async function GET() {
+  await connection();
   try {
     const items = await serverFetch(apiPaths.catalogCategories);
     return NextResponse.json({ success: true, data: mapCategorySuggestions(items) });

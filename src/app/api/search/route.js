@@ -1,13 +1,13 @@
+import { connection } from "next/server";
 import { NextResponse } from "next/server";
 import { serverFetch, ApiError } from "../../../lib/server-fetcher";
 import { apiPaths } from "../../../lib/api-paths";
 import { rewriteGiftSearchItems } from "../../../lib/gift-card-shop";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
 export const instant = false;
 
 export async function GET(request) {
+  await connection();
   const incoming = new URL(request.url);
   const q = (incoming.searchParams.get("q") ?? "").slice(0, 100);
   const page = Number(incoming.searchParams.get("page") ?? "1") || 1;
