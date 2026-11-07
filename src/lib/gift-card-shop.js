@@ -1,6 +1,7 @@
 import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
 import { formatTomanPrice } from "./format-toman";
+import { preferFaTitle } from "./catalog-region";
 
 function asRecord(value) {
   return value && typeof value === "object" ? value : {};
@@ -10,15 +11,37 @@ function asString(value) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-export function giftShopHref(platform) {
-  const id = normalizeGiftPlatform(platform);
-  return id ? `/gift-card/${encodeURIComponent(id)}` : "";
-}
-
 export function normalizeGiftPlatform(value) {
   const id = asString(value).toLowerCase();
   if (!id || id.length > 80 || !/^[a-z0-9][a-z0-9._-]*$/.test(id)) return "";
   return id;
+}
+
+export function isPlayStationPlusPlatform(value) {
+  const id = normalizeGiftPlatform(value);
+  return id === "playstation-plus" || id === "ps-plus";
+}
+
+export function giftHubPlatform(value) {
+  const id = normalizeGiftPlatform(value);
+  if (isPlayStationPlusPlatform(id)) return "playstation";
+  return id;
+}
+
+export function giftCardHubHref(platform) {
+  const hub = giftHubPlatform(platform);
+  return hub ? `/gift-card/${encodeURIComponent(hub)}` : "";
+}
+
+export function giftShopHref(platform) {
+  const id = normalizeGiftPlatform(platform);
+  if (!id) return "";
+  if (isPlayStationPlusPlatform(id)) return "/playstation-plus";
+  return `/gift-card/${encodeURIComponent(id)}`;
+}
+
+function platformQueryIds(id) {
+  return isPlayStationPlusPlatform(id) ? ["playstation-plus", "ps-plus"] : [id];
 }
 
 export function isGiftCardProduct(product) {
@@ -47,25 +70,13 @@ export function rewriteGiftSearchItems(items) {
   });
 }
 
-export function giftShopSeo(brandLabel) {
-  const name = asString(brandLabel) || "گیفت کارت";
-  return {
-    title: `خرید گیفت کارت ${name}`,
-    blocks: [
-      {
-        p: `خرید گیفت کارت ${name} با تومان از شارژینو. از مگا‌منو برند را پیدا کنید، بعد ریجن و مبلغ را از کاتالوگ انتخاب کنید؛ پس از پرداخت، کد در سفارش شما قرار می‌گیرد.`,
-      },
-      { h2: "روش خرید" },
-      {
-        list: [
-          "در مگا‌منو گیفت کارت را جستجو و انتخاب کنید",
-          "در این صفحه ریجن و مبلغ را انتخاب کنید",
-          "دکمه خرید را بزنید و پرداخت را کامل کنید",
-          "پس از تأیید، کد را از سفارش بردارید و در پلتفرم رسمی ردیم کنید",
-        ],
-      },
-    ],
-  };
+export function giftShopBannerName(gameName, platform) {
+  const cleaned = asString(gameName)
+    .replace(/\s*gift\s*cards?\s*/gi, " ")
+    .replace(/\s*گیفت[\s\u200c]*کارت\s*/gi, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+  return cleaned || asString(platform) || gameName;
 }
 
 function catalogPageItems(payload) {
@@ -93,7 +104,10 @@ function skuLabel(brandLabel, skuName) {
 function belongsToShop(product, id) {
   const rec = asRecord(product);
   if (!isGiftCardProduct(rec)) return false;
-  return derivedGiftPlatform(rec) === id || normalizeGiftPlatform(rec.handle) === id;
+  const aliases = platformQueryIds(id);
+  const derived = derivedGiftPlatform(rec);
+  const handle = normalizeGiftPlatform(rec.handle);
+  return aliases.includes(derived) || aliases.includes(handle);
 }
 
 function mergeGiftProducts(rows) {
@@ -146,24 +160,88 @@ async function fetchGiftProductByHandle(id) {
   }
 }
 
+function emptyShop(id) {
+  return { platform: id, gameName: "", brandLabel: "", bannerName: "", regions: [], amounts: [], bannerIcon: "" };
+}
+
+export async function loadGiftBrandPage(platform) {
+  const id = normalizeGiftPlatform(platform);
+  if (!id) return null;
+  try {
+    const page = await serverFetch(apiPaths.catalogGiftBrandPage(id));
+    return asRecord(page);
+  } catch (error) {
+    if (error instanceof ApiError && error.statusCode === 404) return null;
+    throw error;
+  }
+}
+
+function mapGiftBrandBlocks(page) {
+  const blocks = [];
+  const intro = asString(page.intro);
+  if (intro) blocks.push({ p: intro });
+  for (const raw of Array.isArray(page.blocks) ? page.blocks : []) {
+    const block = asRecord(raw);
+    const type = asString(block.type);
+    const text = asString(block.text);
+    const items = (Array.isArray(block.items) ? block.items : []).map(asString).filter(Boolean);
+    if ((type === "h2" || type === "p") && text) {
+      blocks.push(type === "h2" ? { h2: text } : { p: text });
+      continue;
+    }
+    if (type === "ul" && items.length) blocks.push({ ul: items });
+    if (type === "ol" && items.length) blocks.push({ list: items });
+  }
+  const howTo = page.howTo && typeof page.howTo === "object" ? asRecord(page.howTo) : null;
+  if (howTo) {
+    const title = asString(howTo.title);
+    const howIntro = asString(howTo.intro);
+    const steps = (Array.isArray(howTo.steps) ? howTo.steps : []).map(asString).filter(Boolean);
+    const after = asString(howTo.after);
+    if (title) blocks.push({ h2: title });
+    if (howIntro) blocks.push({ p: howIntro });
+    if (steps.length) blocks.push({ list: steps });
+    if (after) blocks.push({ p: after });
+  }
+  return blocks;
+}
+
+export function giftBrandPageSeo(page, fallbackTitle) {
+  if (!page) return null;
+  const rec = asRecord(page);
+  const blocks = mapGiftBrandBlocks(rec);
+  const title = asString(rec.h1) || asString(fallbackTitle);
+  if (!title && blocks.length === 0) return null;
+  return { title, blocks };
+}
+
+export function giftBrandPageMeta(page, fallback) {
+  const rec = asRecord(page);
+  const seo = asRecord(rec.seo);
+  return {
+    title: asString(seo.title) || asString(rec.h1) || asString(fallback?.title),
+    description: asString(seo.description) || asString(fallback?.description),
+  };
+}
+
 export async function loadGiftCardShop(platform) {
   const id = normalizeGiftPlatform(platform);
-  const empty = { platform: id, gameName: "", brandLabel: "", regions: [], amounts: [], bannerIcon: "" };
-  if (!id) return empty;
+  if (!id) return emptyShop(id);
+  const aliases = platformQueryIds(id);
 
   let products = [];
-  try {
-    products = await fetchGiftProductsByPlatform(id);
-  } catch (error) {
-    if (!(error instanceof ApiError)) throw error;
-    products = [];
-  }
-
-  try {
-    const byHandle = await fetchGiftProductByHandle(id);
-    if (byHandle) products = mergeGiftProducts([...products, byHandle]);
-  } catch (error) {
-    if (!(error instanceof ApiError)) throw error;
+  for (const alias of aliases) {
+    try {
+      products = mergeGiftProducts([...products, ...(await fetchGiftProductsByPlatform(alias))]);
+    } catch (error) {
+      if (!(error instanceof ApiError)) throw error;
+    }
+    try {
+      const byHandle = await fetchGiftProductByHandle(alias);
+      if (byHandle) products = mergeGiftProducts([...products, byHandle]);
+    } catch (error) {
+      if (!(error instanceof ApiError)) throw error;
+    }
   }
 
   if (products.length === 0) {
@@ -185,10 +263,10 @@ export async function loadGiftCardShop(platform) {
     const rec = asRecord(item);
     const handle = asString(rec.handle);
     const region = asString(rec.region);
-    const thumbnail = asString(rec.thumbnail);
+    const thumbnail = asString(rec.thumbnail) || asString(rec.imageUrl) || asString(rec.image);
     if (!bannerIcon && thumbnail) bannerIcon = thumbnail;
     if (!gameName) {
-      gameName = stripRegion(rec.title) || stripRegion(rec.titleEn) || rec.brand || id;
+      gameName = stripRegion(preferFaTitle(rec)) || stripRegion(rec.title) || stripRegion(rec.titleEn) || rec.brand || id;
     }
     if (region && !seenRegion.has(region)) {
       seenRegion.add(region);
@@ -201,12 +279,18 @@ export async function loadGiftCardShop(platform) {
       const price = Number(sku.price);
       const name = asString(sku.name) || asString(sku.nameEn);
       if (!Number.isFinite(price) || price <= 0) continue;
+      const amountRegion = asString(sku.region) || region;
+      if (amountRegion && !seenRegion.has(amountRegion)) {
+        seenRegion.add(amountRegion);
+        regions.push(amountRegion);
+      }
       amounts.push({
         key: `${handle}:${sku.id || name}`,
+        skuId: sku.id || null,
         label: skuLabel(gameName, name),
         from: formatTomanPrice(price),
         img: thumbnail,
-        region: asString(sku.region) || region,
+        region: amountRegion,
         href: null,
         handle,
         sort: denominationSort(name),
@@ -215,13 +299,14 @@ export async function loadGiftCardShop(platform) {
     }
   }
 
-  regions.sort((a, b) => a.localeCompare(b, "en"));
-  amounts.sort((a, b) => a.sort - b.sort || a.label.localeCompare(b.label, "en"));
+  regions.sort((a, b) => a.localeCompare(b, "fa"));
+  amounts.sort((a, b) => a.sort - b.sort || a.label.localeCompare(b.label, "fa"));
 
   return {
     platform: id,
     gameName,
     brandLabel: gameName,
+    bannerName: giftShopBannerName(gameName, id),
     regions,
     amounts,
     bannerIcon,

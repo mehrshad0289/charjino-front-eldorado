@@ -3,6 +3,7 @@ export const apiPaths = {
   catalogCategories: "/catalog/categories",
   catalogCategory: (slug) => `/catalog/categories/${encodeURIComponent(slug)}`,
   catalogProduct: (handle) => `/catalog/products/${encodeURIComponent(handle)}`,
+  catalogGiftBrandPage: (platform) => `/catalog/gift-brand-pages/${encodeURIComponent(platform)}`,
   catalogProducts: (params = {}) => {
     const search = new URLSearchParams();
     if (params.category) search.set("category", String(params.category));
@@ -24,6 +25,9 @@ export const apiPaths = {
     search.set("mode", params.mode ?? "auto");
     if (params.page && params.page > 1) search.set("page", String(params.page));
     if (params.perPage) search.set("per_page", String(params.perPage));
+    if (params.group) search.set("group", String(params.group));
+    if (params.platform) search.set("platform", String(params.platform));
+    if (params.region) search.set("region", String(params.region));
     return `/catalog/smart-search?${search.toString()}`;
   },
 };

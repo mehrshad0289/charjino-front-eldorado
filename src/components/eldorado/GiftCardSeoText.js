@@ -1,3 +1,5 @@
+import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
+
 function StarIcon() {
   return (
     <svg width="66" height="66" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -45,8 +47,10 @@ const DEFAULT_BLOCKS = [
 ];
 
 export default function GiftCardSeoText({
-  title = "Buy Xbox Gift Cards Cheap",
-  orders = "14,600",
+  title = GIFT_SHOP_CHROME.giftCard,
+  orders = "۱۴٬۶۰۰",
+  fromLast = GIFT_SHOP_CHROME.fromLast,
+  ordersWord = GIFT_SHOP_CHROME.ordersWord,
   blocks = DEFAULT_BLOCKS,
 }) {
   return (
@@ -57,18 +61,20 @@ export default function GiftCardSeoText({
       {orders ? (
       <div className="mb-5 flex">
         <div
-          className="flex h-[43px] min-w-[246px] items-center rounded-lg pr-3"
+          className="flex h-[43px] min-w-[246px] items-center rounded-lg pe-3"
           style={{ backgroundImage: "linear-gradient(to right, rgb(223, 28, 255) -55.11%, rgb(255, 201, 80) 97.14%)" }}
         >
           {/* capture: 66px yellow star with the 4.9 overlaid on it */}
-          <div className="relative ml-1 h-[43px] w-[60px] shrink-0">
-            <span className="absolute left-[22px] top-[11px] z-[2] block font-bold">4.9</span>
-            <span className="absolute -top-3 left-0 z-[1] block text-[rgb(255,_201,_80)]">
+          <div className="relative ms-1 h-[43px] w-[60px] shrink-0">
+            <span className="absolute start-[22px] top-[11px] z-[2] block font-bold">۴٫۹</span>
+            <span className="absolute -top-3 start-0 z-[1] block text-[rgb(255,_201,_80)]">
               <StarIcon />
             </span>
           </div>
-          <p className="ml-1.5 flex items-center justify-center text-[13px] leading-[21px]">
-            From last<b className="px-1 font-bold">{orders}</b>orders
+          <p className="ms-1.5 flex items-center justify-center text-[13px] leading-[21px]">
+            {fromLast}
+            <b className="px-1 font-bold">{orders}</b>
+            {ordersWord}
           </p>
         </div>
       </div>
@@ -78,8 +84,16 @@ export default function GiftCardSeoText({
           <h2 key={i} className="font-bold leading-[19px]">
             {block.h2}
           </h2>
+        ) : block.ul ? (
+          <ul key={i} className="mb-5 list-disc ps-[30px]">
+            {block.ul.map((li, j) => (
+              <li key={j}>
+                <p>{li}</p>
+              </li>
+            ))}
+          </ul>
         ) : block.list ? (
-          <ol key={i} className="mb-5 list-decimal pl-[30px]">
+          <ol key={i} className="mb-5 list-decimal ps-[30px]">
             {block.list.map((li, j) => (
               <li key={j} className="list-decimal">
                 <p>{li}</p>

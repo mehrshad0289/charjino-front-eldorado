@@ -1,5 +1,5 @@
 import { connection } from "next/server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import HeaderBar from "./HeaderBar";
 import CategoryNav from "./CategoryNav";
 import GiftCardBanner from "./GiftCardBanner";
@@ -12,27 +12,51 @@ import GiftCardSeoText from "./GiftCardSeoText";
 import Footer from "./Footer";
 import ChatBubble from "./ChatBubble";
 import { GIFT_CARD_IMAGES } from "./data/giftCardData";
-import { GIFT_SHOP_CHROME, GIFT_SHOP_FAQ } from "./data/giftShopCopy";
+import {
+  GIFT_SHOP_CHROME,
+  giftShopBannerTabs,
+  giftShopFaq,
+  giftShopSeo,
+} from "./data/giftShopCopy";
 import RecordRecentView from "./RecordRecentView";
-import { giftShopHref, giftShopSeo, loadGiftCardShop, normalizeGiftPlatform } from "../../lib/gift-card-shop";
+import {
+  giftBrandPageSeo,
+  isPlayStationPlusPlatform,
+  loadGiftBrandPage,
+  loadGiftCardShop,
+  normalizeGiftPlatform,
+} from "../../lib/gift-card-shop";
+import { PS_PLUS_BANNER } from "./data/shopSubscriptionData";
 
 export default async function GiftCardShopPage({ platform }) {
   await connection();
   const id = normalizeGiftPlatform(platform || "");
   if (!id) notFound();
-  const catalog = await loadGiftCardShop(id);
-  if (!catalog.gameName || (catalog.amounts.length === 0 && catalog.regions.length === 0)) {
-    notFound();
+  if (isPlayStationPlusPlatform(id)) redirect("/playstation-plus");
+  const [catalog, plus, brandPage] = await Promise.all([
+    loadGiftCardShop(id),
+    id === "playstation" ? loadGiftCardShop("playstation-plus") : Promise.resolve(null),
+    loadGiftBrandPage(id),
+  ]);
+  if (!catalog.gameName && !plus?.gameName) notFound();
+  const href = `/gift-card/${id}`;
+  let name = catalog.bannerName || catalog.gameName || plus?.bannerName || plus?.gameName;
+  if (id === "playstation" && (!catalog.gameName || /plus|پلاس/i.test(name))) {
+    name = PS_PLUS_BANNER.gameName;
   }
-  const href = giftShopHref(id);
-  const seo = giftShopSeo(catalog.gameName);
+  if (!name) notFound();
+  const seo = giftBrandPageSeo(brandPage, `خرید گیفت کارت ${name}`) || giftShopSeo(name);
 
   return (
     <>
       <HeaderBar />
       <CategoryNav activeCategory="Gift cards" />
       <RecordRecentView
-        product={{ title: catalog.gameName, thumbnail: catalog.bannerIcon, category: { slug: "gift-card" } }}
+        product={{
+          title: name,
+          thumbnail: catalog.bannerIcon || plus?.bannerIcon,
+          category: { slug: "gift-card" },
+        }}
         href={href}
       />
       <main className="relative">
@@ -51,28 +75,35 @@ export default async function GiftCardShopPage({ platform }) {
         <div className="relative z-10">
           <GiftCardBanner
             active="Gift cards"
-            iconAlt={catalog.gameName}
-            gameName={catalog.gameName}
-            gameIcon={catalog.bannerIcon || GIFT_CARD_IMAGES.bannerLogo}
-            tabs={[{ key: "Gift cards", href }]}
+            iconAlt={name}
+            gameName={name}
+            gameIcon={catalog.bannerIcon || plus?.bannerIcon || GIFT_CARD_IMAGES.bannerLogo}
+            tabs={giftShopBannerTabs(id, href)}
           />
           <div className="pt-6 lg:pt-8">
             <div className="mx-auto w-full max-w-[1208px] px-4 lg:px-6">
-              <GiftCardBuyFlow regions={catalog.regions} amounts={catalog.amounts} />
+              <GiftCardBuyFlow
+                regions={catalog.regions}
+                amounts={catalog.amounts}
+                productIcon={catalog.bannerIcon || plus?.bannerIcon || ""}
+              />
             </div>
             <div className="mx-auto mt-10 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-16 lg:gap-[128px] lg:px-6">
-              <GiftCardReviews />
-              <GiftCardProcessSteps />
+              <GiftCardReviews title={GIFT_SHOP_CHROME.reviewsTitle} />
+              <GiftCardProcessSteps
+                title={GIFT_SHOP_CHROME.processTitle}
+                steps={GIFT_SHOP_CHROME.processSteps}
+              />
             </div>
             <div className="mx-auto mt-12 w-full max-w-3xl px-4 lg:mt-0 lg:px-3.5">
-              <GiftCardFaq items={GIFT_SHOP_FAQ} title={GIFT_SHOP_CHROME.faqTitle} />
+              <GiftCardFaq items={giftShopFaq(name)} title={GIFT_SHOP_CHROME.faqTitle} />
               <GiftCardTrustCard
                 title={GIFT_SHOP_CHROME.trustTitle}
                 subtitle={GIFT_SHOP_CHROME.trustSubtitle}
                 rows={GIFT_SHOP_CHROME.trustRows}
               />
             </div>
-            <GiftCardSeoText title={seo.title} orders={null} blocks={seo.blocks} />
+            <GiftCardSeoText title={seo.title} blocks={seo.blocks} />
           </div>
         </div>
       </main>
