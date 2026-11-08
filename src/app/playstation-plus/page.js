@@ -13,7 +13,6 @@ import ChatBubble from "../../components/eldorado/ChatBubble";
 import RecordRecentView from "../../components/eldorado/RecordRecentView";
 import {
   GIFT_SHOP_CHROME,
-  playstationHubTabs,
   psPlusFaq,
   psPlusSeo,
 } from "../../components/eldorado/data/giftShopCopy";
@@ -23,10 +22,13 @@ import {
   PS_PLUS_BANNER,
 } from "../../components/eldorado/data/shopSubscriptionData";
 import {
+  activeHubTabKey,
+  bannerTabsFromHub,
   giftBrandPageMeta,
   giftBrandPageSeo,
   loadGiftBrandPage,
   loadGiftCardShop,
+  loadProductHub,
 } from "../../lib/gift-card-shop";
 
 export const instant = false;
@@ -52,14 +54,17 @@ export default async function PlayStationPlusPage() {
   const catalog = await loadGiftCardShop("playstation-plus");
   const gifts = catalog.gameName ? null : await loadGiftCardShop("playstation");
   const brandPage = await loadGiftBrandPage("playstation-plus");
+  const hub = await loadProductHub("playstation");
   const name = catalog.bannerName || catalog.gameName || "پلی‌استیشن پلاس";
   const icon = catalog.bannerIcon || gifts?.bannerIcon || PS_PLUS_BANNER.icon;
   const seo = giftBrandPageSeo(brandPage, `خرید ${name}`) || psPlusSeo();
+  const tabs = bannerTabsFromHub(hub);
+  const activeTab = activeHubTabKey(tabs, "/playstation-plus", "subscription");
 
   return (
     <>
       <HeaderBar />
-      <CategoryNav activeCategory="Top ups" />
+      <CategoryNav activeCategory="Gift cards" />
       <RecordRecentView
         product={{
           title: name,
@@ -83,11 +88,11 @@ export default async function PlayStationPlusPage() {
         </div>
         <div className="relative z-10 pt-6 lg:pt-8">
           <GiftCardBanner
-            active="Subscription"
+            active={activeTab}
             iconAlt={name}
             gameName={PS_PLUS_BANNER.gameName}
             gameIcon={icon}
-            tabs={playstationHubTabs()}
+            tabs={tabs}
           />
           <div className="mt-6 lg:mt-8">
             <div className="mx-auto w-full max-w-[1208px] px-4 lg:px-6">

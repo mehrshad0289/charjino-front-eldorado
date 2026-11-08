@@ -5,15 +5,26 @@ import { GIFT_CARD_PROCESS_STEPS } from "./data/giftCardData";
    Mobile (live @390): the columns stack vertically. Illustrations are the
    capture's own SVG assets. */
 
-export default function GiftCardProcessSteps() {
+export default function GiftCardProcessSteps({ title = "Effortless buying process", steps }) {
+  const items = (Array.isArray(steps) && steps.length > 0 ? steps : GIFT_CARD_PROCESS_STEPS).map((step, index) => {
+    const art = GIFT_CARD_PROCESS_STEPS[index] || GIFT_CARD_PROCESS_STEPS[0];
+    return {
+      title: step.title || art.title,
+      text: step.text || art.text,
+      img: step.img || art.img,
+      w: step.w || art.w,
+      h: step.h || art.h,
+      alt: step.alt || art.alt,
+    };
+  });
   return (
     <div className="w-full">
       <div className="flex flex-col items-center gap-8 lg:gap-12">
         <div className="max-w-[280px] text-center text-[24px] font-bold leading-[36px] lg:max-w-[400px] lg:text-[30px]">
-          Effortless buying process
+          {title}
         </div>
         <div className="grid w-full grid-cols-1 items-start gap-8 lg:grid-cols-3 lg:gap-8">
-          {GIFT_CARD_PROCESS_STEPS.map((step) => (
+          {items.map((step) => (
             <div
               key={step.title}
               aria-label={`Process step: ${step.title}`}

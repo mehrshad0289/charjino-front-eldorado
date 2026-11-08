@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GIFT_CARD_REGIONS } from "./data/giftCardData";
 import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
+import { catalogRegionLabel } from "../../lib/catalog-region";
 
 /* Step 1 of the buying flow (giftcard .make capture): white card with a
    yellow→pink gradient border, yellow number badge pinned to the top-left
@@ -55,7 +56,7 @@ export default function GiftCardRegionStep({
   return (
     <div className="relative z-[1] mb-8 rounded-2xl p-px" style={{ backgroundImage: "linear-gradient(to right, rgb(255, 201, 80), rgb(210, 123, 185))" }}>
       <div
-        className="absolute left-0 top-0 z-[10] flex h-10 w-10 -translate-x-2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full bg-brand lg:-translate-x-0"
+        className="absolute start-0 top-0 z-[10] flex h-10 w-10 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full bg-brand ltr:-translate-x-2 rtl:translate-x-2 lg:ltr:translate-x-0 lg:rtl:translate-x-0"
         aria-hidden="true"
       >
         <span className="block text-[28px] font-bold leading-[42px]">1</span>
@@ -68,13 +69,15 @@ export default function GiftCardRegionStep({
         <div className="relative w-full" ref={rootRef}>
           <button
             type="button"
-            aria-label="Single-select dropdown"
+            aria-label={selectLabel}
             aria-haspopup="listbox"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex min-h-[42px] w-full items-center justify-between overflow-hidden rounded-lg bg-inputgray px-[14px] py-2 text-left leading-[19.6px] shadow-[rgba(0,0,0,0)_0px_0px_0px_1px_inset]"
+            className="flex min-h-[42px] w-full items-center justify-between overflow-hidden rounded-lg bg-inputgray px-[14px] py-2 text-start leading-[19.6px] shadow-[rgba(0,0,0,0)_0px_0px_0px_1px_inset]"
           >
-            <span className={`block truncate ${selected ? "text-ink" : "text-filtertext"}`}>{selected ?? placeholder}</span>
+            <span className={`block truncate ${selected ? "text-ink" : "text-filtertext"}`}>
+              {selected ? catalogRegionLabel(selected) : placeholder}
+            </span>
             <Chevron open={open} />
           </button>
           {open && (
@@ -89,9 +92,9 @@ export default function GiftCardRegionStep({
                     role="option"
                     aria-selected={selected === r}
                     onClick={() => choose(r)}
-                    className={`block w-full px-[14px] py-2 text-left text-[14px] hover:bg-inputgray ${selected === r ? "font-bold" : ""}`}
+                    className={`block w-full px-[14px] py-2 text-start text-[14px] hover:bg-inputgray ${selected === r ? "font-bold" : ""}`}
                   >
-                    {r}
+                    {catalogRegionLabel(r)}
                   </button>
                 </li>
               ))}

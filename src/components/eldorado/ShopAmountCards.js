@@ -24,33 +24,37 @@ function InfoIcon() {
   );
 }
 
-function PopularChip() {
+function PopularChip({ label = "Popular" }) {
   return (
-    <div className="flex w-fit items-center gap-1 rounded-bl-lg rounded-br-lg bg-brand py-1 pl-2 pr-3">
+    <div className="flex w-fit items-center gap-1 rounded-bl-lg rounded-br-lg bg-brand py-1 ps-2 pe-3">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path
           d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 16.9l-6.1 3.5 1.5-6.8L2.2 9l6.9-.7L12 2Z"
           fill="#14131a"
         />
       </svg>
-      <span className="block text-[12px] font-bold leading-[16.8px]">Popular</span>
+      <span className="block text-[12px] font-bold leading-[16.8px]">{label}</span>
     </div>
   );
 }
 
-function Card({ variant, selected, onSelect }) {
+function variantKey(variant) {
+  return variant.key || `${variant.ariaLabel ?? variant.label}${variant.sub ? " " + variant.sub : ""}`;
+}
+
+function Card({ variant, selected, onSelect, popularLabel }) {
   return (
     <button
       type="button"
       aria-label={`Select ${variant.ariaLabel ?? variant.label}${variant.sub ? " " + variant.sub : ""}`}
       aria-pressed={selected}
       onClick={onSelect}
-      className={`relative flex h-full w-full flex-col rounded-lg border border-cardborder min-h-40 text-left transition-colors ${
+      className={`relative flex h-full w-full flex-col rounded-lg border border-cardborder min-h-40 text-start transition-colors ${
         selected ? "bg-brand/[0.16] outline-2 outline-offset-[-2px] outline-brand" : "bg-white hover:bg-badgebg"
       }`}
     >
       <div className="flex grow flex-col items-start gap-[10px] p-3 pt-0">
-        {selected && variant.popular ? <PopularChip /> : null}
+        {selected && variant.popular ? <PopularChip label={popularLabel} /> : null}
         <div className="flex w-full grow flex-col items-start gap-[10px]">
           <div className="h-10 w-10 shrink-0 overflow-hidden">
             <img
@@ -90,50 +94,76 @@ function Card({ variant, selected, onSelect }) {
   );
 }
 
-export default function ShopAmountCards({ variants, defaultSelected }) {
+export default function ShopAmountCards({
+  variants,
+  defaultSelected,
+  selectedKey,
+  onSelect,
+  amountLabel = "Amount:",
+  popularLabel = "Popular",
+  empty = null,
+}) {
   const [selected, setSelected] = useState(defaultSelected);
   const scrollerRef = useRef(null);
+  const current = onSelect ? selectedKey : selected;
 
   // live @390 opens with the selected variant visible in the scroller
   // (gamepass GamePassAmountGrid precedent)
   useEffect(() => {
     const scroller = scrollerRef.current;
-    if (!scroller) return;
-    const el = scroller.querySelector(`[aria-label="Select ${CSS.escape(selected)}"]`);
+    if (!scroller || !current) return;
+    const el = scroller.querySelector(`[aria-label="Select ${CSS.escape(String(current))}"]`);
     if (el) scroller.scrollTo({ left: Math.max(0, el.offsetLeft - 16) });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const pick = (variant) => {
+    if (onSelect) onSelect(variant);
+    else setSelected(variantKey(variant));
+  };
+
+  const selectedVariant = variants.find((row) => variantKey(row) === current);
+  const selectedText = selectedVariant?.label || current || "";
+
   return (
-    <div className="bg-white px-4 pb-4 pt-4 lg:px-6 lg:pb-5">
+    <div className="rounded-b-lg bg-white px-4 pb-4 pt-4 lg:px-6 lg:pb-5">
       <div className="mb-3 text-[16px] leading-[24px]">
-        <span className="font-bold">Amount: </span>
-        <span className="text-graytext">{selected}</span>
+        <span className="font-bold">{amountLabel} </span>
+        <span className="text-graytext">{selectedText}</span>
       </div>
-      {/* below lg: horizontal scroll row (live @390: ~142px cards) */}
-      <div ref={scrollerRef} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:hidden">
-        {variants.map((v) => {
-          const aria = `${v.ariaLabel ?? v.label}${v.sub ? " " + v.sub : ""}`;
-          return (
-            <div key={aria} className="w-[142px] shrink-0">
-              <Card
-                variant={v}
-                selected={selected === aria}
-                onSelect={() => setSelected(aria)}
-              />
-            </div>
-          );
-        })}
-      </div>
-      {/* lg+: the capture's open grid (repeat(4, 1fr) @1920) */}
-      <div className="hidden gap-4 lg:grid lg:grid-cols-3 xl:grid-cols-4">
-        {variants.map((v) => {
-          const aria = `${v.ariaLabel ?? v.label}${v.sub ? " " + v.sub : ""}`;
-          return (
-            <Card key={aria} variant={v} selected={selected === aria} onSelect={() => setSelected(aria)} />
-          );
-        })}
-      </div>
+      {variants.length === 0 ? empty : (
+        <>
+          <div ref={scrollerRef} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:hidden">
+            {variants.map((v) => {
+              const key = variantKey(v);
+              return (
+                <div key={key} className="w-[142px] shrink-0">
+                  <Card
+                    variant={v}
+                    selected={current === key}
+                    onSelect={() => pick(v)}
+                    popularLabel={popularLabel}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <div className="hidden gap-4 lg:grid lg:grid-cols-3 xl:grid-cols-4">
+            {variants.map((v) => {
+              const key = variantKey(v);
+              return (
+                <Card
+                  key={key}
+                  variant={v}
+                  selected={current === key}
+                  onSelect={() => pick(v)}
+                  popularLabel={popularLabel}
+                />
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 }

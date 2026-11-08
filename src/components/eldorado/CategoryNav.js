@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MegaMenu from "./MegaMenu";
 import { CATEGORY_NAV, FA } from "./data/faCopy";
 import { loadNavMega, peekNavMega, prefetchNavMegas } from "./nav-mega-client";
@@ -63,8 +63,9 @@ function MoonIcon() {
 
 export default function CategoryNav({ activeCategory = null }) {
   const [openCategory, setOpenCategory] = useState(null);
-  const [pinned, setPinned] = useState(false);
   const [settled, setSettled] = useState({});
+  const triggersRef = useRef(null);
+  const megaRef = useRef(null);
 
   const markSettled = (key) => {
     setSettled((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
@@ -84,35 +85,44 @@ export default function CategoryNav({ activeCategory = null }) {
   };
   const closeMenu = () => {
     setOpenCategory(null);
-    setPinned(false);
+  };
+  const toggleMenu = (key) => {
+    if (openCategory === key) closeMenu();
+    else openMenu(key);
   };
   const showMega = Boolean(openCategory && (peekNavMega(openCategory) || settled[openCategory]));
+
+  useEffect(() => {
+    if (!openCategory) return undefined;
+    const onPointerDown = (event) => {
+      const target = event.target;
+      if (triggersRef.current?.contains(target)) return;
+      if (megaRef.current?.contains(target)) return;
+      closeMenu();
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [openCategory]);
 
   return (
     <nav
       className={`relative hidden bg-catnav text-white lg:block ${
         openCategory ? "z-[1001]" : "z-30"
       }`}
-      onMouseLeave={() => {
-        if (!pinned) closeMenu();
-      }}
     >
       <div className="flex h-10 items-center justify-between lg:px-6">
-        <ul className="ms-3 flex items-center overflow-x-auto whitespace-nowrap">
+        <ul ref={triggersRef} className="ms-3 flex items-center overflow-x-auto whitespace-nowrap">
           {CATEGORY_NAV.map((c) => {
-            const active = openCategory === c.key || activeCategory === c.key;
+            const expanded = openCategory === c.key;
+            const active = expanded || activeCategory === c.key;
             return (
               <li key={c.key}>
-                <a
-                  href={c.href}
-                  aria-expanded={openCategory === c.key}
+                <button
+                  type="button"
+                  aria-expanded={expanded}
                   aria-haspopup="true"
-                  onMouseEnter={() => openMenu(c.key)}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    openMenu(c.key);
-                    setPinned(true);
-                  }}
+                  aria-controls={expanded ? `nav-mega-${c.key}` : undefined}
+                  onClick={() => toggleMenu(c.key)}
                   className={`flex h-10 items-center gap-1 px-3 pb-0.5 text-sm font-bold tracking-[0.48px] ${
                     active ? "rounded-t-sm bg-catactive text-white" : "text-white hover:text-brand"
                   }`}
@@ -124,7 +134,7 @@ export default function CategoryNav({ activeCategory = null }) {
                     viewBox="0 0 12 12"
                     fill="none"
                     aria-hidden="true"
-                    className={`mt-1 text-navgray ${active ? "rotate-180" : ""}`}
+                    className={`mt-1 text-navgray ${expanded ? "rotate-180" : ""}`}
                   >
                     <path
                       d="m2.5 4.5 3.5 3 3.5-3"
@@ -134,7 +144,7 @@ export default function CategoryNav({ activeCategory = null }) {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </a>
+                </button>
               </li>
             );
           })}
@@ -165,12 +175,14 @@ export default function CategoryNav({ activeCategory = null }) {
       </div>
 
       {showMega ? (
-        <MegaMenu
-          key={openCategory}
-          categoryKey={openCategory}
-          onClose={closeMenu}
-          fallbackHref={CATEGORY_NAV.find((c) => c.key === openCategory)?.href}
-        />
+        <div ref={megaRef}>
+          <MegaMenu
+            key={openCategory}
+            categoryKey={openCategory}
+            onClose={closeMenu}
+            fallbackHref={CATEGORY_NAV.find((c) => c.key === openCategory)?.href}
+          />
+        </div>
       ) : null}
     </nav>
   );

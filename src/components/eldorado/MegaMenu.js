@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ALL_GAMES, POPULAR_GAMES } from "./data/referenceData";
 import { FA, SHOP_ACCOUNTS_HREF, SHOP_ITEMS_HREF } from "./data/faCopy";
+import { GiftMegaEmpty, GiftNotSoldBanner, MegaSearchField, useGiftMegaSearch } from "./GiftMegaSearch";
 import { loadNavMega, peekNavMega } from "./nav-mega-client";
 import { readRecentGames } from "./nav-recent";
 
@@ -21,12 +21,13 @@ const PROMO_ICONS = [
   },
 ];
 
-function GameRow({ game, fallbackHref }) {
+function GameRow({ game, fallbackHref, showCategory = false }) {
   const href = game.href || fallbackHref || SHOP_ACCOUNTS_HREF;
   const img = game.img || game.icon || "";
+  const category = showCategory ? game.category : "";
   return (
     <a href={href} aria-label={game.name} className="text-[14px] leading-[21px]">
-      <div className="flex h-[42px] items-center gap-2 truncate rounded-lg text-[16px] leading-[24px] hover:bg-page">
+      <div className="flex h-[42px] items-center gap-2 rounded-lg text-[16px] leading-[24px] hover:bg-page">
         {img ? (
           <div className="h-7 max-w-fit shrink-0 overflow-hidden rounded-sm">
             <img alt={game.name} src={img} className="block h-7 w-7 object-cover align-middle" />
@@ -34,7 +35,10 @@ function GameRow({ game, fallbackHref }) {
         ) : (
           <span className="block h-7 w-7 shrink-0 rounded-sm bg-badgebg" />
         )}
-        <span className="block overflow-hidden text-ellipsis">{game.name}</span>
+        <span className="min-w-0 flex-1 overflow-hidden text-ellipsis" dir="auto">
+          {game.name}
+        </span>
+        {category ? <span className="shrink-0 text-[14px] leading-[21px] text-graytext">{category}</span> : null}
       </div>
     </a>
   );
@@ -53,15 +57,6 @@ function GameSection({ title, games, fallbackHref }) {
         ))}
       </div>
     </div>
-  );
-}
-
-function SearchIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="11" cy="11" r="7" stroke="#14131a" strokeWidth="2" />
-      <path d="m20 20-3.5-3.5" stroke="#14131a" strokeWidth="2" strokeLinecap="round" />
-    </svg>
   );
 }
 
@@ -144,7 +139,7 @@ export default function MegaMenu({ onClose, categoryKey, fallbackHref = SHOP_ACC
       }
       if (peekNavMega(categoryKey)) return;
       applyMegaData(
-        { popular: POPULAR_GAMES, all: ALL_GAMES, promo: categoryKey === "Items" },
+        { popular: [], all: [], promo: categoryKey === "Items" },
         categoryKey,
         setters,
       );
@@ -154,15 +149,24 @@ export default function MegaMenu({ onClose, categoryKey, fallbackHref = SHOP_ACC
     };
   }, [categoryKey]);
 
+  const isGiftMega = categoryKey === "Gift cards";
+  const giftSearch = useGiftMegaSearch(isGiftMega, query, allGames);
   const q = query.trim().toLowerCase();
   const source = allGames.length > 0 ? allGames : [];
-  const all = q ? source.filter((g) => g.name.toLowerCase().includes(q)) : source;
+  const all = isGiftMega
+    ? giftSearch.rows
+    : q
+      ? source.filter((g) => g.name.toLowerCase().includes(q))
+      : source;
   const popularRows = popular.slice(0, 12);
+  const showCategory = isGiftMega && giftSearch.kind === "other";
 
   return (
-    <>
-      <div className="fixed inset-0 z-[1002]" onClick={onClose} aria-hidden="true" />
-      <div ref={panelRef} className="absolute inset-x-0 top-full z-[1003] mx-5 hidden lg:block">
+    <div
+      id={`nav-mega-${categoryKey}`}
+      ref={panelRef}
+      className="absolute inset-x-0 top-full z-[1003] mx-5 hidden lg:block"
+    >
         <div className="flex max-w-[1070px] overflow-hidden rounded-[10px] bg-white text-ink shadow-[rgba(47,47,55,0.15)_0px_2px_4px_0px,rgba(47,47,55,0.1)_0px_24px_60px_0px,rgba(47,47,55,0.05)_0px_12px_24px_0px]">
           <div className="w-[63%]">
             <div className="flex flex-col gap-6 bg-white p-6">
@@ -175,31 +179,22 @@ export default function MegaMenu({ onClose, categoryKey, fallbackHref = SHOP_ACC
             <div className="relative h-full bg-badgebg">
               <div className="absolute inset-x-0 bottom-0 top-6 flex flex-col gap-4 overflow-y-auto pb-2 ps-6 pe-4">
                 <p className="text-[14px] font-bold leading-[19.6px] tracking-[0.14px]">{FA.allGames}</p>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder={FA.searchForGame}
-                    aria-label={FA.searchForGame}
-                    className="block h-[42px] w-full rounded-lg border-2 border-inputgray bg-white py-[7px] ps-3 pe-9 text-[14px] leading-[19.2px] outline-none placeholder:text-ink focus:border-focusblue"
-                  />
-                  <div className="absolute end-2 top-1/2 -translate-y-1/2">
-                    <SearchIcon />
-                  </div>
-                </div>
+                <MegaSearchField query={query} onChange={setQuery} onClear={() => setQuery("")} />
                 <div>
-                  {all.map((g) => (
-                    <div key={g.href + g.name} className="pb-1">
-                      <GameRow game={g} fallbackHref={fallbackHref} />
-                    </div>
-                  ))}
+                  {isGiftMega && giftSearch.kind === "other" ? <GiftNotSoldBanner /> : null}
+                  {isGiftMega && giftSearch.kind === "empty" ? <GiftMegaEmpty /> : null}
+                  {giftSearch.kind === "pending"
+                    ? null
+                    : all.map((g) => (
+                        <div key={`${g.category || ""}:${g.href || ""}:${g.name}`} className="pb-1">
+                          <GameRow game={g} fallbackHref={fallbackHref} showCategory={showCategory} />
+                        </div>
+                      ))}
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
+    </div>
   );
 }

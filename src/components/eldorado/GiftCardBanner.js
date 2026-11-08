@@ -56,26 +56,21 @@ function BannerIcon({ alt, src }) {
   );
 }
 
-const DEFAULT_TABS = [
-  { key: "Accounts", href: "https://www.eldorado.gg/xbox-accounts/a/103-1-0" },
-  { key: "Game Pass", href: "/xbox-game-pass" },
-  { key: "Gift cards", href: "/gift-card/xbox" },
-];
-
 export default function GiftCardBanner({
-  active = "Gift cards",
+  active = "gift-cards",
   iconAlt = "xbox gift card",
   gameName = "Xbox",
   gameIcon,
-  tabs = DEFAULT_TABS,
+  tabs = [],
 }) {
   const icon = gameIcon ?? GIFT_CARD_IMAGES.bannerLogo;
+  const showTabs = tabs.length > 1;
   return (
     <div className="w-full bg-catactive shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]">
       {/* mobile: single row — game name left, tabs right (live @390
           re-capture 2026-11-04; same bar as desktop, tighter paddings) */}
       <div className="flex h-11 items-center justify-between lg:hidden">
-        <div className="flex min-w-0 items-center pl-4">
+        <div className="flex min-w-0 items-center ps-4">
           <div className="h-7 shrink-0 overflow-hidden">
             <img
               alt={iconAlt}
@@ -83,21 +78,25 @@ export default function GiftCardBanner({
               className="block h-7 w-7 rounded-sm object-cover align-middle"
             />
           </div>
-          <div className="ml-2 truncate font-bold leading-[20px] text-white">{gameName}</div>
-        </div>
-        <nav className="flex items-center pr-1">
-          <div className="flex items-center text-[13px] leading-none">
-            {tabs.map((t) => (
-              <span key={t.key} className="flex items-center px-1.5">
-                {t.key === active ? (
-                  <ActiveTab href={t.href}>{t.key}</ActiveTab>
-                ) : (
-                  <BannerTab href={t.href}>{t.key}</BannerTab>
-                )}
-              </span>
-            ))}
+          <div className="ms-2 truncate font-bold leading-[20px] text-white" dir="auto">
+            {gameName}
           </div>
-        </nav>
+        </div>
+        {showTabs ? (
+          <nav className="flex items-center pe-1">
+            <div className="flex items-center text-[13px] leading-none">
+              {tabs.map((t) => (
+                <span key={t.key} className="flex items-center px-1.5">
+                  {t.key === active ? (
+                    <ActiveTab href={t.href}>{t.label || t.key}</ActiveTab>
+                  ) : (
+                    <BannerTab href={t.href}>{t.label || t.key}</BannerTab>
+                  )}
+                </span>
+              ))}
+            </div>
+          </nav>
+        ) : null}
       </div>
 
       {/* desktop: 1fr_2fr_1fr grid per the 1920 capture */}
@@ -110,21 +109,27 @@ export default function GiftCardBanner({
               className="block h-7 w-7 rounded-sm object-cover align-middle"
             />
           </div>
-          <div className="ml-2 font-bold leading-[20px] text-white">{gameName}</div>
-        </div>
-        <nav className="flex items-center justify-center">
-          <div className="flex items-center justify-center">
-            {tabs.map((t) => (
-              <span key={t.key} className="flex items-center pb-[18px] pt-[13px]">
-                {t.key === active ? (
-                  <ActiveTab href={t.href}>{t.key}</ActiveTab>
-                ) : (
-                  <BannerTab href={t.href}>{t.key}</BannerTab>
-                )}
-              </span>
-            ))}
+          <div className="ms-2 font-bold leading-[20px] text-white" dir="auto">
+            {gameName}
           </div>
-        </nav>
+        </div>
+        {showTabs ? (
+          <nav className="flex items-center justify-center">
+            <div className="flex items-center justify-center">
+              {tabs.map((t) => (
+                <span key={t.key} className="flex items-center pb-[18px] pt-[13px]">
+                  {t.key === active ? (
+                    <ActiveTab href={t.href}>{t.label || t.key}</ActiveTab>
+                  ) : (
+                    <BannerTab href={t.href}>{t.label || t.key}</BannerTab>
+                  )}
+                </span>
+              ))}
+            </div>
+          </nav>
+        ) : (
+          <div />
+        )}
       </div>
     </div>
   );

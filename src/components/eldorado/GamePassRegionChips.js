@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { GAME_PASS_REGIONS, GAME_PASS_DEFAULT_REGION } from "./data/gamePassData";
+import { catalogRegionLabel } from "../../lib/catalog-region";
 
 /* Step 1 of the buying flow (gamepass .make capture + live probes): white
    card with "Game region: {region}" inline label and single-select chips.
@@ -77,7 +78,7 @@ export default function GamePassRegionChips({
                   : "border-cardborder bg-white hover:bg-badgebg"
               }`}
             >
-              <span className="block px-1">{r}</span>
+              <span className="block px-1">{catalogRegionLabel(r) || r}</span>
             </button>
           );
         })}

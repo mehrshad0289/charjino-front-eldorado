@@ -1,3 +1,5 @@
+import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
+
 /* "Trusted by thousands of players worldwide" (giftcard .make capture):
    centered 30px title over a white rounded card (230px tall on desktop,
    150px content area). The live widget is a Trustpilot reviews carousel
@@ -13,25 +15,25 @@ function TrustpilotStar() {
   );
 }
 
-export default function GiftCardReviews() {
+export default function GiftCardReviews({ title = GIFT_SHOP_CHROME.reviewsTitle }) {
   return (
     <div className="w-full">
       <div className="flex w-full justify-center text-center">
         <span className="block text-center text-[20px] font-bold leading-[29px] lg:text-[30px] lg:leading-[36px]">
-          Trusted by thousands of players worldwide
+          {title}
         </span>
       </div>
       <div className="relative mx-auto mt-6 lg:mt-8 lg:h-[230px] lg:max-w-[1208px]">
         <div className="flex h-full min-h-[120px] items-center justify-center rounded-lg bg-white px-6 pb-8 pt-12 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] lg:min-h-[230px] lg:py-0">
           <p className="text-center text-[14px] leading-[21px]">
-            Rated 4.4 out of 5 based on{" "}
+            {GIFT_SHOP_CHROME.reviewsRated}{" "}
             <a
               href="https://www.trustpilot.com/review/eldorado.gg"
               className="font-bold underline"
             >
-              289,757 reviews
+              {GIFT_SHOP_CHROME.reviewsCount}
             </a>{" "}
-            on{" "}
+            {GIFT_SHOP_CHROME.reviewsOn}{" "}
             <span className="inline-flex items-center gap-1 align-middle">
               <TrustpilotStar />
               <span className="font-bold">Trustpilot</span>

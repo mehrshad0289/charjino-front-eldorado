@@ -14,16 +14,20 @@ import ChatBubble from "./ChatBubble";
 import { GIFT_CARD_IMAGES } from "./data/giftCardData";
 import {
   GIFT_SHOP_CHROME,
-  giftShopBannerTabs,
   giftShopFaq,
   giftShopSeo,
 } from "./data/giftShopCopy";
 import RecordRecentView from "./RecordRecentView";
 import {
+  activeHubTabKey,
+  bannerTabsFromHub,
   giftBrandPageSeo,
+  giftHubPlatform,
   isPlayStationPlusPlatform,
+  isXboxGamePassPlatform,
   loadGiftBrandPage,
   loadGiftCardShop,
+  loadProductHub,
   normalizeGiftPlatform,
 } from "../../lib/gift-card-shop";
 import { PS_PLUS_BANNER } from "./data/shopSubscriptionData";
@@ -33,10 +37,12 @@ export default async function GiftCardShopPage({ platform }) {
   const id = normalizeGiftPlatform(platform || "");
   if (!id) notFound();
   if (isPlayStationPlusPlatform(id)) redirect("/playstation-plus");
-  const [catalog, plus, brandPage] = await Promise.all([
+  if (isXboxGamePassPlatform(id)) redirect("/xbox-game-pass");
+  const [catalog, plus, brandPage, hub] = await Promise.all([
     loadGiftCardShop(id),
     id === "playstation" ? loadGiftCardShop("playstation-plus") : Promise.resolve(null),
     loadGiftBrandPage(id),
+    loadProductHub(giftHubPlatform(id) || id),
   ]);
   if (!catalog.gameName && !plus?.gameName) notFound();
   const href = `/gift-card/${id}`;
@@ -46,6 +52,8 @@ export default async function GiftCardShopPage({ platform }) {
   }
   if (!name) notFound();
   const seo = giftBrandPageSeo(brandPage, `خرید گیفت کارت ${name}`) || giftShopSeo(name);
+  const tabs = bannerTabsFromHub(hub);
+  const activeTab = activeHubTabKey(tabs, href);
 
   return (
     <>
@@ -74,11 +82,11 @@ export default async function GiftCardShopPage({ platform }) {
         </div>
         <div className="relative z-10">
           <GiftCardBanner
-            active="Gift cards"
+            active={activeTab}
             iconAlt={name}
             gameName={name}
             gameIcon={catalog.bannerIcon || plus?.bannerIcon || GIFT_CARD_IMAGES.bannerLogo}
-            tabs={giftShopBannerTabs(id, href)}
+            tabs={tabs}
           />
           <div className="pt-6 lg:pt-8">
             <div className="mx-auto w-full max-w-[1208px] px-4 lg:px-6">

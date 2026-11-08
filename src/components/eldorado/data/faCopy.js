@@ -8,6 +8,8 @@ export const FA = {
   language: "فارسی",
   toman: "تومان",
   giftCards: "گیفت کارت",
+  gamePass: "گیم پس",
+  subscription: "اشتراک",
   topUps: "شارژ بازی",
   accounts: "اکانت",
   currency: "ارز",
@@ -18,6 +20,11 @@ export const FA = {
   recentlyViewedGames: "بازی‌های اخیراً دیده‌شده",
   allGames: "همهٔ بازی‌ها",
   searchForGame: "جستجوی بازی",
+  clearSearch: "پاک کردن جستجو",
+  giftNotSoldDirectly: "گیفت کارت به‌صورت مستقیم فروخته نمی‌شود",
+  giftGetThroughOther: "از دسته‌های دیگر تهیه کنید.",
+  nothingFound: "چیزی پیدا نشد",
+  nothingFoundHint: "متأسفیم، چیزی که می‌گردید پیدا نشد.",
   robloxPriceHistory: "تاریخچه قیمت روبلاکس",
   robloxPriceHistoryHint: "ببینید قیمت آیتم‌های روبلاکس چطور عوض می‌شود.",
   priceHistory: "تاریخچه قیمت",
@@ -25,21 +32,24 @@ export const FA = {
   buyNow: "خرید",
   chatNow: "گفتگو",
   learnMore: "بیشتر بدانید",
+  instantUseAck: "شرایط تحویل فوری را خواندم و می‌پذیرم",
+  shopEmpty: "در این دسته فعلاً کالای قابل‌فروش نیست.",
 };
 
-export const SHOP_ACCOUNTS_HREF = "/efootball-accounts";
-export const SHOP_GIFT_CARDS_HREF = "/catalog/category/gift-card";
-export const SHOP_TOPUPS_HREF = "/cod-points";
-export const SHOP_ITEMS_HREF = "/roblox-items";
-export const SHOP_BOOSTING_HREF = "/ea-fc-boosting/b/142-4";
+export const SHOP_ACCOUNTS_HREF = "/shop/accounts";
+export const SHOP_GIFT_CARDS_HREF = "/shop/gift-cards";
+export const SHOP_TOPUPS_HREF = "/shop/top-ups";
+export const SHOP_ITEMS_HREF = "/shop/items";
+export const SHOP_BOOSTING_HREF = "/shop/boosting";
+export const SHOP_CURRENCY_HREF = "/shop/currency";
 export const CONTACT_HREF = "/contact-us";
 export const TERMS_HREF = "/terms-of-service";
 
 export const CATEGORY_NAV = [
-  { key: "Currency", label: FA.currency, href: "/catalog/category/steam-wallet", mega: true },
+  { key: "Currency", label: FA.currency, href: SHOP_CURRENCY_HREF, mega: true },
   { key: "Accounts", label: FA.accounts, href: SHOP_ACCOUNTS_HREF, mega: true },
-  { key: "Top ups", label: FA.topUps, href: "/catalog/category/game-topup", mega: true },
+  { key: "Top ups", label: FA.topUps, href: SHOP_TOPUPS_HREF, mega: true },
   { key: "Items", label: FA.items, href: SHOP_ITEMS_HREF, mega: true },
   { key: "Boosting", label: FA.boosting, href: SHOP_BOOSTING_HREF, mega: true },
-  { key: "Gift cards", label: FA.giftCards, href: "/catalog/category/gift-card", mega: true },
+  { key: "Gift cards", label: FA.giftCards, href: SHOP_GIFT_CARDS_HREF, mega: true },
 ];

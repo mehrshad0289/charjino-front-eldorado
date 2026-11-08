@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { GIFT_CARD_FAQ } from "./data/giftCardData";
+import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
 
 /* "Frequently Asked Questions" (giftcard .make capture): white rounded
    accordion rows with a chevron; answers are collapsed in the capture, so
@@ -32,7 +33,7 @@ function Answer({ item }) {
     <div className="pt-6 text-[14px] leading-[21px] text-graytext">
       {item.intro && <p>{item.intro}</p>}
       {item.steps && (
-        <ol className="my-2 list-decimal pl-6">
+        <ol className="my-2 list-decimal ps-6">
           {item.steps.map((s, i) => (
             <li key={i}>{s}</li>
           ))}
@@ -48,12 +49,12 @@ function Answer({ item }) {
   );
 }
 
-export default function GiftCardFaq({ items = GIFT_CARD_FAQ, title = "Frequently Asked Questions" }) {
+export default function GiftCardFaq({ items = GIFT_CARD_FAQ, title = GIFT_SHOP_CHROME.faqTitle }) {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
     <div className="mb-10 lg:mb-16">
-      <div className="mb-6 text-left text-[24px] font-bold leading-[36px] lg:mb-8 lg:text-center lg:text-[30px]">
+      <div className="mb-6 text-start text-[24px] font-bold leading-[36px] lg:mb-8 lg:text-center lg:text-[30px]">
         {title}
       </div>
       <div className="flex flex-col gap-2">
@@ -65,7 +66,7 @@ export default function GiftCardFaq({ items = GIFT_CARD_FAQ, title = "Frequently
                 type="button"
                 aria-expanded={open}
                 onClick={() => setOpenIndex(open ? null : i)}
-                className="flex items-center justify-between gap-1.5 text-left font-bold"
+                className="flex items-center justify-between gap-1.5 text-start font-bold"
               >
                 <span>{item.q}</span>
                 <Chevron open={open} />

@@ -22,20 +22,24 @@ function Row({ amount, selected, onSelect, horizontal, valueLabel, fromLabel, im
       onClick={onSelect}
       className={
         horizontal
-          ? `flex w-full items-center gap-3 rounded-lg p-2.5 text-left transition-colors ${
+          ? `flex w-full items-center gap-3 rounded-lg p-2.5 text-start transition-colors ${
               selected ? "bg-white ring-2 ring-ink" : "bg-badgebg"
             }`
-          : `relative flex h-full w-full flex-col items-start rounded-lg border p-[10px] text-left transition-colors ${
+          : `relative flex h-full w-full flex-col items-start rounded-lg border p-[10px] text-start transition-colors ${
               selected ? "border-ink ring-1 ring-ink" : "border-cardborder bg-white"
             }`
       }
     >
       <div className="h-9 shrink-0 overflow-hidden">
-        <img
-          alt={imgAlt}
-          src={amount.img}
-          className="block h-9 w-9 rounded-sm object-cover align-middle"
-        />
+        {amount.img ? (
+          <img
+            alt={imgAlt}
+            src={amount.img}
+            className="block h-9 w-9 rounded-sm object-cover align-middle"
+          />
+        ) : (
+          <span className="block h-9 w-9 rounded-sm bg-badgebg" />
+        )}
       </div>
       <div className="min-w-0 grow lg:mt-3">
         <div className="text-[14px] leading-[19.6px]">{amount.label}</div>
@@ -86,7 +90,7 @@ export default function GiftCardAmountGrid({
           switches from the stacked card at ~960-1024, mapped to lg) */}
       <div className="hidden lg:block">
         <div className="mb-3 flex items-center text-[18px] font-bold leading-[27px]">
-          <div className="mr-[10px]">
+          <div className="me-[10px]">
             <AmountBadge />
           </div>
           <span className="block">{selectLabel}</span>
@@ -110,7 +114,7 @@ export default function GiftCardAmountGrid({
       {/* mobile: white container card (live @390, kept through the tablet band) */}
       <div className="relative rounded-2xl bg-white p-4 pt-6 lg:hidden">
         <div
-          className="absolute left-0 top-0 z-[10] flex h-10 w-10 -translate-x-2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full bg-brand"
+          className="absolute start-0 top-0 z-[10] flex h-10 w-10 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full bg-brand ltr:-translate-x-2 rtl:translate-x-2"
           aria-hidden="true"
         >
           <span className="block text-[28px] leading-[42px]">2</span>

@@ -13,6 +13,7 @@ const IMG_EU20 = `${GCS}adf5dfd241cd1a56457cb2266162e88f30d4cdb5.png?generation=
 export const GIFT_CARD_IMAGES = {
   bannerLogo: `${GCS}dfc6208bcbd66fc42eb981f27c8429a96f0285a1.png?generation=1793768744541913&alt=media`,
   heroBackdrop: `${GCS}3dc1f3acb06f6d5646426b81fc717fa1c1d29d77.png?generation=1793727745913594&alt=media`,
+  amountDefault: IMG_DEFAULT,
   offerIcon: `${GCS}2a14dfec006c3244a048e1905c646dafe5fc95db.png?generation=1793768744686144&alt=media`,
   applePay: `${GCS}dd6e842fcce7d583e70dddf074d9307e29d69a8e.svg?generation=1793768744578617&alt=media`,
   googlePay: `${GCS}8916ddaefd4ac6e1dfdec635acab443637130fa2.svg?generation=1793768744565450&alt=media`,

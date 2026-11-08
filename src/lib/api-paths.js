@@ -4,6 +4,10 @@ export const apiPaths = {
   catalogCategory: (slug) => `/catalog/categories/${encodeURIComponent(slug)}`,
   catalogProduct: (handle) => `/catalog/products/${encodeURIComponent(handle)}`,
   catalogGiftBrandPage: (platform) => `/catalog/gift-brand-pages/${encodeURIComponent(platform)}`,
+  catalogProductHub: (hubKey) => `/catalog/product-hubs/${encodeURIComponent(hubKey)}`,
+  catalogStoreCategories: "/catalog/store-categories",
+  catalogStoreCategory: (key) => `/catalog/store-categories/${encodeURIComponent(key)}`,
+  catalogCheckoutPreview: "/catalog/checkout-preview",
   catalogProducts: (params = {}) => {
     const search = new URLSearchParams();
     if (params.category) search.set("category", String(params.category));
@@ -11,6 +15,7 @@ export const apiPaths = {
     if (params.platform) search.set("platform", String(params.platform));
     if (params.region) search.set("region", String(params.region));
     if (params.withSkus) search.set("withSkus", "1");
+    if (params.giftDelivery) search.set("giftDelivery", String(params.giftDelivery));
     if (params.q) search.set("q", String(params.q).slice(0, 100));
     if (params.page) search.set("page", String(params.page));
     if (params.perPage) search.set("perPage", String(params.perPage));
@@ -19,6 +24,15 @@ export const apiPaths = {
   },
   marketGames: (offer) =>
     offer ? `/market/games?offer=${encodeURIComponent(offer)}` : "/market/games",
+  marketListings: (params = {}) => {
+    const search = new URLSearchParams();
+    if (params.game) search.set("game", String(params.game));
+    if (params.page) search.set("page", String(params.page));
+    if (params.perPage) search.set("perPage", String(params.perPage));
+    const qs = search.toString();
+    return qs ? `/market/listings?${qs}` : "/market/listings";
+  },
+  marketListing: (id) => `/market/listings/${encodeURIComponent(id)}`,
   smartSearch: (params) => {
     const search = new URLSearchParams();
     search.set("q", String(params.q ?? "").slice(0, 100));

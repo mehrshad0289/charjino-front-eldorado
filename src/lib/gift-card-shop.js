@@ -22,9 +22,14 @@ export function isPlayStationPlusPlatform(value) {
   return id === "playstation-plus" || id === "ps-plus";
 }
 
+export function isXboxGamePassPlatform(value) {
+  return normalizeGiftPlatform(value) === "xbox-game-pass";
+}
+
 export function giftHubPlatform(value) {
   const id = normalizeGiftPlatform(value);
   if (isPlayStationPlusPlatform(id)) return "playstation";
+  if (isXboxGamePassPlatform(id)) return "xbox";
   return id;
 }
 
@@ -37,6 +42,7 @@ export function giftShopHref(platform) {
   const id = normalizeGiftPlatform(platform);
   if (!id) return "";
   if (isPlayStationPlusPlatform(id)) return "/playstation-plus";
+  if (isXboxGamePassPlatform(id)) return "/xbox-game-pass";
   return `/gift-card/${encodeURIComponent(id)}`;
 }
 
@@ -142,8 +148,8 @@ async function fetchGiftProductPages(params) {
   return rows;
 }
 
-async function fetchGiftProductsByPlatform(platform) {
-  return fetchGiftProductPages({ category: "gift-card", platform });
+async function fetchGiftProductsByPlatform(platform, giftDelivery = "standard") {
+  return fetchGiftProductPages({ category: "gift-card", platform, giftDelivery });
 }
 
 async function fetchGiftProductsByQuery(id) {
@@ -174,6 +180,40 @@ export async function loadGiftBrandPage(platform) {
     if (error instanceof ApiError && error.statusCode === 404) return null;
     throw error;
   }
+}
+
+export async function loadProductHub(hubKey) {
+  const id = normalizeGiftPlatform(hubKey);
+  if (!id) return null;
+  try {
+    const hub = await serverFetch(apiPaths.catalogProductHub(id));
+    return asRecord(hub);
+  } catch (error) {
+    if (error instanceof ApiError && error.statusCode === 404) return null;
+    throw error;
+  }
+}
+
+export function bannerTabsFromHub(hub) {
+  const rec = asRecord(hub);
+  const tabs = [];
+  for (const raw of Array.isArray(rec.tabs) ? rec.tabs : []) {
+    const tab = asRecord(raw);
+    const key = asString(tab.tabKey);
+    const label = asString(tab.label);
+    const href = asString(tab.href);
+    if (!key || !label || !href || !href.startsWith("/")) continue;
+    tabs.push({ key, label, href });
+  }
+  return tabs;
+}
+
+export function activeHubTabKey(tabs, href, fallbackKey = "gift-cards") {
+  const rows = Array.isArray(tabs) ? tabs : [];
+  const current = rows.find((tab) => asString(tab.href) === href);
+  if (current) return asString(current.key);
+  const fallback = rows.find((tab) => asString(tab.key) === fallbackKey);
+  return fallback ? asString(fallback.key) : asString(rows[0]?.key);
 }
 
 function mapGiftBrandBlocks(page) {
@@ -224,15 +264,22 @@ export function giftBrandPageMeta(page, fallback) {
   };
 }
 
-export async function loadGiftCardShop(platform) {
+function matchesGiftDelivery(product, giftDelivery) {
+  const rec = asRecord(product);
+  const instant = rec.instantUse === true || asString(rec.giftDelivery) === "instant_use";
+  return giftDelivery === "instant_use" ? instant : !instant;
+}
+
+export async function loadGiftCardShop(platform, options = {}) {
   const id = normalizeGiftPlatform(platform);
   if (!id) return emptyShop(id);
+  const giftDelivery = asString(options.giftDelivery) || "standard";
   const aliases = platformQueryIds(id);
 
   let products = [];
   for (const alias of aliases) {
     try {
-      products = mergeGiftProducts([...products, ...(await fetchGiftProductsByPlatform(alias))]);
+      products = mergeGiftProducts([...products, ...(await fetchGiftProductsByPlatform(alias, giftDelivery))]);
     } catch (error) {
       if (!(error instanceof ApiError)) throw error;
     }
@@ -252,6 +299,7 @@ export async function loadGiftCardShop(platform) {
       products = [];
     }
   }
+  products = products.filter((item) => belongsToShop(item, id) && matchesGiftDelivery(item, giftDelivery));
 
   const regions = [];
   const seenRegion = new Set();
@@ -295,6 +343,7 @@ export async function loadGiftCardShop(platform) {
         handle,
         sort: denominationSort(name),
         name,
+        instantUse: rec.instantUse === true || asString(rec.giftDelivery) === "instant_use",
       });
     }
   }

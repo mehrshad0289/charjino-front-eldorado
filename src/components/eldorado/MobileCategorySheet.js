@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ALL_GAMES, POPULAR_GAMES } from "./data/referenceData";
 import { FA } from "./data/faCopy";
+import { GiftMegaEmpty, GiftNotSoldBanner, MegaSearchField, useGiftMegaSearch } from "./GiftMegaSearch";
 import { ItemsPromo } from "./MegaMenu";
 import { loadNavMega, peekNavMega } from "./nav-mega-client";
 import { readRecentGames } from "./nav-recent";
@@ -23,18 +23,10 @@ function BackChevron() {
   );
 }
 
-function SearchGlyph() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="11" cy="11" r="7" stroke="#14131a" strokeWidth="2" />
-      <path d="m20 20-3.5-3.5" stroke="#14131a" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function GameRow({ game, fallbackHref }) {
+function GameRow({ game, fallbackHref, showCategory = false }) {
   const href = game.href || fallbackHref;
   const img = game.img || game.icon || "";
+  const category = showCategory ? game.category : "";
   return (
     <a href={href} aria-label={game.name} className="flex items-center gap-4 py-[11px] text-base text-ink">
       {img ? (
@@ -45,19 +37,20 @@ function GameRow({ game, fallbackHref }) {
         <span className="h-8 w-8 shrink-0 rounded-lg bg-badgebg" />
       )}
       <span className="min-w-0 flex-1 truncate">{game.name}</span>
+      {category ? <span className="shrink-0 text-sm text-graytext">{category}</span> : null}
     </a>
   );
 }
 
-function GameList({ title, games, fallbackHref }) {
+function GameList({ title, games, fallbackHref, showCategory = false }) {
   if (!games.length) return null;
   return (
     <div className="pt-6">
       {title ? <p className="pb-1 text-sm font-bold tracking-[0.14px] text-ink">{title}</p> : null}
       <ul>
         {games.map((game) => (
-          <li key={(game.href || "") + game.name}>
-            <GameRow game={game} fallbackHref={fallbackHref} />
+          <li key={`${game.category || ""}:${game.href || ""}:${game.name}`}>
+            <GameRow game={game} fallbackHref={fallbackHref} showCategory={showCategory} />
           </li>
         ))}
       </ul>
@@ -113,7 +106,7 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
       }
       if (peekNavMega(categoryKey)) return;
       applyMegaData(
-        { popular: POPULAR_GAMES, all: ALL_GAMES, promo: categoryKey === "Items" },
+        { popular: [], all: [], promo: categoryKey === "Items" },
         categoryKey,
         setters,
       );
@@ -123,8 +116,15 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
     };
   }, [categoryKey]);
 
+  const isGiftMega = categoryKey === "Gift cards";
+  const giftSearch = useGiftMegaSearch(isGiftMega, query, allGames);
   const q = query.trim().toLowerCase();
-  const filtered = q ? allGames.filter((game) => game.name.toLowerCase().includes(q)) : allGames;
+  const filtered = isGiftMega
+    ? giftSearch.rows
+    : q
+      ? allGames.filter((game) => game.name.toLowerCase().includes(q))
+      : allGames;
+  const showCategory = isGiftMega && giftSearch.kind === "other";
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white text-ink" role="dialog" aria-modal="true">
@@ -153,24 +153,31 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
       </div>
 
       <div className="px-4">
-        <div className="relative">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={FA.searchForGame}
-            aria-label={FA.searchForGame}
-            className="block h-[42px] w-full rounded-lg bg-inputgray py-[7px] ps-3 pe-11 text-base text-ink outline-none placeholder:text-graytext"
-          />
-          <span className="absolute end-3 top-1/2 -translate-y-1/2">
-            <SearchGlyph />
-          </span>
-        </div>
+        <MegaSearchField
+          query={query}
+          onChange={setQuery}
+          onClear={() => setQuery("")}
+          inputClassName="block h-[42px] w-full rounded-lg bg-inputgray py-[7px] ps-3 pe-11 text-base text-ink outline-none placeholder:text-graytext"
+        />
       </div>
 
       <div className="px-4 pb-24">
         {q ? (
-          <GameList games={filtered} fallbackHref={category.href} />
+          <>
+            {isGiftMega && giftSearch.kind === "other" ? (
+              <div className="pt-6">
+                <GiftNotSoldBanner />
+              </div>
+            ) : null}
+            {isGiftMega && giftSearch.kind === "empty" ? (
+              <div className="pt-6">
+                <GiftMegaEmpty />
+              </div>
+            ) : null}
+            {giftSearch.kind === "pending" ? null : (
+              <GameList games={filtered} fallbackHref={category.href} showCategory={showCategory} />
+            )}
+          </>
         ) : (
           <>
             {showPromo ? (

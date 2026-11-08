@@ -13,9 +13,22 @@ export async function GET(request) {
   const page = Number(incoming.searchParams.get("page") ?? "1") || 1;
   const perPage = Number(incoming.searchParams.get("per_page") ?? "10") || 10;
   const mode = incoming.searchParams.get("mode") ?? "auto";
+  const group = incoming.searchParams.get("group") ?? "";
+  const platform = incoming.searchParams.get("platform") ?? "";
+  const region = incoming.searchParams.get("region") ?? "";
 
   try {
-    const data = await serverFetch(apiPaths.smartSearch({ q, page, perPage, mode }));
+    const data = await serverFetch(
+      apiPaths.smartSearch({
+        q,
+        page,
+        perPage,
+        mode,
+        group: group || undefined,
+        platform: platform || undefined,
+        region: region || undefined,
+      }),
+    );
     const items = Array.isArray(data?.items) ? rewriteGiftSearchItems(data.items) : data?.items;
     return NextResponse.json({
       success: true,
