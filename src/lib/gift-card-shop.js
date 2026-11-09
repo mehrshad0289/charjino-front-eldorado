@@ -1,6 +1,6 @@
 import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
-import { formatTomanPrice } from "./format-toman";
+import { formatTomanPrice, shopTopupHref } from "./format-toman";
 import { preferFaTitle } from "./catalog-region";
 
 function asRecord(value) {
@@ -58,6 +58,19 @@ export function isGiftCardProduct(product) {
   return /گیفت|gift\s*-?\s*card/i.test(name);
 }
 
+export function isTopupProduct(product) {
+  const rec = asRecord(product);
+  const slug = asString(rec.category?.slug || rec.categorySlug || rec.product_type).toLowerCase();
+  if (slug === "game-topup" || slug === "topup") return true;
+  return asString(rec.fulfillmentType).toLowerCase() === "topup";
+}
+
+export function shopTopupHrefFromProduct(product) {
+  const rec = asRecord(product);
+  const hub = normalizeGiftPlatform(rec.platform) || normalizeGiftPlatform(rec.handle);
+  return shopTopupHref(hub);
+}
+
 export function derivedGiftPlatform(product) {
   const rec = asRecord(product);
   return normalizeGiftPlatform(rec.platform) || normalizeGiftPlatform(rec.handle);
@@ -70,9 +83,15 @@ export function giftShopHrefFromProduct(product) {
 export function rewriteGiftSearchItems(items) {
   return (Array.isArray(items) ? items : []).map((row) => {
     const rec = asRecord(row);
-    if (!isGiftCardProduct(rec)) return rec;
-    const href = giftShopHrefFromProduct(rec);
-    return href ? { ...rec, href } : rec;
+    if (isGiftCardProduct(rec)) {
+      const href = giftShopHrefFromProduct(rec);
+      return href ? { ...rec, href } : rec;
+    }
+    if (isTopupProduct(rec)) {
+      const href = shopTopupHrefFromProduct(rec);
+      return href ? { ...rec, href } : rec;
+    }
+    return rec;
   });
 }
 
@@ -214,6 +233,31 @@ export function activeHubTabKey(tabs, href, fallbackKey = "gift-cards") {
   if (current) return asString(current.key);
   const fallback = rows.find((tab) => asString(tab.key) === fallbackKey);
   return fallback ? asString(fallback.key) : asString(rows[0]?.key);
+}
+
+export function tabForStoreCategory(hub, categoryKey) {
+  const key = asString(categoryKey || "").toLowerCase();
+  const tabs = Array.isArray(hub?.tabs) ? hub.tabs : [];
+  return (
+    tabs.find((raw) => {
+      const tab = asRecord(raw);
+      if (asString(tab.storeCategory).toLowerCase() === key) return true;
+      if (key === "top-ups") {
+        return (
+          asString(tab.tabKey) === "top-up" ||
+          asString(tab.fulfillmentType) === "topup" ||
+          asString(tab.catalogGroupSlug) === "game-topup"
+        );
+      }
+      if (key === "gift-cards") {
+        return asString(tab.tabKey) === "gift-cards" || asString(tab.renderer) === "code-card";
+      }
+      if (key === "accounts") {
+        return asString(tab.tabKey) === "accounts" || asString(tab.renderer) === "account-listing";
+      }
+      return false;
+    }) || null
+  );
 }
 
 function mapGiftBrandBlocks(page) {
@@ -359,5 +403,115 @@ export async function loadGiftCardShop(platform, options = {}) {
     regions,
     amounts,
     bannerIcon,
+  };
+}
+
+function belongsToTopupShop(product, id) {
+  const rec = asRecord(product);
+  const platform = normalizeGiftPlatform(rec.platform);
+  const handle = normalizeGiftPlatform(rec.handle);
+  return platform === id || handle === id;
+}
+
+async function fetchTopupProductsByPlatform(platform) {
+  return fetchGiftProductPages({ category: "game-topup", platform });
+}
+
+async function loadBuyerFields(products) {
+  const handles = [];
+  const seen = new Set();
+  for (const item of products) {
+    const handle = asString(asRecord(item).handle);
+    if (!handle || seen.has(handle)) continue;
+    seen.add(handle);
+    handles.push(handle);
+    if (handles.length >= 24) break;
+  }
+  const entries = await Promise.all(
+    handles.map(async (handle) => {
+      try {
+        const detail = asRecord(await serverFetch(apiPaths.catalogProduct(handle)));
+        return [handle, Array.isArray(detail.inputFields) ? detail.inputFields : []];
+      } catch (error) {
+        if (!(error instanceof ApiError)) throw error;
+        return [handle, []];
+      }
+    }),
+  );
+  return Object.fromEntries(entries);
+}
+
+export async function loadTopupShop(platform) {
+  const id = normalizeGiftPlatform(platform);
+  if (!id) return { ...emptyShop(id), buyerFieldsByHandle: {} };
+  let products = [];
+  try {
+    products = mergeGiftProducts(await fetchTopupProductsByPlatform(id));
+  } catch (error) {
+    if (!(error instanceof ApiError)) throw error;
+    products = [];
+  }
+  products = products.filter((item) => belongsToTopupShop(item, id));
+
+  const regions = [];
+  const seenRegion = new Set();
+  const amounts = [];
+  let bannerIcon = "";
+  let gameName = "";
+
+  for (const item of products) {
+    const rec = asRecord(item);
+    const handle = asString(rec.handle);
+    const region = asString(rec.region);
+    const thumbnail = asString(rec.thumbnail) || asString(rec.imageUrl) || asString(rec.image);
+    if (!bannerIcon && thumbnail) bannerIcon = thumbnail;
+    if (!gameName) {
+      gameName = stripRegion(preferFaTitle(rec)) || stripRegion(rec.title) || stripRegion(rec.titleEn) || rec.brand || id;
+    }
+    if (region && !seenRegion.has(region)) {
+      seenRegion.add(region);
+      regions.push(region);
+    }
+    const skus = Array.isArray(rec.skus) ? rec.skus : [];
+    if (!handle || skus.length === 0) continue;
+    for (const raw of skus) {
+      const sku = asRecord(raw);
+      const price = Number(sku.price);
+      const name = asString(sku.name) || asString(sku.nameEn);
+      if (!Number.isFinite(price) || price <= 0) continue;
+      const amountRegion = asString(sku.region) || region;
+      if (amountRegion && !seenRegion.has(amountRegion)) {
+        seenRegion.add(amountRegion);
+        regions.push(amountRegion);
+      }
+      amounts.push({
+        key: `${handle}:${sku.id || name}`,
+        skuId: sku.id || null,
+        label: skuLabel(gameName, name),
+        from: formatTomanPrice(price),
+        img: thumbnail,
+        region: amountRegion,
+        href: null,
+        handle,
+        sort: denominationSort(name),
+        name,
+        instantUse: false,
+      });
+    }
+  }
+
+  regions.sort((a, b) => a.localeCompare(b, "fa"));
+  amounts.sort((a, b) => a.sort - b.sort || a.label.localeCompare(b.label, "fa"));
+  const buyerFieldsByHandle = await loadBuyerFields(products);
+
+  return {
+    platform: id,
+    gameName,
+    brandLabel: gameName,
+    bannerName: giftShopBannerName(gameName, id),
+    regions,
+    amounts,
+    bannerIcon,
+    buyerFieldsByHandle,
   };
 }

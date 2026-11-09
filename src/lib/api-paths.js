@@ -8,6 +8,7 @@ export const apiPaths = {
   catalogStoreCategories: "/catalog/store-categories",
   catalogStoreCategory: (key) => `/catalog/store-categories/${encodeURIComponent(key)}`,
   catalogCheckoutPreview: "/catalog/checkout-preview",
+  checkoutCoupon: "/checkout/coupon",
   catalogProducts: (params = {}) => {
     const search = new URLSearchParams();
     if (params.category) search.set("category", String(params.category));

@@ -6,7 +6,7 @@ export function useCheckoutPreview() {
   const [ack, setAck] = useState(false);
   const [message, setMessage] = useState("");
 
-  async function preview(selected) {
+  async function preview(selected, extraFields = {}) {
     const skuId = selected?.skuId;
     if (!skuId) {
       setMessage("پیشنهاد معتبری انتخاب نشده است.");
@@ -18,7 +18,7 @@ export function useCheckoutPreview() {
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
         skuId,
-        fields: { instantUseAck: ack },
+        fields: { instantUseAck: ack, ...extraFields },
       }),
     });
     const payload = await response.json().catch(() => ({}));

@@ -8,6 +8,7 @@ import ShopNoResults from "./ShopNoResults";
 import { FA } from "./data/faCopy";
 import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
 import { useCheckoutPreview } from "./useCheckoutPreview";
+import { useCheckoutCoupon } from "./useCheckoutCoupon";
 
 export default function SubscriptionBuyFlow({
   regions = [],
@@ -49,6 +50,7 @@ export default function SubscriptionBuyFlow({
     ariaLabel: row.label || row.name,
   }));
   const selected = visibleAmounts.find((row) => row.key === selectedKey) || null;
+  const coupon = useCheckoutCoupon(selected?.skuId);
 
   return (
     <div className="flex flex-col gap-6 lg:mb-8 lg:flex-row lg:items-start lg:gap-9">
@@ -87,6 +89,7 @@ export default function SubscriptionBuyFlow({
           ack={checkout.ack}
           onAckChange={checkout.setAck}
           message={checkout.message}
+          coupon={coupon}
           onBuy={() => checkout.preview(selected)}
         />
       </aside>

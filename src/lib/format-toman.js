@@ -27,3 +27,9 @@ export function productHref(handle) {
 export function categoryHref(slug) {
   return `/catalog/category/${encodeURIComponent(slug)}`;
 }
+
+export function shopTopupHref(hubKey) {
+  const id = typeof hubKey === "string" ? hubKey.trim() : "";
+  if (!id) return "";
+  return `/shop/top-ups/${encodeURIComponent(id)}`;
+}

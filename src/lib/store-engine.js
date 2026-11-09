@@ -1,7 +1,7 @@
 import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
 import { formatTomanPrice, productHref } from "./format-toman";
-import { giftShopHrefFromProduct, isGiftCardProduct } from "./gift-card-shop";
+import { giftShopHrefFromProduct, isGiftCardProduct, isTopupProduct, shopTopupHrefFromProduct } from "./gift-card-shop";
 import { preferFaTitle } from "./catalog-region";
 
 export const STORE_CATEGORY_KEYS = ["currency", "accounts", "top-ups", "items", "boosting", "gift-cards"];
@@ -43,28 +43,45 @@ export async function loadStoreCategory(key) {
   }
 }
 
+function tabMatchesStoreCategory(tab, categoryKey) {
+  const item = asRecord(tab);
+  if (asString(item.storeCategory) === categoryKey) return true;
+  const href = asString(item.href);
+  if (categoryKey === "top-ups") return href.includes("/shop/top-ups/");
+  if (categoryKey === "gift-cards") {
+    return (
+      href.startsWith("/gift-card/") ||
+      href.includes("/shop/gift-cards/") ||
+      href === "/playstation-plus" ||
+      href === "/xbox-game-pass"
+    );
+  }
+  if (categoryKey === "accounts") return href.includes("/shop/accounts/");
+  if (categoryKey === "boosting") return href.includes("/shop/boosting/");
+  if (categoryKey === "currency") return href.includes("/shop/currency/");
+  return href.includes(`/shop/${categoryKey}/`);
+}
+
 export function hubCardsFromCategory(category) {
   const rec = asRecord(category);
+  const categoryKey = asString(rec.key);
   const seen = new Set();
   const cards = [];
   for (const hub of Array.isArray(rec.hubs) ? rec.hubs : []) {
     const row = asRecord(hub);
-    const tabs = Array.isArray(row.tabs) ? row.tabs : [];
+    const tabs = (Array.isArray(row.tabs) ? row.tabs : []).filter((tab) => tabMatchesStoreCategory(tab, categoryKey));
     const title = asString(row.title) || asString(row.hubKey);
-    for (const tab of tabs) {
-      const item = asRecord(tab);
-      const href = asString(item.href);
-      if (!href.startsWith("/") || seen.has(href)) continue;
-      seen.add(href);
-      const label = asString(item.label);
-      cards.push({
-        key: `${asString(row.hubKey)}:${asString(item.tabKey) || href}`,
-        name: title,
-        tag: label,
-        img: "",
-        href,
-      });
-    }
+    const item = asRecord(tabs[0]);
+    const href = asString(item.href);
+    if (!href.startsWith("/") || seen.has(href)) continue;
+    seen.add(href);
+    cards.push({
+      key: asString(row.hubKey) || href,
+      name: title,
+      tag: asString(item.label),
+      img: "",
+      href,
+    });
   }
   return cards;
 }
@@ -81,7 +98,11 @@ export async function loadCatalogGroupCards(slug, { gift = false } = {}) {
       const handle = asString(rec.handle);
       const title = preferFaTitle(rec) || asString(rec.title);
       if (!handle || !title) continue;
-      const href = gift || isGiftCardProduct(rec) ? giftShopHrefFromProduct(rec) : productHref(handle);
+      const href = gift || isGiftCardProduct(rec)
+        ? giftShopHrefFromProduct(rec)
+        : isTopupProduct(rec)
+          ? shopTopupHrefFromProduct(rec)
+          : productHref(handle);
       if (!href || seen.has(href)) continue;
       seen.add(href);
       items.push({

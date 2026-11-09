@@ -58,8 +58,12 @@ export async function serverFetch(path, init = {}) {
 
   const payload = await readPayload(response);
   const errorMessage = toErrorMessage(payload, "درخواست انجام نشد");
+  const errorCode =
+    payload && typeof payload === "object" && payload.error && typeof payload.error.code === "string"
+      ? payload.error.code
+      : undefined;
   if (!response.ok || payload?.success === false) {
-    throw new ApiError(errorMessage, response.status, undefined, payload?.data);
+    throw new ApiError(errorMessage, response.status, errorCode, payload?.data);
   }
   return payload?.data ?? payload;
 }

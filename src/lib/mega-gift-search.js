@@ -1,4 +1,4 @@
-import { giftShopHrefFromProduct, isGiftCardProduct } from "./gift-card-shop";
+import { giftShopHrefFromProduct, isGiftCardProduct, isTopupProduct, shopTopupHrefFromProduct } from "./gift-card-shop";
 
 export const MEGA_OTHER_VERTICALS = ["Currency", "Accounts", "Top ups", "Items", "Boosting"];
 
@@ -94,11 +94,12 @@ function categoryLabel(item, labels) {
 function searchItemToGame(item, category) {
   const rec = asRecord(item);
   const giftHref = isGiftCardProduct(rec) ? giftShopHrefFromProduct(rec) : "";
+  const topupHref = !giftHref && isTopupProduct(rec) ? shopTopupHrefFromProduct(rec) : "";
   return {
     name: asString(rec.title) || asString(rec.name),
     nameEn: asString(rec.title_en) || asString(rec.titleEn) || asString(rec.name_en),
     img: asString(rec.thumbnail) || asString(rec.image),
-    href: giftHref || asString(rec.href),
+    href: giftHref || topupHref || asString(rec.href),
     category,
   };
 }

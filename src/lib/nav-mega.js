@@ -1,8 +1,9 @@
 import { serverFetch } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
-import { productHref, categoryHref } from "./format-toman";
-import { derivedGiftPlatform, giftShopHref } from "./gift-card-shop";
+import { productHref, categoryHref, shopTopupHref } from "./format-toman";
+import { derivedGiftPlatform, giftShopHref, shopTopupHrefFromProduct } from "./gift-card-shop";
 import { preferFaTitle } from "./catalog-region";
+import { hubCardsFromCategory, loadStoreCategory } from "./store-engine";
 import { ALL_GAMES, POPULAR_GAMES, RECENTLY_VIEWED_GAMES } from "../components/eldorado/data/referenceData";
 import {
   SHOP_ACCOUNTS_HREF,
@@ -42,6 +43,23 @@ function asString(value) {
 
 function stripRegion(title) {
   return asString(title).replace(/\s*\([^)]*\)\s*$/, "").trim();
+}
+
+function humanizeHubKey(value) {
+  return asString(value)
+    .split(/[-_]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(" ");
+}
+
+function stripTopupFulfillment(title) {
+  return asString(title)
+    .replace(/\s*[–-]\s*(auto|manual|fast)\b/gi, "")
+    .replace(/\s*\((auto|manual|fast)[^)]*\)/gi, "")
+    .replace(/\b(auto|manual)\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 const ICON_BY_NAME = new Map();
@@ -87,7 +105,7 @@ const MEGA_TTL_MS = 60_000;
 const megaMemo = new Map();
 
 export async function buildNavMegaCached(verticalKey) {
-  const key = `gift-search-fa:${verticalKey}`;
+  const key = `topup-shop-hubs-v2:${verticalKey}`;
   const hit = megaMemo.get(key);
   if (hit && Date.now() - hit.at < MEGA_TTL_MS) return hit.data;
   const data = await buildNavMega(verticalKey);
@@ -98,6 +116,7 @@ export async function buildNavMegaCached(verticalKey) {
 function catalogHref(product, verticalKey) {
   const rec = asRecord(product);
   if (verticalKey === "Gift cards") return giftShopHref(derivedGiftPlatform(rec));
+  if (verticalKey === "Top ups") return shopTopupHrefFromProduct(rec) || shopTopupHref(asString(rec.platform) || asString(rec.handle));
   const platform = asString(rec.platform);
   const handle = asString(rec.handle);
   const hub = BRAND_HUB_BY_PLATFORM[platform];
@@ -105,23 +124,82 @@ function catalogHref(product, verticalKey) {
   return handle ? productHref(handle) : "";
 }
 
+function topupCatalogExtras(products) {
+  const extras = new Map();
+  for (const item of Array.isArray(products) ? products : []) {
+    const rec = asRecord(item);
+    const platform = asString(rec.platform) || asString(rec.handle);
+    if (!platform) continue;
+    const img = asString(rec.thumbnail) || asString(rec.image) || asString(rec.imageUrl);
+    const nameEn = stripTopupFulfillment(asString(rec.titleEn) || asString(rec.title_en));
+    const faTitle = stripTopupFulfillment(preferFaTitle(rec) || asString(rec.title));
+    const current = extras.get(platform) || { img: "", popular: false, nameEn: "", faTitle: "" };
+    extras.set(platform, {
+      img: current.img || img,
+      popular: current.popular || Boolean(rec.isPopular),
+      nameEn: current.nameEn || nameEn,
+      faTitle: current.faTitle || (faTitle && faTitle.toLowerCase() !== platform ? faTitle : ""),
+    });
+  }
+  return extras;
+}
+
+async function mapTopupMega() {
+  const category = await loadStoreCategory("top-ups");
+  const cards = hubCardsFromCategory(category);
+  if (cards.length === 0) return { popular: [], all: [] };
+
+  let extras = new Map();
+  try {
+    extras = topupCatalogExtras(await fetchCatalogPages("game-topup"));
+  } catch {
+    extras = new Map();
+  }
+
+  const rows = cards
+    .map((card) => {
+      const extra = extras.get(card.key) || {};
+      const href = asString(card.href);
+      const titled = asString(card.name) !== card.key ? asString(card.name) : "";
+      const name = titled || stripRegion(extra.faTitle) || humanizeHubKey(card.key) || card.name;
+      return {
+        name,
+        nameEn: extra.nameEn || titled || "",
+        img: extra.img || iconFor(name) || iconFor(extra.nameEn) || iconFor(titled) || "",
+        href,
+        popular: Boolean(extra.popular) || POPULAR_TOPUP_HUBS.has(card.key),
+      };
+    })
+    .filter((row) => row.name && row.href.startsWith("/shop/top-ups/"))
+    .sort((a, b) => a.name.localeCompare(b.name, "fa"));
+
+  const popular = rows.filter((row) => row.popular);
+  return {
+    popular: popular.length > 0 ? popular : rows.slice(0, 12),
+    all: rows,
+  };
+}
+
 function uniqueCatalogGames(products, verticalKey) {
   const seen = new Map();
   for (const item of products) {
     const rec = asRecord(item);
     const handle = asString(rec.handle);
-    const title = preferFaTitle(rec) || asString(rec.title) || asString(rec.titleEn);
-    if (!handle || !title) continue;
+    const rawTitle = preferFaTitle(rec) || asString(rec.title) || asString(rec.titleEn);
+    const title = verticalKey === "Top ups" ? stripTopupFulfillment(rawTitle) || rawTitle : rawTitle;
+    if (!title) continue;
+    if (verticalKey !== "Top ups" && !handle) continue;
     const derived = verticalKey === "Gift cards" ? derivedGiftPlatform(rec) : "";
-    const platform = verticalKey === "Gift cards" ? derived : asString(rec.platform);
+    const platform =
+      verticalKey === "Gift cards" ? derived : verticalKey === "Top ups" ? asString(rec.platform) || handle : asString(rec.platform);
     const key = platform ? `p:${platform}` : `t:${stripRegion(rec.titleEn || title).toLowerCase()}`;
     const current = seen.get(key);
     const row = {
       name: stripRegion(title) || title,
-      nameEn: stripRegion(asString(rec.titleEn) || asString(rec.nameEn)),
+      nameEn: stripRegion(stripTopupFulfillment(asString(rec.titleEn) || asString(rec.nameEn))),
       img: asString(rec.thumbnail) || asString(rec.image),
       href: catalogHref(rec, verticalKey),
-      popular: Boolean(rec.isPopular),
+      popular: Boolean(rec.isPopular) || (verticalKey === "Top ups" && POPULAR_TOPUP_HUBS.has(platform)),
       platform,
     };
     if (!current) {
@@ -149,11 +227,28 @@ const POPULAR_CATALOG_PLATFORMS = [
   "pubg-mobile",
 ];
 
+const POPULAR_TOPUP_HUBS = new Set([
+  "pubg-mobile",
+  "free-fire",
+  "mobile-legends",
+  "genshin-impact",
+  "fortnite",
+  "valorant",
+  "roblox",
+  "cod-mobile",
+  "clash-of-clans",
+  "honkai-star-rail",
+  "ea-fc-mobile",
+  "blood-strike",
+]);
+
 function mapCatalogMega(products, verticalKey) {
   const unique = uniqueCatalogGames(products, verticalKey);
   const all = [...unique].sort((a, b) => a.name.localeCompare(b.name, "fa"));
   const flagged = unique.filter((row) => row.popular);
-  const byPlatform = unique.filter((row) => POPULAR_CATALOG_PLATFORMS.includes(row.platform));
+  const byPlatform = unique.filter((row) =>
+    verticalKey === "Top ups" ? POPULAR_TOPUP_HUBS.has(row.platform) : POPULAR_CATALOG_PLATFORMS.includes(row.platform),
+  );
   const popular = (flagged.length > 0 ? flagged : byPlatform.length > 0 ? byPlatform : unique).slice(0, 12);
   const toRow = (row) => ({ name: row.name, nameEn: row.nameEn || "", img: row.img, href: row.href });
   return { popular: popular.map(toRow), all: all.map(toRow) };
@@ -194,6 +289,10 @@ export async function buildNavMega(verticalKey) {
 
   try {
     if (config.source === "catalog") {
+      if (verticalKey === "Top ups") {
+        const storeMega = await mapTopupMega();
+        if (storeMega.all.length > 0) return { ...storeMega, promo: Boolean(config.promo) };
+      }
       const products = await fetchCatalogPages(config.slug);
       const mapped = mapCatalogMega(products, verticalKey);
       return { ...mapped, promo: Boolean(config.promo) };

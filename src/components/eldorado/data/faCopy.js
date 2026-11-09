@@ -34,6 +34,16 @@ export const FA = {
   learnMore: "بیشتر بدانید",
   instantUseAck: "شرایط تحویل فوری را خواندم و می‌پذیرم",
   shopEmpty: "در این دسته فعلاً کالای قابل‌فروش نیست.",
+  haveDiscountCode: "کد تخفیف دارید؟",
+  coupon: "کد تخفیف",
+  couponPlaceholder: "کد تخفیف را وارد کنید",
+  couponApply: "اعمال",
+  couponRemove: "حذف",
+  couponNeedSku: "اول بسته را انتخاب کنید.",
+  couponNeedAuth: "برای اعمال کد تخفیف وارد شوید.",
+  couponApplied: "کد تخفیف اعمال شد.",
+  discount: "تخفیف",
+  payable: "قابل پرداخت",
 };
 
 export const SHOP_ACCOUNTS_HREF = "/shop/accounts";

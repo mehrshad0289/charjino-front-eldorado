@@ -4,6 +4,8 @@ import { GIFT_CARD_IMAGES } from "./data/giftCardData";
 import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
 import { FA } from "./data/faCopy";
 import { catalogRegionLabel } from "../../lib/catalog-region";
+import { formatTomanPrice } from "../../lib/format-toman";
+import CheckoutCouponField from "./CheckoutCouponField";
 import { BoltIcon, ShieldIcon, SupportIcon, TrustRow } from "./TrustRows";
 
 /* Gift-card offer sidebar: live Eldorado gift shop (product img + amount
@@ -53,11 +55,16 @@ export default function GiftCardOfferCard({
   onAckChange,
   message = "",
   onBuy,
+  buyerFields = [],
+  buyerValues = {},
+  onBuyerFieldChange,
+  coupon = null,
 }) {
   const heading = selected ? selected.name || selected.label || title : title;
   const icon = selected?.img || productIcon;
   const region = catalogRegionLabel(selected?.region) || selected?.region || "";
   const price = selected?.from || "";
+  const payable = coupon?.quote?.payableToman > 0 ? formatTomanPrice(coupon.quote.payableToman) : "";
 
   return (
     <div className="mb-3 rounded-lg bg-white shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] md:mb-4">
@@ -109,15 +116,45 @@ export default function GiftCardOfferCard({
             </div>
             <span className="font-bold">{GIFT_SHOP_CHROME.warrantyValue}</span>
           </div>
-          {price ? (
-            <div className="flex px-3.5 py-2.5 text-[20px] font-bold md:px-6 md:pb-3">
-              <span>{price}</span>
+          {price || payable ? (
+            <div className="flex flex-col gap-1 px-3.5 py-2.5 md:px-6 md:pb-3">
+              {payable ? (
+                <>
+                  {price ? <span className="text-sm font-normal text-graytext line-through">{price}</span> : null}
+                  <span className="text-[20px] font-bold">{payable}</span>
+                </>
+              ) : (
+                <span className="text-[20px] font-bold">{price}</span>
+              )}
             </div>
           ) : null}
         </>
       ) : null}
 
       <div className={selected ? "px-3.5 pb-5 md:px-6" : "px-6 pb-5 pt-[14px]"}>
+        {Array.isArray(buyerFields) && buyerFields.length > 0 ? (
+          <div className="mb-3 flex flex-col gap-2">
+            {buyerFields.map((raw) => {
+              const field = raw && typeof raw === "object" ? raw : {};
+              const name = String(field.name || field.key || "").trim();
+              if (!name) return null;
+              const label = String(field.label || name);
+              return (
+                <label key={name} className="block text-sm text-graytext">
+                  <span className="mb-1 block font-bold text-nav">{label}</span>
+                  <input
+                    type={field.type === "number" ? "text" : field.type || "text"}
+                    name={name}
+                    required={field.required !== false}
+                    value={buyerValues?.[name] || ""}
+                    onChange={(event) => onBuyerFieldChange?.(name, event.target.value)}
+                    className="min-h-10 w-full rounded-md border border-cardborder bg-white px-3 py-2 text-sm text-nav"
+                  />
+                </label>
+              );
+            })}
+          </div>
+        ) : null}
         {selected?.instantUse ? (
           <label className="mb-3 flex items-start gap-2 text-sm text-graytext">
             <input
@@ -129,6 +166,7 @@ export default function GiftCardOfferCard({
             <span>{FA.instantUseAck}</span>
           </label>
         ) : null}
+        {selected ? <CheckoutCouponField coupon={coupon} disabled={!selected?.skuId} /> : null}
         {message ? <p className="mb-3 text-sm text-graytext">{message}</p> : null}
         <button
           type="button"
