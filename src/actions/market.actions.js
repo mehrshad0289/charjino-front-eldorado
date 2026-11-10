@@ -476,7 +476,23 @@ export async function createMarketOrder(listingId) {
       body: JSON.stringify({ listingId: Number(listingId), termsAccepted: true }),
     });
     revalidatePath("/dashboard/orders/purchased");
-    return { ok: true, orderNo: data?.order_no || "" };
+    const orderNo = data?.order_no || "";
+    if (!orderNo) return { ok: true, orderNo, status: data?.status || "" };
+    const paid = await serverFetch(apiPaths.marketOrderPay(orderNo), {
+      method: "POST",
+      headers: bearerHeaders(accessToken),
+      body: JSON.stringify({}),
+    });
+    const redirectUrl = String(paid?.redirect_url || "");
+    if (redirectUrl.includes("fake-gateway.charjino.local") && paid?.reference) {
+      const verified = await serverFetch(apiPaths.marketPaymentVerify("fake"), {
+        method: "POST",
+        headers: { ...bearerHeaders(accessToken), Accept: "application/json" },
+        body: JSON.stringify({ reference: paid.reference }),
+      });
+      return { ok: true, orderNo, status: verified?.status || "paid", paid: verified?.status === "paid" };
+    }
+    return { ok: true, orderNo, status: paid?.status || "", payUrl: redirectUrl };
   } catch (error) {
     return fromMarketError(error);
   }

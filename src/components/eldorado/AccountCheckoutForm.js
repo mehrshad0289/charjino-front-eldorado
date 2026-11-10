@@ -9,6 +9,7 @@ export default function AccountCheckoutForm({ listingId, loggedIn, next }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [orderNo, setOrderNo] = useState("");
+  const [paid, setPaid] = useState(false);
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -33,14 +34,18 @@ export default function AccountCheckoutForm({ listingId, loggedIn, next }) {
       return;
     }
     setOrderNo(result.orderNo || "");
+    setPaid(Boolean(result.paid));
   }
 
   if (orderNo) {
     return (
       <div className="rounded-lg bg-white p-6 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px]">
-        <p className="text-[18px] font-bold">سفارش ثبت شد</p>
+        <p className="text-[18px] font-bold">{paid ? "خرید ثبت شد" : "سفارش ثبت شد"}</p>
         <p className="mt-2 text-[14px] leading-[22px] text-graytext">
-          شماره سفارش {toFaDigits(orderNo)}. پرداخت در مرحلهٔ بعد انجام می‌شود.
+          شماره سفارش {toFaDigits(orderNo)}.{" "}
+          {paid
+            ? "پرداخت تأیید شد و پول تا تأیید تحویل نزد شارژینو می‌ماند."
+            : "پرداخت در مرحلهٔ بعد انجام می‌شود."}
         </p>
         <a href="/dashboard/orders/purchased" className="mt-4 inline-flex rounded-lg bg-darkbtn px-4 py-3 text-[14px] font-bold text-white">
           سفارش‌های خرید

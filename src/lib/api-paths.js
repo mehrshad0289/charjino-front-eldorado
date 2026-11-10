@@ -63,6 +63,8 @@ export const apiPaths = {
   marketListingFacets: (game) => `/market/listings/facets?game=${encodeURIComponent(game)}`,
   marketListing: (id) => `/market/listings/${encodeURIComponent(id)}`,
   marketOrders: "/market/orders",
+  marketOrderPay: (orderNo) => `/market/orders/${encodeURIComponent(orderNo)}/pay`,
+  marketPaymentVerify: (gateway) => `/market/payments/verify/${encodeURIComponent(gateway)}`,
   marketBoostForm: (gameId) => `/market/boost-forms/${encodeURIComponent(gameId)}`,
   marketBoostRequests: "/market/boost-requests",
   marketBoostImages: "/market/boost-forms/images",

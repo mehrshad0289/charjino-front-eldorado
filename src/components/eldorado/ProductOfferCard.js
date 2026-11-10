@@ -140,6 +140,59 @@ function TrustRowsBlock({ trust }) {
   );
 }
 
+function WarrantyChoices() {
+  const [plan, setPlan] = useState("5d");
+  const [open, setOpen] = useState(false);
+  const plans = [
+    { id: "5d", title: "۵ روز", note: "رایگان" },
+    { id: "3m", title: "۳ ماه", note: "تمدید" },
+    { id: "6m", title: "۶ ماه", note: "تمدید" },
+  ];
+  return (
+    <div className="px-4 py-4 lg:px-6">
+      <p className="text-[14px] font-bold">تمدید ضمانت</p>
+      <p className="mt-1 text-[13px] leading-[20px] text-graytext">اگر بن یا از دست دادن دسترسی پیش آمد، پول برمی‌گردد.</p>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {plans.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => setPlan(item.id)}
+            className={`rounded-lg border px-2 py-2 text-center text-[13px] ${plan === item.id ? "border-ink bg-page font-bold" : "border-cardborder"}`}
+          >
+            <span className="block">{item.title}</span>
+            <span className="block text-graytext">{item.note}</span>
+          </button>
+        ))}
+      </div>
+      <button type="button" className="mt-3 text-[13px] font-bold text-linkblue underline" onClick={() => setOpen(true)}>
+        چه چیزهایی پوشش دارد؟
+      </button>
+      {open ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center" role="dialog" aria-modal="true">
+          <div className="w-full max-w-md rounded-lg bg-white p-5 text-[14px] leading-[22px]">
+            <h2 className="text-[18px] font-bold">ضمانت چه چیزهایی را پوشش می‌دهد؟</h2>
+            <ul className="mt-3 list-disc space-y-1 ps-5">
+              <li>فروشنده اکانت را پس می‌گیرد.</li>
+              <li>بن به‌خاطر انتقال مالکیت یا کار فروشنده.</li>
+              <li>اکانت با آگهی یکی نیست.</li>
+            </ul>
+            <h3 className="mt-4 font-bold">چطور کار می‌کند</h3>
+            <ul className="mt-2 list-disc space-y-1 ps-5">
+              <li>پوشش رایگان ۵ روز است. تمدید ۳ یا ۶ ماهه را همین‌جا انتخاب می‌کنی.</li>
+              <li>درخواست را ثبت می‌کنی و بررسی می‌شود.</li>
+              <li>اگر تأیید شود، پول اکانت برمی‌گردد.</li>
+            </ul>
+            <button type="button" className="mt-4 rounded-lg bg-darkbtn px-4 py-2 font-bold text-white" onClick={() => setOpen(false)}>
+              بستن
+            </button>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function BuyNow({ href, label }) {
   const text = label || "Buy now";
   const className = "block w-full rounded-lg bg-darkbtn py-3 text-center text-[16px] font-bold leading-[24px] text-white";
@@ -185,6 +238,7 @@ export default function ProductOfferCard({ offer }) {
             <DetailRow key={row.label} row={row} />
           ))}
         </div>
+        {offer?.showWarranty ? <WarrantyChoices /> : null}
         <div className="pb-4 pt-4">
           <BuyNow href={buyHref} label={buyLabel} />
         </div>
@@ -211,6 +265,7 @@ export default function ProductOfferCard({ offer }) {
         {details.map((row) => (
           <DetailRow key={row.label} row={row} />
         ))}
+        {offer?.showWarranty ? <WarrantyChoices /> : null}
         <div className="pb-4 pt-4">
           <BuyNow href={buyHref} label={buyLabel} />
         </div>

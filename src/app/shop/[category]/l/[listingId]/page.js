@@ -126,13 +126,15 @@ export default async function ShopListingPage({ params }) {
                 details: [
                   { label: "بازی", value: game, mobileHidden: true },
                   ...attributeRows.map((row) => ({ label: row.label_fa || row.key, value: row.value })),
-                  { label: "زمان تحویل", value: "پس از پرداخت", instant: true },
+                  { label: "ضمانت", value: "۵ روز رایگان" },
+                  { label: "زمان تحویل", value: "فوری", instant: true },
                 ],
+                showWarranty: true,
                 trust: {
-                  guarantee: "تضمین بازگشت پول",
-                  guaranteeNote: "تا تأیید تحویل، پول نزد شارژینو می‌ماند",
+                  guarantee: "فروشنده بعد از تحویل پول می‌گیرد",
+                  guaranteeNote: "وقتی اکانت را گرفتی و تأیید کردی، پول آزاد می‌شود",
                   support: "پشتیبانی",
-                  supportNote: "اگر تحویل مشکل داشت پیام بده",
+                  supportNote: "اگر تحویل یا آگهی مشکل داشت پیام بده",
                 },
               }}
             />
@@ -187,13 +189,15 @@ export default async function ShopListingPage({ params }) {
                   details: [
                     { label: "بازی", value: game },
                     ...attributeRows.map((row) => ({ label: row.label_fa || row.key, value: row.value })),
-                    { label: "زمان تحویل", value: "پس از پرداخت", instant: true },
+                    { label: "ضمانت", value: "۵ روز رایگان" },
+                    { label: "زمان تحویل", value: "فوری", instant: true },
                   ],
+                  showWarranty: true,
                   trust: {
-                    guarantee: "تضمین بازگشت پول",
-                    guaranteeNote: "تا تأیید تحویل، پول نزد شارژینو می‌ماند",
+                    guarantee: "فروشنده بعد از تحویل پول می‌گیرد",
+                    guaranteeNote: "وقتی اکانت را گرفتی و تأیید کردی، پول آزاد می‌شود",
                     support: "پشتیبانی",
-                    supportNote: "اگر تحویل مشکل داشت پیام بده",
+                    supportNote: "اگر تحویل یا آگهی مشکل داشت پیام بده",
                   },
                 }}
               />
