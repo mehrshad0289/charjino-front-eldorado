@@ -1,5 +1,7 @@
 import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
+import { getBackendUrl } from "./env";
+import { toFaDigits } from "./fa-digits";
 import { formatTomanPrice, productHref } from "./format-toman";
 import { giftShopHrefFromProduct, isGiftCardProduct, isTopupProduct, shopTopupHrefFromProduct } from "./gift-card-shop";
 import { preferFaTitle } from "./catalog-region";
@@ -173,21 +175,64 @@ export async function loadMarketListing(id) {
   }
 }
 
+export function mediaUrl(url) {
+  const value = asString(url);
+  if (!value) return "";
+  if (/^https?:\/\//i.test(value)) return value;
+  const origin = getBackendUrl().replace(/\/api\/?$/, "");
+  return `${origin}${value.startsWith("/") ? value : `/${value}`}`;
+}
+
+function listingChips(rec) {
+  return (Array.isArray(rec.card_attributes) ? rec.card_attributes : [])
+    .map((row) => {
+      const item = asRecord(row);
+      const label = asString(item.label_fa) || asString(item.key);
+      const value = asString(item.value);
+      return label && value ? `${label}: ${value}` : value || label;
+    })
+    .filter(Boolean);
+}
+
+function sellerRating(seller) {
+  const count = Number(seller.rating_count || 0);
+  const avg = Number(seller.rating_avg);
+  if (!count || !Number.isFinite(avg)) return "";
+  return `${toFaDigits(avg.toFixed(1))} (${toFaDigits(count)})`;
+}
+
 export function listingToOffer(listing, categoryKey) {
   const rec = asRecord(listing);
   const id = rec.id != null ? String(rec.id) : "";
   if (!id) return null;
   const price = Number(rec.price_amount ?? rec.price);
+  const seller = asRecord(rec.seller);
+  const cover = asRecord(rec.cover_image);
+  const chips = listingChips(rec);
   return {
     href: `/shop/${categoryKey}/l/${encodeURIComponent(id)}`,
     title: asString(rec.title) || asString(rec.game_name),
-    desc: asString(rec.description) || asString(rec.game_name_fa) || asString(rec.game_name),
-    img: asString(rec.cover) || asString(asRecord(rec.seller).avatar) || "",
-    seller: asString(asRecord(rec.seller).name),
-    rating: "",
+    desc: chips.join(" · ") || asString(rec.description) || asString(rec.game_name),
+    img: mediaUrl(cover.url || rec.cover),
+    seller: asString(seller.name) || "فروشنده",
+    rating: sellerRating(seller),
     price: Number.isFinite(price) && price > 0 ? formatTomanPrice(price) : "",
-    delivery: "",
+    priceAmount: Number.isFinite(price) ? price : 0,
+    attributes: asRecord(rec.attributes),
+    delivery: "پس از پرداخت",
   };
+}
+
+export async function loadMarketFacets(game) {
+  const name = asString(game);
+  if (!name) return [];
+  try {
+    const payload = await serverFetch(apiPaths.marketListingFacets(name));
+    return Array.isArray(payload?.fields) ? payload.fields : [];
+  } catch (error) {
+    if (error instanceof ApiError) return [];
+    throw error;
+  }
 }
 
 export async function resolveMarketGame(categoryKey, hub) {

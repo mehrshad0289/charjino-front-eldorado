@@ -6,10 +6,7 @@ import DashboardOrderFilters from "../../../../components/eldorado/DashboardOrde
 import EmptyState from "../../../../components/eldorado/EmptyState";
 import Footer from "../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../components/eldorado/ChatBubble";
-import {
-  DASHBOARD_USER,
-  DASHBOARD_ORDERS_PURCHASED_PAGE,
-} from "../../../../components/eldorado/data/dashboardData";
+import { DASHBOARD_ORDERS_PURCHASED_PAGE } from "../../../../components/eldorado/data/dashboardData";
 
 /* Dashboard orders page /dashboard/orders/purchased (own .make capture,
    1920-only, decoded 2026-11-04): logged-in frame + dashboard shell with
@@ -28,7 +25,7 @@ export default function DashboardOrdersPurchasedPage() {
   const { icon, title, filters, emptyState } = DASHBOARD_ORDERS_PURCHASED_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
+      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell active="Purchased orders">

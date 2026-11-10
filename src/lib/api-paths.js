@@ -1,10 +1,37 @@
 export const apiPaths = {
+  authRequestOtp: "/auth/request-otp",
+  authVerifyOtp: "/auth/verify-otp",
+  authMe: "/auth/me",
+  authLogout: "/auth/logout",
+  marketSellerMe: "/market/seller/me",
+  marketSellerAcceptTerms: "/market/seller/accept-terms",
+  marketSellerBank: "/market/seller/bank",
+  marketSellerListings: "/market/seller/listings",
+  marketSellerListing: (id) => `/market/seller/listings/${encodeURIComponent(id)}`,
+  marketListingsStore: "/market/listings",
+  marketListingPlace: (id) => `/market/listings/${encodeURIComponent(id)}/place`,
+  marketListingSubmit: (id) => `/market/listings/${encodeURIComponent(id)}/submit`,
+  marketListingImages: (id) => `/market/seller/listings/${encodeURIComponent(id)}/images`,
+  marketListingImage: (id, imageId) =>
+    `/market/seller/listings/${encodeURIComponent(id)}/images/${encodeURIComponent(imageId)}`,
+  marketListingVideos: (id) => `/market/seller/listings/${encodeURIComponent(id)}/videos`,
+  marketListingVideo: (id, videoId) =>
+    `/market/seller/listings/${encodeURIComponent(id)}/videos/${encodeURIComponent(videoId)}`,
+  marketListingPause: (id) => `/market/listings/${encodeURIComponent(id)}/pause`,
+  marketListingResume: (id) => `/market/listings/${encodeURIComponent(id)}/resume`,
+  marketListingArchive: (id) => `/market/listings/${encodeURIComponent(id)}/archive`,
+  marketGameSchema: (id) => `/market/games/${encodeURIComponent(id)}/attribute-schema`,
+  marketKycMe: "/market/kyc/me",
+  marketKycUpgrade: "/market/kyc/upgrade",
+  marketKycDocuments: "/market/kyc/documents",
   catalogHome: "/catalog/home",
   catalogCategories: "/catalog/categories",
   catalogCategory: (slug) => `/catalog/categories/${encodeURIComponent(slug)}`,
   catalogProduct: (handle) => `/catalog/products/${encodeURIComponent(handle)}`,
   catalogGiftBrandPage: (platform) => `/catalog/gift-brand-pages/${encodeURIComponent(platform)}`,
   catalogProductHub: (hubKey) => `/catalog/product-hubs/${encodeURIComponent(hubKey)}`,
+  catalogProductHubByMarketGame: (source) =>
+    `/catalog/product-hubs/by-market-game/${encodeURIComponent(source)}`,
   catalogStoreCategories: "/catalog/store-categories",
   catalogStoreCategory: (key) => `/catalog/store-categories/${encodeURIComponent(key)}`,
   catalogCheckoutPreview: "/catalog/checkout-preview",
@@ -33,7 +60,12 @@ export const apiPaths = {
     const qs = search.toString();
     return qs ? `/market/listings?${qs}` : "/market/listings";
   },
+  marketListingFacets: (game) => `/market/listings/facets?game=${encodeURIComponent(game)}`,
   marketListing: (id) => `/market/listings/${encodeURIComponent(id)}`,
+  marketOrders: "/market/orders",
+  marketBoostForm: (gameId) => `/market/boost-forms/${encodeURIComponent(gameId)}`,
+  marketBoostRequests: "/market/boost-requests",
+  marketBoostImages: "/market/boost-forms/images",
   smartSearch: (params) => {
     const search = new URLSearchParams();
     search.set("q", String(params.q ?? "").slice(0, 100));

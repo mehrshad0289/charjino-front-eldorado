@@ -5,7 +5,7 @@ import DashboardPageHeader from "../../../components/eldorado/DashboardPageHeade
 import DashboardLoyalty from "../../../components/eldorado/DashboardLoyalty";
 import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
-import { DASHBOARD_USER } from "../../../components/eldorado/data/dashboardData";
+import { FA } from "../../../components/eldorado/data/faCopy";
 
 /* Dashboard page /dashboard/loyalty (own .make capture, 1920-only,
    decoded 2026-11-04, session 16): logged-in frame + dashboard shell with
@@ -23,11 +23,11 @@ export const metadata = {
 export default function DashboardLoyaltyPage() {
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
+      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell active="Loyalty">
-          <DashboardPageHeader icon="loyalty" title="Eldorado Loyalty" />
+          <DashboardPageHeader icon="loyalty" title={FA.loyalty} />
           <DashboardLoyalty />
         </DashboardShell>
       </main>

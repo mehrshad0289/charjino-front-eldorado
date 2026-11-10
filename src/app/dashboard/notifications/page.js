@@ -5,7 +5,6 @@ import DashboardPageHeader from "../../../components/eldorado/DashboardPageHeade
 import DashboardNotificationsPanel from "../../../components/eldorado/DashboardNotificationsPanel";
 import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
-import { DASHBOARD_USER } from "../../../components/eldorado/data/dashboardData";
 import { DASHBOARD_NOTIFICATIONS_PAGE } from "../../../components/eldorado/data/dashboardExtraData";
 
 /* Dashboard page /dashboard/notifications — session 26. The sidebar
@@ -23,7 +22,7 @@ export default function DashboardNotificationsPage() {
   const { icon, title, tabs, items } = DASHBOARD_NOTIFICATIONS_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} notiCount={26} favCount="9+" />
+      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell active="Notifications">

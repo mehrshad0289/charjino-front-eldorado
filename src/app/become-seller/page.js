@@ -1,9 +1,11 @@
+import Link from "next/link";
+import { connection } from "next/server";
+import { getSessionUser } from "@/actions/auth.actions";
 import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import Footer from "../../components/eldorado/Footer";
 import ChatBubble from "../../components/eldorado/ChatBubble";
 import SellerFaq from "../../components/eldorado/SellerFaq";
-import { DASHBOARD_USER } from "../../components/eldorado/data/dashboardData";
 import {
   BS_HERO_BG,
   BS_HERO_IMG,
@@ -13,8 +15,12 @@ import {
   BS_CTA_LABEL,
   BS_PILLS,
   BS_WHY,
+  BS_WHY_TITLE,
   BS_TOOLS,
+  BS_TOOLS_TITLE,
   BS_FAQS,
+  BS_FAQ_TITLE,
+  BS_FAQ_ALL,
   BS_FULL_FAQ_HREF,
   BS_CTA_TITLE,
   BS_CTA_SUB,
@@ -45,10 +51,11 @@ import {
    stacked (gap 16), why grid 1-col, tools grid STAYS 2-col (163.5px
    cards), section titles 24px, CTA band pad 40px/12px gap 32. */
 
+export const instant = false;
+
 export const metadata = {
-  title: "Become a Seller | Eldorado.gg",
-  description:
-    "Start making money on Eldorado. Reach millions of verified gamers who buy gaming goods daily from sellers like you.",
+  title: "فروشنده شو — شارژینو",
+  description: "فروش اکانت را از احراز هویت شروع کن.",
 };
 
 /* icomoon substitutes (documented assumption — no icomoon font). */
@@ -103,25 +110,28 @@ function ArrowRight({ size = 18 }) {
   );
 }
 
-function DarkCta() {
+function DarkCta({ href, label }) {
   return (
-    <a
-      href={BS_CTA_HREF}
-      aria-label={BS_CTA_LABEL}
+    <Link
+      href={href}
+      aria-label={label}
       className="inline-flex min-h-14 min-w-[70px] items-center justify-center overflow-hidden rounded-lg bg-ink px-4 pt-3 pb-3 text-center font-bold leading-[19.2px] text-white"
     >
       <span className="flex w-full items-center justify-center gap-[6px] text-center">
-        <span className="block text-center">{BS_CTA_LABEL}</span>
+        <span className="block text-center">{label}</span>
         <ArrowRight />
       </span>
-    </a>
+    </Link>
   );
 }
 
-export default function BecomeSellerPage() {
+export default async function BecomeSellerPage() {
+  await connection();
+  const user = await getSessionUser();
+  const ctaHref = user ? BS_CTA_HREF : `/login?next=${encodeURIComponent(BS_CTA_HREF)}`;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
+      <HeaderBar />
       <CategoryNav />
       <main className="isolate relative">
         {/* bg band (capture: bg-repeat-x absolute h-975 z-0) */}
@@ -137,18 +147,18 @@ export default function BecomeSellerPage() {
               <div className="flex flex-col items-center gap-6 lg:w-full lg:flex-row lg:items-start lg:gap-[96px]">
                 <div className="flex max-w-[705px] flex-col items-start gap-[40px] max-lg:items-center">
                   <div className="flex flex-col items-start gap-4 max-lg:items-center">
-                    <h1 className="max-w-[705px] text-center text-[36px] font-black leading-[43.2px] lg:text-left lg:text-[72px] lg:leading-[79.2px]">
+                    <h1 className="max-w-[705px] text-center text-[36px] font-black leading-[43.2px] lg:text-start lg:text-[72px] lg:leading-[79.2px]">
                       {BS_H1}
                     </h1>
-                    <p className="text-center text-[18px] leading-[27px] text-graytext lg:text-left lg:text-[24px] lg:leading-[28.8px]">
+                    <p className="text-center text-[18px] leading-[27px] text-graytext lg:text-start lg:text-[24px] lg:leading-[28.8px]">
                       {BS_SUB}
                     </p>
                   </div>
-                  <DarkCta />
+                  <DarkCta href={ctaHref} label={BS_CTA_LABEL} />
                 </div>
                 <div className="order-first h-[186px] shrink-0 overflow-hidden lg:order-none lg:h-[418px]">
                   <img
-                    alt="Earn money by selling video game items on the Eldorado.gg marketplace"
+                    alt="فروش اکانت در شارژینو"
                     src={BS_HERO_IMG}
                     className="block h-[186px] w-[300px] object-contain align-middle lg:h-[418px] lg:w-[421px]"
                   />
@@ -180,7 +190,7 @@ export default function BecomeSellerPage() {
             {/* Why Eldorado? */}
             <section className="flex w-full flex-col items-center gap-10 lg:gap-[48px]">
               <h2 className="text-center text-[24px] font-bold leading-[28.8px] lg:text-[48px] lg:leading-[52.8px]">
-                Why Eldorado?
+                {BS_WHY_TITLE}
               </h2>
               <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-4">
                 {BS_WHY.map((card) => (
@@ -195,13 +205,9 @@ export default function BecomeSellerPage() {
                     <div className="flex flex-col items-center gap-2">
                       <p className="text-center text-[20px] font-bold leading-[30px]">{card.title}</p>
                       <p className="text-center text-graytext">{card.desc}</p>
-                      <a
-                        href={card.link}
-                        className="block text-center text-graytext underline"
-                        style={{ textDecoration: "underline" }}
-                      >
-                        Learn how <span aria-hidden="true">→</span>
-                      </a>
+                      <Link href={card.link} className="block text-center text-graytext underline">
+                        {card.linkLabel || "بیشتر"}
+                      </Link>
                     </div>
                   </div>
                 ))}
@@ -211,7 +217,7 @@ export default function BecomeSellerPage() {
             {/* Tools to power your next sale */}
             <section className="flex w-full flex-col items-center gap-10 lg:gap-[48px]">
               <h2 className="text-center text-[24px] font-bold leading-[28.8px] lg:text-[48px] lg:leading-[52.8px]">
-                Tools to power your next sale
+                {BS_TOOLS_TITLE}
               </h2>
               <div className="grid w-full grid-cols-2 gap-x-6 gap-y-1">
                 {BS_TOOLS.map((tool) => (
@@ -240,27 +246,27 @@ export default function BecomeSellerPage() {
                   </div>
                 ))}
               </div>
-              <DarkCta />
+              <DarkCta href={ctaHref} label={BS_CTA_LABEL} />
             </section>
 
             {/* Seller FAQs */}
             <section className="flex w-full flex-col items-center gap-6 lg:gap-[24px]">
               <h2 className="text-center text-[24px] font-bold leading-[28.8px] lg:text-[48px] lg:leading-[52.8px]">
-                Seller FAQs
+                {BS_FAQ_TITLE}
               </h2>
               <div className="flex w-full max-w-3xl flex-col items-start gap-2">
                 <SellerFaq items={BS_FAQS} />
               </div>
-              <a
+              <Link
                 href={BS_FULL_FAQ_HREF}
-                aria-label="Full seller FAQ"
+                aria-label={BS_FAQ_ALL}
                 className="inline-flex min-h-12 min-w-[70px] items-center justify-center overflow-hidden rounded-lg border-2 border-cardborder bg-badgebg px-4 pt-3 pb-3 text-center font-bold leading-[19.2px] text-[rgb(20,_20,_26)]"
               >
                 <span className="flex w-full items-center justify-center gap-[6px] text-center">
-                  <span className="block text-center">Full seller FAQ</span>
+                  <span className="block text-center">{BS_FAQ_ALL}</span>
                   <ArrowRight />
                 </span>
-              </a>
+              </Link>
             </section>
           </div>
 
@@ -275,7 +281,7 @@ export default function BecomeSellerPage() {
                   {BS_CTA_SUB}
                 </p>
               </div>
-              <DarkCta />
+              <DarkCta href={ctaHref} label={BS_CTA_LABEL} />
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ALL_GAMES } from "./data/referenceData";
-import { CATEGORY_NAV, FA, SHOP_ACCOUNTS_HREF } from "./data/faCopy";
+import { CATEGORY_NAV, CONTACT_HREF, FA, SHOP_ACCOUNTS_HREF } from "./data/faCopy";
 import MobileCategorySheet from "./MobileCategorySheet";
 import { prefetchNavMegas } from "./nav-mega-client";
 
@@ -73,7 +73,24 @@ export default function MobileMenu({ onClose }) {
         </button>
       </div>
 
+      <div className="px-4 pt-4">
+        <a
+          href="/become-seller"
+          className="flex h-14 w-full items-center rounded-lg bg-brand px-5 text-start text-base font-bold text-ink"
+        >
+          {FA.sell}
+        </a>
+      </div>
       <ul className="px-4 pt-4">
+        <li className="mb-2">
+          <a
+            href="/dashboard/offers/Account/new#listing-game"
+            onClick={onClose}
+            className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base font-bold text-ink"
+          >
+            {FA.sellAccount}
+          </a>
+        </li>
         {CATEGORY_NAV.map((c) => (
           <li key={c.key} className="mb-2">
             <button
@@ -88,7 +105,18 @@ export default function MobileMenu({ onClose }) {
             </button>
           </li>
         ))}
+        <li className="mb-2">
+          <a
+            href={CONTACT_HREF}
+            className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base text-ink"
+          >
+            {FA.support}
+          </a>
+        </li>
       </ul>
+      <p className="px-5 py-3 text-sm text-graytext">
+        {FA.language} <span className="opacity-60">|</span> {FA.toman}
+      </p>
 
       <p className="px-5 pb-1 pt-5 text-sm font-bold tracking-[0.14px] text-ink">{FA.popularGames}</p>
       <ul className="px-4 pb-6">

@@ -1,8 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getSessionUser } from "@/actions/auth.actions";
 import {
-  DASHBOARD_USER,
+  accountAvatarUrl,
+  accountDisplayName,
+  accountInitials,
+  accountRegisteredLabel,
+  isDashboardNavActive,
+} from "@/lib/account-display";
+import { FA } from "./data/faCopy";
+import {
   DASHBOARD_NAV_GROUPS,
   DASHBOARD_NAV_LINKS,
   DASHBOARD_VIEW_PROFILE,
@@ -107,56 +115,88 @@ function SidebarIcon({ name, className = "" }) {
    row highlights yellow exactly like the capture. Below lg the same block
    spans full width above the content (no mobile reference exists for the
    logged-in dashboard — capture is 1920-only). */
-export default function DashboardSidebar({ active = null }) {
+export default function DashboardSidebar({ active = null, user = null }) {
   const [collapsed, setCollapsed] = useState({});
+  const [sessionUser, setSessionUser] = useState(user);
+  const liveUser = sessionUser || user;
+  const displayName = accountDisplayName(liveUser);
+  const avatar = accountAvatarUrl(liveUser);
+  const phoneName = displayName.includes("***");
+  const [registered, setRegistered] = useState("");
 
-  const toggle = (label) =>
-    setCollapsed((c) => ({ ...c, [label]: !c[label] }));
+  useEffect(() => {
+    if (user?.id) {
+      setSessionUser(user);
+      return undefined;
+    }
+    let cancelled = false;
+    getSessionUser().then((row) => {
+      if (!cancelled) setSessionUser(row);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
+  useEffect(() => {
+    setRegistered(accountRegisteredLabel(liveUser));
+  }, [liveUser]);
+
+  const toggle = (id) =>
+    setCollapsed((c) => ({ ...c, [id]: !c[id] }));
 
   return (
     <div className="h-full w-full bg-white lg:w-[260px]">
-      <nav id="dashboard-sidebar" className="sticky left-0 top-[100px]">
+      <nav id="dashboard-sidebar" className="sticky start-0 top-[100px]">
         <div className="flex h-[62px] justify-start px-[10px] pb-3 pt-[10px]">
-          <div className="mr-[10px]">
-            <div className="size-10 overflow-hidden rounded-full">
-              <img alt="Profile avatar" src={DASHBOARD_USER.avatar} className="block size-full object-cover align-middle" />
+          <div className="me-[10px]">
+            <div className="size-10 overflow-hidden rounded-full bg-badgebg text-center text-[13px] font-bold leading-10">
+              {avatar ? (
+                <img alt={FA.profileAvatar} src={avatar} className="block size-full object-cover align-middle" />
+              ) : (
+                <span aria-hidden="true">{accountInitials(liveUser)}</span>
+              )}
             </div>
           </div>
-          <div className="flex flex-col justify-center">
+          <div className="flex min-w-0 flex-col justify-center">
             <h5 className="flex items-center gap-1 text-[14px] font-bold leading-[19.6px]">
-              <a href={DASHBOARD_USER.profileUrl} className="block">
-                {DASHBOARD_USER.name}
+              <a
+                href={DASHBOARD_VIEW_PROFILE.href}
+                className="block truncate"
+                dir={phoneName ? "ltr" : "auto"}
+              >
+                {displayName}
               </a>
             </h5>
-            <p className="text-[14px] leading-[21px]">{DASHBOARD_USER.registered}</p>
+            {registered ? <p className="text-[14px] leading-[21px] text-graytext">{registered}</p> : null}
           </div>
         </div>
 
         <div className="border-t-[0.8px] border-cardborder px-[10px] pb-3 pt-3">
           <div className="mb-2 mt-2 flex flex-col gap-2">
             {DASHBOARD_NAV_GROUPS.map((group) => {
-              const isCollapsed = !!collapsed[group.label];
+              const isCollapsed = !!collapsed[group.id];
               return (
-                <div key={group.label} className="flex flex-col">
+                <div key={group.id} className="flex flex-col">
                   <button
                     type="button"
-                    onClick={() => toggle(group.label)}
+                    onClick={() => toggle(group.id)}
                     aria-expanded={!isCollapsed}
-                    className="flex items-center text-left"
+                    className="flex items-center text-start"
                   >
-                    <SidebarIcon name={group.icon} className="ml-[4px] mr-[12px]" />
+                    <SidebarIcon name={group.icon} className="ms-[4px] me-[12px]" />
                     <span className="block">{group.label}</span>
-                    <span className={`ml-auto text-ink/70 transition-transform ${isCollapsed ? "-rotate-90" : ""}`}>
+                    <span className={`ms-auto text-ink/70 transition-transform ${isCollapsed ? "-rotate-90" : ""}`}>
                       {CHEVRON}
                     </span>
                   </button>
                   {!isCollapsed && (
-                    <div className="flex flex-col pl-7">
+                    <div className="flex flex-col ps-7">
                       {group.children.map((item) => {
-                        const isActive = active === item.label;
+                        const isActive = isDashboardNavActive(active, item);
                         return (
                           <a
-                            key={item.label}
+                            key={item.id}
                             href={item.href}
                             aria-current={isActive ? "page" : undefined}
                             className={`block py-2 px-[10px] ${isActive ? "bg-brand" : "hover:text-brand"}`}
@@ -172,15 +212,15 @@ export default function DashboardSidebar({ active = null }) {
             })}
 
             {DASHBOARD_NAV_LINKS.map((link) => {
-              const isActive = active === link.label;
+              const isActive = isDashboardNavActive(active, link);
               return (
                 <a
-                  key={link.label}
+                  key={link.id}
                   href={link.href}
                   aria-current={isActive ? "page" : undefined}
                   className={`flex items-center p-1 ${isActive ? "bg-brand" : "hover:text-brand"}`}
                 >
-                  <SidebarIcon name={link.icon} className="mr-[12px]" />
+                  <SidebarIcon name={link.icon} className="me-[12px]" />
                   <span className="block">{link.label}</span>
                 </a>
               );
@@ -194,7 +234,7 @@ export default function DashboardSidebar({ active = null }) {
         >
           <div className="my-[12px] mx-[10px] flex items-center p-1">
             <SidebarIcon name={DASHBOARD_VIEW_PROFILE.icon} />
-            <span className="ml-[7px] block">{DASHBOARD_VIEW_PROFILE.label}</span>
+            <span className="ms-[7px] block">{DASHBOARD_VIEW_PROFILE.label}</span>
           </div>
         </a>
       </nav>

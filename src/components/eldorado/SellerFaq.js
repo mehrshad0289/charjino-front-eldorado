@@ -69,7 +69,7 @@ export default function SellerFaq({ items }) {
               type="button"
               onClick={() => toggle(i)}
               aria-expanded={isOpen}
-              className="flex w-full items-center justify-between gap-[6px] text-left"
+              className="flex w-full items-center justify-between gap-[6px] text-start"
             >
               <span className="font-bold">{item.q}</span>
               <Chevron open={isOpen} />

@@ -9,6 +9,8 @@
    inline SVGs in the components; names for the unnamed header icon buttons
    are documented assumptions. */
 
+import { FA } from "./faCopy";
+
 const ASSET = "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F";
 
 export const DASHBOARD_USER = {
@@ -28,27 +30,30 @@ export const DASHBOARD_BANNER = `${ASSET}88ee8d54b0513acd4a7d21d309470a1d431bf0e
 export const DASHBOARD_NAV_GROUPS = [
   {
     icon: "orders",
-    label: "Orders",
+    id: "Orders",
+    label: FA.orders,
     children: [
-      { label: "Purchased orders", href: "/dashboard/orders/purchased" },
-      { label: "Sold orders", href: "/dashboard/orders/sold" },
+      { id: "Purchased orders", label: FA.purchasedOrders, href: "/dashboard/orders/purchased" },
+      { id: "Sold orders", label: FA.soldOrders, href: "/dashboard/orders/sold" },
     ],
   },
   {
     icon: "offers",
-    label: "Offers",
+    id: "Offers",
+    label: FA.offers,
     children: [
-      { label: "Currency", href: "/dashboard/offers/Currency" },
-      { label: "Accounts", href: "/dashboard/offers/Account" },
-      { label: "Top Ups", href: "/dashboard/offers/TopUp" },
-      { label: "Items", href: "/dashboard/offers/CustomItem" },
-      { label: "Gift Cards", href: "/dashboard/offers/GiftCard" },
+      { id: "Accounts", label: FA.accounts, href: "/dashboard/offers/Account" },
+      { id: "Top Ups", label: FA.topUps, href: "/dashboard/offers/TopUp" },
+      { id: "Items", label: FA.items, href: "/dashboard/offers/CustomItem" },
+      { id: "Gift Cards", label: FA.giftCards, href: "/dashboard/offers/GiftCard" },
+      { id: "Currency", label: FA.currency, href: "/dashboard/offers/Currency" },
     ],
   },
   {
     icon: "boosting",
-    label: "Boosting",
-    children: [{ label: "My requests", href: "/dashboard/boosting/my-requests" }],
+    id: "Boosting",
+    label: FA.boosting,
+    children: [{ id: "My requests", label: FA.myRequests, href: "/dashboard/boosting/my-requests" }],
   },
 ];
 
@@ -58,27 +63,27 @@ export const DASHBOARD_NAV_GROUPS = [
    had. Treated as a live-site change, not a per-page variation: removed
    from the shared nav (the link itself lives on at /become-seller). */
 export const DASHBOARD_NAV_LINKS = [
-  { icon: "loyalty", label: "Loyalty", href: "/dashboard/loyalty" },
-  { icon: "wallet", label: "Wallet", href: "/dashboard/wallet" },
-  { icon: "messages", label: "Messages", href: "/dashboard/messages" },
-  { icon: "notifications", label: "Notifications", href: "/dashboard/notifications" },
-  { icon: "feedback", label: "Feedback", href: "/dashboard/feedback" },
-  { icon: "settings", label: "Account settings", href: "/dashboard/settings" },
+  { icon: "loyalty", id: "Loyalty", label: FA.loyalty, href: "/dashboard/loyalty" },
+  { icon: "wallet", id: "Wallet", label: FA.wallet, href: "/dashboard/wallet" },
+  { icon: "messages", id: "Messages", label: FA.messages, href: "/dashboard/messages" },
+  { icon: "notifications", id: "Notifications", label: FA.notifications, href: "/dashboard/notifications" },
+  { icon: "feedback", id: "Feedback", label: FA.feedback, href: "/dashboard/feedback" },
+  { icon: "settings", id: "Account settings", label: FA.accountSettings, href: "/dashboard/settings" },
 ];
 
 export const DASHBOARD_VIEW_PROFILE = {
   icon: "profile",
-  label: "View Profile",
-  /* Session 18: internal profile route (was the live URL). */
-  href: "/users/NewFloat-0una",
+  id: "View Profile",
+  label: FA.viewProfile,
+  href: "/dashboard/settings",
 };
 
 /* /dashboard/offers/Account page content (empty state — the capture's
    account is brand new and has no offers yet) */
 export const DASHBOARD_OFFERS_PAGE = {
   icon: "tag",
-  title: "Offers",
-  action: { label: "New Offer", href: "/become-seller", ariaLabel: "New Offer" },
+  title: FA.offers,
+  action: { label: FA.newOffer, href: "/become-seller", ariaLabel: FA.newOffer },
   infoBanner: {
     title: "Want to pause all your offers?",
     bodyParts: [
@@ -140,7 +145,7 @@ export const DASHBOARD_OFFERS_GIFTCARD_PAGE = {
    (documented assumption, same convention as the tag icon). */
 export const DASHBOARD_ORDERS_PURCHASED_PAGE = {
   icon: "orders",
-  title: "Purchased orders",
+  title: FA.purchasedOrders,
   filters: { status: "All statuses", period: "Recent" },
   emptyState: {
     image: DASHBOARD_OFFERS_PAGE.emptyState.image,
@@ -152,7 +157,7 @@ export const DASHBOARD_ORDERS_PURCHASED_PAGE = {
 
 export const DASHBOARD_ORDERS_SOLD_PAGE = {
   icon: "orders",
-  title: "Sold orders",
+  title: FA.soldOrders,
   filters: {
     status: "All statuses",
     period: "Recent",
@@ -179,7 +184,7 @@ export const DASHBOARD_ORDERS_SOLD_PAGE = {
 
 export const DASHBOARD_FEEDBACK_PAGE = {
   icon: "feedback",
-  title: "Feedback",
+  title: FA.feedback,
   stats: [
     { icon: "completed", label: "Completed orders", value: "0" },
     { icon: "positive", label: "Positive feedback", value: "0" },
@@ -197,7 +202,7 @@ export const DASHBOARD_FEEDBACK_PAGE = {
 
 export const DASHBOARD_WALLET_PAGE = {
   icon: "wallet",
-  title: "Wallet",
+  title: FA.wallet,
   balanceLabel: "Balance",
   balanceValue: "0.00",
   filterLabel: "All",
@@ -207,7 +212,7 @@ export const DASHBOARD_WALLET_PAGE = {
 
 export const DASHBOARD_MESSAGES_PAGE = {
   icon: "messages",
-  title: "Messages",
+  title: FA.messages,
   /* Session 22 (messages-notempty capture): the empty state is gone —
      the page now renders a filter chip row + an "Unread messages only"
      toggle above an (in every reference) client-rendered chat container.
@@ -228,7 +233,7 @@ export const DASHBOARD_MESSAGES_PAGE = {
    knob). Description textarea is EMPTY with placeholder "Type here...". */
 export const DASHBOARD_SETTINGS_PAGE = {
   icon: "settings",
-  title: "Account settings",
+  title: FA.accountSettings,
   email: "mehrshad02899@gmail.com",
   emailNote: "This email is linked to your account. It is not visible to other users.",
   username: "NewFloat-0una",

@@ -124,36 +124,48 @@ function DetailRow({ row }) {
   );
 }
 
-function TrustRowsBlock() {
+function TrustRowsBlock({ trust }) {
   return (
     <div className="flex flex-col gap-3 px-4 pb-5 pt-4 lg:px-6 lg:pb-6">
-      <TrustRow icon={<ShieldIcon />} label="Money-back guarantee" note="Protected by TradeShield" />
-      <TrustRow icon={<BoltIcon />} label="Fast checkout options">
-        <PaymentBadge src={PRODUCT_PAYMENTS.applePay} alt="Apple Pay" />
-        <PaymentBadge src={PRODUCT_PAYMENTS.googlePay} alt="Google Pay" />
-        <PaymentBadge src={PRODUCT_PAYMENTS.paypal} alt="PayPal" />
-      </TrustRow>
-      <TrustRow icon={<SupportIcon />} label="24/7 live support" note="We're always here to help" />
+      <TrustRow icon={<ShieldIcon />} label={trust?.guarantee || "Money-back guarantee"} note={trust?.guaranteeNote || "Protected by TradeShield"} />
+      {trust ? null : (
+        <TrustRow icon={<BoltIcon />} label="Fast checkout options">
+          <PaymentBadge src={PRODUCT_PAYMENTS.applePay} alt="Apple Pay" />
+          <PaymentBadge src={PRODUCT_PAYMENTS.googlePay} alt="Google Pay" />
+          <PaymentBadge src={PRODUCT_PAYMENTS.paypal} alt="PayPal" />
+        </TrustRow>
+      )}
+      <TrustRow icon={<SupportIcon />} label={trust?.support || "24/7 live support"} note={trust?.supportNote || "We're always here to help"} />
     </div>
   );
 }
 
-function BuyNow() {
+function BuyNow({ href, label }) {
+  const text = label || "Buy now";
+  const className = "block w-full rounded-lg bg-darkbtn py-3 text-center text-[16px] font-bold leading-[24px] text-white";
   return (
     <div className="px-4 pb-1 lg:px-6 lg:pb-4">
-      <button
-        type="button"
-        aria-label="Buy now"
-        className="block w-full rounded-lg bg-darkbtn py-3 text-center text-[16px] font-bold leading-[24px] text-white"
-      >
-        Buy now
-      </button>
+      {href ? (
+        <a href={href} aria-label={text} className={className}>
+          {text}
+        </a>
+      ) : (
+        <button type="button" aria-label={text} className={className}>
+          {text}
+        </button>
+      )}
     </div>
   );
 }
 
-export default function ProductOfferCard() {
-  const mobileRows = PRODUCT.details.filter((r) => !r.mobileHidden);
+export default function ProductOfferCard({ offer }) {
+  const price = offer?.price || PRODUCT.price;
+  const details = offer?.details || PRODUCT.details;
+  const banner = offer?.banner || "Full email access included";
+  const buyHref = offer?.buyHref || "";
+  const buyLabel = offer?.buyLabel || "Buy now";
+  const trust = offer?.trust;
+  const mobileRows = details.filter((row) => !row.mobileHidden);
   return (
     <>
       {/* mobile: chip + big price + rows + buy + trust, white flow (live @390) */}
@@ -161,12 +173,12 @@ export default function ProductOfferCard() {
         <div className="px-4 pt-1">
           <div className="flex w-fit items-center gap-[6px] rounded-full border-[0.8px] border-[rgba(71,131,255,0.4)] bg-[rgba(71,131,255,0.08)] px-3 py-1 text-[14px] leading-[19.6px]">
             <LinkIcon size={16} />
-            <span className="font-bold">Full email access included</span>
+            <span className="font-bold">{banner}</span>
             <span className="text-graytext">
               <InfoIcon />
             </span>
           </div>
-          <strong className="mt-3 block text-[28px] font-bold leading-[34px]">{PRODUCT.price}</strong>
+          <strong className="mt-3 block text-[28px] font-bold leading-[34px]">{price}</strong>
         </div>
         <div className="mt-3 border-t-[0.8px] border-cardborder">
           {mobileRows.map((row) => (
@@ -174,9 +186,9 @@ export default function ProductOfferCard() {
           ))}
         </div>
         <div className="pb-4 pt-4">
-          <BuyNow />
+          <BuyNow href={buyHref} label={buyLabel} />
         </div>
-        <TrustRowsBlock />
+        <TrustRowsBlock trust={trust} />
       </div>
 
       {/* desktop: sidebar card (capture) */}
@@ -188,21 +200,21 @@ export default function ProductOfferCard() {
           <span className="text-focusblue">
             <LinkIcon />
           </span>
-          <strong className="block font-bold">Full email access included</strong>
+          <strong className="block font-bold">{banner}</strong>
           <span className="text-graytext">
             <InfoIcon />
           </span>
         </div>
         <div className="flex flex-col gap-[16px] border-b-[0.8px] border-cardborder px-6 pb-4 pt-6">
-          <strong className="block text-[24px] font-bold leading-[28.8px]">{PRODUCT.price}</strong>
+          <strong className="block text-[24px] font-bold leading-[28.8px]">{price}</strong>
         </div>
-        {PRODUCT.details.map((row) => (
+        {details.map((row) => (
           <DetailRow key={row.label} row={row} />
         ))}
         <div className="pb-4 pt-4">
-          <BuyNow />
+          <BuyNow href={buyHref} label={buyLabel} />
         </div>
-        <TrustRowsBlock />
+        <TrustRowsBlock trust={trust} />
       </div>
     </>
   );

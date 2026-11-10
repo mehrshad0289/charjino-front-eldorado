@@ -49,15 +49,20 @@ function GrayIcon({ kind }) {
   );
 }
 
-export default function ProductSellerCard() {
-  const s = PRODUCT_SELLER;
+export default function ProductSellerCard({ seller }) {
+  const s = seller || PRODUCT_SELLER;
+  const avatar = s.avatar ? (
+    <img alt={s.name} src={s.avatar} className="block h-12 w-12 object-cover align-middle" />
+  ) : (
+    <span className="flex h-12 w-12 items-center justify-center bg-badgebg text-[16px] font-bold">{(s.name || "ف").slice(0, 1)}</span>
+  );
   return (
     <>
       {/* mobile compact card (live @390) */}
       <div className="rounded-lg bg-white p-4 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] lg:hidden">
         <div className="flex items-center gap-[10px]">
           <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full">
-            <img alt={s.name} src={s.avatar} className="block h-12 w-12 object-cover align-middle" />
+            {avatar}
           </div>
           <div className="flex flex-col justify-center gap-[7px]">
             <div className="flex items-center gap-1 text-[14px] font-bold leading-[17px]">
@@ -67,9 +72,7 @@ export default function ProductSellerCard() {
             <div className="flex items-center gap-1.5 text-[14px] leading-[17px]">
               <ThumbsUp />
               <span className="font-bold">{s.feedback}</span>
-              <button type="button" className="ml-1 underline decoration-solid">
-                2,701 reviews
-              </button>
+              <span className="ms-1 underline decoration-solid">{s.reviews || "2,701 reviews"}</span>
             </div>
           </div>
         </div>
@@ -79,7 +82,7 @@ export default function ProductSellerCard() {
       <div className="hidden rounded-lg bg-white shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] lg:block">
         <div className="flex items-center gap-[12px] px-6 pb-4 pt-6">
           <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full">
-            <img alt={s.name} src={s.avatar} className="block h-12 w-12 object-cover align-middle" />
+            {avatar}
           </div>
           <div className="grow">
             <div className="flex items-center gap-1 font-bold">
@@ -89,28 +92,34 @@ export default function ProductSellerCard() {
             <div className="mt-[4px] flex items-center gap-1 text-[14px] leading-[19.6px]">
               <ThumbsUp />
               <button type="button" className="ml-[4px] text-[14px] underline decoration-solid text-linkblue">
-                {s.feedback} positive feedback
+                {s.feedbackNote || `${s.feedback} positive feedback`}
               </button>
             </div>
           </div>
         </div>
         <div className="grid gap-[12px] border-y-[0.8px] border-cardborder px-6 py-4 text-[14px] leading-[19.6px]">
-          <div className="flex items-center gap-[8px]">
-            <span className="m-[3px] block h-[10px] w-[10px] rounded-full bg-[rgb(0,_228,_201)]" aria-hidden="true" />
-            <span className="block">{s.online}</span>
-          </div>
-          <div className="flex items-center gap-[8px]">
-            <span className="text-graytext">
-              <GrayIcon kind="orders" />
-            </span>
-            <span className="block">{s.orders}</span>
-          </div>
-          <div className="flex items-center gap-[8px]">
-            <span className="text-graytext">
-              <GrayIcon kind="since" />
-            </span>
-            <span className="block">{s.sellingSince}</span>
-          </div>
+          {s.online ? (
+            <div className="flex items-center gap-[8px]">
+              <span className="m-[3px] block h-[10px] w-[10px] rounded-full bg-[rgb(0,_228,_201)]" aria-hidden="true" />
+              <span className="block">{s.online}</span>
+            </div>
+          ) : null}
+          {s.orders ? (
+            <div className="flex items-center gap-[8px]">
+              <span className="text-graytext">
+                <GrayIcon kind="orders" />
+              </span>
+              <span className="block">{s.orders}</span>
+            </div>
+          ) : null}
+          {s.sellingSince ? (
+            <div className="flex items-center gap-[8px]">
+              <span className="text-graytext">
+                <GrayIcon kind="since" />
+              </span>
+              <span className="block">{s.sellingSince}</span>
+            </div>
+          ) : null}
         </div>
         <div className="flex gap-[8px] px-6 pb-6 pt-4">
           <div className="flex w-fit items-center gap-[8px] rounded-lg bg-[rgba(71,131,255,0.12)] px-3 py-1">

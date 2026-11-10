@@ -22,19 +22,22 @@ function ShieldRoundel() {
   );
 }
 
-export default function ProductProtectCard() {
+export default function ProductProtectCard({ title, items, label }) {
   const [open, setOpen] = useState(false);
+  const heading = title || "How we protect your purchase";
+  const rows = items || PRODUCT_PROTECT;
+  const aria = label || heading;
   return (
     <div className="rounded-lg bg-[rgba(71,131,255,0.08)] outline-[0.8px] outline-[rgba(71,131,255,0.2)]">
       <button
         type="button"
         aria-expanded={open}
-        aria-label="How we protect your purchase"
+        aria-label={aria}
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center gap-[10px] rounded-t-lg px-4 py-3 text-left lg:px-5"
       >
         <ShieldRoundel />
-        <span className="grow text-[14px] font-bold leading-[19.6px]">How we protect your purchase</span>
+        <span className="grow text-start text-[14px] font-bold leading-[19.6px]">{heading}</span>
         <svg
           width="18"
           height="18"
@@ -48,7 +51,7 @@ export default function ProductProtectCard() {
       </button>
       {open && (
         <div className="flex flex-col gap-4 px-4 pb-5 pt-1 lg:px-5">
-          {PRODUCT_PROTECT.map((f) => (
+          {rows.map((f) => (
             <div key={f.title}>
               <div className="text-[14px] font-bold leading-[19.6px]">{f.title}</div>
               <div className="text-[14px] leading-[19.6px] text-graytext">{f.text}</div>

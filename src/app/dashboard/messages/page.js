@@ -5,10 +5,7 @@ import DashboardPageHeader from "../../../components/eldorado/DashboardPageHeade
 import DashboardMessagesPanel from "../../../components/eldorado/DashboardMessagesPanel";
 import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
-import {
-  DASHBOARD_USER,
-  DASHBOARD_MESSAGES_PAGE,
-} from "../../../components/eldorado/data/dashboardData";
+import { DASHBOARD_MESSAGES_PAGE } from "../../../components/eldorado/data/dashboardData";
 
 /* Dashboard page /dashboard/messages. Session 17 built the EMPTY state
    from `ui ux/Messages/…`; session 22 rebuilt it per the user-pushed
@@ -37,7 +34,7 @@ export default function DashboardMessagesPage() {
   const { icon, title, chips, unreadToggleLabel } = DASHBOARD_MESSAGES_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} notiCount={26} favCount="9+" />
+      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell active="Messages">

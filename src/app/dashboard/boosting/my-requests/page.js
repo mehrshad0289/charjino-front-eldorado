@@ -5,8 +5,8 @@ import DashboardPageHeader from "../../../../components/eldorado/DashboardPageHe
 import EmptyState from "../../../../components/eldorado/EmptyState";
 import Footer from "../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../components/eldorado/ChatBubble";
-import { DASHBOARD_USER } from "../../../../components/eldorado/data/dashboardData";
 import { DASHBOARD_BOOSTING_REQUESTS_PAGE } from "../../../../components/eldorado/data/dashboardExtraData";
+import { FA } from "../../../../components/eldorado/data/faCopy";
 
 /* Dashboard page /dashboard/boosting/my-requests — session 26. The
    sidebar's Boosting group links here (DASHBOARD_NAV_GROUPS) but no
@@ -23,14 +23,14 @@ export default function DashboardBoostingRequestsPage() {
   const { icon, title, emptyState } = DASHBOARD_BOOSTING_REQUESTS_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
+      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell active="My requests">
           <DashboardPageHeader
             icon={icon}
             title={title}
-            action={{ label: "New request", href: "/become-seller", ariaLabel: "New request" }}
+            action={{ label: FA.newRequest, href: "/become-seller", ariaLabel: FA.newRequest }}
           />
           <div className="relative mt-8 max-w-[1048px] px-6 pb-[50px]">
             <EmptyState {...emptyState} />

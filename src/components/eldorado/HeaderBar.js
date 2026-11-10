@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { getSessionUser, logout } from "@/actions/auth.actions";
 import Logo from "./Logo";
 import SearchOverlay from "./SearchOverlay";
 import MobileMenu from "./MobileMenu";
 import { FA } from "./data/faCopy";
+import { accountAvatarUrl, accountInitials } from "@/lib/account-display";
 
 function SearchIcon({ className = "", stroke = "#ffffff", size = 24 }) {
   return (
@@ -50,19 +53,29 @@ function GearIcon() {
    Session 22 (messages-notempty capture): the FOURTH icon (Favorites)
    can carry the same yellow badge with a "9+" value — optional favCount
    prop, default off. */
-function LoggedInActions({ user, notiCount = null, favCount = null, avatarAlert = false }) {
+function LoggedInActions({
+  user,
+  notiCount = null,
+  favCount = null,
+  avatarAlert = false,
+  accountMenu = false,
+  onLogout,
+}) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const avatar = accountAvatarUrl(user);
+
   return (
     <>
       <button
         type="button"
-        aria-label="Notifications"
+        aria-label={FA.notifications}
         className="hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
       >
         <BellIcon />
       </button>
       <button
         type="button"
-        aria-label="Messages"
+        aria-label={FA.messages}
         className="relative hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
       >
         <ChatIcon />
@@ -74,7 +87,7 @@ function LoggedInActions({ user, notiCount = null, favCount = null, avatarAlert 
       </button>
       <button
         type="button"
-        aria-label="Favorites"
+        aria-label={FA.favorites}
         className="relative hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
       >
         <HeartIcon />
@@ -84,16 +97,58 @@ function LoggedInActions({ user, notiCount = null, favCount = null, avatarAlert 
           </span>
         )}
       </button>
-      <button type="button" aria-label="Account menu" className="relative ml-1 flex items-center">
-        <span className="size-11 overflow-hidden rounded-full border-2 border-black/0">
-          <img alt="Profile avatar" src={user.avatar} className="block size-11 object-cover align-middle" />
-        </span>
-        {avatarAlert && (
-          <span className="absolute right-0 top-0 flex h-4 min-h-4 items-center justify-center rounded-[0.4375rem] bg-[rgb(255,_141,_0)] px-[5px] pt-[2px] text-[12px] leading-[18px] text-ink">
-            !
+      <div className="relative ms-1 flex items-center">
+        <button
+          type="button"
+          aria-label={FA.accountMenu}
+          aria-expanded={accountMenu ? menuOpen : undefined}
+          className="relative flex items-center"
+          onClick={() => {
+            if (accountMenu) setMenuOpen((open) => !open);
+          }}
+        >
+          <span className="size-11 overflow-hidden rounded-full border-2 border-black/0 bg-searchbg text-center text-sm font-bold leading-[44px] text-white">
+            {avatar ? (
+              <img alt="" src={avatar} className="block size-11 object-cover align-middle" />
+            ) : (
+              accountInitials(user)
+            )}
           </span>
-        )}
-      </button>
+          {avatarAlert && (
+            <span className="absolute right-0 top-0 flex h-4 min-h-4 items-center justify-center rounded-[0.4375rem] bg-[rgb(255,_141,_0)] px-[5px] pt-[2px] text-[12px] leading-[18px] text-ink">
+              !
+            </span>
+          )}
+        </button>
+        {accountMenu && menuOpen ? (
+          <div className="absolute end-0 top-[calc(100%+8px)] z-50 min-w-[160px] rounded-lg border border-searchstroke bg-headerdark p-2 text-sm text-white">
+            <Link
+              href="/dashboard/offers/Account/new#listing-game"
+              className="block rounded-md px-3 py-2 hover:bg-white/10"
+              onClick={() => setMenuOpen(false)}
+            >
+              {FA.sellAccount}
+            </Link>
+            <Link
+              href="/dashboard/settings"
+              className="block rounded-md px-3 py-2 hover:bg-white/10"
+              onClick={() => setMenuOpen(false)}
+            >
+              {FA.dashboard}
+            </Link>
+            <button
+              type="button"
+              className="block w-full rounded-md px-3 py-2 text-start hover:bg-white/10"
+              onClick={() => {
+                setMenuOpen(false);
+                onLogout?.();
+              }}
+            >
+              {FA.logout}
+            </button>
+          </div>
+        ) : null}
+      </div>
     </>
   );
 }
@@ -142,8 +197,31 @@ export default function HeaderBar({
   favCount = null,
   avatarAlert = false,
 }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const captureSession = loggedIn === true;
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [sessionUser, setSessionUser] = useState(user);
+  const [sessionKnown, setSessionKnown] = useState(captureSession);
+  const liveUser = captureSession ? user : sessionUser;
+  const isLoggedIn = captureSession || Boolean(liveUser);
+  const loginHref =
+    pathname && pathname !== "/login" ? `/login?next=${encodeURIComponent(pathname)}` : "/login";
+
+  useEffect(() => {
+    if (captureSession) return undefined;
+    let cancelled = false;
+    getSessionUser().then((row) => {
+      if (!cancelled) {
+        setSessionUser(row);
+        setSessionKnown(true);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [captureSession]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen || searchOpen ? "hidden" : "";
@@ -164,6 +242,12 @@ export default function HeaderBar({
     return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen, searchOpen]);
 
+  async function handleLogout() {
+    await logout();
+    setSessionUser(null);
+    router.refresh();
+  }
+
   return (
     <header className="relative z-40 bg-headerdark">
       <div className="flex items-center px-4 pt-2.5 lg:h-[60px] lg:px-6 lg:pt-0">
@@ -176,7 +260,7 @@ export default function HeaderBar({
           <BurgerIcon />
         </button>
 
-        <Link href="/" aria-label="Eldorado logo" className="shrink-0">
+        <Link href="/" aria-label={FA.logo} className="shrink-0">
           <Logo color="#FFFFFF" className="hidden lg:block" />
           <Logo iconOnly size={42} className="lg:hidden" />
         </Link>
@@ -193,19 +277,34 @@ export default function HeaderBar({
         </div>
 
         <div className="ms-auto flex shrink-0 items-center gap-1">
-          {loggedIn ? (
-            <LoggedInActions user={user} notiCount={notiCount} favCount={favCount} avatarAlert={avatarAlert} />
+          <Link
+            href="/dashboard/offers/Account"
+            className="inline-flex h-[42px] items-center px-3 text-sm font-bold text-white hover:text-brand"
+          >
+            {FA.sell}
+          </Link>
+          {!sessionKnown ? (
+            <span className="inline-flex h-[42px] min-w-[70px]" aria-hidden="true" />
+          ) : isLoggedIn ? (
+            <LoggedInActions
+              user={liveUser}
+              notiCount={notiCount}
+              favCount={favCount}
+              avatarAlert={avatarAlert}
+              accountMenu={!captureSession}
+              onLogout={handleLogout}
+            />
           ) : (
             <>
               <Link
-                href="/login"
+                href={loginHref}
                 className="inline-flex h-[42px] min-w-[70px] items-center justify-center rounded-lg bg-brand px-4 text-sm font-bold text-ink"
               >
                 {FA.login}
               </Link>
               <button
                 type="button"
-                aria-label="Settings"
+                aria-label={FA.settings}
                 className="flex h-[42px] w-[42px] items-center justify-center text-white lg:hidden"
               >
                 <GearIcon />

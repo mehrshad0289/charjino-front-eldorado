@@ -11,14 +11,20 @@ import { PRODUCT } from "./data/productData";
 export default function ProductTitleCard({ product }) {
   const item = product || PRODUCT;
   const title = item.title || (!product ? PRODUCT.title : "");
-  const image = item.image || item.thumbnail || (!product ? PRODUCT.image : "");
+  const images = Array.isArray(item.images) && item.images.length
+    ? item.images
+    : [{ url: item.image || item.thumbnail || (!product ? PRODUCT.image : ""), alt: title }].filter((row) => row.url);
+  const video = item.video || "";
   return (
     <>
       {/* mobile: inset image on white, then white title section (live @390) */}
       <div className="lg:hidden">
-        <div className="flex justify-center bg-white p-[10px]">
-          {image ? (
-            <img alt={title} src={image} className="block h-auto w-full max-w-[355px] rounded-lg object-cover align-middle" />
+        <div className="flex gap-3 overflow-x-auto bg-white p-[10px]">
+          {images.map((image) => (
+            <img key={image.url} alt={image.alt || title} src={image.url} className="block h-[255px] w-[255px] shrink-0 rounded-lg object-cover align-middle" />
+          ))}
+          {video ? (
+            <video controls preload="metadata" className="block w-full max-w-[355px] rounded-lg bg-black" src={video} />
           ) : null}
         </div>
         <div className="bg-white px-4 pb-4 pt-3">
@@ -33,12 +39,16 @@ export default function ProductTitleCard({ product }) {
         </div>
         <div className="p-[17px]">
           <div className="overflow-x-auto whitespace-nowrap">
-            {image ? (
+            {images.map((image) => (
               <img
-                alt={title}
-                src={image}
-                className="mx-[24px] inline-block h-[255px] w-[255px] rounded-lg object-cover align-middle"
+                key={image.url}
+                alt={image.alt || title}
+                src={image.url}
+                className="mx-[12px] inline-block h-[255px] w-[255px] rounded-lg object-cover align-middle"
               />
+            ))}
+            {video ? (
+              <video controls preload="metadata" className="mx-[12px] inline-block h-[255px] w-[255px] rounded-lg bg-black align-middle" src={video} />
             ) : null}
           </div>
         </div>

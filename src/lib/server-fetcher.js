@@ -42,7 +42,9 @@ export async function serverFetch(path, init = {}) {
     headers.set("Accept", "application/json");
   }
   if (requestInit.body && !headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
+    if (!(requestInit.body instanceof FormData)) {
+      headers.set("Content-Type", "application/json");
+    }
   }
 
   let response;

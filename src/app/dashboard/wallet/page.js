@@ -5,10 +5,7 @@ import DashboardPageHeader from "../../../components/eldorado/DashboardPageHeade
 import DashboardWalletTable from "../../../components/eldorado/DashboardWalletTable";
 import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
-import {
-  DASHBOARD_USER,
-  DASHBOARD_WALLET_PAGE,
-} from "../../../components/eldorado/data/dashboardData";
+import { DASHBOARD_WALLET_PAGE } from "../../../components/eldorado/data/dashboardData";
 
 /* Dashboard page /dashboard/wallet (own .make capture `ui ux/Wallet/…`,
    decoded 2026-11-05, 1920-only): header "Wallet" (no action button),
@@ -25,7 +22,7 @@ export default function DashboardWalletPage() {
   const { icon, title, ...table } = DASHBOARD_WALLET_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
+      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell active="Wallet">

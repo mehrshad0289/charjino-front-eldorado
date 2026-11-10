@@ -8,10 +8,12 @@ import { PRODUCT_GAME } from "./data/productData";
    game names centered ("eFootball 2027" bold, "eFootball 2026" gray) —
    the live mobile banner doubles as the breadcrumb. */
 
-function GameIcon() {
+function GameIcon({ game }) {
+  const item = game || PRODUCT_GAME;
+  if (!item.icon) return <span className="block h-7 w-7 rounded-sm bg-white/15" />;
   return (
     <div className="h-7 shrink-0 overflow-hidden">
-      <img alt={PRODUCT_GAME.name} src={PRODUCT_GAME.icon} className="block h-7 w-7 rounded-sm object-cover align-middle" />
+      <img alt={item.name} src={item.icon} className="block h-7 w-7 rounded-sm object-cover align-middle" />
     </div>
   );
 }
@@ -24,28 +26,29 @@ function BackChevron() {
   );
 }
 
-export default function ProductBanner() {
+export default function ProductBanner({ game }) {
+  const item = game || PRODUCT_GAME;
   return (
     <div className="w-full bg-catactive shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]">
       {/* mobile: back chevron + stacked game names (live @390) */}
       <div className="relative flex min-h-[64px] flex-col justify-center px-4 py-2 lg:hidden">
         <a
-          href={PRODUCT_GAME.backHref}
-          aria-label={PRODUCT_GAME.backLabel}
-          className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center"
+          href={item.backHref}
+          aria-label={item.backLabel}
+          className="absolute start-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rtl:rotate-180"
         >
           <BackChevron />
         </a>
         <div className="pointer-events-none flex flex-col items-center leading-tight">
-          <div className="text-[16px] font-bold text-white">{PRODUCT_GAME.name}</div>
-          <div className="text-[12px] text-navgray">{PRODUCT_GAME.subName}</div>
+          <div className="text-[16px] font-bold text-white">{item.name}</div>
+          {item.subName ? <div className="text-[12px] text-navgray">{item.subName}</div> : null}
         </div>
       </div>
 
       {/* desktop: game icon + name only (capture has no tabs here) */}
       <div className="mx-auto hidden h-12 w-full max-w-[1208px] items-center px-6 lg:flex">
-        <GameIcon />
-        <div className="ml-2 font-bold leading-[20px] text-white">{PRODUCT_GAME.name}</div>
+        <GameIcon game={item} />
+        <div className="ms-2 font-bold leading-[20px] text-white">{item.name}</div>
       </div>
     </div>
   );

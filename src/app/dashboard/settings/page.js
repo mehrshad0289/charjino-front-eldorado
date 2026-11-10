@@ -5,10 +5,7 @@ import DashboardPageHeader from "../../../components/eldorado/DashboardPageHeade
 import DashboardSettings from "../../../components/eldorado/DashboardSettings";
 import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
-import {
-  DASHBOARD_USER,
-  DASHBOARD_SETTINGS_PAGE,
-} from "../../../components/eldorado/data/dashboardData";
+import { DASHBOARD_SETTINGS_PAGE } from "../../../components/eldorado/data/dashboardData";
 
 /* Dashboard settings page /dashboard/settings (own .make capture,
    1920-only, decoded 2026-11-04): logged-in frame, sidebar active row
@@ -28,7 +25,7 @@ export default function DashboardSettingsPage() {
   const { icon, title } = DASHBOARD_SETTINGS_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
+      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell active="Account settings">

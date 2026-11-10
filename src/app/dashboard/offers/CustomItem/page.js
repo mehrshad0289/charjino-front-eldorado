@@ -7,10 +7,7 @@ import InfoBanner from "../../../../components/eldorado/InfoBanner";
 import EmptyState from "../../../../components/eldorado/EmptyState";
 import Footer from "../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../components/eldorado/ChatBubble";
-import {
-  DASHBOARD_USER,
-  DASHBOARD_OFFERS_PAGE,
-} from "../../../../components/eldorado/data/dashboardData";
+import { DASHBOARD_OFFERS_PAGE } from "../../../../components/eldorado/data/dashboardData";
 
 /* Dashboard offers page /dashboard/offers/CustomItem (session 15, from the
    user-pushed capture `ui ux/CustomItem/
@@ -37,7 +34,7 @@ export default function DashboardOffersCustomItemPage() {
   const { icon, title, action, infoBanner, filters, emptyState } = DASHBOARD_OFFERS_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
+      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell active="Items">

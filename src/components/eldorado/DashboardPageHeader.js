@@ -85,7 +85,7 @@ const ICONS = {
    dashboard section with its own icon/title/action. */
 export default function DashboardPageHeader({ icon = "tag", title, action = null }) {
   return (
-    <div className="flex min-h-[106px] items-end px-6 pt-4 pb-0 lg:pl-6 lg:pr-0">
+    <div className="flex min-h-[106px] items-end px-6 pt-4 pb-0 lg:ps-0">
       <div className="flex min-h-[60px] w-full max-w-5xl flex-wrap items-center justify-between pb-4">
         <div className="flex items-center justify-start">
           <div className="p-1 text-brand">{ICONS[icon] ?? ICONS.tag}</div>

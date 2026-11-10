@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AccountCheckoutPage from "../../components/eldorado/AccountCheckoutPage";
 import Footer from "../../components/eldorado/Footer";
 import ChatBubble from "../../components/eldorado/ChatBubble";
 import TrustpilotStars, {
@@ -95,7 +96,9 @@ function GuaranteeIcon() {
   );
 }
 
-export default function CheckoutPage() {
+export default async function CheckoutPage({ searchParams }) {
+  const query = searchParams ? await searchParams : {};
+  if (query.listing) return <AccountCheckoutPage listingId={String(query.listing)} />;
   return (
     <div className="flex min-h-screen flex-col bg-page text-ink">
       {/* Minimal checkout header (capture: no site nav, logo only) */}

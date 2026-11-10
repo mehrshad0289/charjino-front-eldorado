@@ -213,6 +213,8 @@ export async function loadProductHub(hubKey) {
   }
 }
 
+const HUB_TAB_ORDER = ["top-up", "gift-cards", "accounts", "items", "boosting", "currency"];
+
 export function bannerTabsFromHub(hub) {
   const rec = asRecord(hub);
   const tabs = [];
@@ -224,7 +226,22 @@ export function bannerTabsFromHub(hub) {
     if (!key || !label || !href || !href.startsWith("/")) continue;
     tabs.push({ key, label, href });
   }
-  return tabs;
+  return tabs.sort((a, b) => {
+    const ai = HUB_TAB_ORDER.indexOf(a.key);
+    const bi = HUB_TAB_ORDER.indexOf(b.key);
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+  });
+}
+
+export async function loadHubByMarketGame(source) {
+  const id = typeof source === "number" ? String(source) : asString(source);
+  if (!id) return null;
+  try {
+    return asRecord(await serverFetch(apiPaths.catalogProductHubByMarketGame(id)));
+  } catch (error) {
+    if (error instanceof ApiError && error.statusCode === 404) return null;
+    throw error;
+  }
 }
 
 export function activeHubTabKey(tabs, href, fallbackKey = "gift-cards") {

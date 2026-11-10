@@ -64,7 +64,7 @@ export default function GiftCardBanner({
   tabs = [],
 }) {
   const icon = gameIcon ?? GIFT_CARD_IMAGES.bannerLogo;
-  const showTabs = tabs.length > 1;
+  const showTabs = tabs.length > 0;
   return (
     <div className="w-full bg-catactive shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]">
       {/* mobile: single row — game name left, tabs right (live @390

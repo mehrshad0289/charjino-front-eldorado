@@ -27,27 +27,37 @@ function Bolt() {
   );
 }
 
-export default function ProductMoreGrid() {
+export default function ProductMoreGrid({ cards, allHref = "/efootball-accounts", heading = "More like this", extra = PRODUCT_MORE_EXTRA }) {
+  const rows = cards || PRODUCT_MORE_CARDS;
+  if (cards && rows.length === 0) return null;
   return (
     <section aria-label="More offers" className="hidden lg:block">
       <div className="flex items-center justify-between">
-        <h2 className="text-[24px] font-bold leading-[normal]">More like this</h2>
-        <a href="/efootball-accounts" className="text-[14px] leading-[21px] text-linkblue underline">
-          All offers
+        <h2 className="text-[24px] font-bold leading-[normal]">{heading}</h2>
+        <a href={allHref} className="text-[14px] leading-[21px] text-linkblue underline">
+          {heading === "More like this" ? "All offers" : "همه آگهی‌ها"}
         </a>
       </div>
       <div className="mt-4 grid grid-cols-3 gap-4">
-        {PRODUCT_MORE_CARDS.map((c, i) => (
+        {rows.map((c, i) => (
           <article
             key={`${c.title}-${i}`}
             className="flex h-40 flex-col rounded-lg bg-white px-[14px] pb-[14px] pt-4 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]"
           >
             <div className="flex grow items-start justify-between">
               <div className="flex min-w-0 flex-col items-start gap-[8px]">
-                <div className="flow-root overflow-hidden text-[14px] leading-[19.6px]">{c.title}</div>
+                {c.href ? (
+                  <a href={c.href} className="flow-root overflow-hidden text-[14px] leading-[19.6px]">{c.title}</a>
+                ) : (
+                  <div className="flow-root overflow-hidden text-[14px] leading-[19.6px]">{c.title}</div>
+                )}
               </div>
-              <div className="ml-[12px] h-[58px] w-[58px] min-w-[58px] shrink-0 overflow-hidden">
-                <img alt="eFootball 2027" src={c.img} className="block h-[58px] w-[58px] rounded-sm object-cover align-middle" />
+              <div className="ms-3 h-[58px] w-[58px] min-w-[58px] shrink-0 overflow-hidden">
+                {c.img ? (
+                  <img alt="" src={c.img} className="block h-[58px] w-[58px] rounded-sm object-cover align-middle" />
+                ) : (
+                  <span className="block h-[58px] w-[58px] rounded-sm bg-badgebg" />
+                )}
               </div>
             </div>
             <div className="flex justify-between gap-[4px] text-[14px] leading-[14px]">
@@ -68,7 +78,7 @@ export default function ProductMoreGrid() {
             </div>
           </article>
         ))}
-        <div className="flex items-center text-[14px] leading-[normal] text-footlink">{PRODUCT_MORE_EXTRA}</div>
+        {extra ? <div className="flex items-center text-[14px] leading-[normal] text-footlink">{extra}</div> : null}
       </div>
     </section>
   );

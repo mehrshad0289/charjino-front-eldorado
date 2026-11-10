@@ -53,10 +53,12 @@ function ArrowButton({ dir, onClick, disabled, label }) {
   );
 }
 
-export default function ProductCarousel() {
+export default function ProductCarousel({ cards, allHref = "/efootball-accounts", heading = "More like this" }) {
+  const rows = cards || PRODUCT_CAROUSEL;
   const scroller = useRef(null);
   const [page, setPage] = useState(1);
-  const pageCount = 4;
+  const pageCount = Math.max(1, Math.ceil(rows.length / 2) || 1);
+  if (cards && rows.length === 0) return null;
 
   const scrollByPage = (dir) => {
     const el = scroller.current;
@@ -76,10 +78,10 @@ export default function ProductCarousel() {
     <section aria-label="More offers like this">
       {/* header row: mobile shows the All offers link, desktop the paginator */}
       <div className="flex items-center justify-between">
-        <h2 className="text-[16px] font-bold leading-[24px] lg:text-[18px] lg:leading-[27px]">More like this</h2>
+        <h2 className="text-[16px] font-bold leading-[24px] lg:text-[18px] lg:leading-[27px]">{heading}</h2>
         <div className="flex items-center">
-          <a href="/efootball-accounts" className="text-[14px] leading-[21px] text-linkblue underline lg:hidden">
-            All offers
+          <a href={allHref} className="text-[14px] leading-[21px] text-linkblue underline lg:hidden">
+            {heading === "More like this" ? "All offers" : "همه آگهی‌ها"}
           </a>
           <div className="hidden items-center pl-[14px] lg:flex">
             <span className="mr-[10px] block text-[12px] leading-[16.8px] text-filtertext">Page {page} of {pageCount}</span>
@@ -97,10 +99,14 @@ export default function ProductCarousel() {
         onScroll={onScroll}
         className="mt-3 flex w-full gap-[8px] overflow-x-auto pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {PRODUCT_CAROUSEL.map((c) => (
-          <article key={c.title} className="w-52 shrink-0 rounded-lg bg-white shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]">
+        {rows.map((c) => (
+          <article key={c.href || c.title} className="w-52 shrink-0 rounded-lg bg-white shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]">
             <div className="px-[10px] pb-[10px] pt-3">
-              <h3 className="mb-[10px] flow-root h-[84px] overflow-hidden text-ellipsis text-[14px] leading-[21px]">{c.title}</h3>
+              {c.href ? (
+                <a href={c.href} className="mb-[10px] flow-root h-[84px] overflow-hidden text-ellipsis text-[14px] leading-[21px]">{c.title}</a>
+              ) : (
+                <h3 className="mb-[10px] flow-root h-[84px] overflow-hidden text-ellipsis text-[14px] leading-[21px]">{c.title}</h3>
+              )}
               <div className="mt-[10px] flex items-center justify-between text-[14px] leading-[21px]">
                 <span className="flex min-w-0 items-center gap-1">
                   <strong className="block truncate font-bold">{c.seller}</strong>

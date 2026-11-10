@@ -7,10 +7,7 @@ import DashboardFilters from "../../../../components/eldorado/DashboardFilters";
 import EmptyState from "../../../../components/eldorado/EmptyState";
 import Footer from "../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../components/eldorado/ChatBubble";
-import {
-  DASHBOARD_USER,
-  DASHBOARD_OFFERS_CURRENCY_PAGE,
-} from "../../../../components/eldorado/data/dashboardData";
+import { DASHBOARD_OFFERS_CURRENCY_PAGE } from "../../../../components/eldorado/data/dashboardData";
 
 /* Dashboard offers page /dashboard/offers/Currency (own .make capture,
    1920-only, decoded 2026-11-04): same logged-in frame and page content as
@@ -29,7 +26,7 @@ export default function DashboardOffersCurrencyPage() {
     DASHBOARD_OFFERS_CURRENCY_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
+      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell active="Currency">

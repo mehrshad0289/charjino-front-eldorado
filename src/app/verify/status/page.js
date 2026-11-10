@@ -1,37 +1,20 @@
+import { connection } from "next/server";
+import { redirect } from "next/navigation";
+import { getSessionUser } from "@/actions/auth.actions";
+import { getKycMe, getSellerMe } from "@/actions/market.actions";
 import HeaderBar from "../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../components/eldorado/CategoryNav";
 import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
-import { DASHBOARD_USER } from "../../../components/eldorado/data/dashboardData";
-import { VERIFY_BANNER, VERIFY_STATUS } from "../../../components/eldorado/data/verifyData";
+import VerifyStatusActions from "../../../components/eldorado/VerifyStatusActions";
+import VerifyShebaForm from "../../../components/eldorado/VerifyShebaForm";
+import { VERIFY_BANNER, VERIFY_KYC, VERIFY_STATUS } from "../../../components/eldorado/data/verifyData";
 
-/* Seller verification page /verify/status (session 20, per the
-   user-pushed capture `ui ux/verify/
-   www_eldorado_gg_verify_status_…make`, 1920-only): logged-in header —
-   the capture's variant carries a yellow "26" count badge on the middle
-   header icon and an orange "!" alert on the avatar (HeaderBar now takes
-   optional notiCount/avatarAlert props; off on every other page) —
-   category strip, then a centered max-w-648 column over the 465px
-   banner + 340px fade (same pattern as the dashboard shell, capture's
-   own banner image):
-   - status card (white rounded-xl p-6, soft card shadow): red
-     "Action required" badge (rgb(232,27,22), role=status) + soft-red
-     info disc on the right; "Almost there..." 24 bold + gray 18/27
-     subtitle (capture text verbatim — "thats", html.to.design strips
-     apostrophes); dark "Continue verification" button (rgb(34,33,39),
-     14 bold, min-h-42, rounded-lg) with a trailing arrow (icomoon glyph
-     decodes empty → inline SVG, documented assumption).
-   - three white info cards (rounded-lg px-6 py-4, gap-12 between):
-     "What happens next" (3-item ul, pl-5, gray), "Why verification
-     matters" (gray paragraph), "Need help?" (Seller FAQ external +
-     Contact support → internal /contact-us; linkblue 14/19.6).
-   Footer + ChatBubble. Below 1920 the column just narrows (no other
-   reference — live page is client-rendered behind a login; documented). */
+export const instant = false;
 
 export const metadata = {
-  title: "Seller Verification - Eldorado",
-  description:
-    "Verify your seller account to list offers, access full payouts and chat safely with buyers on Eldorado.",
+  title: "احراز فروشنده — شارژینو",
+  description: "برای فروش اکانت، احراز هویت را شروع کن.",
 };
 
 function InfoIcon() {
@@ -44,26 +27,143 @@ function InfoIcon() {
   );
 }
 
-function ArrowRightIcon() {
+function attemptList(kyc) {
+  const raw = kyc.ok ? kyc.data?.attempts : null;
+  if (Array.isArray(raw)) return raw;
+  if (raw && typeof raw === "object") return Object.values(raw);
+  return [];
+}
+
+function latestLevelTwo(attempts, status) {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M4 12h15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <path d="m13 6 6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    attempts
+      .filter((row) => Number(row.level) === 2 && row.status === status)
+      .sort((left, right) => {
+        const idDelta = Number(right.id || 0) - Number(left.id || 0);
+        if (idDelta !== 0) return idDelta;
+        return String(right.requested_at || "").localeCompare(String(left.requested_at || ""));
+      })[0] ?? null
   );
 }
 
-export default function VerifyStatusPage() {
-  const { badge, badgeBg, title, subtitle, cta, next, why, help, cardShadow, infoPillBg } =
-    VERIFY_STATUS;
+function kycPhase(seller, kyc) {
+  const profile = seller.ok ? seller.data?.profile : null;
+  const currentLevel = kyc.ok ? Number(kyc.data?.current_level ?? 0) : Number(profile?.kyc_level ?? 0);
+  const attempts = attemptList(kyc);
+  const pending = latestLevelTwo(attempts, "pending");
+  const rejected = latestLevelTwo(attempts, "rejected");
+  const uploadedKinds = Array.isArray(pending?.documents)
+    ? pending.documents.map((doc) => doc.kind).filter(Boolean)
+    : [];
+  const hasCard = uploadedKinds.includes("national_card");
+  const hasSelfie = uploadedKinds.includes("selfie");
+
+  const shebaSet = Boolean(profile?.sheba_set);
+  const shebaMasked = profile?.sheba_masked ? String(profile.sheba_masked) : "";
+  const holderName = profile?.sheba_holder_name ? String(profile.sheba_holder_name) : "";
+
+  if (currentLevel >= 2) {
+    return {
+      phase: shebaSet ? "ready" : "sheba",
+      uploadedKinds,
+      rejectionReason: "",
+      shebaMasked,
+      holderName,
+    };
+  }
+  if (pending && hasCard && hasSelfie) {
+    return { phase: "pending", uploadedKinds, rejectionReason: "", shebaMasked, holderName };
+  }
+  if (pending) return { phase: "docs", uploadedKinds, rejectionReason: "", shebaMasked, holderName };
+  if (rejected) {
+    return {
+      phase: "rejected",
+      uploadedKinds: [],
+      rejectionReason: String(rejected.rejection_reason || "").trim(),
+      shebaMasked,
+      holderName,
+    };
+  }
+  return { phase: "form", uploadedKinds: [], rejectionReason: "", shebaMasked, holderName };
+}
+
+export default async function VerifyStatusPage() {
+  await connection();
+  const user = await getSessionUser();
+  if (!user) redirect("/login?next=/verify/status");
+
+  const [seller, kyc] = await Promise.all([getSellerMe(), getKycMe()]);
+  const { phase, uploadedKinds, rejectionReason, shebaMasked, holderName } = kycPhase(seller, kyc);
+  const { next, why, help, cardShadow, infoPillBg } = VERIFY_STATUS;
+
+  const headline =
+    phase === "pending"
+      ? {
+          badge: VERIFY_KYC.pendingBadge,
+          badgeBg: VERIFY_KYC.pendingBadgeBg,
+          title: VERIFY_KYC.pendingTitle,
+          subtitle: VERIFY_KYC.pendingSubtitle,
+          cta: "",
+          reason: false,
+        }
+      : phase === "sheba"
+        ? {
+            badge: VERIFY_STATUS.badge,
+            badgeBg: VERIFY_STATUS.badgeBg,
+            title: VERIFY_KYC.shebaTitle,
+            subtitle: VERIFY_KYC.shebaSubtitle,
+            cta: VERIFY_KYC.shebaSubmit,
+            reason: false,
+          }
+        : phase === "ready"
+          ? {
+              badge: VERIFY_KYC.verifiedBadge,
+              badgeBg: VERIFY_KYC.verifiedBadgeBg,
+              title: VERIFY_KYC.shebaSavedTitle,
+              subtitle: shebaMasked
+                ? `تسویه به ${shebaMasked} می‌رود. شماره کامل اینجا نشان داده نمی‌شود.`
+                : VERIFY_KYC.shebaSavedSubtitle,
+              cta: VERIFY_KYC.shebaReplace,
+              reason: false,
+            }
+        : phase === "docs"
+          ? {
+              badge: VERIFY_STATUS.badge,
+              badgeBg: VERIFY_STATUS.badgeBg,
+              title: VERIFY_KYC.docsTitle,
+              subtitle: VERIFY_KYC.docsSubtitle,
+              cta: VERIFY_KYC.docsCta,
+              reason: false,
+            }
+          : phase === "rejected"
+            ? {
+                badge: VERIFY_KYC.rejectedBadge,
+                badgeBg: VERIFY_STATUS.badgeBg,
+                title: VERIFY_KYC.rejectedTitle,
+                subtitle: rejectionReason || VERIFY_KYC.rejectedFallback,
+                cta: VERIFY_KYC.rejectedCta,
+                reason: true,
+              }
+            : {
+                badge: VERIFY_STATUS.badge,
+                badgeBg: VERIFY_STATUS.badgeBg,
+                title: VERIFY_STATUS.title,
+                subtitle: VERIFY_STATUS.subtitle,
+                cta: VERIFY_KYC.submit,
+                reason: false,
+              };
+
+  const showForm = phase === "form" || phase === "docs" || phase === "rejected";
+  const showSheba = phase === "sheba" || phase === "ready";
+
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} notiCount={26} avatarAlert />
+      <HeaderBar user={user} />
       <CategoryNav />
       <main className="isolate relative min-h-[1200px]">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[465px] overflow-hidden">
           <img
-            alt="Background image"
+            alt=""
             src={VERIFY_BANNER}
             className="block h-[465px] w-full object-cover align-middle"
             style={{ objectPosition: "50% 15%" }}
@@ -79,7 +179,6 @@ export default function VerifyStatusPage() {
 
         <div className="relative z-[1] flex flex-col items-center gap-8 px-4 pb-10 pt-10">
           <div className="flex w-full max-w-[648px] flex-col gap-6">
-            {/* status card */}
             <div
               className="flex w-full flex-col items-end gap-6 rounded-xl bg-white p-6"
               style={{ boxShadow: cardShadow }}
@@ -87,11 +186,11 @@ export default function VerifyStatusPage() {
               <div className="flex flex-grow items-center justify-between self-stretch">
                 <div
                   role="status"
-                  aria-label={badge}
+                  aria-label={headline.badge}
                   className="flex max-w-fit items-center justify-center rounded-lg px-3 pb-[6px] pt-[5px] text-[14px] leading-[normal] text-white"
-                  style={{ backgroundColor: badgeBg }}
+                  style={{ backgroundColor: headline.badgeBg }}
                 >
-                  <span className="block">{badge}</span>
+                  <span className="block">{headline.badge}</span>
                 </div>
                 <div
                   className="flex items-center rounded-full p-1"
@@ -103,35 +202,50 @@ export default function VerifyStatusPage() {
               <div className="flex flex-col items-start self-stretch">
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col items-start gap-2">
-                    <p className="text-[24px] font-bold leading-[28.8px]">{title}</p>
-                    <p className="text-[18px] leading-[27px] text-graytext">{subtitle}</p>
+                    <p className="text-[24px] font-bold leading-[28.8px]">{headline.title}</p>
+                    <p
+                      className={`text-[18px] leading-[27px] ${headline.reason ? "text-[rgb(232,27,22)]" : "text-graytext"}`}
+                    >
+                      {headline.subtitle}
+                    </p>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-start gap-2 self-stretch">
-                <div>
-                  <button
-                    type="button"
-                    aria-label={cta}
-                    className="inline-block min-h-[42px] w-full min-w-[70px] overflow-hidden rounded-lg bg-[rgb(34,_33,_39)] px-4 pb-[10px] pt-[10px] text-center text-[14px] font-bold leading-[21px] text-white"
-                  >
-                    <span className="flex items-center justify-center gap-[6px] text-center">
-                      <span className="block text-center">{cta}</span>
-                      <ArrowRightIcon />
-                    </span>
-                  </button>
+              {showForm ? (
+                <div className="flex items-center justify-start gap-2 self-stretch">
+                  <VerifyStatusActions
+                    phase={phase}
+                    cta={headline.cta}
+                    uploadedKinds={uploadedKinds}
+                  />
                 </div>
-              </div>
+              ) : null}
+              {showSheba ? (
+                <div className="flex w-full flex-col items-start gap-4 self-stretch">
+                  {phase === "ready" ? (
+                    <a
+                      href="/dashboard/offers/Account/new"
+                      className="inline-flex min-h-[42px] items-center rounded-lg bg-[rgb(34,33,39)] px-4 text-[14px] font-bold text-white"
+                    >
+                      {VERIFY_KYC.listingCta}
+                    </a>
+                  ) : null}
+                  <VerifyShebaForm
+                    cta={headline.cta}
+                    shebaMasked={shebaMasked}
+                    holderName={holderName}
+                  />
+                </div>
+              ) : null}
             </div>
 
-            {/* info cards */}
             <div className="flex w-full flex-col gap-3">
               <div
                 className="flex flex-col items-start justify-center gap-2 rounded-lg bg-white px-6 pb-4 pt-4"
                 style={{ boxShadow: cardShadow }}
               >
                 <p className="text-[18px] font-bold leading-[27px]">{next.title}</p>
-                <ul className="list-disc pl-5 text-graytext">
+                <ul className="list-disc ps-5 text-graytext">
                   {next.items.map((item) => (
                     <li key={item}>{item}</li>
                   ))}

@@ -163,12 +163,12 @@ export default function CategoryNav({ activeCategory = null }) {
           </button>
           <button
             type="button"
-            aria-label="Toggle theme"
+            aria-label={FA.themeToggle}
             className="rounded-sm bg-searchstroke p-1 text-white hover:text-brand"
           >
             <SunIcon />
           </button>
-          <button type="button" aria-label="Dark theme" className="p-1 text-white hover:text-brand">
+          <button type="button" aria-label={FA.darkTheme} className="p-1 text-white hover:text-brand">
             <MoonIcon />
           </button>
         </div>

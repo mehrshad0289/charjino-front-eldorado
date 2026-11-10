@@ -7,9 +7,11 @@
    settings capture defines (order/message/dispute/payment/withdrawal
    updates). */
 
+import { FA } from "./faCopy";
+
 export const DASHBOARD_NOTIFICATIONS_PAGE = {
   icon: "notifications",
-  title: "Notifications",
+  title: FA.notifications,
   tabs: ["All", "Orders", "Messages", "Disputes", "Payments"],
   items: [
     { id: 1, icon: "orders", tab: "Orders", text: "Order #77351 — 2400 CoD Points (Xbox) marked as delivered. Confirm the order or open a dispute.", time: "12 min ago", unread: true },
@@ -23,7 +25,7 @@ export const DASHBOARD_NOTIFICATIONS_PAGE = {
 
 export const DASHBOARD_BOOSTING_REQUESTS_PAGE = {
   icon: "boosting",
-  title: "My requests",
+  title: FA.myRequests,
   emptyState: {
     image: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F91671a13bded2708951c70c98c7f9d8f11e1ed60.svg?generation=1793785993043728&alt=media",
     imageAlt: "No boosting requests",

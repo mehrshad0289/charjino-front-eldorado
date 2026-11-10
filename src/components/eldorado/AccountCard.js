@@ -24,9 +24,9 @@ export default function AccountCard({ offer }) {
   return (
     <a
       href={offer.href}
-      className="block size-full overflow-hidden rounded-lg bg-white text-[14px] leading-[21px] shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] transition-shadow hover:shadow-[rgba(9,9,11,0.10)_0px_4px_8px_0px,rgba(9,9,11,0.06)_0px_16px_16px_0px]"
+      className="block h-48 overflow-hidden rounded-lg bg-white text-[14px] leading-[21px] shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] transition-shadow hover:shadow-[rgba(9,9,11,0.10)_0px_4px_8px_0px,rgba(9,9,11,0.06)_0px_16px_16px_0px]"
     >
-      <section className="flex h-48 flex-col p-[14px]">
+      <section className="flex h-full flex-col p-[14px]">
         <div className="mb-4 flex items-center gap-2.5 truncate">
           <div className="max-h-[19.6px] overflow-hidden leading-[19.6px]">
             <div className="flex flex-wrap content-start gap-1 font-bold">
@@ -36,17 +36,21 @@ export default function AccountCard({ offer }) {
         </div>
         <div className="flex grow items-start justify-between">
           <div className="flex flex-col gap-2">
-            <div className="flow-root overflow-hidden text-[19.6px] leading-[19.6px] text-graytext">
+            <div className="line-clamp-2 overflow-hidden text-[14px] leading-[19.6px] text-graytext">
               {offer.desc}
             </div>
           </div>
-          <div className="ml-3 h-[58px] w-[58px] min-w-[58px] shrink-0 overflow-hidden">
-            <img
-              alt={offer.title}
-              src={offer.img}
-              className="block h-[58px] w-[58px] rounded-sm object-cover align-middle"
-              loading="lazy"
-            />
+          <div className="ms-3 h-[58px] w-[58px] min-w-[58px] shrink-0 overflow-hidden">
+            {offer.img ? (
+              <img
+                alt={offer.title}
+                src={offer.img}
+                className="block h-[58px] w-[58px] rounded-sm object-cover align-middle"
+                loading="lazy"
+              />
+            ) : (
+              <span className="block h-[58px] w-[58px] rounded-sm bg-badgebg" />
+            )}
           </div>
         </div>
         <div className="flex justify-between gap-1 text-[14px] leading-[14px]">

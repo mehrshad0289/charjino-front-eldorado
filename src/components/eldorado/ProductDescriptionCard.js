@@ -24,12 +24,15 @@ function InfoIcon() {
   );
 }
 
-export default function ProductDescriptionCard() {
+export default function ProductDescriptionCard({ copy }) {
+  const title = copy?.title || "Offer description";
+  const chips = copy?.chips || PRODUCT.chips;
+  const description = copy?.description ?? PRODUCT.description;
   return (
     <div className="rounded-lg bg-white px-4 py-1 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] lg:px-6">
-      <h2 className="pb-4 pt-6 text-[18px] font-bold leading-[27px]">Offer description</h2>
+      <h2 className="pb-4 pt-6 text-[18px] font-bold leading-[27px]">{title}</h2>
       <div className="flex flex-wrap gap-[16px]">
-        {PRODUCT.chips.map((chip) => (
+        {chips.map((chip) => (
           <div
             key={chip}
             className="flex w-fit items-center gap-[4px] rounded-full border-[0.8px] border-cardborder bg-white px-3 py-1 text-[14px] leading-[19.6px]"
@@ -42,7 +45,7 @@ export default function ProductDescriptionCard() {
           </div>
         ))}
       </div>
-      <p className="whitespace-pre-wrap py-4 text-[16px] leading-[24px]">{PRODUCT.description}</p>
+      <p className="whitespace-pre-wrap py-4 text-[16px] leading-[24px]">{description}</p>
     </div>
   );
 }
