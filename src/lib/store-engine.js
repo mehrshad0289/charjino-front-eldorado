@@ -3,7 +3,14 @@ import { apiPaths } from "./api-paths";
 import { getBackendUrl } from "./env";
 import { toFaDigits } from "./fa-digits";
 import { formatTomanPrice, productHref } from "./format-toman";
-import { giftShopHrefFromProduct, isGiftCardProduct, isTopupProduct, shopTopupHrefFromProduct } from "./gift-card-shop";
+import {
+  giftShopHrefFromProduct,
+  isGiftCardProduct,
+  isTopupProduct,
+  loadProductHub,
+  shopTopupHrefFromProduct,
+  tabForStoreCategory,
+} from "./gift-card-shop";
 import { preferFaTitle } from "./catalog-region";
 import { pickTopupDisplayName, topupShopHref } from "./topup-hub";
 
@@ -82,18 +89,37 @@ export function hubCardsFromCategory(category) {
     }
     if (!href.startsWith("/") || seen.has(href)) continue;
     seen.add(href);
+    const gameTitle = asString(row.gameTitle);
+    const gameTitleFa = asString(row.gameTitleFa);
     cards.push({
       key: hubKey || href,
       name:
         categoryKey === "top-ups"
           ? pickTopupDisplayName({ hubKey, hubTitle: title })
-          : title,
+          : gameTitleFa || gameTitle || title,
+      gameTitle,
+      gameTitleFa,
       tag: asString(item.label),
       img: "",
       href,
     });
   }
   return cards;
+}
+
+function normShopName(value) {
+  return asString(value).toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+export async function currencyHubKeyForMarket(raw) {
+  const game = await resolveMarketGame("currency", raw);
+  if (!game) return "";
+  const cards = hubCardsFromCategory(await loadStoreCategory("currency"));
+  const names = new Set([game.game_name, game.game_name_fa].map(normShopName).filter(Boolean));
+  const hit = cards.find((card) =>
+    [card.name, card.gameTitle, card.gameTitleFa].some((label) => names.has(normShopName(label))),
+  );
+  return asString(hit?.key);
 }
 
 export async function loadCatalogGroupCards(slug, { gift = false } = {}) {
@@ -249,9 +275,17 @@ export async function resolveMarketGame(categoryKey, hub) {
   try {
     const payload = await serverFetch(apiPaths.marketGames());
     const items = Array.isArray(payload?.items) ? payload.items : [];
-    return (
+    const fromList =
       items.find((row) => String(asRecord(row).id) === needle) ||
-      items.find((row) => asString(asRecord(row).game_name) === needle) ||
+      items.find((row) => asString(asRecord(row).game_name) === needle);
+    if (fromList) return fromList;
+    const catalogHub = await loadProductHub(needle);
+    const tab = tabForStoreCategory(catalogHub, categoryKey);
+    const sourceId = asString(asRecord(tab).sourceId);
+    if (!sourceId) return null;
+    return (
+      items.find((row) => String(asRecord(row).id) === sourceId) ||
+      items.find((row) => asString(asRecord(row).game_name) === sourceId) ||
       null
     );
   } catch (error) {

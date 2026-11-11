@@ -96,7 +96,7 @@ const MEGA_TTL_MS = 60_000;
 const megaMemo = new Map();
 
 export async function buildNavMegaCached(verticalKey) {
-  const key = `topup-hub-v6:${verticalKey}`;
+  const key = `topup-hub-v7:${verticalKey}`;
   const hit = megaMemo.get(key);
   if (hit && Date.now() - hit.at < MEGA_TTL_MS) return hit.data;
   const data = await buildNavMega(verticalKey);
@@ -322,6 +322,49 @@ function mapMarketMega(items, offer, shopKey) {
   };
 }
 
+function normMegaName(value) {
+  return asString(value).toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+async function overlayCatalogHubs(mapped, shopKey) {
+  let cards = [];
+  try {
+    cards = hubCardsFromCategory(await loadStoreCategory(shopKey));
+  } catch {
+    cards = [];
+  }
+  const hrefByName = new Map();
+  const catalogRows = [];
+  for (const card of cards) {
+    const href = asString(card.href);
+    if (!href.startsWith(`/shop/${shopKey}/`)) continue;
+    const row = {
+      name: asString(card.name) || asString(card.gameTitleFa) || asString(card.gameTitle),
+      nameEn: asString(card.gameTitle),
+      img: asString(card.img),
+      href,
+    };
+    if (!row.name) continue;
+    catalogRows.push(row);
+    for (const label of [row.name, card.gameTitle, card.gameTitleFa, card.name]) {
+      const key = normMegaName(label);
+      if (key) hrefByName.set(key, href);
+    }
+  }
+  const rewrite = (row) => {
+    const href = hrefByName.get(normMegaName(row.name)) || hrefByName.get(normMegaName(row.nameEn));
+    return href ? { ...row, href } : row;
+  };
+  const rewritten = mapped.all.map(rewrite);
+  const seen = new Set(rewritten.map((row) => row.href));
+  const extras = catalogRows.filter((row) => !seen.has(row.href));
+  const all = [...rewritten, ...extras].sort((a, b) => a.name.localeCompare(b.name, "fa"));
+  return {
+    popular: mapped.popular.map(rewrite),
+    all,
+  };
+}
+
 export async function buildNavMega(verticalKey) {
   const config = NAV_VERTICALS[verticalKey];
   if (!config) return emptyMega(false);
@@ -339,7 +382,8 @@ export async function buildNavMega(verticalKey) {
 
     const payload = await serverFetch(apiPaths.marketGames(config.offer));
     const items = Array.isArray(payload?.items) ? payload.items : [];
-    const mapped = mapMarketMega(items, config.offer, config.shopKey);
+    let mapped = mapMarketMega(items, config.offer, config.shopKey);
+    if (config.shopKey === "currency") mapped = await overlayCatalogHubs(mapped, config.shopKey);
     return { ...mapped, promo: Boolean(config.promo) };
   } catch {
     return emptyMega(Boolean(config.promo));

@@ -23,7 +23,17 @@ export default async function ShopCategoryPage({ params }) {
       : row.catalogGroupSlug
         ? await loadCatalogGroupCards(row.catalogGroupSlug, { gift: key === "gift-cards" })
         : [];
-  const marketCards = row.marketOffer ? await loadMarketGameCards(row.marketOffer, key) : [];
+  const boundMarketIds = new Set();
+  for (const hub of Array.isArray(row.hubs) ? row.hubs : []) {
+    for (const tab of Array.isArray(hub?.tabs) ? hub.tabs : []) {
+      if (String(tab?.sourceType || "") === "market_game" && tab?.sourceId != null) {
+        boundMarketIds.add(String(tab.sourceId));
+      }
+    }
+  }
+  const marketCards = (row.marketOffer ? await loadMarketGameCards(row.marketOffer, key) : []).filter(
+    (card) => !boundMarketIds.has(String(card.key)),
+  );
   const items = [...hubCards, ...catalogCards, ...marketCards];
   return (
     <DynamicShopPage

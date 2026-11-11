@@ -12,7 +12,7 @@ export function loadNavMega(vertical) {
   const pending = inflight.get(vertical);
   if (pending) return pending;
 
-  const request = fetch(`/api/nav-mega?vertical=${encodeURIComponent(vertical)}&v=topup-hub-v6`)
+  const request = fetch(`/api/nav-mega?vertical=${encodeURIComponent(vertical)}&v=topup-hub-v7`)
     .then((res) => res.json())
     .then((payload) => {
       if (!payload?.success || !payload.data) return null;

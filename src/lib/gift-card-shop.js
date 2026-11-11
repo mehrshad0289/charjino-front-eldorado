@@ -132,7 +132,7 @@ export function topupTabsFromShop(shop, fallbackTabs, hubKey) {
 
 export function topupBannerName(shop, hubKey, fallback) {
   const siblings = Array.isArray(shop?.siblings) ? shop.siblings : [];
-  const gameTitle = asString(shop?.gameTitle);
+  const gameTitle = asString(shop?.gameTitleFa) || asString(shop?.gameTitle);
   if (siblings.length >= 2 && gameTitle) return gameTitle;
   return fcFamilyBannerName(hubKey, fallback);
 }
@@ -360,12 +360,15 @@ export function bannerTabsFromHub(hub) {
     const label = asString(tab.label);
     const href = asString(tab.href);
     if (!key || !label || !href || !href.startsWith("/")) continue;
-    tabs.push({ key, label, href });
+    tabs.push({ key, label, href, sortOrder: Number(tab.sortOrder) || 0 });
   }
   return tabs.sort((a, b) => {
     const ai = HUB_TAB_ORDER.indexOf(a.key);
     const bi = HUB_TAB_ORDER.indexOf(b.key);
-    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+    if (ai !== -1 && bi !== -1) return ai - bi;
+    if (ai !== -1) return -1;
+    if (bi !== -1) return 1;
+    return (a.sortOrder || 0) - (b.sortOrder || 0);
   });
 }
 
@@ -406,7 +409,23 @@ export function tabForStoreCategory(hub, categoryKey) {
         return asString(tab.tabKey) === "gift-cards" || asString(tab.renderer) === "code-card";
       }
       if (key === "accounts") {
-        return asString(tab.tabKey) === "accounts" || asString(tab.renderer) === "account-listing";
+        const tabKey = asString(tab.tabKey);
+        return tabKey === "accounts" || (asString(tab.renderer) === "account-listing" && tabKey !== "items" && tabKey !== "currency");
+      }
+      if (key === "boosting") {
+        return asString(tab.tabKey) === "boosting" || asString(tab.renderer) === "service-request";
+      }
+      if (key === "items") {
+        return asString(tab.tabKey) === "items";
+      }
+      if (key === "currency") {
+        const hubCategory = asString(hub?.storeCategoryKey).toLowerCase();
+        return (
+          asString(tab.tabKey) === "currency" ||
+          asString(tab.storeCategory).toLowerCase() === "currency" ||
+          (hubCategory === "currency" &&
+            (asString(tab.tabKey) === "top-up" || asString(tab.fulfillmentType) === "topup" || asString(tab.href).includes("/shop/currency/")))
+        );
       }
       return false;
     }) || null

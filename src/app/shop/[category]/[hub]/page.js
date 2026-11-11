@@ -35,6 +35,7 @@ import { canonicalTopupHrefKey, topupShopHref } from "../../../../lib/topup-hub"
 import { serverFetch, ApiError } from "../../../../lib/server-fetcher";
 import { apiPaths } from "../../../../lib/api-paths";
 import {
+  currencyHubKeyForMarket,
   isStoreCategoryKey,
   listingToOffer,
   loadMarketFacets,
@@ -81,6 +82,9 @@ export default async function ShopHubPage({ params }) {
   if (!store) notFound();
 
   const catalogHub = await loadProductHub(giftHubPlatform(hubKey) || hubKey);
+  if (key === "top-ups" && String(catalogHub?.storeCategoryKey || "").toLowerCase() === "currency") {
+    redirect(`/shop/currency/${encodeURIComponent(hubKey)}`);
+  }
   const tab = tabForStoreCategory(catalogHub, key);
   if (tab?.renderer === "code-card") {
     return <GiftCardShopPage platform={tab.sourceId || hubKey} />;
@@ -181,6 +185,11 @@ export default async function ShopHubPage({ params }) {
   }
   if (key === "gift-cards") {
     notFound();
+  }
+
+  if (key === "currency") {
+    const target = await currencyHubKeyForMarket(hubKey);
+    if (target && target !== hubKey) redirect(`/shop/currency/${encodeURIComponent(target)}`);
   }
 
   if (key === "boosting") {
