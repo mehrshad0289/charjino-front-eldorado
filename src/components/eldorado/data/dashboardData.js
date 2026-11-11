@@ -22,7 +22,11 @@ export const DASHBOARD_USER = {
   avatar: `${ASSET}84921a2fde83d534b819877fa09cd79af209ba7a.svg?generation=1793785993008975&alt=media`,
 };
 
-export const DASHBOARD_BANNER = `${ASSET}88ee8d54b0513acd4a7d21d309470a1d431bf0ed.png?generation=1793785993005156&alt=media`;
+/* Live eld-banner (eldorado-assasin-desktop/mobile.png, 465px, overlay
+   --homepage-gradient). Local copies so the dashboard does not depend on
+   the Eldorado CDN. Mobile source is used below 601px, matching live. */
+export const DASHBOARD_BANNER = "/dashboard/eldorado-assasin-desktop.png";
+export const DASHBOARD_BANNER_MOBILE = "/dashboard/eldorado-assasin-mobile.png";
 
 /* Sidebar nav: groups are collapsible (chevron per capture); active item
    gets the yellow fill (bg rgb(255,201,80)) exactly like the capture's
@@ -146,12 +150,12 @@ export const DASHBOARD_OFFERS_GIFTCARD_PAGE = {
 export const DASHBOARD_ORDERS_PURCHASED_PAGE = {
   icon: "orders",
   title: FA.purchasedOrders,
-  filters: { status: "All statuses", period: "Recent" },
+  filters: { status: "همه وضعیت‌ها", period: "اخیر" },
   emptyState: {
     image: DASHBOARD_OFFERS_PAGE.emptyState.image,
-    imageAlt: "No results found",
-    title: "Nothing found",
-    text: "You have no purchased orders",
+    imageAlt: "چیزی پیدا نشد",
+    title: "چیزی پیدا نشد",
+    text: "هنوز سفارشی نخریده‌ای.",
   },
 };
 
@@ -159,16 +163,16 @@ export const DASHBOARD_ORDERS_SOLD_PAGE = {
   icon: "orders",
   title: FA.soldOrders,
   filters: {
-    status: "All statuses",
-    period: "Recent",
-    searchPlaceholder: "Search Orders",
-    invoiceLabel: "Download invoice",
+    status: "همه وضعیت‌ها",
+    period: "اخیر",
+    searchPlaceholder: "جستجوی سفارش",
+    invoiceLabel: "دانلود فاکتور",
   },
   emptyState: {
     image: DASHBOARD_OFFERS_PAGE.emptyState.image,
-    imageAlt: "No results found",
-    title: "Nothing found",
-    text: "You have no sold orders",
+    imageAlt: "چیزی پیدا نشد",
+    title: "چیزی پیدا نشد",
+    text: "هنوز فروشی نداشته‌ای.",
   },
 };
 
@@ -203,11 +207,40 @@ export const DASHBOARD_FEEDBACK_PAGE = {
 export const DASHBOARD_WALLET_PAGE = {
   icon: "wallet",
   title: FA.wallet,
-  balanceLabel: "Balance",
-  balanceValue: "0.00",
-  filterLabel: "All",
-  columns: ["Date Created", "Balance change", "Order ID", "Description"],
+  /* Live/capture: one "Balance" card (max-w 500px), not a 4-card grid.
+     Charjino shows withdrawable in that slot. */
+  balanceLabel: "موجودی",
+  pendingLabel: "در انتظار تأیید خریدار",
+  withdrawableLabel: "قابل برداشت",
+  reservedLabel: "رزرو",
+  heldLabel: "مسدود در اختلاف",
+  filterLabel: "همه",
+  filterOptions: [
+    { value: "all", label: "همه" },
+    { value: "purchases", label: "خریدها" },
+    { value: "sales", label: "فروش‌ها" },
+    { value: "withdrawals", label: "برداشت‌ها" },
+  ],
+  filterKinds: {
+    purchases: ["refund", "reversal"],
+    sales: ["order_release", "reserve_release", "arbiter_split"],
+    withdrawals: ["payout", "withdrawal_request"],
+  },
+  columns: ["تاریخ ایجاد", "تغییر موجودی", "شماره سفارش", "شرح"],
   columnWidths: ["20%", "15%", "31%", "34%"],
+  first: "اول",
+  last: "آخر",
+  emptyText: "هنوز تراکنشی نیست.",
+  kinds: {
+    order_release: "آزادسازی فروش",
+    reserve_release: "آزادسازی رزرو",
+    payout: "برداشت",
+    refund: "بازگشت وجه",
+    arbiter_split: "رأی داور",
+    reversal: "برگشت سند",
+    withdrawal_request: "درخواست برداشت",
+    other: "سایر",
+  },
 };
 
 export const DASHBOARD_MESSAGES_PAGE = {

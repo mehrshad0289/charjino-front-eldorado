@@ -7,7 +7,7 @@ export default function ChatBubble() {
     <a
       href="/contact-us"
       aria-label="گفتگو"
-      className="fixed bottom-5 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-brand shadow-[0_1px_6px_rgba(0,0,0,0.06),0_2px_32px_rgba(0,0,0,0.16)]"
+      className="fixed end-5 bottom-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-brand shadow-[0_1px_6px_rgba(0,0,0,0.06),0_2px_32px_rgba(0,0,0,0.16)]"
     >
       <img
         src={`${GCS}3ac514e2f10ecc546d6f42b7a35609744d381842.svg?generation=1793718219990790&alt=media`}

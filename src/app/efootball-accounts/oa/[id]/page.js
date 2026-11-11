@@ -78,7 +78,7 @@ export default async function ProductSinglePage({ params }) {
               <ProductCarousel />
               <ProductDescriptionCard />
             </div>
-            <aside className="flex flex-col gap-6 lg:sticky lg:top-[108px]">
+            <aside className="flex flex-col gap-6 lg:sticky lg:top-[var(--shop-header-h)]">
               <ProductOfferCard />
               <ProductProtectCard />
               <ProductSellerCard />

@@ -7,6 +7,8 @@ import { apiPaths } from "@/lib/api-paths";
 import { onlyDigits } from "@/lib/fa-digits";
 import { iranianNationalIdError } from "@/lib/national-id";
 import { iranianShebaError, normalizeSheba, SHEBA_HOLDER } from "@/lib/sheba";
+import { testPayUrl } from "@/lib/order";
+import { EMPTY_ORDER_STATUS_COUNTS, orderListApiQuery } from "@/lib/order-list-query";
 
 function extraErrorText(error) {
   if (!(error instanceof ApiError)) return "";
@@ -466,6 +468,26 @@ export async function uploadBoostImage(file) {
   return uploadMedia(apiPaths.marketBoostImages, body);
 }
 
+function revalidateOrderPaths(orderNo) {
+  revalidatePath("/dashboard/orders/purchased");
+  revalidatePath("/dashboard/orders/sold");
+  revalidatePath("/dashboard/wallet");
+  revalidatePath("/shop", "layout");
+  if (orderNo) {
+    revalidatePath(`/dashboard/orders/purchased/${orderNo}`);
+    revalidatePath(`/dashboard/orders/sold/${orderNo}`);
+  }
+}
+
+function payRedirect(paid, orderNo, amount) {
+  const reference = String(paid?.reference || "");
+  const redirectUrl = String(paid?.redirect_url || "");
+  if (reference.startsWith("FAKE-") || redirectUrl.includes("/pay/test") || redirectUrl.includes("fake-gateway.charjino.local")) {
+    return testPayUrl(reference, orderNo, amount);
+  }
+  return redirectUrl;
+}
+
 export async function createMarketOrder(listingId) {
   const accessToken = await getAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای خرید وارد شوید." };
@@ -475,7 +497,7 @@ export async function createMarketOrder(listingId) {
       headers: bearerHeaders(accessToken),
       body: JSON.stringify({ listingId: Number(listingId), termsAccepted: true }),
     });
-    revalidatePath("/dashboard/orders/purchased");
+    revalidateOrderPaths(data?.order_no);
     const orderNo = data?.order_no || "";
     if (!orderNo) return { ok: true, orderNo, status: data?.status || "" };
     const paid = await serverFetch(apiPaths.marketOrderPay(orderNo), {
@@ -483,16 +505,234 @@ export async function createMarketOrder(listingId) {
       headers: bearerHeaders(accessToken),
       body: JSON.stringify({}),
     });
-    const redirectUrl = String(paid?.redirect_url || "");
-    if (redirectUrl.includes("fake-gateway.charjino.local") && paid?.reference) {
-      const verified = await serverFetch(apiPaths.marketPaymentVerify("fake"), {
-        method: "POST",
-        headers: { ...bearerHeaders(accessToken), Accept: "application/json" },
-        body: JSON.stringify({ reference: paid.reference }),
-      });
-      return { ok: true, orderNo, status: verified?.status || "paid", paid: verified?.status === "paid" };
+    const payUrl = payRedirect(paid, orderNo, data?.buyer_paid_amount);
+    if (!payUrl) {
+      return { ok: true, orderNo, status: paid?.status || data?.status || "" };
     }
-    return { ok: true, orderNo, status: paid?.status || "", payUrl: redirectUrl };
+    return { ok: true, orderNo, status: paid?.status || "", payUrl };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function startMarketPayment(orderNo) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true, message: "برای پرداخت وارد شوید." };
+  try {
+    const paid = await serverFetch(apiPaths.marketOrderPay(orderNo), {
+      method: "POST",
+      headers: bearerHeaders(accessToken),
+      body: JSON.stringify({}),
+    });
+    const payUrl = payRedirect(paid, orderNo, "");
+    if (!payUrl) return { ok: false, message: "آدرس درگاه آماده نشد." };
+    return { ok: true, payUrl, orderNo };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function verifyTestPayment(reference) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true, message: "برای پرداخت وارد شوید." };
+  const value = String(reference || "").trim();
+  if (!value) return { ok: false, message: "مرجع پرداخت نیست." };
+  try {
+    const verified = await serverFetch(apiPaths.marketPaymentVerify("fake"), {
+      method: "POST",
+      headers: { ...bearerHeaders(accessToken), Accept: "application/json" },
+      body: JSON.stringify({ reference: value }),
+    });
+    const orderNo = verified?.order_no || "";
+    revalidateOrderPaths(orderNo);
+    return {
+      ok: true,
+      orderNo,
+      status: verified?.status || "",
+      paid: verified?.status === "paid" || verified?.outcome === "success",
+    };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function getBuyerOrders(filters = {}) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true };
+  try {
+    const data = await serverFetch(`${apiPaths.marketOrders}?${orderListApiQuery(filters)}`, {
+      headers: bearerHeaders(accessToken),
+    });
+    return {
+      ok: true,
+      items: Array.isArray(data?.items) ? data.items : [],
+      meta: data?.meta || null,
+      statusCounts: data?.status_counts && typeof data.status_counts === "object" ? data.status_counts : EMPTY_ORDER_STATUS_COUNTS,
+    };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function getBuyerOrder(orderNo) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true };
+  try {
+    const data = await serverFetch(apiPaths.marketOrder(orderNo), {
+      headers: bearerHeaders(accessToken),
+    });
+    return { ok: true, data };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function getSellerOrders(filters = {}) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true };
+  try {
+    const data = await serverFetch(`${apiPaths.marketSellerOrders}?${orderListApiQuery(filters)}`, {
+      headers: bearerHeaders(accessToken),
+    });
+    return {
+      ok: true,
+      items: Array.isArray(data?.items) ? data.items : [],
+      meta: data?.meta || null,
+      statusCounts: data?.status_counts && typeof data.status_counts === "object" ? data.status_counts : EMPTY_ORDER_STATUS_COUNTS,
+    };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function getSellerWallet() {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true };
+  try {
+    const data = await serverFetch(apiPaths.marketSellerWallet, {
+      headers: bearerHeaders(accessToken),
+    });
+    return { ok: true, data };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function getSellerTransactions() {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true };
+  try {
+    const data = await serverFetch(apiPaths.marketSellerTransactions, {
+      headers: bearerHeaders(accessToken),
+    });
+    return { ok: true, items: Array.isArray(data?.items) ? data.items : [], nextCursor: data?.next_cursor ?? null };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function getSellerOrder(orderNo) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true };
+  try {
+    const data = await serverFetch(apiPaths.marketSellerOrder(orderNo), {
+      headers: bearerHeaders(accessToken),
+    });
+    return { ok: true, data };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function deliverSellerOrder(orderNo, secret, instructions) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
+  const payload = String(secret || "").trim();
+  if (!payload) return { ok: false, message: "مشخصات ورود را بنویس." };
+  try {
+    const current = await serverFetch(apiPaths.marketSellerOrder(orderNo), {
+      headers: bearerHeaders(accessToken),
+    });
+    if (current?.status === "paid") {
+      await serverFetch(apiPaths.marketOrderSellerAck(orderNo), {
+        method: "POST",
+        headers: bearerHeaders(accessToken),
+        body: JSON.stringify({}),
+      });
+    }
+    const data = await serverFetch(apiPaths.marketOrderDeliver(orderNo), {
+      method: "POST",
+      headers: bearerHeaders(accessToken),
+      body: JSON.stringify({
+        secret: payload,
+        instructions: String(instructions || "").trim() || null,
+      }),
+    });
+    revalidateOrderPaths(orderNo);
+    return { ok: true, data };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function revealBuyerOrder(orderNo) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
+  try {
+    const data = await serverFetch(apiPaths.marketOrderReveal(orderNo), {
+      method: "POST",
+      headers: bearerHeaders(accessToken),
+      body: JSON.stringify({}),
+    });
+    revalidateOrderPaths(orderNo);
+    return { ok: true, secret: String(data?.secret || "") };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function confirmBuyerOrder(orderNo) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
+  try {
+    const data = await serverFetch(apiPaths.marketOrderConfirm(orderNo), {
+      method: "POST",
+      headers: bearerHeaders(accessToken),
+      body: JSON.stringify({}),
+    });
+    revalidateOrderPaths(orderNo);
+    return { ok: true, data };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function getOrderMessages(orderNo) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true };
+  try {
+    const data = await serverFetch(apiPaths.marketOrderMessages(orderNo), {
+      headers: bearerHeaders(accessToken),
+    });
+    return { ok: true, items: Array.isArray(data?.items) ? data.items : [] };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function sendOrderMessage(orderNo, body) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
+  const text = String(body || "").trim();
+  if (!text) return { ok: false, message: "متن پیام خالی است." };
+  try {
+    const data = await serverFetch(apiPaths.marketOrderMessages(orderNo), {
+      method: "POST",
+      headers: bearerHeaders(accessToken),
+      body: JSON.stringify({ body: text }),
+    });
+    revalidateOrderPaths(orderNo);
+    return { ok: true, data };
   } catch (error) {
     return fromMarketError(error);
   }

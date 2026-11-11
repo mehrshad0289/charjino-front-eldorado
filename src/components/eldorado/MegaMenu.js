@@ -5,6 +5,7 @@ import { FA, SHOP_ACCOUNTS_HREF, SHOP_ITEMS_HREF } from "./data/faCopy";
 import { GiftMegaEmpty, GiftNotSoldBanner, MegaSearchField, useGiftMegaSearch } from "./GiftMegaSearch";
 import { loadNavMega, peekNavMega } from "./nav-mega-client";
 import { readRecentGames } from "./nav-recent";
+import { filterMegaGames } from "../../lib/mega-gift-search";
 
 const PROMO_ICONS = [
   {
@@ -151,13 +152,8 @@ export default function MegaMenu({ onClose, categoryKey, fallbackHref = SHOP_ACC
 
   const isGiftMega = categoryKey === "Gift cards";
   const giftSearch = useGiftMegaSearch(isGiftMega, query, allGames);
-  const q = query.trim().toLowerCase();
   const source = allGames.length > 0 ? allGames : [];
-  const all = isGiftMega
-    ? giftSearch.rows
-    : q
-      ? source.filter((g) => g.name.toLowerCase().includes(q))
-      : source;
+  const all = isGiftMega ? giftSearch.rows : filterMegaGames(source, query);
   const popularRows = popular.slice(0, 12);
   const showCategory = isGiftMega && giftSearch.kind === "other";
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ALL_GAMES } from "./data/referenceData";
-import { CATEGORY_NAV, CONTACT_HREF, FA, SHOP_ACCOUNTS_HREF } from "./data/faCopy";
+import { CATEGORY_NAV, FA, SHOP_ACCOUNTS_HREF, SUPPORT_HREF } from "./data/faCopy";
 import MobileCategorySheet from "./MobileCategorySheet";
 import { prefetchNavMegas } from "./nav-mega-client";
 
@@ -60,7 +60,7 @@ export default function MobileMenu({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-white" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-[60] overflow-y-auto bg-white" role="dialog" aria-modal="true">
       <div className="sticky top-0 flex h-[60px] items-center justify-between bg-headerdark px-4">
         <p className="text-lg font-bold text-white">{FA.menu}</p>
         <button
@@ -82,6 +82,24 @@ export default function MobileMenu({ onClose }) {
         </a>
       </div>
       <ul className="px-4 pt-4">
+        <li className="mb-2">
+          <a
+            href="/dashboard/orders/purchased"
+            onClick={onClose}
+            className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base font-bold text-ink"
+          >
+            {FA.purchasedOrders}
+          </a>
+        </li>
+        <li className="mb-2">
+          <a
+            href="/dashboard/orders/sold"
+            onClick={onClose}
+            className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base font-bold text-ink"
+          >
+            {FA.soldOrders}
+          </a>
+        </li>
         <li className="mb-2">
           <a
             href="/dashboard/offers/Account/new#listing-game"
@@ -107,7 +125,7 @@ export default function MobileMenu({ onClose }) {
         ))}
         <li className="mb-2">
           <a
-            href={CONTACT_HREF}
+            href={SUPPORT_HREF}
             className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base text-ink"
           >
             {FA.support}

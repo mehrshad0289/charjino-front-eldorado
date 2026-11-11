@@ -10,6 +10,8 @@
    Currency and TopUp offers captures have only the game select
    (no "Search offers", no "Recommended" in their captures). */
 
+import EldSelect from "./EldSelect";
+
 function ChevronDown() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -41,36 +43,23 @@ export default function DashboardFilters({ gamePlaceholder, searchPlaceholder, d
     <div className="mb-[10px] flex flex-wrap">
       <div>
         <div className="flex flex-wrap items-center">
-          <form className="mb-[10px] mr-[10px]">
-            <div className="w-[148px]">
-              <button
-                type="button"
-                aria-label="Single-select searchable dropdown"
-                aria-haspopup="listbox"
-                className="flex min-h-[42px] w-full items-center justify-between overflow-hidden rounded-lg bg-[rgb(239,_239,_241)] px-[14px] py-2 leading-[19.6px]"
-              >
-                <span className="block grow truncate text-[rgb(98,_99,_98)]">{gamePlaceholder}</span>
-                <span className="block text-[rgb(98,_99,_98)]">
-                  <ChevronDown />
-                </span>
-              </button>
-            </div>
-          </form>
+          <div className="mb-[10px] me-[10px]">
+            <EldSelect
+              className="w-[148px]"
+              ariaLabel="Single-select searchable dropdown"
+              value=""
+              options={[{ value: "", label: gamePlaceholder }]}
+            />
+          </div>
         </div>
       </div>
       {deliveryLabel ? (
-        <div className="mr-[10px] w-[180px]">
-          <button
-            type="button"
-            aria-label="Delivery method filter"
-            aria-haspopup="listbox"
-            className="flex min-h-[42px] w-full items-center justify-between overflow-hidden rounded-lg bg-[rgb(239,_239,_241)] px-[14px] py-2 leading-[19.6px]"
-          >
-            <span className="block grow truncate text-[rgb(98,_99,_98)]">{deliveryLabel}</span>
-            <span className="block text-[rgb(98,_99,_98)]">
-              <ChevronDown />
-            </span>
-          </button>
+        <div className="me-[10px] w-[180px]">
+          <EldSelect
+            ariaLabel="Delivery method filter"
+            value=""
+            options={[{ value: "", label: deliveryLabel }]}
+          />
         </div>
       ) : searchPlaceholder ? (
         <div>

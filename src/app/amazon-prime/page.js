@@ -71,7 +71,7 @@ export default function AmazonPrimePage() {
             style={{ objectPosition: "50% 15%" }}
           />
         </div>
-        <div className="relative z-10 pt-6 lg:pt-8">
+        <div className="relative z-10 ">
           <GiftCardBanner
             active={PRIME_BANNER.active}
             iconAlt={PRIME_BANNER.iconAlt}

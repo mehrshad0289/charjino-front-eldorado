@@ -1,7 +1,8 @@
 import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
-import { formatTomanPrice, shopTopupHref } from "./format-toman";
+import { discountLabel, formatTomanPrice, shopTopupHref } from "./format-toman";
 import { preferFaTitle } from "./catalog-region";
+import { canonicalTopupHrefKey, pickTopupDisplayName, topupHubKeyFromProduct } from "./topup-hub";
 
 function asRecord(value) {
   return value && typeof value === "object" ? value : {};
@@ -66,9 +67,8 @@ export function isTopupProduct(product) {
 }
 
 export function shopTopupHrefFromProduct(product) {
-  const rec = asRecord(product);
-  const hub = normalizeGiftPlatform(rec.platform) || normalizeGiftPlatform(rec.handle);
-  return shopTopupHref(hub);
+  const hub = topupHubKeyFromProduct(product);
+  return hub ? shopTopupHref(hub) : "";
 }
 
 export function derivedGiftPlatform(product) {
@@ -104,6 +104,51 @@ export function giftShopBannerName(gameName, platform) {
   return cleaned || asString(platform) || gameName;
 }
 
+const FC_FAMILY = {
+  "fc-points": { label: "پوینت", href: "/shop/top-ups/fc-points" },
+  "fc-coins": { label: "کوین", href: "/shop/top-ups/fc-coins" },
+};
+
+export function isFcFamilyHub(hubKey) {
+  return Boolean(FC_FAMILY[asString(hubKey).toLowerCase()]);
+}
+
+export function fcFamilyBannerName(hubKey, fallback) {
+  return isFcFamilyHub(hubKey) ? "EA Sports FC 27" : fallback;
+}
+
+export function topupTabsFromShop(shop, fallbackTabs, hubKey) {
+  const siblings = Array.isArray(shop?.siblings) ? shop.siblings : [];
+  const family = siblings
+    .map((item) => ({
+      key: asString(item?.key),
+      label: asString(item?.label),
+      href: asString(item?.href),
+    }))
+    .filter((item) => item.key && item.label && item.href.startsWith("/"));
+  if (family.length >= 2) return family;
+  return mergeFcFamilyTabs(fallbackTabs, hubKey);
+}
+
+export function topupBannerName(shop, hubKey, fallback) {
+  const siblings = Array.isArray(shop?.siblings) ? shop.siblings : [];
+  const gameTitle = asString(shop?.gameTitle);
+  if (siblings.length >= 2 && gameTitle) return gameTitle;
+  return fcFamilyBannerName(hubKey, fallback);
+}
+
+export function mergeFcFamilyTabs(tabs, hubKey) {
+  if (!isFcFamilyHub(hubKey)) return Array.isArray(tabs) ? tabs : [];
+  const family = [
+    { key: "fc-points", label: FC_FAMILY["fc-points"].label, href: FC_FAMILY["fc-points"].href },
+    { key: "fc-coins", label: FC_FAMILY["fc-coins"].label, href: FC_FAMILY["fc-coins"].href },
+  ];
+  const rest = (Array.isArray(tabs) ? tabs : []).filter(
+    (tab) => tab?.key !== "top-up" && !FC_FAMILY[asString(tab?.key).toLowerCase()],
+  );
+  return [...family, ...rest];
+}
+
 function catalogPageItems(payload) {
   return Array.isArray(payload?.items) ? payload.items : Array.isArray(payload) ? payload : [];
 }
@@ -112,8 +157,14 @@ function stripRegion(title) {
   return asString(title).replace(/\s*\([^)]*\)\s*$/, "").trim();
 }
 
+function toLatinDigits(value) {
+  return String(value)
+    .replace(/[۰-۹]/g, (digit) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit)))
+    .replace(/[٬,]/g, "");
+}
+
 function denominationSort(name) {
-  const match = String(name).match(/(\d+(?:\.\d+)?)/);
+  const match = toLatinDigits(name).match(/(\d+(?:\.\d+)?)/);
   return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
 }
 
@@ -186,7 +237,92 @@ async function fetchGiftProductByHandle(id) {
 }
 
 function emptyShop(id) {
-  return { platform: id, gameName: "", brandLabel: "", bannerName: "", regions: [], amounts: [], bannerIcon: "" };
+  return {
+    platform: id,
+    gameName: "",
+    brandLabel: "",
+    bannerName: "",
+    regions: [],
+    amounts: [],
+    bannerIcon: "",
+    buyerFieldsByHandle: {},
+    shop: null,
+  };
+}
+
+const GENERIC_TOPUP_REGION = /^(ir|iran|global|worldwide|ww|all|any|default|none|n\/a)$/i;
+
+function isGenericTopupRegion(value) {
+  const raw = asString(value);
+  return !raw || GENERIC_TOPUP_REGION.test(raw);
+}
+
+function pickerRegionsForTopup(regions) {
+  const unique = [];
+  const seen = new Set();
+  for (const raw of Array.isArray(regions) ? regions : []) {
+    const value = asString(raw);
+    if (isGenericTopupRegion(value)) continue;
+    const key = value.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(value);
+  }
+  return unique.length >= 2 ? unique : [];
+}
+
+function topupSkuTitle(gameName, skuName) {
+  const name = asString(skuName);
+  const brand = asString(gameName);
+  if (!name) return brand;
+  if (brand && name.toLowerCase().startsWith(brand.toLowerCase())) {
+    return name.slice(brand.length).replace(/^[\s\-–:]+/, "").trim() || name;
+  }
+  return name;
+}
+
+function splitTopupDenomination(name, unit) {
+  const raw = asString(name);
+  const unitText = asString(unit);
+  const match = raw.match(/^([0-9۰-۹][0-9۰-۹,٬]*)(?:[\s\u200c]+)+(.+)$/u);
+  if (match) return { label: match[1], sub: match[2].trim() };
+  if (/^[0-9۰-۹][0-9۰-۹,٬]*$/u.test(raw) && unitText) return { label: raw, sub: unitText };
+  return { label: raw || unitText, sub: "" };
+}
+
+function chargeUnit(value) {
+  const raw = asString(value);
+  if (!raw || raw.length > 16) return "";
+  if (/شناسه|بازیکن|player|login/i.test(raw)) return "";
+  return raw;
+}
+
+function normalizeTopupUnit(value) {
+  const raw = asString(value).toLowerCase();
+  if (/یوسی|\buc\b/.test(raw)) return "uc";
+  if (/کوین|\bcoins?\b/.test(raw)) return "coin";
+  return raw.replace(/\s+/g, "");
+}
+
+function packDedupeKey(row) {
+  const n = row.sort;
+  const device = asString(row.region).toLowerCase();
+  if (Number.isFinite(n) && n !== Number.MAX_SAFE_INTEGER) {
+    return `${n}:${normalizeTopupUnit(row.sub || row.name)}:${device}`;
+  }
+  return `name:${asString(row.name || row.label).toLowerCase()}:${device}`;
+}
+
+function dedupeTopupAmounts(rows) {
+  const best = new Map();
+  for (const row of rows) {
+    const key = packDedupeKey(row);
+    const prev = best.get(key);
+    if (!prev || (Number(row.priceValue) || Infinity) < (Number(prev.priceValue) || Infinity)) {
+      best.set(key, row);
+    }
+  }
+  return [...best.values()];
 }
 
 export async function loadGiftBrandPage(platform) {
@@ -425,16 +561,38 @@ export async function loadGiftCardShop(platform, options = {}) {
 
 function belongsToTopupShop(product, id) {
   const rec = asRecord(product);
-  const platform = normalizeGiftPlatform(rec.platform);
-  const handle = normalizeGiftPlatform(rec.handle);
-  return platform === id || handle === id;
+  const want = canonicalTopupHrefKey(id) || normalizeGiftPlatform(id);
+  if (!want) return false;
+  const platform = canonicalTopupHrefKey(rec.platform) || normalizeGiftPlatform(rec.platform);
+  const handle = canonicalTopupHrefKey(rec.handle) || normalizeGiftPlatform(rec.handle);
+  const hub = canonicalTopupHrefKey(topupHubKeyFromProduct(rec));
+  return hub === want || platform === want || handle === want;
 }
 
 async function fetchTopupProductsByPlatform(platform) {
   return fetchGiftProductPages({ category: "game-topup", platform });
 }
 
-async function loadBuyerFields(products) {
+function pickTopupShop(details) {
+  let fallback = null;
+  for (const rec of details) {
+    const shop = asRecord(rec.shop);
+    const hasShop =
+      Boolean(asString(shop.identity)) ||
+      (Array.isArray(shop.devices) && shop.devices.length > 0) ||
+      Boolean(asString(shop.noticeTitle)) ||
+      Boolean(asString(shop.noticeBody)) ||
+      Boolean(asString(shop.description)) ||
+      (Array.isArray(shop.faq) && shop.faq.length > 0) ||
+      (Array.isArray(shop.siblings) && shop.siblings.length > 1);
+    if (!hasShop) continue;
+    if (asString(rec.code).startsWith("local-topup-")) return shop;
+    if (!fallback) fallback = shop;
+  }
+  return fallback;
+}
+
+async function loadTopupDetails(products) {
   const handles = [];
   const seen = new Set();
   for (const item of products) {
@@ -444,23 +602,28 @@ async function loadBuyerFields(products) {
     handles.push(handle);
     if (handles.length >= 24) break;
   }
-  const entries = await Promise.all(
+  const details = await Promise.all(
     handles.map(async (handle) => {
       try {
-        const detail = asRecord(await serverFetch(apiPaths.catalogProduct(handle)));
-        return [handle, Array.isArray(detail.inputFields) ? detail.inputFields : []];
+        return asRecord(await serverFetch(apiPaths.catalogProduct(handle)));
       } catch (error) {
         if (!(error instanceof ApiError)) throw error;
-        return [handle, []];
+        return { handle, inputFields: [] };
       }
     }),
   );
-  return Object.fromEntries(entries);
+  const buyerFieldsByHandle = {};
+  for (const detail of details) {
+    const handle = asString(detail.handle);
+    if (!handle) continue;
+    buyerFieldsByHandle[handle] = Array.isArray(detail.inputFields) ? detail.inputFields : [];
+  }
+  return { buyerFieldsByHandle, shop: pickTopupShop(details) };
 }
 
 export async function loadTopupShop(platform) {
   const id = normalizeGiftPlatform(platform);
-  if (!id) return { ...emptyShop(id), buyerFieldsByHandle: {} };
+  if (!id) return emptyShop(id);
   let products = [];
   try {
     products = mergeGiftProducts(await fetchTopupProductsByPlatform(id));
@@ -483,12 +646,23 @@ export async function loadTopupShop(platform) {
     const thumbnail = asString(rec.thumbnail) || asString(rec.imageUrl) || asString(rec.image);
     if (!bannerIcon && thumbnail) bannerIcon = thumbnail;
     if (!gameName) {
-      gameName = stripRegion(preferFaTitle(rec)) || stripRegion(rec.title) || stripRegion(rec.titleEn) || rec.brand || id;
+      gameName =
+        pickTopupDisplayName({
+          hubKey: id,
+          nameEn: rec.titleEn || rec.nameEn || rec.brand,
+          faTitle: preferFaTitle(rec) || rec.title,
+        }) ||
+        stripRegion(preferFaTitle(rec)) ||
+        stripRegion(rec.title) ||
+        stripRegion(rec.titleEn) ||
+        rec.brand ||
+        id;
     }
     if (region && !seenRegion.has(region)) {
       seenRegion.add(region);
       regions.push(region);
     }
+    const unit = chargeUnit(rec.subtitle);
     const skus = Array.isArray(rec.skus) ? rec.skus : [];
     if (!handle || skus.length === 0) continue;
     for (const raw of skus) {
@@ -501,34 +675,51 @@ export async function loadTopupShop(platform) {
         seenRegion.add(amountRegion);
         regions.push(amountRegion);
       }
+      const title = topupSkuTitle(gameName, name);
+      const split = splitTopupDenomination(title, unit);
+      const original = Number(sku.originalPrice);
+      const sale = discountLabel(price, original);
       amounts.push({
         key: `${handle}:${sku.id || name}`,
         skuId: sku.id || null,
-        label: skuLabel(gameName, name),
+        label: split.label,
+        sub: split.sub,
         from: formatTomanPrice(price),
+        priceValue: price,
+        discount: sale ? `${sale}*` : "",
+        was: sale ? formatTomanPrice(original) : "",
         img: thumbnail,
-        region: amountRegion,
+        region: isGenericTopupRegion(amountRegion) ? "" : amountRegion,
         href: null,
         handle,
         sort: denominationSort(name),
-        name,
+        name: title,
         instantUse: false,
+        popular: false,
       });
     }
   }
 
-  regions.sort((a, b) => a.localeCompare(b, "fa"));
-  amounts.sort((a, b) => a.sort - b.sort || a.label.localeCompare(b.label, "fa"));
-  const buyerFieldsByHandle = await loadBuyerFields(products);
+  const uniqueAmounts = dedupeTopupAmounts(amounts).sort((a, b) => {
+    const aPack = a.sub ? 0 : 1;
+    const bPack = b.sub ? 0 : 1;
+    return aPack - bPack || a.sort - b.sort || a.label.localeCompare(b.label, "fa");
+  });
+  const popularIndex = uniqueAmounts.length >= 3 ? Math.min(2, uniqueAmounts.length - 1) : 0;
+  if (uniqueAmounts[popularIndex]) uniqueAmounts[popularIndex].popular = true;
+  const { buyerFieldsByHandle, shop } = await loadTopupDetails(products);
+  const configuredDevices = Array.isArray(shop?.devices) ? shop.devices.filter((item) => asString(item?.key)) : [];
+  const pickerRegions = configuredDevices.length > 0 ? [] : pickerRegionsForTopup(regions);
 
   return {
     platform: id,
     gameName,
     brandLabel: gameName,
-    bannerName: giftShopBannerName(gameName, id),
-    regions,
-    amounts,
+    bannerName: fcFamilyBannerName(id, giftShopBannerName(gameName, id)),
+    regions: pickerRegions,
+    amounts: uniqueAmounts,
     bannerIcon,
     buyerFieldsByHandle,
+    shop,
   };
 }

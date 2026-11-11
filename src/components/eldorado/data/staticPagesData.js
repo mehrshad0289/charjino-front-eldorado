@@ -38,7 +38,7 @@ export const CONTACT_PAGE = {
       iconBg: "bg-guarantee",
       title: "Search help articles",
       text: "Get answers about account warranty, seller rules, refunds, and more.",
-      action: { label: "Search articles", ariaLabel: "Search articles", href: "https://support.eldorado.gg/", dark: false },
+      action: { label: "Search articles", ariaLabel: "Search articles", href: "/support", dark: false },
     },
   ],
 };

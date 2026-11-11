@@ -74,7 +74,7 @@ export default function CodPointsPage() {
             style={{ objectPosition: "50% 15%" }}
           />
         </div>
-        <div className="relative z-10 pt-6 lg:pt-8">
+        <div className="relative z-10 ">
           <GiftCardBanner
             active={COD_BANNER.active}
             iconAlt={COD_BANNER.iconAlt}

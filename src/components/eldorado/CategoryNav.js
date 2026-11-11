@@ -105,9 +105,10 @@ export default function CategoryNav({ activeCategory = null }) {
   }, [openCategory]);
 
   return (
+    <>
     <nav
-      className={`relative hidden bg-catnav text-white lg:block ${
-        openCategory ? "z-[1001]" : "z-30"
+      className={`hidden bg-catnav text-white lg:fixed lg:inset-x-0 lg:top-[var(--shop-header-bar)] lg:block ${
+        openCategory ? "z-[1001]" : "z-40"
       }`}
     >
       <div className="flex h-10 items-center justify-between lg:px-6">
@@ -151,7 +152,7 @@ export default function CategoryNav({ activeCategory = null }) {
         </ul>
 
         <div className="hidden items-center gap-2 text-sm lg:flex">
-          <a href="/contact-us" className="flex h-10 items-center gap-2 px-[14px] text-navgray hover:text-brand">
+          <a href="/support" className="flex h-10 items-center gap-2 px-[14px] text-navgray hover:text-brand">
             <HeadsetIcon />
             {FA.support}
           </a>
@@ -185,5 +186,7 @@ export default function CategoryNav({ activeCategory = null }) {
         </div>
       ) : null}
     </nav>
+    <div className="hidden h-10 lg:block" aria-hidden="true" />
+    </>
   );
 }

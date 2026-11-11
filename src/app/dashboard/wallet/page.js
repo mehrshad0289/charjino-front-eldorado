@@ -1,3 +1,7 @@
+import { connection } from "next/server";
+import { redirect } from "next/navigation";
+import { getSessionUser } from "@/actions/auth.actions";
+import { getSellerTransactions, getSellerWallet } from "@/actions/market.actions";
 import HeaderBar from "../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../components/eldorado/CategoryNav";
 import DashboardShell from "../../../components/eldorado/DashboardShell";
@@ -7,28 +11,35 @@ import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
 import { DASHBOARD_WALLET_PAGE } from "../../../components/eldorado/data/dashboardData";
 
-/* Dashboard page /dashboard/wallet (own .make capture `ui ux/Wallet/…`,
-   decoded 2026-11-05, 1920-only): header "Wallet" (no action button),
-   white balance card ("Balance 0.00", max-w 500px), 200px "All"
-   combobox and the empty white transactions table (header only + a
-   disabled First/‹/›/Last pagination strip). Sidebar active row: Wallet. */
+export const instant = false;
 
 export const metadata = {
-  title: "Dashboard Wallet - Eldorado",
-  description: "Your Eldorado wallet balance and transactions.",
+  title: "کیف پول — شارژینو",
+  description: "موجودی قابل برداشت و تراکنش‌های فروش در شارژینو.",
 };
 
-export default function DashboardWalletPage() {
-  const { icon, title, ...table } = DASHBOARD_WALLET_PAGE;
+export default async function DashboardWalletPage() {
+  await connection();
+  const user = await getSessionUser();
+  if (!user) redirect("/login?next=/dashboard/wallet");
+  const wallet = await getSellerWallet();
+  if (wallet.unauthorized) redirect("/login?next=/dashboard/wallet");
+  const feed = wallet.ok ? await getSellerTransactions() : { ok: false, items: [] };
+  const balances = wallet.data?.balances || { pending: 0, withdrawable: 0, reserved: 0, held: 0 };
+
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
+      <HeaderBar user={user} />
       <CategoryNav />
       <main className="isolate">
-        <DashboardShell active="Wallet">
-          <DashboardPageHeader icon={icon} title={title} />
-          <div className="relative mt-8 max-w-[1048px] px-6 pb-[50px]">
-            <DashboardWalletTable {...table} />
+        <DashboardShell active="Wallet" user={user}>
+          <DashboardPageHeader icon={DASHBOARD_WALLET_PAGE.icon} title={DASHBOARD_WALLET_PAGE.title} />
+          <div className="relative mt-[32px] max-w-[1048px] px-6 pb-[50px]">
+            {!wallet.ok ? (
+              <p className="text-[14px] text-[rgb(232,27,22)]">{wallet.message || "کیف پول خوانده نشد."}</p>
+            ) : (
+              <DashboardWalletTable balances={balances} items={feed.ok ? feed.items : []} />
+            )}
           </div>
         </DashboardShell>
       </main>

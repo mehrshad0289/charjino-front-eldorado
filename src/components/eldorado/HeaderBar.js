@@ -123,6 +123,20 @@ function LoggedInActions({
         {accountMenu && menuOpen ? (
           <div className="absolute end-0 top-[calc(100%+8px)] z-50 min-w-[160px] rounded-lg border border-searchstroke bg-headerdark p-2 text-sm text-white">
             <Link
+              href="/dashboard/orders/purchased"
+              className="block rounded-md px-3 py-2 hover:bg-white/10"
+              onClick={() => setMenuOpen(false)}
+            >
+              {FA.purchasedOrders}
+            </Link>
+            <Link
+              href="/dashboard/orders/sold"
+              className="block rounded-md px-3 py-2 hover:bg-white/10"
+              onClick={() => setMenuOpen(false)}
+            >
+              {FA.soldOrders}
+            </Link>
+            <Link
               href="/dashboard/offers/Account/new#listing-game"
               className="block rounded-md px-3 py-2 hover:bg-white/10"
               onClick={() => setMenuOpen(false)}
@@ -249,7 +263,8 @@ export default function HeaderBar({
   }
 
   return (
-    <header className="relative z-40 bg-headerdark">
+    <>
+    <header className="fixed inset-x-0 top-0 z-50 bg-headerdark">
       <div className="flex items-center px-4 pt-2.5 lg:h-[60px] lg:px-6 lg:pt-0">
         <button
           type="button"
@@ -330,5 +345,7 @@ export default function HeaderBar({
       {menuOpen && <MobileMenu onClose={() => setMenuOpen(false)} />}
       {searchOpen && <SearchOverlay onClose={() => setSearchOpen(false)} />}
     </header>
+    <div className="h-[var(--shop-header-bar)]" aria-hidden="true" />
+    </>
   );
 }

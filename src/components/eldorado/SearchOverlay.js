@@ -97,7 +97,7 @@ export default function SearchOverlay({ onClose }) {
   const list = results ?? idleItems;
 
   return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-[60]" role="dialog" aria-modal="true">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" onClick={onClose} />
 
       <div className="absolute inset-0 overflow-y-auto bg-white p-3 lg:hidden">

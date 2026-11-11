@@ -6,6 +6,7 @@ import { GiftMegaEmpty, GiftNotSoldBanner, MegaSearchField, useGiftMegaSearch } 
 import { ItemsPromo } from "./MegaMenu";
 import { loadNavMega, peekNavMega } from "./nav-mega-client";
 import { readRecentGames } from "./nav-recent";
+import { filterMegaGames } from "../../lib/mega-gift-search";
 
 function CloseIcon() {
   return (
@@ -118,12 +119,7 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
 
   const isGiftMega = categoryKey === "Gift cards";
   const giftSearch = useGiftMegaSearch(isGiftMega, query, allGames);
-  const q = query.trim().toLowerCase();
-  const filtered = isGiftMega
-    ? giftSearch.rows
-    : q
-      ? allGames.filter((game) => game.name.toLowerCase().includes(q))
-      : allGames;
+  const filtered = isGiftMega ? giftSearch.rows : filterMegaGames(allGames, query);
   const showCategory = isGiftMega && giftSearch.kind === "other";
 
   return (

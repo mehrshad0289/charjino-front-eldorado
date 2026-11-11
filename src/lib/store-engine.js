@@ -5,6 +5,7 @@ import { toFaDigits } from "./fa-digits";
 import { formatTomanPrice, productHref } from "./format-toman";
 import { giftShopHrefFromProduct, isGiftCardProduct, isTopupProduct, shopTopupHrefFromProduct } from "./gift-card-shop";
 import { preferFaTitle } from "./catalog-region";
+import { pickTopupDisplayName, topupShopHref } from "./topup-hub";
 
 export const STORE_CATEGORY_KEYS = ["currency", "accounts", "top-ups", "items", "boosting", "gift-cards"];
 
@@ -72,14 +73,21 @@ export function hubCardsFromCategory(category) {
   for (const hub of Array.isArray(rec.hubs) ? rec.hubs : []) {
     const row = asRecord(hub);
     const tabs = (Array.isArray(row.tabs) ? row.tabs : []).filter((tab) => tabMatchesStoreCategory(tab, categoryKey));
-    const title = asString(row.title) || asString(row.hubKey);
+    const hubKey = asString(row.hubKey);
+    const title = asString(row.title) || hubKey;
     const item = asRecord(tabs[0]);
-    const href = asString(item.href);
+    let href = asString(item.href);
+    if (categoryKey === "top-ups" && hubKey && href.startsWith("/shop/top-ups/")) {
+      href = topupShopHref(hubKey) || href;
+    }
     if (!href.startsWith("/") || seen.has(href)) continue;
     seen.add(href);
     cards.push({
-      key: asString(row.hubKey) || href,
-      name: title,
+      key: hubKey || href,
+      name:
+        categoryKey === "top-ups"
+          ? pickTopupDisplayName({ hubKey, hubTitle: title })
+          : title,
       tag: asString(item.label),
       img: "",
       href,

@@ -65,7 +65,7 @@ export default async function XboxGamePassPage() {
         href="/xbox-game-pass"
       />
       <main className="relative">
-        <div className="relative z-10 pt-6 lg:pt-8">
+        <div className="relative z-10 ">
           <GiftCardBanner
             active={activeTab}
             iconAlt={name}

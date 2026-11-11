@@ -8,8 +8,8 @@ import DynamicShopPage from "../../../../components/eldorado/DynamicShopPage";
 import HeaderBar from "../../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../../components/eldorado/CategoryNav";
 import GiftCardBanner from "../../../../components/eldorado/GiftCardBanner";
-import GiftCardBuyFlow from "../../../../components/eldorado/GiftCardBuyFlow";
 import SubscriptionBuyFlow from "../../../../components/eldorado/SubscriptionBuyFlow";
+import TopupShopPage from "../../../../components/eldorado/TopupShopPage";
 import Footer from "../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../components/eldorado/ChatBubble";
 import { FA } from "../../../../components/eldorado/data/faCopy";
@@ -20,6 +20,9 @@ import {
   bannerTabsFromHub,
   loadHubByMarketGame,
   giftHubPlatform,
+  isFcFamilyHub,
+  topupBannerName,
+  topupTabsFromShop,
   isPlayStationPlusPlatform,
   isXboxGamePassPlatform,
   loadGiftCardShop,
@@ -28,6 +31,7 @@ import {
   normalizeGiftPlatform,
   tabForStoreCategory,
 } from "../../../../lib/gift-card-shop";
+import { canonicalTopupHrefKey, topupShopHref } from "../../../../lib/topup-hub";
 import { serverFetch, ApiError } from "../../../../lib/server-fetcher";
 import { apiPaths } from "../../../../lib/api-paths";
 import {
@@ -66,8 +70,10 @@ export async function generateMetadata({ params }) {
 export default async function ShopHubPage({ params }) {
   const { category, hub } = await params;
   const key = String(category || "").toLowerCase();
-  const hubKey = normalizeGiftPlatform(hub) || decodeURIComponent(String(hub || ""));
+  const rawHub = normalizeGiftPlatform(hub) || decodeURIComponent(String(hub || ""));
+  const hubKey = key === "top-ups" ? canonicalTopupHrefKey(rawHub) || rawHub : rawHub;
   if (!isStoreCategoryKey(key) || !hubKey) notFound();
+  if (key === "top-ups" && hubKey !== rawHub) redirect(topupShopHref(hubKey));
   if (isPlayStationPlusPlatform(hubKey)) redirect("/playstation-plus");
   if (isXboxGamePassPlatform(hubKey)) redirect("/xbox-game-pass");
 
@@ -120,8 +126,19 @@ export default async function ShopHubPage({ params }) {
       ? await loadTopupShop(sourceId)
       : await loadGiftCardShop(sourceId, { giftDelivery: tab.deliveryMode || "standard" });
     if (!catalog.gameName) notFound();
-    const tabs = bannerTabsFromHub(catalogHub);
     const href = tab.href || `/shop/${key}/${hubKey}`;
+    const tabs = isTopup ? topupTabsFromShop(catalog.shop, bannerTabsFromHub(catalogHub), hubKey) : bannerTabsFromHub(catalogHub);
+    if (isTopup) {
+      catalog.bannerName = topupBannerName(catalog.shop, hubKey, catalog.bannerName);
+      return (
+        <TopupShopPage
+          catalog={catalog}
+          tabs={tabs}
+          activeTab={activeHubTabKey(tabs, href, isFcFamilyHub(hubKey) || tabs.some((item) => item.key === hubKey) ? hubKey : tab.tabKey || "top-up")}
+          href={href}
+        />
+      );
+    }
     return (
       <>
         <HeaderBar />
@@ -134,21 +151,12 @@ export default async function ShopHubPage({ params }) {
             tabs={tabs}
           />
           <div className="mx-auto mt-8 max-w-[1208px] px-4 lg:px-6">
-            {isTopup ? (
-              <GiftCardBuyFlow
-                regions={catalog.regions}
-                amounts={catalog.amounts}
-                productIcon={catalog.bannerIcon}
-                buyerFieldsByHandle={catalog.buyerFieldsByHandle}
-              />
-            ) : (
-              <SubscriptionBuyFlow
-                regions={catalog.regions}
-                amounts={catalog.amounts}
-                offerTitle={tab.label || FA.subscription}
-                productIcon={catalog.bannerIcon}
-              />
-            )}
+            <SubscriptionBuyFlow
+              regions={catalog.regions}
+              amounts={catalog.amounts}
+              offerTitle={tab.label || FA.subscription}
+              productIcon={catalog.bannerIcon}
+            />
           </div>
         </main>
         <Footer />
@@ -156,7 +164,22 @@ export default async function ShopHubPage({ params }) {
       </>
     );
   }
-  if (key === "top-ups" || key === "gift-cards") {
+  if (key === "top-ups") {
+    const catalog = await loadTopupShop(hubKey);
+    if (!catalog.gameName) notFound();
+    const href = `/shop/top-ups/${hubKey}`;
+    const tabs = topupTabsFromShop(catalog.shop, bannerTabsFromHub(catalogHub), hubKey);
+    catalog.bannerName = topupBannerName(catalog.shop, hubKey, catalog.bannerName);
+    return (
+      <TopupShopPage
+        catalog={catalog}
+        tabs={tabs}
+        activeTab={activeHubTabKey(tabs, href, isFcFamilyHub(hubKey) || tabs.some((item) => item.key === hubKey) ? hubKey : "top-up")}
+        href={href}
+      />
+    );
+  }
+  if (key === "gift-cards") {
     notFound();
   }
 

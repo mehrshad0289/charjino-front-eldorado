@@ -278,7 +278,7 @@ export default function SupportSellerRulesPage() {
         <div className="flex w-full items-center justify-between gap-4 px-4">
           <div className="flex grow basis-0 items-center">
             <a
-              href="https://support.eldorado.gg/en/"
+              href="/support"
               aria-label="Help Center home"
               className="flex items-center overflow-hidden gap-3 pl-2"
             >

@@ -179,7 +179,7 @@ export default async function ShopListingPage({ params }) {
                 }}
               />
             </div>
-            <aside className="flex flex-col gap-6 lg:sticky lg:top-[108px]">
+            <aside className="flex flex-col gap-6 lg:sticky lg:top-[var(--shop-header-h)]">
               <ProductOfferCard
                 offer={{
                   price,

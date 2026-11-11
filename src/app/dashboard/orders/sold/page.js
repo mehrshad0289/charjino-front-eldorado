@@ -1,48 +1,64 @@
-import HeaderBar from "../../../../components/eldorado/HeaderBar";
-import CategoryNav from "../../../../components/eldorado/CategoryNav";
-import DashboardShell from "../../../../components/eldorado/DashboardShell";
-import DashboardPageHeader from "../../../../components/eldorado/DashboardPageHeader";
+import { connection } from "next/server";
+import { redirect } from "next/navigation";
+import { getSessionUser } from "@/actions/auth.actions";
+import { getSellerOrders } from "@/actions/market.actions";
+import OrderDashboardFrame from "../../../../components/eldorado/OrderDashboardFrame";
 import DashboardOrderFilters from "../../../../components/eldorado/DashboardOrderFilters";
 import EmptyState from "../../../../components/eldorado/EmptyState";
-import Footer from "../../../../components/eldorado/Footer";
-import ChatBubble from "../../../../components/eldorado/ChatBubble";
+import OrderCard from "../../../../components/eldorado/OrderCard";
 import { DASHBOARD_ORDERS_SOLD_PAGE } from "../../../../components/eldorado/data/dashboardData";
+import { ORDER_COPY } from "../../../../components/eldorado/data/orderData";
+import { EMPTY_ORDER_STATUS_COUNTS, parseOrderListQuery, soldInvoiceHref } from "@/lib/order-list-query";
 
-/* Dashboard orders page /dashboard/orders/sold (own .make capture,
-   1920-only, decoded 2026-11-04): same frame as the purchased page with
-   sidebar active row "Sold orders"; filter row extends the two comboboxes
-   ("All statuses", "Recent") with a 200px "Search Orders" input and a
-   right-aligned gray "Download invoice" button; "Nothing found" empty
-   state with the text "You have no sold orders". Footer + chat bubble
-   reuse the shared components. */
+export const instant = false;
 
 export const metadata = {
-  title: "Dashboard Sold Orders - Eldorado",
-  description: "Review the orders you sold on Eldorado.",
+  title: "سفارش‌های فروش — شارژینو",
 };
 
-export default function DashboardOrdersSoldPage() {
-  const { icon, title, filters, emptyState } = DASHBOARD_ORDERS_SOLD_PAGE;
+export default async function DashboardOrdersSoldPage({ searchParams }) {
+  await connection();
+  const query = searchParams ? await searchParams : {};
+  const filters = parseOrderListQuery(query);
+  const user = await getSessionUser();
+  if (!user) redirect("/login?next=/dashboard/orders/sold");
+  const orders = await getSellerOrders(filters);
+  if (orders.unauthorized) redirect("/login?next=/dashboard/orders/sold");
+  const items = orders.ok ? orders.items : [];
+  const { emptyState } = DASHBOARD_ORDERS_SOLD_PAGE;
+
   return (
-    <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
-      <CategoryNav />
-      <main className="isolate">
-        <DashboardShell active="Sold orders">
-          <DashboardPageHeader icon={icon} title={title} />
-          <div className="mt-[32px] max-w-[1048px] px-6 pb-[50px]">
-            <DashboardOrderFilters
-              status={filters.status}
-              period={filters.period}
-              searchPlaceholder={filters.searchPlaceholder}
-              invoiceLabel={filters.invoiceLabel}
+    <OrderDashboardFrame user={user} active="Sold orders" title={ORDER_COPY.soldTitle}>
+      <DashboardOrderFilters
+        status={filters.status}
+        period={filters.period}
+        query={filters.q}
+        counts={orders.ok ? orders.statusCounts : EMPTY_ORDER_STATUS_COUNTS}
+        searchPlaceholder={ORDER_COPY.searchOrders}
+        invoiceLabel={ORDER_COPY.downloadInvoice}
+        invoiceHref={soldInvoiceHref(filters)}
+      />
+      {!orders.ok ? (
+        <p className="text-[14px] text-[rgb(232,27,22)]">{orders.message || "سفارش‌ها خوانده نشد."}</p>
+      ) : items.length === 0 ? (
+        <EmptyState
+          image={emptyState.image}
+          imageAlt={ORDER_COPY.emptySoldTitle}
+          title={ORDER_COPY.emptySoldTitle}
+          text={ORDER_COPY.emptySoldText}
+        />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {items.map((order) => (
+            <OrderCard
+              key={order.order_no}
+              order={order}
+              amountKey="seller_payout_amount"
+              href={`/dashboard/orders/sold/${encodeURIComponent(order.order_no)}`}
             />
-            <EmptyState {...emptyState} />
-          </div>
-        </DashboardShell>
-      </main>
-      <Footer />
-      <ChatBubble />
-    </div>
+          ))}
+        </div>
+      )}
+    </OrderDashboardFrame>
   );
 }

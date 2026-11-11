@@ -146,8 +146,8 @@ export default function DashboardSidebar({ active = null, user = null }) {
     setCollapsed((c) => ({ ...c, [id]: !c[id] }));
 
   return (
-    <div className="h-full w-full bg-white lg:w-[260px]">
-      <nav id="dashboard-sidebar" className="sticky start-0 top-[100px]">
+    <div className="h-full w-[260px] bg-white">
+      <nav id="dashboard-sidebar" className="sticky start-0 top-[var(--shop-header-h)]">
         <div className="flex h-[62px] justify-start px-[10px] pb-3 pt-[10px]">
           <div className="me-[10px]">
             <div className="size-10 overflow-hidden rounded-full bg-badgebg text-center text-[13px] font-bold leading-10">

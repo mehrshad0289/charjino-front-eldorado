@@ -1,43 +1,60 @@
-import HeaderBar from "../../../../components/eldorado/HeaderBar";
-import CategoryNav from "../../../../components/eldorado/CategoryNav";
-import DashboardShell from "../../../../components/eldorado/DashboardShell";
-import DashboardPageHeader from "../../../../components/eldorado/DashboardPageHeader";
+import { connection } from "next/server";
+import { redirect } from "next/navigation";
+import { getSessionUser } from "@/actions/auth.actions";
+import { getBuyerOrders } from "@/actions/market.actions";
+import OrderDashboardFrame from "../../../../components/eldorado/OrderDashboardFrame";
 import DashboardOrderFilters from "../../../../components/eldorado/DashboardOrderFilters";
 import EmptyState from "../../../../components/eldorado/EmptyState";
-import Footer from "../../../../components/eldorado/Footer";
-import ChatBubble from "../../../../components/eldorado/ChatBubble";
+import OrderCard from "../../../../components/eldorado/OrderCard";
 import { DASHBOARD_ORDERS_PURCHASED_PAGE } from "../../../../components/eldorado/data/dashboardData";
+import { ORDER_COPY } from "../../../../components/eldorado/data/orderData";
+import { EMPTY_ORDER_STATUS_COUNTS, parseOrderListQuery } from "@/lib/order-list-query";
 
-/* Dashboard orders page /dashboard/orders/purchased (own .make capture,
-   1920-only, decoded 2026-11-04): logged-in frame + dashboard shell with
-   sidebar active row "Purchased orders"; page header (receipt icon + H1,
-   NO action button); content gap mt-[32px] (offers pages use mt-[4px]);
-   filter row = "All statuses" + "Recent" comboboxes (min-w-[200px]);
-   "Nothing found" empty state with the order-specific text "You have no
-   purchased orders". Footer + chat bubble reuse the shared components. */
+export const instant = false;
 
 export const metadata = {
-  title: "Dashboard Purchased Orders - Eldorado",
-  description: "Review the orders you purchased on Eldorado.",
+  title: "سفارش‌های خرید — شارژینو",
 };
 
-export default function DashboardOrdersPurchasedPage() {
-  const { icon, title, filters, emptyState } = DASHBOARD_ORDERS_PURCHASED_PAGE;
+export default async function DashboardOrdersPurchasedPage({ searchParams }) {
+  await connection();
+  const query = searchParams ? await searchParams : {};
+  const filters = parseOrderListQuery(query);
+  const user = await getSessionUser();
+  if (!user) redirect("/login?next=/dashboard/orders/purchased");
+  const orders = await getBuyerOrders(filters);
+  if (orders.unauthorized) redirect("/login?next=/dashboard/orders/purchased");
+  const items = orders.ok ? orders.items : [];
+  const { emptyState } = DASHBOARD_ORDERS_PURCHASED_PAGE;
+
   return (
-    <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
-      <CategoryNav />
-      <main className="isolate">
-        <DashboardShell active="Purchased orders">
-          <DashboardPageHeader icon={icon} title={title} />
-          <div className="mt-[32px] max-w-[1048px] px-6 pb-[50px]">
-            <DashboardOrderFilters status={filters.status} period={filters.period} />
-            <EmptyState {...emptyState} />
-          </div>
-        </DashboardShell>
-      </main>
-      <Footer />
-      <ChatBubble />
-    </div>
+    <OrderDashboardFrame user={user} active="Purchased orders" title={ORDER_COPY.purchasedTitle}>
+      <DashboardOrderFilters
+        status={filters.status}
+        period={filters.period}
+        query={filters.q}
+        counts={orders.ok ? orders.statusCounts : EMPTY_ORDER_STATUS_COUNTS}
+      />
+      {!orders.ok ? (
+        <p className="text-[14px] text-[rgb(232,27,22)]">{orders.message || "سفارش‌ها خوانده نشد."}</p>
+      ) : items.length === 0 ? (
+        <EmptyState
+          image={emptyState.image}
+          imageAlt={ORDER_COPY.emptyBuyTitle}
+          title={ORDER_COPY.emptyBuyTitle}
+          text={ORDER_COPY.emptyBuyText}
+        />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {items.map((order) => (
+            <OrderCard
+              key={order.order_no}
+              order={order}
+              href={`/dashboard/orders/purchased/${encodeURIComponent(order.order_no)}`}
+            />
+          ))}
+        </div>
+      )}
+    </OrderDashboardFrame>
   );
 }

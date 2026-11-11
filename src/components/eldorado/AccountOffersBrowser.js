@@ -77,7 +77,7 @@ export default function AccountOffersBrowser({ offers, facets = [] }) {
   }, [offers, query, sort, priceMin, priceMax, picked, numberBand]);
 
   const sidebar = (
-    <div className="lg:sticky lg:top-[108px]">
+    <div className="lg:sticky lg:top-[var(--shop-header-h)]">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="hidden text-[20px] font-bold leading-[30px] lg:block">فیلترها</h2>
         {activeCount ? (

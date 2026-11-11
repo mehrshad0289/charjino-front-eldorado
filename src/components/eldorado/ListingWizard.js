@@ -392,7 +392,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
   return (
     <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start lg:gap-6">
       <div className="flex flex-col gap-4 pb-28 lg:pb-6">
-        <div className="sticky top-[100px] z-20 flex flex-col gap-2">
+        <div className="sticky top-[var(--shop-header-h)] z-20 flex flex-col gap-2">
         <nav className="flex gap-2 overflow-x-auto rounded-xl bg-white p-2" style={{ boxShadow: cardShadow }} aria-label="بخش‌های آگهی">
           {LISTING_SECTIONS.map((section, index) => {
             const current = activeSection === section.id;
@@ -617,7 +617,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
         {issues.form ? <p className="text-[14px] text-[rgb(232,27,22)]" role="alert">{issues.form}</p> : null}
       </div>
 
-      <aside className="mt-4 lg:sticky lg:top-28 lg:mt-0">
+      <aside className="mt-4 lg:sticky lg:top-[var(--shop-header-h)] lg:mt-0">
         <div className="rounded-xl bg-white p-4" style={{ boxShadow: cardShadow }}>
           <p className="text-[13px] font-bold text-graytext">پیش‌نمایش آگهی</p>
           {previewCover ? (

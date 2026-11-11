@@ -88,6 +88,7 @@ export const SHOP_ITEMS_HREF = "/shop/items";
 export const SHOP_BOOSTING_HREF = "/shop/boosting";
 export const SHOP_CURRENCY_HREF = "/shop/currency";
 export const CONTACT_HREF = "/contact-us";
+export const SUPPORT_HREF = "/support";
 export const TERMS_HREF = "/terms-of-service";
 
 export const CATEGORY_NAV = [

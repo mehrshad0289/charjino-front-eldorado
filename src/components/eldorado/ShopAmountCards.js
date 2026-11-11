@@ -53,15 +53,19 @@ function Card({ variant, selected, onSelect, popularLabel }) {
         selected ? "bg-brand/[0.16] outline-2 outline-offset-[-2px] outline-brand" : "bg-white hover:bg-badgebg"
       }`}
     >
-      <div className="flex grow flex-col items-start gap-[10px] p-3 pt-0">
+      <div className={`flex grow flex-col items-start gap-[10px] p-3 ${selected && variant.popular ? "pt-0" : ""}`}>
         {selected && variant.popular ? <PopularChip label={popularLabel} /> : null}
         <div className="flex w-full grow flex-col items-start gap-[10px]">
           <div className="h-10 w-10 shrink-0 overflow-hidden">
-            <img
-              alt={variant.imgAlt ?? variant.label}
-              src={variant.img}
-              className="block h-10 w-10 rounded-sm object-cover align-middle"
-            />
+            {variant.img ? (
+              <img
+                alt={variant.imgAlt ?? variant.label}
+                src={variant.img}
+                className="block h-10 w-10 rounded-sm object-cover align-middle"
+              />
+            ) : (
+              <span className="block h-10 w-10 rounded-sm bg-badgebg" />
+            )}
           </div>
           <div className="grow">
             <div className={`text-[14px] leading-[19.6px] ${selected ? "font-bold" : ""}`}>{variant.label}</div>
@@ -102,6 +106,8 @@ export default function ShopAmountCards({
   amountLabel = "Amount:",
   popularLabel = "Popular",
   empty = null,
+  attached = true,
+  footer = null,
 }) {
   const [selected, setSelected] = useState(defaultSelected);
   const scrollerRef = useRef(null);
@@ -126,7 +132,9 @@ export default function ShopAmountCards({
   const selectedText = selectedVariant?.label || current || "";
 
   return (
-    <div className="rounded-b-lg bg-white px-4 pb-4 pt-4 lg:px-6 lg:pb-5">
+    <div
+      className={`${attached ? "rounded-b-lg" : "rounded-lg"} bg-white px-4 pb-4 pt-4 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] lg:px-6 lg:pb-5`}
+    >
       <div className="mb-3 text-[16px] leading-[24px]">
         <span className="font-bold">{amountLabel} </span>
         <span className="text-graytext">{selectedText}</span>
@@ -164,6 +172,7 @@ export default function ShopAmountCards({
           </div>
         </>
       )}
+      {footer ? <div className="pt-4">{footer}</div> : null}
     </div>
   );
 }

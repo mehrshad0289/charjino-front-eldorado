@@ -64,7 +64,7 @@ function RadioRow({ label, icon }) {
 function FiltersSidebar() {
   return (
     <div className="mr-0 mb-8 lg:mr-[32px] lg:mb-0">
-      <div className="flex w-full flex-col pt-7 lg:sticky lg:top-[100px] lg:h-[1044px] lg:w-2xs">
+      <div className="flex w-full flex-col pt-7 lg:sticky lg:top-[var(--shop-header-h)] lg:h-[1044px] lg:w-2xs">
         <span className="mb-5 block text-[20px] font-bold leading-[30px]">{SHOP_ITEM_FILTERS.title}</span>
         <div className="grow overflow-y-auto overflow-x-hidden border-t-[0.8px] border-cardborder pr-0 lg:pr-4">
           <div className="mt-5 mb-5">

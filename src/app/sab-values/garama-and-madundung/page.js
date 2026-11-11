@@ -78,7 +78,7 @@ export default function RobloxPriceHistoryPage() {
             style={{ objectPosition: "50% 15%" }}
           />
         </div>
-        <div className="relative z-10 pt-6 lg:pt-8">
+        <div className="relative z-10 ">
           <section className="mx-auto flex w-full max-w-[1208px] flex-col gap-6 p-4 lg:p-6">
             {/* header row */}
             <div>

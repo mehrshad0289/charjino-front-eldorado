@@ -1,5 +1,13 @@
 import Link from "next/link";
 import Logo from "./Logo";
+import {
+  SUPPORT_BUYER_PROTECTION,
+  SUPPORT_CHANGE_GAME_EMAIL,
+  SUPPORT_HOME,
+  SUPPORT_RECEIVE_DETAILS,
+  SUPPORT_SELLER_RULES,
+  SUPPORT_SELLER_WALLET,
+} from "./data/supportData";
 
 const PAY_URL = "https://assetsdelivery.eldorado.gg/v7/_assets_/payments/v11/icons";
 const BADGE_URL =
@@ -19,34 +27,29 @@ const LINK_COLS = [
   {
     bold: true,
     links: [
-      ["Help center", "https://support.eldorado.gg"],
-      ["Contact us", "/contact-us"],
-      ["About us", "/about-us"],
-      ["Careers", "https://careers.eldorado.gg/"],
-      ["Bug bounty", "/bug-bounty"],
-      ["Blog", "/blog/"],
-      ["Influencer program", "/influencer-program"],
-      ["Become an affiliate", "https://affiliates.eldorado.gg"],
-      ["Become a seller", "/become-seller"],
+      ["مرکز راهنما", SUPPORT_HOME],
+      ["تماس با ما", "/contact-us"],
+      ["درباره ما", "/about-us"],
+      ["وبلاگ", "/blog/"],
+      ["فروشنده شو", "/become-seller"],
     ],
   },
   {
     bold: false,
     links: [
-      ["Account warranty", "https://support.eldorado.gg/en/articles/8408988-account-warranty"],
-      ["TradeShield (buying)", "https://support.eldorado.gg/en/articles/8408994-tradeshield-buying"],
-      ["TradeShield (selling)", "https://support.eldorado.gg/en/articles/8409006-tradeshield-selling"],
-      ["Withdrawals", "https://support.eldorado.gg/en/articles/8409026-withdrawals"],
-      ["Account seller rules", "https://support.eldorado.gg/en/articles/8408996-account-seller-rules"],
+      ["دریافت مشخصات اکانت", SUPPORT_RECEIVE_DETAILS],
+      ["تعویض ایمیل اکانت بازی", SUPPORT_CHANGE_GAME_EMAIL],
+      ["حفاظت خریدار", SUPPORT_BUYER_PROTECTION],
+      ["کیف پول فروشنده", SUPPORT_SELLER_WALLET],
+      ["قوانین فروشنده", SUPPORT_SELLER_RULES],
     ],
   },
   {
     bold: false,
     links: [
-      ["Seller rules", "https://support.eldorado.gg/en/articles/8408997-seller-rules"],
-      ["Changing username", "https://support.eldorado.gg/en/articles/8409011-changing-username"],
-      ["Fees", "https://support.eldorado.gg/en/articles/8409025-fees"],
-      ["Refund Policy", "https://support.eldorado.gg/en/articles/8409020-refund-policy"],
+      ["سفارش‌های خرید", "/dashboard/orders/purchased"],
+      ["سفارش‌های فروش", "/dashboard/orders/sold"],
+      ["کیف پول", "/dashboard/wallet"],
     ],
   },
 ];

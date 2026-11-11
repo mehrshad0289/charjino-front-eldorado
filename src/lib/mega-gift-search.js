@@ -1,4 +1,5 @@
 import { giftShopHrefFromProduct, isGiftCardProduct, isTopupProduct, shopTopupHrefFromProduct } from "./gift-card-shop";
+import { pickTopupDisplayName, topupHubKeyFromProduct } from "./topup-hub";
 
 export const MEGA_OTHER_VERTICALS = ["Currency", "Accounts", "Top ups", "Items", "Boosting"];
 
@@ -95,9 +96,18 @@ function searchItemToGame(item, category) {
   const rec = asRecord(item);
   const giftHref = isGiftCardProduct(rec) ? giftShopHrefFromProduct(rec) : "";
   const topupHref = !giftHref && isTopupProduct(rec) ? shopTopupHrefFromProduct(rec) : "";
+  const hub = topupHref ? topupHubKeyFromProduct(rec) : "";
+  const name = hub
+    ? pickTopupDisplayName({
+        hubKey: hub,
+        hubTitle: "",
+        nameEn: asString(rec.titleEn) || asString(rec.title_en) || asString(rec.name_en),
+        faTitle: asString(rec.title) || asString(rec.name),
+      })
+    : asString(rec.title) || asString(rec.name);
   return {
-    name: asString(rec.title) || asString(rec.name),
-    nameEn: asString(rec.title_en) || asString(rec.titleEn) || asString(rec.name_en),
+    name,
+    nameEn: asString(rec.title_en) || asString(rec.titleEn) || asString(rec.name_en) || hub,
     img: asString(rec.thumbnail) || asString(rec.image),
     href: giftHref || topupHref || asString(rec.href),
     category,

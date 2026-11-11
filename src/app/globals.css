@@ -65,6 +65,26 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Fixed shop chrome: mobile header (burger + search row) ~114px;
+   desktop header 60px + category strip 40px. Sidebar/sticky panels
+   pin below --shop-header-h. */
+:root {
+  --shop-header-bar: 114px;
+  --shop-header-h: 114px;
+}
+@media (min-width: 1024px) {
+  :root {
+    --shop-header-bar: 60px;
+    --shop-header-h: 100px;
+  }
+}
+
+/* Assassin sits on the right of the source PNG (English LTR). In RTL the
+   sidebar occupies that side, so mirror the art onto the content column. */
+html[dir="rtl"] img.dashboard-assassin {
+  transform: scaleX(-1);
+}
+
 /* Blog pages use "Lato Eldorado" (the capture's font-face files) like
    every other page. Session-15 measured WHY the alternate "use next/font
    Google Lato" theory is wrong: canvas '400 18px' on the SAME 65-char
