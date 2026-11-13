@@ -7,6 +7,8 @@ import { hubCardsFromCategory, loadStoreCategory } from "./store-engine";
 import {
   canonicalTopupHrefKey,
   cleanTopupGameTitle,
+  humanizeTopupHub,
+  joinTopupSearchText,
   pickTopupDisplayName,
   topupHubKey,
   topupHubKeyFromProduct,
@@ -96,7 +98,7 @@ const MEGA_TTL_MS = 60_000;
 const megaMemo = new Map();
 
 export async function buildNavMegaCached(verticalKey) {
-  const key = `topup-hub-v7:${verticalKey}`;
+  const key = `topup-hub-v8:${verticalKey}`;
   const hit = megaMemo.get(key);
   if (hit && Date.now() - hit.at < MEGA_TTL_MS) return hit.data;
   const data = await buildNavMega(verticalKey);
@@ -139,19 +141,31 @@ function toTopupMegaRow(hubKey, hubTitle, extra = {}) {
   const key = canonicalTopupHrefKey(hubKey) || asString(hubKey);
   const href = topupShopHref(key);
   if (!href) return null;
-  const name = pickTopupDisplayName({
-    hubKey: key,
-    hubTitle,
-    nameEn: extra.nameEn,
-    faTitle: extra.faTitle,
-  });
-  const nameEn = [cleanTopupGameTitle(extra.nameEn), cleanTopupGameTitle(extra.faTitle), key]
-    .filter((part, index, all) => part && all.indexOf(part) === index)
-    .join(" ");
+  const gameFa = asString(extra.gameTitleFa) || asString(extra.faTitle);
+  const gameEn = asString(extra.gameTitle) || asString(extra.nameEn);
+  const named = asString(hubTitle);
+  const name =
+    named ||
+    pickTopupDisplayName({
+      hubKey: key,
+      hubTitle,
+      nameEn: gameEn,
+      faTitle: gameFa,
+    });
+  const nameEn = joinTopupSearchText(
+    named,
+    extra.searchText,
+    gameEn,
+    gameFa,
+    extra.tag,
+    extra.hubTitle,
+    humanizeTopupHub(key),
+    key,
+  );
   return {
     name,
     nameEn,
-    img: extra.img || iconFor(name) || iconFor(extra.nameEn) || iconFor(hubTitle) || "",
+    img: extra.img || iconFor(name) || iconFor(gameEn) || iconFor(hubTitle) || "",
     href,
     hubKey: key,
     popular: Boolean(extra.popular) || POPULAR_TOPUP_HUBS.has(key),
@@ -177,13 +191,24 @@ async function mapTopupMega() {
     if (!key || seen.has(key)) continue;
     const href = asString(card.href);
     if (href && !href.startsWith("/shop/top-ups/")) continue;
-    const extra = extras.get(key) || extras.get(topupHubKey(card.key)) || {};
+    const catalog = extras.get(key) || extras.get(topupHubKey(card.key)) || {};
+    const extra = {
+      ...catalog,
+      gameTitleFa: asString(card.gameTitleFa) || asString(catalog.faTitle),
+      gameTitle: asString(card.gameTitle) || asString(catalog.nameEn),
+      faTitle: asString(card.gameTitleFa) || asString(catalog.faTitle),
+      nameEn: asString(card.gameTitle) || asString(catalog.nameEn),
+      tag: asString(card.tag),
+      hubTitle: asString(card.hubTitle),
+      searchText: asString(card.nameEn),
+      img: asString(catalog.img) || asString(card.img),
+    };
     const row = toTopupMegaRow(key, card.name, extra);
     if (!row) continue;
     seen.add(key);
     rows.push(row);
   }
-  rows.sort((a, b) => a.name.localeCompare(b.name, "en"));
+  rows.sort((a, b) => a.name.localeCompare(b.name, "fa"));
 
   const byKey = new Map(rows.map((row) => [row.hubKey, row]));
   const curated = [...POPULAR_TOPUP_HUBS].map((key) => byKey.get(key)).filter(Boolean);

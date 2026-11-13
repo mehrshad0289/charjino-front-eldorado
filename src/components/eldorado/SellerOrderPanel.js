@@ -20,6 +20,11 @@ export default function SellerOrderPanel({ order }) {
   const canDeliver = order?.status === "paid" || order?.status === "awaiting_delivery";
   const paidOut = order?.status === "settling" || order?.status === "settled" || order?.status === "completed";
   const delivered = Boolean(order?.delivered_at) || order?.status === "buyer_reviewing" || paidOut;
+  const isItem = order?.listing?.offer_type === "CustomItem";
+  const isCurrency = order?.listing?.offer_type === "Currency";
+  const isGoods = isItem || isCurrency;
+  const checkoutRows = order?.buyer_checkout && typeof order.buyer_checkout === "object" ? Object.entries(order.buyer_checkout) : [];
+  const checkoutLabels = Object.fromEntries((order?.checkout_fields || []).map((field) => [field.key, field.label]));
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -59,8 +64,27 @@ export default function SellerOrderPanel({ order }) {
         {order.status === "cart_pending" || orderNeedsPay(order.status) ? (
           <p className="mt-3 text-[14px]">{ORDER_COPY.sellerWaitPay}</p>
         ) : null}
-        {order.status === "paid" ? <p className="mt-3 text-[14px] leading-[22px]">{ORDER_COPY.sellerPaidHint}</p> : null}
-        {order.status === "buyer_reviewing" ? <p className="mt-3 text-[14px] leading-[22px]">{ORDER_COPY.sellerWaitBuyer}</p> : null}
+        {order.status === "paid" ? (
+          <p className="mt-3 text-[14px] leading-[22px]">
+            {isCurrency ? ORDER_COPY.sellerPaidHintCurrency : isItem ? ORDER_COPY.sellerPaidHintItem : ORDER_COPY.sellerPaidHint}
+            {isCurrency && order.delivery_minutes ? ` زمان تضمینی: ${toFaDigits(order.delivery_minutes)} دقیقه.` : ""}
+          </p>
+        ) : null}
+        {checkoutRows.length > 0 ? (
+          <dl className="mt-4 space-y-1 text-[14px]">
+            {checkoutRows.map(([key, value]) => (
+              <div key={key} className="flex justify-between gap-3">
+                <dt className="text-graytext">{checkoutLabels[key] || key}</dt>
+                <dd className="font-bold">{String(value)}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : null}
+        {order.status === "buyer_reviewing" ? (
+          <p className="mt-3 text-[14px] leading-[22px]">
+            {isCurrency ? ORDER_COPY.sellerWaitBuyerCurrency : isItem ? ORDER_COPY.sellerWaitBuyerItem : ORDER_COPY.sellerWaitBuyer}
+          </p>
+        ) : null}
         {paidOut ? (
           <p className="mt-3 text-[14px] leading-[22px]">
             {ORDER_COPY.sellerWalletCredited}{" "}
@@ -73,9 +97,11 @@ export default function SellerOrderPanel({ order }) {
 
       {canDeliver ? (
         <form onSubmit={onSubmit} className="rounded-xl bg-white p-5 shadow-[0_2px_4px_rgba(9,9,11,0.05)]">
-          <h2 className="text-[16px] font-bold">{ORDER_COPY.sellerDeliverTitle}</h2>
-          <p className="mt-2 text-[14px] leading-[22px] text-graytext">{ORDER_COPY.sellerDeliverHint}</p>
-          <label className="mt-4 block text-[13px] font-bold">{ORDER_COPY.sellerSecret}</label>
+          <h2 className="text-[16px] font-bold">
+            {isCurrency ? ORDER_COPY.sellerDeliverTitleCurrency : isItem ? ORDER_COPY.sellerDeliverTitleItem : ORDER_COPY.sellerDeliverTitle}
+          </h2>
+          <p className="mt-2 text-[14px] leading-[22px] text-graytext">{isGoods ? ORDER_COPY.sellerDeliverHintItem : ORDER_COPY.sellerDeliverHint}</p>
+          <label className="mt-4 block text-[13px] font-bold">{isGoods ? ORDER_COPY.sellerSecretItem : ORDER_COPY.sellerSecret}</label>
           <textarea
             required
             value={secret}
@@ -97,7 +123,7 @@ export default function SellerOrderPanel({ order }) {
         </form>
       ) : null}
 
-      <OrderChatBox orderNo={order.order_no} role="seller" />
+      <OrderChatBox orderNo={order.order_no} role="seller" isItem={isGoods} />
       <OrderTimeline items={order.timeline} />
     </div>
   );

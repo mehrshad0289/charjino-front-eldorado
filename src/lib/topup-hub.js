@@ -228,15 +228,31 @@ export function pickTopupDisplayName({ hubKey, hubTitle, nameEn, faTitle }) {
   const key = canonicalTopupHrefKey(hubKey) || asString(hubKey);
   const cleanedEn = cleanTopupGameTitle(nameEn);
   const titled = asString(hubTitle);
+  const cleanedFa = cleanTopupGameTitle(faTitle);
   const human = humanizeTopupHub(key);
   if (cleanedEn && !isSkuLikeTopupTitle(cleanedEn) && !hasPersian(cleanedEn) && !looksLikeHubSlug(cleanedEn, key)) {
     return cleanedEn;
   }
-  if (titled && !looksLikeHubSlug(titled, key) && !hasPersian(titled) && !isSkuLikeTopupTitle(titled)) {
+  if (cleanedFa && !isSkuLikeTopupTitle(cleanedFa)) return cleanedFa;
+  if (titled && !looksLikeHubSlug(titled, key) && !isSkuLikeTopupTitle(titled)) {
     return titled;
   }
   if (human) return human;
-  const cleanedFa = cleanTopupGameTitle(faTitle);
-  if (cleanedFa && !isSkuLikeTopupTitle(cleanedFa)) return cleanedFa;
   return titled || key;
+}
+
+export function joinTopupSearchText(...parts) {
+  const seen = new Set();
+  const out = [];
+  for (const part of parts) {
+    const text = asString(part);
+    if (!text) continue;
+    const folded = text
+      .toLowerCase()
+      .replace(/[\s\u200c\-_·]+/g, "");
+    if (!folded || seen.has(folded)) continue;
+    seen.add(folded);
+    out.push(text);
+  }
+  return out.join(" ");
 }

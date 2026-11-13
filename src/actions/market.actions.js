@@ -213,6 +213,24 @@ export async function saveSellerBank(formData) {
   }
 }
 
+export async function getItemOfferGames() {
+  try {
+    const data = await serverFetch(apiPaths.marketItemOfferGames);
+    return { ok: true, items: Array.isArray(data?.items) ? data.items : [] };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function getCurrencyOfferGames() {
+  try {
+    const data = await serverFetch(apiPaths.marketCurrencyOfferGames);
+    return { ok: true, items: Array.isArray(data?.items) ? data.items : [] };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
 export async function getMarketGames() {
   try {
     const account = await serverFetch(apiPaths.marketGames("Account"));
@@ -239,11 +257,13 @@ export async function getGameSchema(gameId) {
   }
 }
 
-export async function getSellerListings() {
+export async function getSellerListings(offer) {
   const accessToken = await getAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
-    const data = await serverFetch(`${apiPaths.marketSellerListings}?perPage=60`, {
+    const search = new URLSearchParams({ perPage: "60" });
+    if (offer) search.set("offer", offer);
+    const data = await serverFetch(`${apiPaths.marketSellerListings}?${search.toString()}`, {
       headers: bearerHeaders(accessToken),
     });
     return { ok: true, items: Array.isArray(data?.items) ? data.items : [], meta: data?.meta || null };
@@ -286,7 +306,7 @@ function listingPayload(formData) {
     const trimmed = String(value ?? "").trim();
     if (key && trimmed) cleanAttributes[key] = trimmed;
   }
-  return {
+  const body = {
     title,
     description: description || null,
     game_name: gameName,
@@ -294,6 +314,19 @@ function listingPayload(formData) {
     price_amount: priceAmount,
     attributes: Object.keys(cleanAttributes).length ? cleanAttributes : null,
   };
+  const offerType = String(formData.get("offer_type") || "").trim();
+  if (offerType) body.offer_type = offerType;
+  const typeId = Number(formData.get("item_type_id") || "");
+  if (typeId > 0) body.item_type_id = typeId;
+  const stock = Number(onlyDigits(String(formData.get("stock") || "")));
+  if (stock > 0) body.stock = stock;
+  const minQuantity = Number(onlyDigits(String(formData.get("min_quantity") || "")));
+  if (minQuantity > 0) body.min_quantity = minQuantity;
+  const deliveryMethod = String(formData.get("delivery_method") || "").trim();
+  if (deliveryMethod) body.delivery_method = deliveryMethod;
+  const deliveryMinutes = Number(onlyDigits(String(formData.get("delivery_minutes") || "")));
+  if (deliveryMinutes > 0) body.delivery_minutes = deliveryMinutes;
+  return body;
 }
 
 export async function createListing(formData) {
@@ -488,14 +521,21 @@ function payRedirect(paid, orderNo, amount) {
   return redirectUrl;
 }
 
-export async function createMarketOrder(listingId) {
+export async function createMarketOrder(listingId, extra = {}) {
   const accessToken = await getAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای خرید وارد شوید." };
   try {
+    const quantity = Number(extra.quantity);
+    const checkout = extra.checkout && typeof extra.checkout === "object" ? extra.checkout : undefined;
     const data = await serverFetch(apiPaths.marketOrders, {
       method: "POST",
       headers: bearerHeaders(accessToken),
-      body: JSON.stringify({ listingId: Number(listingId), termsAccepted: true }),
+      body: JSON.stringify({
+        listingId: Number(listingId),
+        termsAccepted: true,
+        ...(Number.isFinite(quantity) && quantity > 0 ? { quantity } : {}),
+        ...(checkout ? { checkout } : {}),
+      }),
     });
     revalidateOrderPaths(data?.order_no);
     const orderNo = data?.order_no || "";

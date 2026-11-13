@@ -27,7 +27,7 @@ export default async function DashboardOffersAccountPage() {
   const user = await getSessionUser();
   if (!user) redirect("/login?next=/dashboard/offers/Account");
 
-  const [seller, listings] = await Promise.all([getSellerMe(), getSellerListings()]);
+  const [seller, listings] = await Promise.all([getSellerMe(), getSellerListings("Account")]);
   if (seller.unauthorized || listings.unauthorized) {
     redirect("/login?next=/dashboard/offers/Account");
   }

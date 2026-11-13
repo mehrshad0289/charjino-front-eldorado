@@ -3,6 +3,8 @@ export const apiPaths = {
   authVerifyOtp: "/auth/verify-otp",
   authMe: "/auth/me",
   authLogout: "/auth/logout",
+  authProfile: "/auth/profile",
+  authProfileAvatar: "/auth/profile/avatar",
   marketSellerMe: "/market/seller/me",
   marketSellerAcceptTerms: "/market/seller/accept-terms",
   marketSellerBank: "/market/seller/bank",
@@ -52,9 +54,12 @@ export const apiPaths = {
   },
   marketGames: (offer) =>
     offer ? `/market/games?offer=${encodeURIComponent(offer)}` : "/market/games",
+  marketItemOfferGames: "/market/item-offer-games",
+  marketCurrencyOfferGames: "/market/currency-offer-games",
   marketListings: (params = {}) => {
     const search = new URLSearchParams();
     if (params.game) search.set("game", String(params.game));
+    if (params.offer) search.set("offer", String(params.offer));
     if (params.page) search.set("page", String(params.page));
     if (params.perPage) search.set("perPage", String(params.perPage));
     const qs = search.toString();
@@ -62,6 +67,12 @@ export const apiPaths = {
   },
   marketListingFacets: (game) => `/market/listings/facets?game=${encodeURIComponent(game)}`,
   marketListing: (id) => `/market/listings/${encodeURIComponent(id)}`,
+  marketQuote: (listingId, quantity) => {
+    const search = new URLSearchParams();
+    search.set("listingId", String(listingId));
+    if (quantity) search.set("quantity", String(quantity));
+    return `/market/quote?${search.toString()}`;
+  },
   marketOrders: "/market/orders",
   marketOrder: (orderNo) => `/market/orders/${encodeURIComponent(orderNo)}`,
   marketOrderPay: (orderNo) => `/market/orders/${encodeURIComponent(orderNo)}/pay`,

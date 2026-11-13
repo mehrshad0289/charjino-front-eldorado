@@ -12,7 +12,7 @@ import {
   tabForStoreCategory,
 } from "./gift-card-shop";
 import { preferFaTitle } from "./catalog-region";
-import { pickTopupDisplayName, topupShopHref } from "./topup-hub";
+import { humanizeTopupHub, joinTopupSearchText, pickTopupDisplayName, topupShopHref } from "./topup-hub";
 
 export const STORE_CATEGORY_KEYS = ["currency", "accounts", "top-ups", "items", "boosting", "gift-cards"];
 
@@ -72,6 +72,48 @@ function tabMatchesStoreCategory(tab, categoryKey) {
   return href.includes(`/shop/${categoryKey}/`);
 }
 
+function compactHubLabel(value) {
+  return asString(value)
+    .toLowerCase()
+    .replace(/[\s\u200c\-_·]+/g, "");
+}
+
+function parentGameGroupKey(card) {
+  const id = asString(card.gameKey) || asString(card.gameId);
+  if (id) return `id:${id}`;
+  return `name:${compactHubLabel(card.gameTitleFa) || compactHubLabel(card.gameTitle) || compactHubLabel(card.key)}`;
+}
+
+function labelTopupHubCards(cards) {
+  const counts = new Map();
+  for (const card of cards) {
+    const group = parentGameGroupKey(card);
+    counts.set(group, (counts.get(group) || 0) + 1);
+  }
+  return cards.map((card) => {
+    const gameFa = asString(card.gameTitleFa);
+    const gameEn = asString(card.gameTitle);
+    const game = gameFa || gameEn;
+    const tag = asString(card.tag);
+    const siblings = counts.get(parentGameGroupKey(card)) || 1;
+    const name = game
+      ? siblings > 1 && tag && compactHubLabel(tag) !== compactHubLabel(game)
+        ? `${game} · ${tag}`
+        : game
+      : pickTopupDisplayName({
+          hubKey: card.key,
+          hubTitle: card.hubTitle || card.name,
+          nameEn: gameEn,
+          faTitle: gameFa,
+        });
+    return {
+      ...card,
+      name,
+      nameEn: joinTopupSearchText(name, gameEn, gameFa, card.hubTitle, tag, card.key, humanizeTopupHub(card.key)),
+    };
+  });
+}
+
 export function hubCardsFromCategory(category) {
   const rec = asRecord(category);
   const categoryKey = asString(rec.key);
@@ -93,22 +135,36 @@ export function hubCardsFromCategory(category) {
     const gameTitleFa = asString(row.gameTitleFa);
     cards.push({
       key: hubKey || href,
-      name:
-        categoryKey === "top-ups"
-          ? pickTopupDisplayName({ hubKey, hubTitle: title })
-          : gameTitleFa || gameTitle || title,
+      name: gameTitleFa || gameTitle || title,
+      gameKey: asString(row.gameKey),
+      gameId: row.gameId != null ? String(row.gameId) : "",
       gameTitle,
       gameTitleFa,
       tag: asString(item.label),
+      hubTitle: title,
       img: "",
       href,
     });
   }
-  return cards;
+  if (categoryKey === "top-ups") return labelTopupHubCards(cards);
+  return cards.map((card) => ({
+    ...card,
+    name: card.gameTitleFa || card.gameTitle || card.name,
+  }));
 }
 
 function normShopName(value) {
   return asString(value).toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+export async function loadCurrencyOfferGames() {
+  try {
+    const payload = await serverFetch(apiPaths.marketCurrencyOfferGames);
+    return Array.isArray(payload?.items) ? payload.items : [];
+  } catch (error) {
+    if (error instanceof ApiError) return [];
+    throw error;
+  }
 }
 
 export async function currencyHubKeyForMarket(raw) {
@@ -183,11 +239,18 @@ export async function loadMarketGameCards(offer, categoryKey) {
   }
 }
 
-export async function loadMarketListings(game) {
+export async function loadMarketListings(game, offer, perPage = 24) {
   const name = asString(game);
   if (!name) return { items: [], meta: null };
   try {
-    const payload = await serverFetch(apiPaths.marketListings({ game: name, page: 1, perPage: 24 }));
+    const payload = await serverFetch(
+      apiPaths.marketListings({
+        game: name,
+        offer: asString(offer) || undefined,
+        page: 1,
+        perPage: Math.min(60, Math.max(1, Number(perPage) || 24)),
+      }),
+    );
     return {
       items: Array.isArray(payload?.items) ? payload.items : [],
       meta: payload?.meta || null,
@@ -212,7 +275,18 @@ export async function loadMarketListing(id) {
 export function mediaUrl(url) {
   const value = asString(url);
   if (!value) return "";
-  if (/^https?:\/\//i.test(value)) return value;
+  if (/^https?:\/\//i.test(value)) {
+    try {
+      const parsed = new URL(value);
+      if (parsed.pathname.startsWith("/storage/")) {
+        return `${parsed.pathname}${parsed.search}`;
+      }
+    } catch {
+      return value;
+    }
+    return value;
+  }
+  if (value.startsWith("/storage/")) return value;
   const origin = getBackendUrl().replace(/\/api\/?$/, "");
   return `${origin}${value.startsWith("/") ? value : `/${value}`}`;
 }
@@ -243,19 +317,112 @@ export function listingToOffer(listing, categoryKey) {
   const seller = asRecord(rec.seller);
   const cover = asRecord(rec.cover_image);
   const chips = listingChips(rec);
+  const itemTypeName = asString(rec.item_type_name);
+  const delivery = asString(rec.delivery_label);
+  const filterLabels = { ...asRecord(rec.filter_labels) };
+  if (categoryKey === "currency") {
+    if (!filterLabels.region) filterLabels.region = "ریجن یا سرور";
+    if (!filterLabels.delivery_method) filterLabels.delivery_method = "تحویل";
+  }
+  const attributes = { ...asRecord(rec.attributes) };
+  if (itemTypeName) attributes.item_type = itemTypeName;
+  if (delivery) attributes.delivery_method = delivery;
+  for (const row of Array.isArray(rec.card_attributes) ? rec.card_attributes : []) {
+    const item = asRecord(row);
+    const key = asString(item.key);
+    const value = asString(item.value);
+    if (key && value) attributes[key] = value;
+  }
+  const unitLabel = asString(rec.price_unit_label);
+  const firstImage = Array.isArray(rec.images) ? asRecord(rec.images[0]) : {};
+  const currencyDesc = [delivery, asString(attributes.region), unitLabel ? `هر ${unitLabel}` : ""]
+    .filter(Boolean)
+    .join(" · ");
   return {
     href: `/shop/${categoryKey}/l/${encodeURIComponent(id)}`,
     title: asString(rec.title) || asString(rec.game_name),
-    desc: chips.join(" · ") || asString(rec.description) || asString(rec.game_name),
-    img: mediaUrl(cover.url || rec.cover),
+    desc:
+      categoryKey === "currency"
+        ? currencyDesc || asString(rec.description) || asString(rec.game_name)
+        : chips.join(" · ") || itemTypeName || asString(rec.description) || asString(rec.game_name),
+    img: mediaUrl(cover.url || firstImage.url || rec.cover),
     seller: asString(seller.name) || "فروشنده",
     rating: sellerRating(seller),
-    price: Number.isFinite(price) && price > 0 ? formatTomanPrice(price) : "",
+    price:
+      Number.isFinite(price) && price > 0
+        ? `${formatTomanPrice(price)}${categoryKey === "currency" && unitLabel ? ` / ${unitLabel}` : ""}`
+        : "",
     priceAmount: Number.isFinite(price) ? price : 0,
-    attributes: asRecord(rec.attributes),
-    delivery: "پس از پرداخت",
+    attributes,
+    filterLabels,
+    delivery:
+      categoryKey === "currency" && rec.delivery_minutes != null
+        ? `${toFaDigits(Number(rec.delivery_minutes))} دقیقه`
+        : delivery || (categoryKey === "items" || categoryKey === "currency" ? "" : "پس از پرداخت"),
+    itemTypeName,
+    stock: rec.stock != null ? Number(rec.stock) : null,
+    minQuantity: rec.min_quantity != null ? Number(rec.min_quantity) : 1,
+    priceUnit: asString(rec.price_unit),
+    priceUnitLabel: asString(rec.price_unit_label),
+    deliveryMinutes: rec.delivery_minutes != null ? Number(rec.delivery_minutes) : null,
+    listingId: id,
   };
 }
+
+function countMapToOptions(counts) {
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0]), "fa"))
+    .map(([value, count]) => ({ value, count }));
+}
+
+export function itemFacetsFromOffers(offers) {
+  const typeCounts = new Map();
+  const deliveryCounts = new Map();
+  const extra = new Map();
+  const labels = { item_type: "نوع آیتم", delivery_method: "تحویل" };
+  for (const offer of Array.isArray(offers) ? offers : []) {
+    const type = asString(offer.itemTypeName || offer.attributes?.item_type);
+    if (type) typeCounts.set(type, (typeCounts.get(type) || 0) + 1);
+    const delivery = asString(offer.attributes?.delivery_method);
+    if (delivery) deliveryCounts.set(delivery, (deliveryCounts.get(delivery) || 0) + 1);
+    Object.assign(labels, asRecord(offer.filterLabels));
+    const attributes = asRecord(offer.attributes);
+    for (const [key, raw] of Object.entries(attributes)) {
+      if (key === "item_type" || key === "delivery_method") continue;
+      const value = Array.isArray(raw) ? raw.map(asString).filter(Boolean).join("، ") : asString(raw);
+      if (!key || !value || value.length > 48) continue;
+      if (!extra.has(key)) extra.set(key, new Map());
+      const inner = extra.get(key);
+      inner.set(value, (inner.get(value) || 0) + 1);
+    }
+  }
+  const fields = [];
+  if (typeCounts.size) {
+    fields.push({ key: "item_type", label_fa: labels.item_type, type: "select", options: countMapToOptions(typeCounts) });
+  }
+  if (deliveryCounts.size) {
+    fields.push({ key: "delivery_method", label_fa: labels.delivery_method, type: "select", options: countMapToOptions(deliveryCounts) });
+  }
+  for (const [key, counts] of extra) {
+    if (counts.size < 1) continue;
+    const unique = [...counts.values()].every((count) => count === 1);
+    if (unique && counts.size > 8) continue;
+    fields.push({
+      key,
+      label_fa: asString(labels[key]) || key.split("|").pop() || key,
+      type: "select",
+      options: countMapToOptions(counts),
+    });
+  }
+  return fields;
+}
+
+export const ITEM_PRICE_PRESETS = [
+  { id: "0-100000", min: 0, max: 100000, label: "تا ۱۰۰ هزار" },
+  { id: "100000-500000", min: 100000, max: 500000, label: "۱۰۰ تا ۵۰۰ هزار" },
+  { id: "500000-2000000", min: 500000, max: 2000000, label: "۵۰۰ هزار تا ۲ میلیون" },
+  { id: "2000000+", min: 2000000, max: null, label: "۲ میلیون به بالا" },
+];
 
 export async function loadMarketFacets(game) {
   const name = asString(game);

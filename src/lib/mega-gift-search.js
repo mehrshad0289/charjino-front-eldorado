@@ -11,21 +11,39 @@ function asString(value) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function compactText(value) {
+function foldMegaText(value) {
   return asString(value)
     .toLowerCase()
-    .replace(/[\s\u200c\-_]+/g, "");
+    .replace(/ي/g, "ی")
+    .replace(/ك/g, "ک")
+    .replace(/ة/g, "ه")
+    .replace(/[أإآ]/g, "ا");
+}
+
+function compactText(value) {
+  return foldMegaText(value).replace(/[\s\u200c\-_·]+/g, "");
 }
 
 export function matchesMegaQuery(game, query) {
-  const q = asString(query).toLowerCase();
+  const q = foldMegaText(query);
   if (!q) return true;
   const rec = asRecord(game);
-  const hay = [rec.name, rec.nameEn, rec.title, rec.title_en, rec.titleEn]
-    .map(asString)
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
+  const hay = foldMegaText(
+    [
+      rec.name,
+      rec.nameEn,
+      rec.title,
+      rec.title_en,
+      rec.titleEn,
+      rec.hubKey,
+      rec.tag,
+      rec.gameTitle,
+      rec.gameTitleFa,
+    ]
+      .map(asString)
+      .filter(Boolean)
+      .join(" "),
+  );
   if (!hay) return false;
   if (hay.includes(q)) return true;
   const compactHay = compactText(hay);
@@ -107,7 +125,7 @@ function searchItemToGame(item, category) {
     : asString(rec.title) || asString(rec.name);
   return {
     name,
-    nameEn: asString(rec.title_en) || asString(rec.titleEn) || asString(rec.name_en) || hub,
+    nameEn: [rec.title_en, rec.titleEn, rec.name_en, rec.title, rec.name, hub].map(asString).filter(Boolean).join(" "),
     img: asString(rec.thumbnail) || asString(rec.image),
     href: giftHref || topupHref || asString(rec.href),
     category,

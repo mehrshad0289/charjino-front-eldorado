@@ -22,6 +22,9 @@ export default function BuyerOrderPanel({ order, payment }) {
   const [secret, setSecret] = useState("");
   const [copied, setCopied] = useState(false);
   const status = orderStatusMeta(order?.status);
+  const isItem = order?.listing?.offer_type === "CustomItem";
+  const isCurrency = order?.listing?.offer_type === "Currency";
+  const isGoods = isItem || isCurrency;
   const delivery = order?.delivery || {};
   const reviewing = order?.status === "buyer_reviewing" || Boolean(delivery.has_payload);
   const unpaid = orderNeedsPayment(order?.status);
@@ -98,8 +101,17 @@ export default function BuyerOrderPanel({ order, payment }) {
             {ORDER_COPY.payCta}
           </button>
         ) : null}
-        {order.status === "paid" ? <p className="mt-4 text-[14px] leading-[22px]">{ORDER_COPY.waitSeller}</p> : null}
-        {order.status === "awaiting_delivery" ? <p className="mt-4 text-[14px] leading-[22px]">{ORDER_COPY.waitDelivery}</p> : null}
+        {order.status === "paid" ? (
+          <p className="mt-4 text-[14px] leading-[22px]">
+            {isCurrency ? ORDER_COPY.waitSellerCurrency : isItem ? ORDER_COPY.waitSellerItem : ORDER_COPY.waitSeller}
+            {isCurrency && order.delivery_minutes ? ` زمان تضمینی: ${toFaDigits(order.delivery_minutes)} دقیقه.` : ""}
+          </p>
+        ) : null}
+        {order.status === "awaiting_delivery" ? (
+          <p className="mt-4 text-[14px] leading-[22px]">
+            {isCurrency ? ORDER_COPY.waitSellerCurrency : isItem ? ORDER_COPY.waitDeliveryItem : ORDER_COPY.waitDelivery}
+          </p>
+        ) : null}
         {order.status === "completed" || order.status === "settling" || order.status === "settled" ? (
           <p className="mt-4 text-[14px] leading-[22px]">{ORDER_COPY.completed}</p>
         ) : null}
@@ -107,12 +119,14 @@ export default function BuyerOrderPanel({ order, payment }) {
 
       {reviewing ? (
         <section className="rounded-xl bg-white p-5 shadow-[0_2px_4px_rgba(9,9,11,0.05)]">
-          <h2 className="text-[16px] font-bold">{ORDER_COPY.accountDetails}</h2>
-          <p className="mt-2 text-[14px] leading-[22px] text-graytext">{ORDER_COPY.reviewHint}</p>
+          <h2 className="text-[16px] font-bold">{isGoods ? ORDER_COPY.itemDetails : ORDER_COPY.accountDetails}</h2>
+          <p className="mt-2 text-[14px] leading-[22px] text-graytext">{isGoods ? ORDER_COPY.reviewHintItem : ORDER_COPY.reviewHint}</p>
+          {isGoods ? null : (
           <div className="mt-4 rounded-lg bg-guarantee p-4">
             <p className="text-[14px] font-bold">{ORDER_COPY.staySecureTitle}</p>
             <p className="mt-1 text-[14px] leading-[22px]">{ORDER_COPY.staySecure}</p>
           </div>
+          )}
           {secret ? (
             <div className="mt-4 rounded-lg bg-badgebg p-4">
               <pre className="whitespace-pre-wrap break-all text-[14px]">{secret}</pre>
@@ -129,13 +143,15 @@ export default function BuyerOrderPanel({ order, payment }) {
               onClick={onReveal}
               className="mt-4 rounded-lg bg-darkbtn px-4 py-3 text-[14px] font-bold text-white disabled:opacity-60"
             >
-              {ORDER_COPY.revealCta}
+              {isGoods ? ORDER_COPY.revealCtaItem : ORDER_COPY.revealCta}
             </button>
           )}
-          {secret || delivery.revealed || delivery.has_payload ? <AccountSecureGuide /> : null}
+          {isGoods || !(secret || delivery.revealed || delivery.has_payload) ? null : <AccountSecureGuide />}
           {order.status === "buyer_reviewing" ? (
             <div className="mt-5">
-              <p className="text-[14px] leading-[22px] text-graytext">{ORDER_COPY.confirmHint}</p>
+              <p className="text-[14px] leading-[22px] text-graytext">
+                {isCurrency ? ORDER_COPY.confirmHintCurrency : isItem ? ORDER_COPY.confirmHintItem : ORDER_COPY.confirmHint}
+              </p>
               <button
                 type="button"
                 disabled={busy === "confirm"}
@@ -150,7 +166,7 @@ export default function BuyerOrderPanel({ order, payment }) {
       ) : null}
 
       {message ? <p className="text-[14px] text-[rgb(232,27,22)]">{message}</p> : null}
-      <OrderChatBox orderNo={order.order_no} role="buyer" />
+      <OrderChatBox orderNo={order.order_no} role="buyer" isItem={isGoods} />
       <OrderTimeline items={order.timeline} />
     </div>
   );

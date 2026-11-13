@@ -4,10 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { pauseListing, resumeListing } from "@/actions/market.actions";
-import { formatToman, listingStatusMeta } from "@/lib/listing";
+import { formatToman, listingMediaUrl, listingStatusMeta } from "@/lib/listing";
 import { LISTING_COPY } from "./data/listingData";
 
-export default function SellerListingsTable({ items = [] }) {
+export default function SellerListingsTable({ items = [], editBase = "/dashboard/offers/Account" }) {
   const router = useRouter();
   const [busyId, setBusyId] = useState("");
   const [error, setError] = useState("");
@@ -40,11 +40,20 @@ export default function SellerListingsTable({ items = [] }) {
             className="flex flex-col gap-3 rounded-xl bg-white p-4 shadow-[0_2px_4px_rgba(9,9,11,0.05),0_12px_8px_rgba(9,9,11,0.02)]"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <p className="text-[16px] font-bold">{row.title}</p>
-                <p className="text-[14px] text-graytext">
-                  {row.game_name} · {formatToman(row.price_amount)} تومان
-                </p>
+              <div className="flex min-w-0 items-start gap-3">
+                {listingMediaUrl(row.cover_image?.url) ? (
+                  <img src={listingMediaUrl(row.cover_image.url)} alt="" className="h-14 w-14 shrink-0 rounded-lg object-cover" />
+                ) : (
+                  <span className="h-14 w-14 shrink-0 rounded-lg bg-[rgb(239,239,241)]" />
+                )}
+                <div className="min-w-0">
+                  <p className="text-[16px] font-bold">{row.title}</p>
+                  <p className="text-[14px] text-graytext">
+                    {row.game_name} · {formatToman(row.price_amount)} تومان
+                    {row.price_unit_label ? ` / ${row.price_unit_label}` : ""}
+                    {row.delivery_minutes ? ` · ${row.delivery_minutes} دقیقه` : ""}
+                  </p>
+                </div>
               </div>
               <span
                 className="rounded-lg px-3 py-1 text-[13px] font-bold text-white"
@@ -59,7 +68,7 @@ export default function SellerListingsTable({ items = [] }) {
             <div className="flex flex-wrap gap-2">
               {editable ? (
                 <Link
-                  href={`/dashboard/offers/Account/${row.id}`}
+                  href={`${editBase}/${row.id}`}
                   className="inline-flex min-h-10 items-center rounded-lg bg-[rgb(34,33,39)] px-3 text-[13px] font-bold text-white"
                 >
                   {LISTING_COPY.edit}

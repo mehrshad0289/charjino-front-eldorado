@@ -3,13 +3,14 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { serverFetch, ApiError } from "../../../../lib/server-fetcher";
 import { apiPaths } from "../../../../lib/api-paths";
+import { ACCESS_TOKEN_COOKIE } from "../../../../lib/constants";
 
 export const instant = false;
 
 async function authorizationHeader(request) {
   const header = request.headers.get("authorization");
   if (header) return header;
-  const token = (await cookies()).get("access_token")?.value?.trim();
+  const token = (await cookies()).get(ACCESS_TOKEN_COOKIE)?.value?.trim();
   return token ? `Bearer ${token}` : "";
 }
 

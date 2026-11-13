@@ -13,6 +13,7 @@ import TopupShopPage from "../../../../components/eldorado/TopupShopPage";
 import Footer from "../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../components/eldorado/ChatBubble";
 import { FA } from "../../../../components/eldorado/data/faCopy";
+import { CURRENCY_LISTING_COPY } from "../../../../components/eldorado/data/listingData";
 import { GIFT_CARD_IMAGES } from "../../../../components/eldorado/data/giftCardData";
 import { toFaDigits } from "../../../../lib/fa-digits";
 import {
@@ -37,6 +38,9 @@ import { apiPaths } from "../../../../lib/api-paths";
 import {
   currencyHubKeyForMarket,
   isStoreCategoryKey,
+  loadCurrencyOfferGames,
+  ITEM_PRICE_PRESETS,
+  itemFacetsFromOffers,
   listingToOffer,
   loadMarketFacets,
   loadMarketListings,
@@ -188,6 +192,52 @@ export default async function ShopHubPage({ params }) {
   }
 
   if (key === "currency") {
+    const game = await resolveMarketGame(key, hubKey);
+    const setups = await loadCurrencyOfferGames();
+    const setup = setups.find(
+      (row) => game && (String(row.id) === String(game.id) || row.game_name === game.game_name),
+    );
+    if (setup) {
+      const title = setup.game_name_fa || setup.game_name || store.label;
+      const listings = await loadMarketListings(setup.game_name, "Currency", 60);
+      const offers = listings.items.map((row) => listingToOffer(row, "currency")).filter(Boolean);
+      const hubRecord = await loadHubByMarketGame(game?.id || setup.game_name);
+      const tabs = bannerTabsFromHub(hubRecord);
+      const href = `/shop/currency/${encodeURIComponent(hubKey)}`;
+      const facets = itemFacetsFromOffers(offers);
+      return (
+        <>
+          <HeaderBar />
+          <CategoryNav activeCategory={store.navKey || "Currency"} />
+          <main className="relative">
+            <div className="absolute inset-x-0 top-0 z-0 hidden h-[465px] overflow-hidden md:block" aria-hidden="true">
+              <img alt="" src={GIFT_CARD_IMAGES.heroBackdrop} className="block h-[465px] w-full object-cover" style={{ objectPosition: "50% 15%" }} />
+              <div className="absolute inset-x-0 bottom-0 z-[2] h-[340px] bg-gradient-to-b from-transparent to-page" />
+            </div>
+            <div className="relative z-10">
+              {tabs.length > 0 ? (
+                <GiftCardBanner active={activeHubTabKey(tabs, href, "currency")} iconAlt={title} gameName={title} tabs={tabs} />
+              ) : (
+                <GameBanner name={title} href={href} tabLabel="ارز بازی" />
+              )}
+              <AccountOffersBrowser
+                offers={offers}
+                facets={facets}
+                searchPlaceholder="جستجوی ارز"
+                countLabel="آگهی ارز"
+                foundSuffix="پیدا شد"
+                pricePresets={ITEM_PRICE_PRESETS}
+              />
+              <p className="mx-auto max-w-[1208px] px-4 pb-10 text-[13px] leading-[20px] text-graytext md:px-6">
+                {setup.rwt_notice || CURRENCY_LISTING_COPY.rwtFallback}
+              </p>
+            </div>
+          </main>
+          <Footer />
+          <ChatBubble />
+        </>
+      );
+    }
     const target = await currencyHubKeyForMarket(hubKey);
     if (target && target !== hubKey) redirect(`/shop/currency/${encodeURIComponent(target)}`);
   }
@@ -217,17 +267,20 @@ export default async function ShopHubPage({ params }) {
 
   const game = await resolveMarketGame(key, hubKey);
   const gameName = game?.game_name || hubKey;
-  const listings = await loadMarketListings(gameName);
+  const listings = await loadMarketListings(gameName, key === "items" ? "CustomItem" : undefined, key === "items" ? 60 : 24);
   const offers = listings.items.map((row) => listingToOffer(row, key)).filter(Boolean);
-  const facets = key === "accounts" ? await loadMarketFacets(gameName) : [];
-  if (key === "accounts") {
+  const facets =
+    key === "accounts" ? await loadMarketFacets(gameName) : key === "items" ? itemFacetsFromOffers(offers) : [];
+  if (key === "accounts" || key === "items") {
     const title = game?.game_name_fa || game?.game_name || store.label;
     const hub = await loadHubByMarketGame(game?.id || gameName);
     const tabs = bannerTabsFromHub(hub);
+    const href = `/shop/${key}/${encodeURIComponent(hubKey)}`;
+    const tabKey = key === "items" ? "items" : "accounts";
     return (
       <>
         <HeaderBar />
-        <CategoryNav activeCategory={store.navKey || "Accounts"} />
+        <CategoryNav activeCategory={store.navKey || (key === "items" ? "Items" : "Accounts")} />
         <main className="relative">
           <div className="absolute inset-x-0 top-0 z-0 hidden h-[465px] overflow-hidden md:block" aria-hidden="true">
             <img alt="" src={GIFT_CARD_IMAGES.heroBackdrop} className="block h-[465px] w-full object-cover" style={{ objectPosition: "50% 15%" }} />
@@ -235,14 +288,23 @@ export default async function ShopHubPage({ params }) {
           </div>
           <div className="relative z-10">
             {tabs.length > 0 ? (
-              <GiftCardBanner active="accounts" iconAlt={title} gameName={title} tabs={tabs} />
+              <GiftCardBanner active={activeHubTabKey(tabs, href, tabKey)} iconAlt={title} gameName={title} tabs={tabs} />
             ) : (
-              <GameBanner name={title} href={`/shop/${key}/${encodeURIComponent(hubKey)}`} tabLabel="اکانت" />
+              <GameBanner name={title} href={href} tabLabel={key === "items" ? "آیتم" : "اکانت"} />
             )}
-            <AccountOffersBrowser offers={offers} facets={facets} />
-            <div className="mx-auto w-full max-w-[1208px] px-4 md:px-6">
-              <AccountShopSeo gameName={title} countLabel={toFaDigits(offers.length)} />
-            </div>
+            <AccountOffersBrowser
+              offers={offers}
+              facets={facets}
+              searchPlaceholder={key === "items" ? "جستجوی آیتم" : "جستجوی اکانت"}
+              countLabel={key === "items" ? "آیتم" : "آگهی"}
+              foundSuffix={key === "items" ? "پیدا شد" : ""}
+              pricePresets={key === "items" ? ITEM_PRICE_PRESETS : []}
+            />
+            {key === "accounts" ? (
+              <div className="mx-auto w-full max-w-[1208px] px-4 md:px-6">
+                <AccountShopSeo gameName={title} countLabel={toFaDigits(offers.length)} />
+              </div>
+            ) : null}
           </div>
         </main>
         <Footer />

@@ -54,6 +54,8 @@ export const metadata = {
   description: "Secure checkout — complete your Eldorado order.",
 };
 
+export const dynamic = "force-dynamic";
+
 function LockIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -98,7 +100,7 @@ function GuaranteeIcon() {
 
 export default async function CheckoutPage({ searchParams }) {
   const query = searchParams ? await searchParams : {};
-  if (query.listing) return <AccountCheckoutPage listingId={String(query.listing)} />;
+  if (query.listing) return <AccountCheckoutPage listingId={String(query.listing)} quantity={query.quantity} />;
   return (
     <div className="flex min-h-screen flex-col bg-page text-ink">
       {/* Minimal checkout header (capture: no site nav, logo only) */}

@@ -126,8 +126,24 @@ export function topupTabsFromShop(shop, fallbackTabs, hubKey) {
       href: asString(item?.href),
     }))
     .filter((item) => item.key && item.label && item.href.startsWith("/"));
+  const merged = sortBannerTabs(mergeBannerTabs(family, fallbackTabs));
+  if (merged.length >= 2) return merged;
   if (family.length >= 2) return family;
   return mergeFcFamilyTabs(fallbackTabs, hubKey);
+}
+
+function mergeBannerTabs(primary, extra) {
+  const seen = new Set();
+  const out = [];
+  for (const raw of [...(Array.isArray(primary) ? primary : []), ...(Array.isArray(extra) ? extra : [])]) {
+    const href = asString(raw?.href);
+    const key = asString(raw?.key);
+    const label = asString(raw?.label);
+    if (!href.startsWith("/") || !key || !label || seen.has(href)) continue;
+    seen.add(href);
+    out.push({ key, label, href, sortOrder: Number(raw?.sortOrder) || 0 });
+  }
+  return out;
 }
 
 export function topupBannerName(shop, hubKey, fallback) {
@@ -362,7 +378,11 @@ export function bannerTabsFromHub(hub) {
     if (!key || !label || !href || !href.startsWith("/")) continue;
     tabs.push({ key, label, href, sortOrder: Number(tab.sortOrder) || 0 });
   }
-  return tabs.sort((a, b) => {
+  return sortBannerTabs(tabs);
+}
+
+function sortBannerTabs(tabs) {
+  return [...tabs].sort((a, b) => {
     const ai = HUB_TAB_ORDER.indexOf(a.key);
     const bi = HUB_TAB_ORDER.indexOf(b.key);
     if (ai !== -1 && bi !== -1) return ai - bi;

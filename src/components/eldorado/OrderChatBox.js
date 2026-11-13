@@ -5,7 +5,7 @@ import { getOrderMessages, sendOrderMessage } from "../../actions/market.actions
 import { formatOrderDate } from "../../lib/order";
 import { ORDER_COPY } from "./data/orderData";
 
-export default function OrderChatBox({ orderNo, role }) {
+export default function OrderChatBox({ orderNo, role, isItem = false }) {
   const [items, setItems] = useState([]);
   const [body, setBody] = useState("");
   const [message, setMessage] = useState("");
@@ -37,7 +37,7 @@ export default function OrderChatBox({ orderNo, role }) {
   return (
     <section id="order-chat" className="rounded-xl bg-white p-5 shadow-[0_2px_4px_rgba(9,9,11,0.05)]">
       <h2 className="text-[16px] font-bold">{ORDER_COPY.chatTitle}</h2>
-      <p className="mt-1 text-[13px] leading-[20px] text-graytext">{ORDER_COPY.chatHint}</p>
+      <p className="mt-1 text-[13px] leading-[20px] text-graytext">{isItem ? ORDER_COPY.chatHintItem : ORDER_COPY.chatHint}</p>
       <div className="mt-4 flex max-h-[280px] flex-col gap-2 overflow-y-auto">
         {items.length === 0 ? (
           <p className="text-[14px] text-graytext">هنوز پیامی نیست.</p>

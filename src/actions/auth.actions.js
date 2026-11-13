@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { ApiError, serverFetch } from "@/lib/server-fetcher";
 import { clearAuthCookies, getAccessToken, setAuthTokens } from "@/lib/auth-cookies";
 import { apiPaths } from "@/lib/api-paths";
@@ -69,10 +70,58 @@ export async function getSessionUser() {
   const accessToken = await getAccessToken();
   if (!accessToken) return null;
   try {
-    return await serverFetch(apiPaths.authMe, {
+    const user = await serverFetch(apiPaths.authMe, {
       headers: bearerHeaders(accessToken),
     });
+    if (user?.role === "admin") return null;
+    return user;
   } catch {
     return null;
+  }
+}
+
+function revalidateAccountPaths() {
+  revalidatePath("/dashboard/settings");
+  revalidatePath("/dashboard", "layout");
+}
+
+export async function updateProfile(payload) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
+  try {
+    const user = await serverFetch(apiPaths.authProfile, {
+      method: "PATCH",
+      headers: bearerHeaders(accessToken),
+      body: JSON.stringify(payload),
+    });
+    revalidateAccountPaths();
+    return { ok: true, user };
+  } catch (error) {
+    if (error instanceof ApiError && error.statusCode === 401) {
+      return { ok: false, unauthorized: true, message: error.message };
+    }
+    return { ok: false, message: toActionMessage(error) };
+  }
+}
+
+export async function uploadAvatar(formData) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
+  const body = new FormData();
+  const file = formData.get("file");
+  if (file) body.set("file", file);
+  try {
+    const user = await serverFetch(apiPaths.authProfileAvatar, {
+      method: "POST",
+      headers: bearerHeaders(accessToken),
+      body,
+    });
+    revalidateAccountPaths();
+    return { ok: true, user };
+  } catch (error) {
+    if (error instanceof ApiError && error.statusCode === 401) {
+      return { ok: false, unauthorized: true, message: error.message };
+    }
+    return { ok: false, message: toActionMessage(error) };
   }
 }

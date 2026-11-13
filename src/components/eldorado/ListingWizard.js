@@ -20,6 +20,9 @@ import {
   LISTING_TITLE_MIN,
   emptyAttributes,
   formatToman,
+  listingMediaUrl,
+  listingPhotoNeeded,
+  listingPhotoSlots,
   listingPriceError,
   parseToman,
 } from "@/lib/listing";
@@ -75,7 +78,7 @@ function initialPhotos(listing) {
   const next = {};
   for (const slot of LISTING_PHOTO_SLOTS) {
     const server = (listing?.images || []).find((image) => image.slot === slot.slot) || null;
-    next[slot.slot] = { file: null, previewUrl: server?.url || "", server };
+    next[slot.slot] = { file: null, previewUrl: listingMediaUrl(server?.url || ""), server };
   }
   return next;
 }
@@ -108,13 +111,14 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
   const [photos, setPhotos] = useState(() => initialPhotos(listing));
   const [video, setVideo] = useState(() => {
     const server = listing?.videos?.[0] || null;
-    return { file: null, previewUrl: server?.url || "", server };
+    return { file: null, previewUrl: listingMediaUrl(server?.url || ""), server };
   });
   const [loading, setLoading] = useState(false);
   const [issues, setIssues] = useState({});
   const [listingId, setListingId] = useState(listing?.id || "");
 
   const fields = fieldsForGame(schemaFields, custom);
+  const photoSlots = useMemo(() => listingPhotoSlots(custom ? [] : schemaFields), [custom, schemaFields]);
 
   useEffect(() => {
     if (!gameId) return undefined;
@@ -144,7 +148,10 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
   }, [games, query]);
 
   const selectedGame = games.find((row) => row.game_name === gameName);
-  const photoReady = Boolean(photos.profile?.file || photos.profile?.server);
+  const photoReady = photoSlots.every((slot) => {
+    if (!listingPhotoNeeded(slot, attributes)) return true;
+    return Boolean(photos[slot.slot]?.file || photos[slot.slot]?.server);
+  });
   const titleReady = title.trim().length >= LISTING_TITLE_MIN;
   const priceReady = !listingPriceError(price);
   const detailsReady = titleReady && fields.every((field) => !field.required || String(attributes[field.key] || "").trim());
@@ -204,7 +211,8 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
         [slot]: { file, previewUrl: URL.createObjectURL(file), server: current[slot]?.server || null },
       };
     });
-    if (slot === "profile") clearIssue("photo");
+    clearIssue("photo");
+    clearIssue(`photo-${slot}`);
   }
 
   async function removePhoto(slot) {
@@ -252,7 +260,14 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
     }
     const priceMessage = listingPriceError(price);
     if (priceMessage) next.price = priceMessage;
-    if (requireMedia && !photoReady) next.photo = "عکس پروفایل بازی را انتخاب کن.";
+    if (requireMedia) {
+      for (const slot of photoSlots) {
+        const ready = Boolean(photos[slot.slot]?.file || photos[slot.slot]?.server);
+        if (listingPhotoNeeded(slot, attributes) && !ready) {
+          next[`photo-${slot.slot}`] = `برای «${slot.label}» باید یک تصویر پیوست شود.`;
+        }
+      }
+    }
     return next;
   }
 
@@ -261,6 +276,11 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
     if (next.title) return { section: "listing-details", fieldId: "listing-title" };
     for (const field of fields) {
       if (next[field.key]) return { section: "listing-details", fieldId: `attr-${field.key}` };
+    }
+    for (const slot of photoSlots) {
+      if (next[`photo-${slot.slot}`]) {
+        return { section: "listing-media", fieldId: `listing-photo-${slot.slot}` };
+      }
     }
     if (next.photo) return { section: "listing-media", fieldId: "listing-photo-profile" };
     if (next.video) return { section: "listing-media", fieldId: "listing-video" };
@@ -273,7 +293,9 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
     if (id === "listing-details") {
       return [issues.title, ...fields.map((field) => issues[field.key])].filter(Boolean).join(" · ");
     }
-    if (id === "listing-media") return [issues.photo, issues.video].filter(Boolean).join(" · ");
+    if (id === "listing-media") {
+      return [issues.photo, ...photoSlots.map((slot) => issues[`photo-${slot.slot}`]), issues.video].filter(Boolean).join(" · ");
+    }
     if (id === "listing-price") return issues.price || "";
     return "";
   }
@@ -310,7 +332,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
       if (!uploaded.ok) return uploaded;
       setPhotos((current) => ({
         ...current,
-        [slot.slot]: { file: null, previewUrl: uploaded.data.url, server: uploaded.data },
+        [slot.slot]: { file: null, previewUrl: listingMediaUrl(uploaded.data.url), server: uploaded.data },
       }));
     }
     if (video.file) {
@@ -319,7 +341,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
       body.set("file", video.file);
       const uploaded = await uploadListingVideo(body);
       if (!uploaded.ok) return uploaded;
-      setVideo({ file: null, previewUrl: uploaded.data.url, server: uploaded.data });
+      setVideo({ file: null, previewUrl: listingMediaUrl(uploaded.data.url), server: uploaded.data });
     }
     return { ok: true };
   }
@@ -521,13 +543,13 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
 
         <Section id="listing-media" title="مدیا" hint={LISTING_COPY.photosHint}>
           <div className="grid grid-cols-2 gap-3">
-            {LISTING_PHOTO_SLOTS.map((slot) => {
+            {photoSlots.map((slot) => {
               const row = photos[slot.slot];
-              const invalid = slot.slot === "profile" && Boolean(issues.photo);
+              const invalid = Boolean(issues[`photo-${slot.slot}`] || (slot.slot === "profile" && issues.photo));
               return (
                 <div
                   key={slot.slot}
-                  id={slot.slot === "profile" ? "listing-photo-profile" : undefined}
+                  id={`listing-photo-${slot.slot}`}
                   className={`rounded-lg p-3 ${invalid ? "bg-[rgb(255,244,244)] ring-2 ring-[rgb(232,27,22)]" : "bg-[rgb(244,244,244)]"}`}
                 >
                   <p className="text-[13px] font-bold">
@@ -562,7 +584,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
               );
             })}
           </div>
-          <FieldNote message={issues.photo} />
+          <FieldNote message={[issues.photo, ...photoSlots.map((slot) => issues[`photo-${slot.slot}`])].filter(Boolean).join(" · ")} />
           <div id="listing-video" className={`mt-5 rounded-lg p-3 ${issues.video ? "bg-[rgb(255,244,244)] ring-2 ring-[rgb(232,27,22)]" : ""}`}>
             <p className="text-[14px] font-bold">{LISTING_COPY.video}</p>
             <p className="mt-1 text-[14px] text-graytext">{LISTING_COPY.videoHint}</p>

@@ -11,6 +11,34 @@ export const LISTING_PHOTO_SLOTS = [
   { slot: "extra_1", label: "تصویر دیگر", hint: "اختیاری", required: false },
 ];
 
+export const CURRENCY_PHOTO_SLOTS = [
+  { slot: "profile", label: "کاور آگهی", hint: "لازم", required: true },
+  { slot: "stats", label: "موجودی داخل بازی", hint: "اختیاری", required: false },
+  { slot: "inventory", label: "اسکرین نرخ یا ترید", hint: "اختیاری", required: false },
+  { slot: "extra_1", label: "تصویر دیگر", hint: "اختیاری", required: false },
+];
+
+export const LISTING_ATTRIBUTE_PHOTO_SLOTS = ["stats", "inventory", "extra_1"];
+
+export function listingPhotoSlots(fields) {
+  const slots = LISTING_PHOTO_SLOTS.map((row) => ({ ...row, attributeKey: "" }));
+  const photoFields = (Array.isArray(fields) ? fields : []).filter((field) => field?.photo && field?.key);
+  photoFields.forEach((field, index) => {
+    const slotKey = field.photo_slot || LISTING_ATTRIBUTE_PHOTO_SLOTS[index];
+    const row = slots.find((slot) => slot.slot === slotKey);
+    if (!row) return;
+    row.label = field.label_fa || row.label;
+    row.attributeKey = field.key;
+    row.required = field.photo_required === true;
+    row.hint = row.required ? "لازم" : "اختیاری";
+  });
+  return slots;
+}
+
+export function listingPhotoNeeded(slot) {
+  return Boolean(slot?.required);
+}
+
 export const LISTING_SECTIONS = [
   { id: "listing-game", label: "بازی" },
   { id: "listing-details", label: "مشخصات" },
@@ -37,6 +65,21 @@ export const LISTING_STATUS = {
 
 export function listingStatusMeta(status) {
   return LISTING_STATUS[status] || { label: status || "نامشخص", bg: "rgb(106, 102, 123)" };
+}
+
+export function listingMediaUrl(url) {
+  const value = typeof url === "string" ? url.trim() : "";
+  if (!value || value.startsWith("blob:") || value.startsWith("data:")) return value;
+  if (value.startsWith("/storage/")) return value;
+  if (/^https?:\/\//i.test(value)) {
+    try {
+      const parsed = new URL(value);
+      if (parsed.pathname.startsWith("/storage/")) return `${parsed.pathname}${parsed.search}`;
+    } catch {
+      return value;
+    }
+  }
+  return value;
 }
 
 export function parseToman(value) {

@@ -254,56 +254,59 @@ export const DASHBOARD_MESSAGES_PAGE = {
   unreadToggleLabel: "Unread messages only",
 };
 
-/* Session 18 — /dashboard/settings (own capture, decoded 2026-11-04,
-   1920-only, deflate+0 variant): h1 "Account settings" + five white
-   shadow cards (Profile / Profile picture / Security / Email
-   notifications / Your description). Email + Username render as disabled
-   gray inputs (bg rgb(239,239,241), text rgb(198,198,204)) with a blue
-   uppercase "Edit" label; password row = dark "Change password" button.
-   Toggles verbatim from the capture: master "All email notifications" OFF,
-   "Boosting offers" OFF, the other seven ON (track rgba(71,131,255,0.2)
-   with a blue rgb(71,131,255) knob; off track rgb(231,231,231), white
-   knob). Description textarea is EMPTY with placeholder "Type here...". */
+/* Session 18 layout kept (white cards, 24px h4, 42px inputs, dark
+   buttons, blue knobs). Copy and fields are Charjino: phone + SMS OTP,
+   no email/password/Google 2FA. */
 export const DASHBOARD_SETTINGS_PAGE = {
   icon: "settings",
   title: FA.accountSettings,
-  email: "mehrshad02899@gmail.com",
-  emailNote: "This email is linked to your account. It is not visible to other users.",
-  username: "NewFloat-0una",
-  changePassword: "Change password",
-  passwordNote:
-    "Password can only be changed if you are using the email/password login flow",
-  pictureNote: "Must be JPEG, PNG or HEIC and cannot exceed 10MB.",
-  twoFa: {
-    label: "Set Up 2FA",
-    bodyParts: [
-      "Enable with Google Authenticator. 2FA codes will be requested for ",
-      { bold: "withdrawals" },
-      " and",
-      { bold: "purchases" },
-      ". They are not ",
-      { bold: "required for logging in" },
-      ".",
-    ],
+  profileTitle: "پروفایل",
+  phoneLabel: "شماره همراه:",
+  phoneNote: "ورود فقط با همین شماره و کد پیامکی است. برای دیگران دیده نمی‌شود.",
+  nameLabel: "نام نمایشی:",
+  namePlaceholder: "نامی که در سفارش و آگهی دیده می‌شود",
+  edit: "ویرایش",
+  save: "ذخیره",
+  saving: "در حال ذخیره…",
+  loginLabel: "ورود:",
+  loginTitle: "ورود با پیامک",
+  loginNote: "ایمیل و رمز عبور نداریم. هر بار با شماره همراه و کد پیامکی وارد می‌شوید.",
+  pictureTitle: "تصویر پروفایل",
+  uploadImage: "بارگذاری تصویر",
+  pictureNote: "JPG، PNG یا WEBP. حداکثر ۲ مگابایت.",
+  securityTitle: "امنیت",
+  kycLabel: "احراز فروشنده",
+  kycCta: "وضعیت احراز و شبا",
+  kycBody:
+    "برای فروش اکانت، احراز سطح ۲ و ثبت شبا لازم است. ورود همچنان با پیامک است؛ گوگل‌آتانتیکیتور نداریم.",
+  kycLevels: {
+    0: "شروع نشده",
+    1: "سطح ۱",
+    2: "احراز شده (سطح ۲)",
+    3: "سطح ۳",
   },
-  logout: {
-    label: "Log out from all devices",
-    body: "This button logs you out from all devices and browsers.",
-    footnote: "* This action can take up to 1 hour to complete.",
-  },
+  shebaLabel: "شبا تسویه",
+  shebaEmpty: "هنوز شبایی ثبت نشده.",
+  shebaSet: "ثبت شده",
+  logoutSessions: "خروج از همهٔ نشست‌ها",
+  logoutCta: "خروج از همهٔ دستگاه‌ها",
+  logoutBody: "از این مرورگر و بقیهٔ دستگاه‌هایی که با این حساب وارد شده‌اند همین حالا خارج می‌شوید.",
+  notificationsTitle: "اعلان‌های داخل سایت",
+  notificationsHint: "ایمیل ارسال نمی‌کنیم. این گزینه‌ها زنگولهٔ داشبورد را کنترل می‌کنند.",
   notifications: [
-    { label: "All email notifications", desc: "", on: false, master: true },
-    { label: "New order", desc: "When you receive a new order", on: true },
-    { label: "Message received", desc: "When you receive a new message", on: true },
-    { label: "Order updates", desc: "When your order status changes", on: true },
-    { label: "Dispute updates", desc: "When your dispute is resolved or updated", on: true },
-    { label: "Payment updates", desc: "When your payment is received or refunded", on: true },
-    { label: "Withdrawal updates", desc: "When you request a withdrawal, and when it is processed", on: true },
-    { label: "Verification updates", desc: "When your verification is processed or updated", on: true },
-    { label: "Boosting offers", desc: "When you receive boosting offers or updates", on: false },
+    { key: "all", label: "همهٔ اعلان‌ها", desc: "", on: true, master: true },
+    { key: "newOrder", label: "سفارش جدید", desc: "وقتی سفارش خرید یا فروش جدید ثبت می‌شود", on: true },
+    { key: "message", label: "پیام جدید", desc: "وقتی در سفارش پیام می‌آید", on: true },
+    { key: "orderUpdates", label: "به‌روزرسانی سفارش", desc: "وقتی وضعیت آگهی یا سفارش عوض می‌شود", on: true },
+    { key: "dispute", label: "اختلاف", desc: "وقتی اختلاف باز یا بسته می‌شود", on: true },
+    { key: "payment", label: "پرداخت و تسویه", desc: "وقتی پرداخت می‌رسد یا فروش آزاد می‌شود", on: true },
+    { key: "withdrawal", label: "برداشت کیف پول", desc: "وقتی برداشت ثبت یا پردازش می‌شود", on: true },
+    { key: "verification", label: "احراز هویت", desc: "وقتی مدارک احراز بررسی می‌شود", on: true },
+    { key: "boosting", label: "درخواست بوستینگ", desc: "وقتی درخواست بوستینگ می‌آید", on: false },
   ],
-  descriptionPlaceholder: "Type here...",
-  changeDescription: "Change description",
+  descriptionTitle: "دربارهٔ شما",
+  descriptionPlaceholder: "چند خط دربارهٔ خودت به‌عنوان فروشنده…",
+  changeDescription: "ذخیرهٔ توضیح",
 };
 
 /* Login page (login.eldorado.gg capture) */
