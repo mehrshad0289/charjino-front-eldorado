@@ -1,35 +1,77 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import HeaderBar from "../../../../components/eldorado/HeaderBar";
+import { notFound, redirect } from "next/navigation";
 import CategoryNav from "../../../../components/eldorado/CategoryNav";
 import Footer from "../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../components/eldorado/ChatBubble";
+import AccountOffersBrowser from "../../../../components/eldorado/AccountOffersBrowser";
+import GiftCardBanner from "../../../../components/eldorado/GiftCardBanner";
+import { GIFT_CARD_IMAGES } from "../../../../components/eldorado/data/giftCardData";
+import {
+  consoleOfferFacets,
+  consolePlatform,
+  consoleShopKey,
+  labelConsoleOffer,
+} from "../../../../lib/console-games";
+import { activeHubTabKey, bannerTabsFromHub, loadProductHub, withFallbackHubTab } from "../../../../lib/gift-card-shop";
 import { serverFetch, ApiError } from "../../../../lib/server-fetcher";
 import { apiPaths } from "../../../../lib/api-paths";
-import { formatToman } from "../../../../lib/listing";
-import { consoleFormatLabel, consoleModelLabel, consolePlatform } from "../../../../lib/console-games";
+import { formatTomanPrice, productHref } from "../../../../lib/format-toman";
+import { preferFaTitle } from "../../../../lib/catalog-region";
+import { listingToOffer, loadPlatformListings } from "../../../../lib/store-engine";
 
 export const instant = false;
 
 export async function generateMetadata({ params }) {
   const { platform } = await params;
-  const row = consolePlatform(platform);
+  const row = consolePlatform(consoleShopKey(platform));
   return { title: row ? `${row.title} — بازی — شارژینو` : "بازی — شارژینو" };
 }
 
 export default async function ConsolePlatformPage({ params, searchParams }) {
   const { platform } = await params;
   const query = await searchParams;
-  const row = consolePlatform(platform);
-  if (!row) notFound();
+  const requested = String(platform || "").toLowerCase();
+  const hubKey = consoleShopKey(requested);
+  if (!hubKey) notFound();
+  if (hubKey !== requested) redirect(`/shop/games/${hubKey}`);
+
+  const row = consolePlatform(hubKey);
+  const hub = await loadProductHub(hubKey);
+  const tabs = withFallbackHubTab(
+    bannerTabsFromHub(hub).filter((tab) =>
+      ["games", "gift-cards", "subscription", "game-pass", "instant-use"].includes(tab.key),
+    ),
+    { key: "games", label: "بازی", href: `/shop/games/${hubKey}` },
+  );
+  const href = `/shop/games/${hubKey}`;
   const q = typeof query.q === "string" ? query.q.trim() : "";
-  let items = [];
-  if (row.sell) {
+  const listings = row.sell ? await loadPlatformListings({ platform: hubKey, offer: "ConsoleGame", q, perPage: 60 }) : { items: [] };
+  const offers = listings.items
+    .map((item) => listingToOffer(item, "games"))
+    .filter(Boolean)
+    .map(labelConsoleOffer);
+  const facets = consoleOfferFacets(hubKey, offers);
+
+  let keys = [];
+  if (!row.sell && q) {
     try {
       const payload = await serverFetch(
-        apiPaths.marketListings({ offer: "ConsoleGame", platform: row.key, q, perPage: 48 }),
+        apiPaths.catalogProducts({
+          category: "game-keys",
+          platform: "pc",
+          q,
+          page: 1,
+          perPage: 48,
+        }),
       );
-      items = Array.isArray(payload?.items) ? payload.items : [];
+      keys = (Array.isArray(payload?.items) ? payload.items : [])
+        .map((item) => ({
+          handle: item.handle,
+          name: preferFaTitle(item) || item.title,
+          price: formatTomanPrice(item.minPrice),
+          img: item.thumbnail || "",
+        }))
+        .filter((item) => item.handle && item.name);
     } catch (error) {
       if (!(error instanceof ApiError)) throw error;
     }
@@ -37,60 +79,77 @@ export default async function ConsolePlatformPage({ params, searchParams }) {
 
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
       <CategoryNav activeCategory="Games" />
-      <main className="mx-auto w-full max-w-[1048px] px-4 py-8">
-        <p className="text-[13px] text-graytext">
-          <Link href="/shop/games" className="hover:text-ink">بازی</Link>
-          <span> / {row.title}</span>
-        </p>
-        <div className="mt-2 flex flex-wrap items-end justify-between gap-3">
-          <h1 className="text-[30px] font-semibold leading-[36px]">{row.title}</h1>
+      <main className="relative">
+        <div className="absolute inset-x-0 top-0 z-0 hidden h-[465px] overflow-hidden md:block" aria-hidden="true">
+          <img alt="" src={GIFT_CARD_IMAGES.heroBackdrop} className="block h-[465px] w-full object-cover" style={{ objectPosition: "50% 15%" }} />
+          <div className="absolute inset-x-0 bottom-0 z-[2] h-[340px] bg-gradient-to-b from-transparent to-page" />
+        </div>
+        <div className="relative z-10">
+          <GiftCardBanner
+            active={activeHubTabKey(tabs, href, "games")}
+            iconAlt={row.title}
+            gameName={row.title}
+            gameIcon={row.image || ""}
+            tabs={tabs}
+          />
           {row.sell ? (
-            <Link href={`/dashboard/offers/ConsoleGame/new?platform=${row.key}`} className="inline-flex min-h-[42px] items-center rounded-lg bg-ink px-4 text-[14px] font-bold text-white">
-              ثبت آگهی
-            </Link>
-          ) : null}
-        </div>
-        <p className="mt-2 max-w-[720px] text-[15px] leading-7 text-graytext">{row.text}</p>
-        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {row.services.map((service) => (
-            <Link key={service.title} href={service.href} className="rounded-xl bg-white p-4">
-              <p className="text-[16px] font-bold">{service.title}</p>
-              <p className="mt-1 text-[13px] text-graytext">{service.text}</p>
-              <p className="mt-2 text-[12px] font-bold text-ink">{service.supplier}</p>
-            </Link>
-          ))}
-        </div>
-        {row.sell ? (
-          <>
-            <form className="mt-8 flex gap-2" action={`/shop/games/${row.key}`}>
-              <input
-                name="q"
-                defaultValue={q}
-                placeholder="جستجوی بازی"
-                className="h-[42px] w-full max-w-[360px] rounded-lg bg-white px-3 text-[14px]"
-              />
-              <button type="submit" className="h-[42px] rounded-lg bg-brand px-4 text-[14px] font-bold text-ink">
-                جستجو
-              </button>
-            </form>
-            <div className="mt-4 grid grid-cols-1 gap-3 min-[961px]:grid-cols-2">
-              {items.map((item) => (
-                <Link key={item.id} href={`/shop/games/l/${item.id}`} className="rounded-xl bg-white p-4">
-                  <p className="text-[16px] font-bold">{item.title}</p>
-                  <p className="mt-1 text-[14px] text-graytext">
-                    {item.game_name}
-                    {item.attributes?.format ? ` · ${consoleFormatLabel(item.attributes.format)}` : ""}
-                    {item.attributes?.console_model ? ` · ${consoleModelLabel(item.attributes.console_model)}` : ""}
-                  </p>
-                  <p className="mt-2 text-[15px] font-bold">{formatToman(item.price_amount)} تومان</p>
-                </Link>
-              ))}
+            <AccountOffersBrowser
+              offers={offers}
+              facets={facets}
+              searchPlaceholder="جستجوی بازی"
+              countLabel="آگهی"
+              foundSuffix=""
+            />
+          ) : (
+            <div className="mx-auto w-full max-w-[1208px] px-4 py-8 md:px-6">
+              <p className="max-w-[640px] text-[15px] leading-7 text-graytext">{row.text}</p>
+              {row.services?.length ? (
+                <ul className="mt-4 flex flex-col gap-2">
+                  {row.services.map((service) => (
+                    <li key={service.href + service.title}>
+                      <Link href={service.href} className="text-[15px] font-bold text-linkblue">
+                        {service.title}
+                      </Link>
+                      <span className="ms-2 text-[14px] text-graytext">{service.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              <form className="mt-6 flex flex-wrap gap-2" action={href}>
+                <input
+                  name="q"
+                  defaultValue={q}
+                  placeholder="اسم بازی"
+                  aria-label="اسم بازی"
+                  className="h-[42px] w-full max-w-[360px] rounded-lg bg-white px-3 text-[14px]"
+                />
+                <button type="submit" className="h-[42px] rounded-lg bg-brand px-4 text-[14px] font-bold text-ink">
+                  جستجو
+                </button>
+              </form>
+              {q ? (
+                <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {keys.map((item) => (
+                    <li key={item.handle}>
+                      <Link href={productHref(item.handle)} className="flex items-center gap-3 rounded-xl bg-white p-3">
+                        {item.img ? (
+                          <img src={item.img} alt="" className="h-14 w-14 shrink-0 rounded-lg object-cover" />
+                        ) : (
+                          <span className="h-14 w-14 shrink-0 rounded-lg bg-badgebg" />
+                        )}
+                        <span className="min-w-0">
+                          <span className="block truncate font-bold" dir="auto">{item.name}</span>
+                          {item.price ? <span className="mt-1 block text-[14px] text-graytext">{item.price}</span> : null}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
-            {items.length === 0 ? <p className="mt-6 text-[14px] text-graytext">هنوز آگهی تأییدشده‌ای در این پلتفرم نیست.</p> : null}
-          </>
-        ) : null}
+          )}
+        </div>
       </main>
       <Footer />
       <ChatBubble />

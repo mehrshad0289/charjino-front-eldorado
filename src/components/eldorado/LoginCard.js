@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { requestOtp, verifyOtp } from "@/actions/auth.actions";
+import { writeSessionUser } from "@/lib/session-client";
 import { onlyDigits, toFaDigits } from "@/lib/fa-digits";
 import { isIranianMobile } from "@/lib/phone";
 import Logo from "./Logo";
@@ -11,12 +12,86 @@ import LoadingSpinner from "./LoadingSpinner";
 import { FA } from "./data/faCopy";
 
 const OTP_SECONDS = 120;
+const OTP_LENGTH = 6;
 const inputClass =
   "block min-h-8 w-full rounded-lg border-[0.8px] border-[rgb(198,_198,_204)] bg-[rgb(42,_42,_55)] px-3 pb-[5px] pt-[5px] text-white outline-none placeholder:text-[rgb(160,_158,_169)]";
+const otpBoxClass =
+  "h-11 w-full min-w-0 rounded-lg border-[0.8px] border-[rgb(198,_198,_204)] bg-[rgb(42,_42,_55)] px-0 text-center text-[18px] font-bold text-white outline-none focus:border-brand disabled:opacity-60";
 const yellowButtonClass =
   "inline-block w-full rounded-lg border-2 border-brand bg-brand px-5 py-1 text-center font-bold tracking-[0.07px] text-ink disabled:opacity-60";
 const ghostButtonClass =
   "inline-block w-full rounded-lg border-2 border-[rgb(40,_40,_54)] bg-[rgb(40,_40,_54)] px-5 py-1 text-center font-bold tracking-[0.07px] text-white disabled:opacity-60";
+
+function OtpBoxes({ id, value, disabled, onChange }) {
+  const refs = useRef([]);
+  const code = onlyDigits(value).slice(0, OTP_LENGTH);
+  const digits = Array.from({ length: OTP_LENGTH }, (_, index) => code[index] ?? "");
+
+  useEffect(() => {
+    refs.current[0]?.focus();
+  }, []);
+
+  function commit(nextDigits) {
+    onChange(nextDigits.join("").slice(0, OTP_LENGTH));
+  }
+
+  function handleChange(index, raw) {
+    const incoming = onlyDigits(raw);
+    if (incoming.length > 1) {
+      onChange(incoming.slice(0, OTP_LENGTH));
+      refs.current[Math.min(incoming.length, OTP_LENGTH - 1)]?.focus();
+      return;
+    }
+    const next = digits.slice();
+    next[index] = incoming.slice(-1);
+    commit(next);
+    if (incoming && index < OTP_LENGTH - 1) refs.current[index + 1]?.focus();
+  }
+
+  function handleKeyDown(index, event) {
+    if (event.key !== "Backspace") return;
+    if (digits[index]) return;
+    if (index === 0) return;
+    event.preventDefault();
+    const next = digits.slice();
+    next[index - 1] = "";
+    commit(next);
+    refs.current[index - 1]?.focus();
+  }
+
+  function handlePaste(event) {
+    const pasted = onlyDigits(event.clipboardData.getData("text"));
+    if (!pasted) return;
+    event.preventDefault();
+    onChange(pasted.slice(0, OTP_LENGTH));
+    refs.current[Math.min(pasted.length, OTP_LENGTH - 1)]?.focus();
+  }
+
+  return (
+    <div className="grid w-full min-w-0 grid-cols-6 gap-1.5 sm:gap-2" dir="ltr" onPaste={handlePaste}>
+      {digits.map((digit, index) => (
+        <input
+          key={index}
+          ref={(node) => {
+            refs.current[index] = node;
+          }}
+          id={index === 0 ? id : undefined}
+          name={index === 0 ? "code" : undefined}
+          type="text"
+          inputMode="numeric"
+          autoComplete={index === 0 ? "one-time-code" : "off"}
+          maxLength={1}
+          value={digit ? toFaDigits(digit) : ""}
+          disabled={disabled}
+          aria-label={`رقم ${toFaDigits(index + 1)} کد تأیید`}
+          onChange={(event) => handleChange(index, event.target.value)}
+          onKeyDown={(event) => handleKeyDown(index, event)}
+          className={otpBoxClass}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function LoginCard({ nextPath = "/" }) {
   const router = useRouter();
@@ -62,12 +137,13 @@ export default function LoginCard({ nextPath = "/" }) {
       setError(result.message);
       return;
     }
+    writeSessionUser(result.user ?? null);
     router.refresh();
     router.push(nextPath || "/");
   }
 
   return (
-    <div className="w-full max-w-[402px] min-w-0">
+    <div className="w-full min-w-0 max-w-[min(402px,100%)]">
       <div className="w-full rounded-lg border-[0.8px] border-[rgb(66,_70,_80)] bg-[rgb(30,_31,_40)] p-6">
         <div className="text-[14px] leading-[20px] text-[rgb(160,_158,_169)]">
           <div className="flex flex-col gap-5">
@@ -115,19 +191,14 @@ export default function LoginCard({ nextPath = "/" }) {
                       {FA.otpCodeHeading}
                     </label>
                     <div className="pt-1">
-                      <input
+                      <OtpBoxes
                         id="login-otp"
-                        name="code"
-                        type="text"
-                        inputMode="numeric"
-                        autoComplete="one-time-code"
-                        maxLength={8}
                         value={code}
-                        onChange={(event) => {
-                          setCode(onlyDigits(event.target.value).slice(0, 8));
+                        disabled={loading}
+                        onChange={(next) => {
+                          setCode(next);
                           setError("");
                         }}
-                        className={inputClass}
                       />
                     </div>
                   </div>
@@ -150,7 +221,7 @@ export default function LoginCard({ nextPath = "/" }) {
                     <button
                       type="submit"
                       className={yellowButtonClass}
-                      disabled={loading || code.length < 4}
+                      disabled={loading || code.length < OTP_LENGTH}
                     >
                       {loading ? <LoadingSpinner variant="inline" className="text-ink" /> : FA.otpSubmit}
                     </button>

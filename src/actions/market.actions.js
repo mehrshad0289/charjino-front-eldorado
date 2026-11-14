@@ -140,17 +140,6 @@ export async function submitKycLevel2(formData) {
     if (nationalIdError) return { ok: false, message: nationalIdError };
   }
 
-  try {
-    await serverFetch(apiPaths.marketSellerAcceptTerms, {
-      method: "POST",
-      headers: bearerHeaders(accessToken),
-    });
-  } catch (error) {
-    if (!(error instanceof ApiError && error.statusCode === 409)) {
-      return fromMarketError(error);
-    }
-  }
-
   if (!skipIdentity) {
     try {
       await serverFetch(apiPaths.marketKycUpgrade, {
@@ -189,17 +178,6 @@ export async function saveSellerBank(formData) {
   if (holderName.length < 3) return { ok: false, message: SHEBA_HOLDER };
   const shebaError = iranianShebaError(sheba);
   if (shebaError) return { ok: false, message: shebaError };
-
-  try {
-    await serverFetch(apiPaths.marketSellerAcceptTerms, {
-      method: "POST",
-      headers: bearerHeaders(accessToken),
-    });
-  } catch (error) {
-    if (!(error instanceof ApiError && error.statusCode === 409)) {
-      return fromMarketError(error);
-    }
-  }
 
   try {
     const data = await serverFetch(apiPaths.marketSellerBank, {

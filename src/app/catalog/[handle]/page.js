@@ -1,5 +1,4 @@
 import { notFound, redirect } from "next/navigation";
-import HeaderBar from "../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../components/eldorado/CategoryNav";
 import ProductTitleCard from "../../../components/eldorado/ProductTitleCard";
 import RecordRecentView from "../../../components/eldorado/RecordRecentView";
@@ -31,7 +30,6 @@ export default async function CatalogProductPage({ params }) {
 
   return (
     <>
-      <HeaderBar />
       <CategoryNav />
       <RecordRecentView product={product} href={productHref(handle)} />
       <main className="relative mx-auto max-w-[1208px] px-4 py-8 md:px-6">

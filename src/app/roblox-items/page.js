@@ -1,4 +1,3 @@
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import ShopItemSubNav from "../../components/eldorado/ShopItemSubNav";
 import ShopItemPageContent from "../../components/eldorado/ShopItemPageContent";
@@ -26,7 +25,6 @@ export const metadata = {
 export default function RobloxItemsPage() {
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
       <CategoryNav activeCategory="Items" />
       <main className="relative">
         <ShopItemSubNav />

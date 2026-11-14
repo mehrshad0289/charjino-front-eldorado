@@ -15,10 +15,12 @@ import {
   topupShopHref,
 } from "./topup-hub";
 import { ALL_GAMES, POPULAR_GAMES, RECENTLY_VIEWED_GAMES } from "../components/eldorado/data/referenceData";
+import { CONSOLE_PLATFORMS } from "./console-games";
 import {
   SHOP_ACCOUNTS_HREF,
   SHOP_BOOSTING_HREF,
   SHOP_CURRENCY_HREF,
+  SHOP_GAMES_HREF,
   SHOP_GIFT_CARDS_HREF,
   SHOP_ITEMS_HREF,
   SHOP_TOPUPS_HREF,
@@ -41,6 +43,7 @@ export const NAV_VERTICALS = {
   Items: { source: "market", offer: "CustomItem", landing: SHOP_ITEMS_HREF, promo: true, shopKey: "items" },
   Boosting: { source: "market", offer: "RequestedBoosting", landing: SHOP_BOOSTING_HREF, shopKey: "boosting" },
   "Gift cards": { source: "catalog", slug: "gift-card", landing: SHOP_GIFT_CARDS_HREF, shopKey: "gift-cards" },
+  Games: { source: "store", landing: SHOP_GAMES_HREF, shopKey: "games" },
 };
 
 function asRecord(value) {
@@ -98,7 +101,7 @@ const MEGA_TTL_MS = 60_000;
 const megaMemo = new Map();
 
 export async function buildNavMegaCached(verticalKey) {
-  const key = `topup-hub-v8:${verticalKey}`;
+  const key = `games-console-v2:${verticalKey}`;
   const hit = megaMemo.get(key);
   if (hit && Date.now() - hit.at < MEGA_TTL_MS) return hit.data;
   const data = await buildNavMega(verticalKey);
@@ -170,6 +173,16 @@ function toTopupMegaRow(hubKey, hubTitle, extra = {}) {
     hubKey: key,
     popular: Boolean(extra.popular) || POPULAR_TOPUP_HUBS.has(key),
   };
+}
+
+async function mapGamesMega() {
+  const rows = CONSOLE_PLATFORMS.map((row) => ({
+    name: row.title,
+    nameEn: row.key,
+    img: row.image,
+    href: `/shop/games/${row.key}`,
+  }));
+  return { popular: rows, all: rows };
 }
 
 async function mapTopupMega() {
@@ -395,6 +408,10 @@ export async function buildNavMega(verticalKey) {
   if (!config) return emptyMega(false);
 
   try {
+    if (verticalKey === "Games") {
+      const storeMega = await mapGamesMega();
+      return { ...storeMega, promo: false };
+    }
     if (config.source === "catalog") {
       if (verticalKey === "Top ups") {
         const storeMega = await mapTopupMega();

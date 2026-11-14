@@ -2,10 +2,8 @@ import { notFound, redirect } from "next/navigation";
 import AccountOffersBrowser from "../../../../components/eldorado/AccountOffersBrowser";
 import BoostingRequest from "../../../../components/eldorado/BoostingRequest";
 import AccountShopSeo from "../../../../components/eldorado/AccountShopSeo";
-import GameBanner from "../../../../components/eldorado/GameBanner";
 import GiftCardShopPage from "../../../../components/eldorado/GiftCardShopPage";
 import DynamicShopPage from "../../../../components/eldorado/DynamicShopPage";
-import HeaderBar from "../../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../../components/eldorado/CategoryNav";
 import GiftCardBanner from "../../../../components/eldorado/GiftCardBanner";
 import SubscriptionBuyFlow from "../../../../components/eldorado/SubscriptionBuyFlow";
@@ -19,6 +17,7 @@ import { toFaDigits } from "../../../../lib/fa-digits";
 import {
   activeHubTabKey,
   bannerTabsFromHub,
+  withFallbackHubTab,
   loadHubByMarketGame,
   giftHubPlatform,
   isFcFamilyHub,
@@ -100,7 +99,6 @@ export default async function ShopHubPage({ params }) {
     const href = tab.href || `/shop/${key}/${hubKey}`;
     return (
       <>
-        <HeaderBar />
         <CategoryNav activeCategory={store.navKey || store.label} />
         <main className="relative py-8">
           <GiftCardBanner
@@ -149,7 +147,6 @@ export default async function ShopHubPage({ params }) {
     }
     return (
       <>
-        <HeaderBar />
         <CategoryNav activeCategory={store.navKey || store.label} />
         <main className="relative py-8">
           <GiftCardBanner
@@ -201,13 +198,16 @@ export default async function ShopHubPage({ params }) {
       const title = setup.game_name_fa || setup.game_name || store.label;
       const listings = await loadMarketListings(setup.game_name, "Currency", 60);
       const offers = listings.items.map((row) => listingToOffer(row, "currency")).filter(Boolean);
-      const hubRecord = await loadHubByMarketGame(game?.id || setup.game_name);
-      const tabs = bannerTabsFromHub(hubRecord);
+      const hubRecord = await loadHubByMarketGame(game?.id || setup.game_name, setup.game_name);
       const href = `/shop/currency/${encodeURIComponent(hubKey)}`;
+      const tabs = withFallbackHubTab(bannerTabsFromHub(hubRecord), {
+        key: "currency",
+        label: "ارز بازی",
+        href,
+      });
       const facets = itemFacetsFromOffers(offers);
       return (
         <>
-          <HeaderBar />
           <CategoryNav activeCategory={store.navKey || "Currency"} />
           <main className="relative">
             <div className="absolute inset-x-0 top-0 z-0 hidden h-[465px] overflow-hidden md:block" aria-hidden="true">
@@ -215,11 +215,13 @@ export default async function ShopHubPage({ params }) {
               <div className="absolute inset-x-0 bottom-0 z-[2] h-[340px] bg-gradient-to-b from-transparent to-page" />
             </div>
             <div className="relative z-10">
-              {tabs.length > 0 ? (
-                <GiftCardBanner active={activeHubTabKey(tabs, href, "currency")} iconAlt={title} gameName={title} tabs={tabs} />
-              ) : (
-                <GameBanner name={title} href={href} tabLabel="ارز بازی" />
-              )}
+              <GiftCardBanner
+                active={activeHubTabKey(tabs, href, "currency")}
+                iconAlt={title}
+                gameName={title}
+                gameIcon=""
+                tabs={tabs}
+              />
               <AccountOffersBrowser
                 offers={offers}
                 facets={facets}
@@ -245,18 +247,24 @@ export default async function ShopHubPage({ params }) {
   if (key === "boosting") {
     const game = await resolveMarketGame(key, hubKey);
     const title = game?.game_name_fa || game?.game_name || store.label;
-    const hub = await loadHubByMarketGame(game?.id || game?.game_name || hubKey);
-    const tabs = bannerTabsFromHub(hub);
+    const hub = await loadHubByMarketGame(game?.id || game?.game_name || hubKey, game?.game_name);
+    const href = `/shop/boosting/${encodeURIComponent(hubKey)}`;
+    const tabs = withFallbackHubTab(bannerTabsFromHub(hub), {
+      key: "boosting",
+      label: "بوستینگ",
+      href,
+    });
     return (
       <>
-        <HeaderBar />
         <CategoryNav activeCategory={store.navKey || "Boosting"} />
         <main>
-          {tabs.length > 0 ? (
-            <GiftCardBanner active="boosting" iconAlt={title} gameName={title} tabs={tabs} />
-          ) : (
-            <GameBanner name={title} href={`/shop/boosting/${encodeURIComponent(hubKey)}`} tabLabel="بوستینگ" />
-          )}
+          <GiftCardBanner
+            active={activeHubTabKey(tabs, href, "boosting")}
+            iconAlt={title}
+            gameName={title}
+            gameIcon=""
+            tabs={tabs}
+          />
           <BoostingRequest gameId={game?.id} gameName={title} form={await loadBoostForm(game?.id)} />
         </main>
         <Footer />
@@ -273,13 +281,16 @@ export default async function ShopHubPage({ params }) {
     key === "accounts" ? await loadMarketFacets(gameName) : key === "items" ? itemFacetsFromOffers(offers) : [];
   if (key === "accounts" || key === "items") {
     const title = game?.game_name_fa || game?.game_name || store.label;
-    const hub = await loadHubByMarketGame(game?.id || gameName);
-    const tabs = bannerTabsFromHub(hub);
+    const hub = await loadHubByMarketGame(game?.id || gameName, game?.game_name || gameName);
     const href = `/shop/${key}/${encodeURIComponent(hubKey)}`;
     const tabKey = key === "items" ? "items" : "accounts";
+    const tabs = withFallbackHubTab(bannerTabsFromHub(hub), {
+      key: tabKey,
+      label: key === "items" ? "آیتم" : "اکانت",
+      href,
+    });
     return (
       <>
-        <HeaderBar />
         <CategoryNav activeCategory={store.navKey || (key === "items" ? "Items" : "Accounts")} />
         <main className="relative">
           <div className="absolute inset-x-0 top-0 z-0 hidden h-[465px] overflow-hidden md:block" aria-hidden="true">
@@ -287,11 +298,13 @@ export default async function ShopHubPage({ params }) {
             <div className="absolute inset-x-0 bottom-0 z-[2] h-[340px] bg-gradient-to-b from-transparent to-page" />
           </div>
           <div className="relative z-10">
-            {tabs.length > 0 ? (
-              <GiftCardBanner active={activeHubTabKey(tabs, href, tabKey)} iconAlt={title} gameName={title} tabs={tabs} />
-            ) : (
-              <GameBanner name={title} href={href} tabLabel={key === "items" ? "آیتم" : "اکانت"} />
-            )}
+            <GiftCardBanner
+              active={activeHubTabKey(tabs, href, tabKey)}
+              iconAlt={title}
+              gameName={title}
+              gameIcon=""
+              tabs={tabs}
+            />
             <AccountOffersBrowser
               offers={offers}
               facets={facets}

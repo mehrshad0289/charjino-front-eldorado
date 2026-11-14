@@ -1,12 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ALL_GAMES } from "./data/referenceData";
-import { CATEGORY_NAV, FA, SHOP_ACCOUNTS_HREF, SUPPORT_HREF } from "./data/faCopy";
+import { createPortal } from "react-dom";
+import { CATEGORY_NAV, FA } from "./data/faCopy";
 import MobileCategorySheet from "./MobileCategorySheet";
 import { prefetchNavMegas } from "./nav-mega-client";
-
-const POPULAR = ALL_GAMES.slice(0, 8);
 
 function ChevronRight() {
   return (
@@ -25,155 +23,71 @@ function CloseIcon() {
 }
 
 export default function MobileMenu({ onClose }) {
-  const [popular, setPopular] = useState(POPULAR);
   const [openCategory, setOpenCategory] = useState(null);
 
   useEffect(() => {
     prefetchNavMegas(CATEGORY_NAV.map((item) => item.key));
   }, []);
 
-  useEffect(() => {
-    fetch("/api/catalog-categories")
-      .then((res) => res.json())
-      .then((payload) => {
-        if (payload?.success && Array.isArray(payload.data) && payload.data.length > 0) {
-          setPopular(
-            payload.data.slice(0, 8).map((row) => ({
-              name: row.name,
-              img: row.icon,
-              href: row.href,
-            })),
-          );
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  if (openCategory) {
-    return (
-      <MobileCategorySheet
-        category={openCategory}
-        onBack={() => setOpenCategory(null)}
-        onClose={onClose}
-      />
-    );
-  }
-
-  return (
-    <div className="fixed inset-0 z-[60] overflow-y-auto bg-white" role="dialog" aria-modal="true">
-      <div className="sticky top-0 flex h-[60px] items-center justify-between bg-headerdark px-4">
-        <p className="text-lg font-bold text-white">{FA.menu}</p>
+  const sheet = openCategory ? (
+    <MobileCategorySheet
+      category={openCategory}
+      onBack={() => setOpenCategory(null)}
+      onClose={onClose}
+    />
+  ) : (
+    <div
+      className="shop-sheet-in fixed inset-0 z-[70] overflow-y-auto bg-white"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="shop-categories-title"
+    >
+      <div className="relative flex h-14 items-center justify-center px-4">
+        <p id="shop-categories-title" className="text-base font-bold text-ink">
+          {FA.categories}
+        </p>
         <button
           type="button"
           aria-label={FA.close}
           onClick={onClose}
-          className="flex h-10 w-10 items-center justify-center text-white"
+          className="absolute end-2 flex h-10 w-10 items-center justify-center text-ink"
         >
           <CloseIcon />
         </button>
       </div>
 
-      <div className="px-4 pt-4">
-        <a
-          href="/become-seller"
-          className="flex h-14 w-full items-center rounded-lg bg-brand px-5 text-start text-base font-bold text-ink"
-        >
-          {FA.sell}
-        </a>
-      </div>
-      <ul className="px-4 pt-4">
-        <li className="mb-2">
-          <a
-            href="/dashboard/orders/purchased"
-            onClick={onClose}
-            className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base font-bold text-ink"
-          >
-            {FA.purchasedOrders}
-          </a>
-        </li>
-        <li className="mb-2">
-          <a
-            href="/dashboard/orders/sold"
-            onClick={onClose}
-            className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base font-bold text-ink"
-          >
-            {FA.soldOrders}
-          </a>
-        </li>
-        <li className="mb-2">
-          <a
-            href="/dashboard/offers/Account/new#listing-game"
-            onClick={onClose}
-            className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base font-bold text-ink"
-          >
-            {FA.sellAccount}
-          </a>
-        </li>
-        {CATEGORY_NAV.map((c) => (
-          <li key={c.key} className="mb-2">
-            {c.mega === false ? (
+      <ul className="px-4 pt-1">
+        {CATEGORY_NAV.map((category) => (
+          <li key={category.key} className="mb-2">
+            {category.mega === false ? (
               <a
-                href={c.href}
+                href={category.href}
                 onClick={onClose}
-                className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base text-ink"
+                className="flex h-14 w-full items-center justify-between rounded-lg bg-badgebg px-5 text-start text-base text-ink"
               >
-                {c.label}
+                {category.label}
+                <span className="text-ink rtl:rotate-180">
+                  <ChevronRight />
+                </span>
               </a>
             ) : (
-            <button
-              type="button"
-              onClick={() => setOpenCategory(c)}
-              className="flex h-14 w-full items-center justify-between rounded-lg bg-page px-5 text-start text-base text-ink"
-            >
-              {c.label}
-              <span className="rtl:rotate-180">
-                <ChevronRight />
-              </span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setOpenCategory(category)}
+                className="flex h-14 w-full items-center justify-between rounded-lg bg-badgebg px-5 text-start text-base text-ink"
+              >
+                {category.label}
+                <span className="text-ink rtl:rotate-180">
+                  <ChevronRight />
+                </span>
+              </button>
             )}
-          </li>
-        ))}
-        <li className="mb-2">
-          <a
-            href={SUPPORT_HREF}
-            className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base text-ink"
-          >
-            {FA.support}
-          </a>
-        </li>
-      </ul>
-      <p className="px-5 py-3 text-sm text-graytext">
-        {FA.language} <span className="opacity-60">|</span> {FA.toman}
-      </p>
-
-      <p className="px-5 pb-1 pt-5 text-sm font-bold tracking-[0.14px] text-ink">{FA.popularGames}</p>
-      <ul className="px-4 pb-6">
-        {popular.map((g) => (
-          <li key={g.href || g.name}>
-            <a
-              href={g.href || SHOP_ACCOUNTS_HREF}
-              aria-label={g.name}
-              className="flex h-[52px] items-center gap-3 rounded-lg px-1 text-base text-ink active:bg-page"
-            >
-              {g.img ? (
-                <img
-                  src={g.img}
-                  alt=""
-                  width="32"
-                  height="32"
-                  className="h-8 w-8 shrink-0 rounded-sm object-cover"
-                />
-              ) : (
-                <span className="h-8 w-8 shrink-0 rounded-sm bg-badgebg" />
-              )}
-              <span className="min-w-0 flex-1 truncate">{g.name}</span>
-              <span className="rtl:rotate-180">
-                <ChevronRight />
-              </span>
-            </a>
           </li>
         ))}
       </ul>
     </div>
   );
+
+  if (typeof document === "undefined") return sheet;
+  return createPortal(sheet, document.body);
 }

@@ -1,4 +1,3 @@
-import HeaderBar from "./HeaderBar";
 import CategoryNav from "./CategoryNav";
 import GiftCardBanner from "./GiftCardBanner";
 import TopupBuyFlow from "./TopupBuyFlow";
@@ -46,7 +45,6 @@ export default function TopupShopPage({ catalog, tabs = [], activeTab = "top-up"
 
   return (
     <>
-      <HeaderBar />
       <CategoryNav activeCategory="Top ups" />
       <RecordRecentView
         product={{

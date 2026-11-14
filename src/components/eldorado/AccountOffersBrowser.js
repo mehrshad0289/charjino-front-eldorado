@@ -4,11 +4,13 @@ import { useMemo, useState } from "react";
 import AccountOffersGrid from "./AccountOffersGrid";
 import { toFaDigits } from "../../lib/fa-digits";
 import EldSelect from "./EldSelect";
+import ShopBottomSheet from "./ShopBottomSheet";
+import { FA } from "./data/faCopy";
 
 const SORTS = [
-  { id: "newest", label: "پیشنهادی" },
-  { id: "price_asc", label: "ارزان‌ترین" },
-  { id: "price_desc", label: "گران‌ترین" },
+  { id: "newest", label: FA.sortRecommended },
+  { id: "price_asc", label: FA.sortPriceAsc },
+  { id: "price_desc", label: FA.sortPriceDesc },
 ];
 
 function priceValue(offer) {
@@ -42,6 +44,36 @@ function Chevron() {
   );
 }
 
+function SortIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M7 4v13M7 17l-3-3M7 17l3-3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17 20V7M17 7l-3 3M17 7l3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function FilterIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M4 5h16l-6.2 8.1V19l-3.6 1.8v-7.7L4 5z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5 12.5 9.2 17 19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export default function AccountOffersBrowser({
   offers = [],
   facets = [],
@@ -58,6 +90,9 @@ export default function AccountOffersBrowser({
   const [picked, setPicked] = useState({});
   const [numberBand, setNumberBand] = useState({});
   const [facetQuery, setFacetQuery] = useState({});
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
+  const [draft, setDraft] = useState(null);
 
   function toggleValue(key, value) {
     setPicked((current) => {
@@ -128,13 +163,51 @@ export default function AccountOffersBrowser({
     return rows;
   }, [facets, picked, numberBand, priceMin, priceMax]);
 
+  function snapshotFilters() {
+    return {
+      priceMin,
+      priceMax,
+      pricePreset,
+      picked: { ...picked },
+      numberBand: Object.fromEntries(Object.entries(numberBand).map(([key, value]) => [key, { ...value }])),
+      facetQuery: { ...facetQuery },
+    };
+  }
+
+  function emptyFilters() {
+    return { priceMin: "", priceMax: "", pricePreset: "", picked: {}, numberBand: {}, facetQuery: {} };
+  }
+
+  function applySnapshot(next) {
+    setPriceMin(next.priceMin);
+    setPriceMax(next.priceMax);
+    setPricePreset(next.pricePreset);
+    setPicked(next.picked);
+    setNumberBand(next.numberBand);
+    setFacetQuery(next.facetQuery);
+  }
+
   function clearFilters() {
-    setPriceMin("");
-    setPriceMax("");
-    setPricePreset("");
-    setPicked({});
-    setNumberBand({});
-    setFacetQuery({});
+    applySnapshot(emptyFilters());
+  }
+
+  function openFilters() {
+    setDraft(snapshotFilters());
+    setFilterOpen(true);
+  }
+
+  function closeFilters() {
+    setFilterOpen(false);
+    setDraft(null);
+  }
+
+  function applyDraft() {
+    if (draft) applySnapshot(draft);
+    closeFilters();
+  }
+
+  function clearDraft() {
+    setDraft(emptyFilters());
   }
 
   const rows = useMemo(() => {
@@ -163,195 +236,353 @@ export default function AccountOffersBrowser({
   }, [offers, query, sort, priceMin, priceMax, picked, numberBand]);
 
   const countText = [toFaDigits(rows.length), countLabel, foundSuffix].filter(Boolean).join(" ");
+  const sortLabel = SORTS.find((item) => item.id === sort)?.label || FA.sortRecommended;
+
+  function FilterFields({ idPrefix = "desk", source = null, onChange = null }) {
+    const usingDraft = Boolean(source && onChange);
+    const priceMinValue = usingDraft ? source.priceMin : priceMin;
+    const priceMaxValue = usingDraft ? source.priceMax : priceMax;
+    const pricePresetValue = usingDraft ? source.pricePreset : pricePreset;
+    const pickedValue = usingDraft ? source.picked : picked;
+    const numberBandValue = usingDraft ? source.numberBand : numberBand;
+    const facetQueryValue = usingDraft ? source.facetQuery : facetQuery;
+    const patch = (partial) => onChange((current) => ({ ...current, ...partial }));
+    const onPriceMin = (value) =>
+      usingDraft ? patch({ priceMin: onlyDigits(value), pricePreset: "" }) : changePriceMin(value);
+    const onPriceMax = (value) =>
+      usingDraft ? patch({ priceMax: onlyDigits(value), pricePreset: "" }) : changePriceMax(value);
+    const onPreset = (preset) => {
+      if (!usingDraft) {
+        applyPreset(preset);
+        return;
+      }
+      if (source.pricePreset === preset.id) {
+        patch({ pricePreset: "", priceMin: "", priceMax: "" });
+        return;
+      }
+      patch({
+        pricePreset: preset.id,
+        priceMin: preset.min != null ? String(preset.min) : "",
+        priceMax: preset.max != null ? String(preset.max) : "",
+      });
+    };
+    const onToggle = (key, value) => {
+      if (!usingDraft) {
+        toggleValue(key, value);
+        return;
+      }
+      const list = source.picked[key] || [];
+      const next = list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
+      patch({ picked: { ...source.picked, [key]: next } });
+    };
+    const onBand = (key, edge, value) => {
+      if (!usingDraft) {
+        setBand(key, edge, value);
+        return;
+      }
+      patch({
+        numberBand: { ...source.numberBand, [key]: { ...source.numberBand[key], [edge]: onlyDigits(value) } },
+      });
+    };
+    const onFacetSearch = (key, value) => {
+      if (!usingDraft) {
+        setFacetQuery((current) => ({ ...current, [key]: value }));
+        return;
+      }
+      patch({ facetQuery: { ...source.facetQuery, [key]: value } });
+    };
+    return (
+    <div className="border-t border-cardborder">
+      <details open className="group border-b border-cardborder py-5">
+        <summary className="flex cursor-pointer list-none items-center justify-between font-bold marker:content-none [&::-webkit-details-marker]:hidden">
+          <span>قیمت (تومان)</span>
+          <span className="transition group-open:rotate-180">
+            <Chevron />
+          </span>
+        </summary>
+        <div className="mt-3">
+          <div className="mb-4 flex items-center gap-2">
+            <input
+              inputMode="numeric"
+              value={priceMinValue}
+              onChange={(event) => onPriceMin(event.target.value)}
+              placeholder="از"
+              aria-label="حداقل قیمت"
+              className="h-[42px] w-full rounded-lg bg-inputgray px-3"
+            />
+            <span className="text-graytext">تا</span>
+            <input
+              inputMode="numeric"
+              value={priceMaxValue}
+              onChange={(event) => onPriceMax(event.target.value)}
+              placeholder="تا"
+              aria-label="حداکثر قیمت"
+              className="h-[42px] w-full rounded-lg bg-inputgray px-3"
+            />
+          </div>
+          {pricePresets.length > 0 ? (
+            <div className="flex flex-col gap-3">
+              {pricePresets.map((preset) => (
+                <label key={preset.id} className="flex h-6 items-center gap-2 text-[14px] leading-[20px]">
+                  <input
+                    type="radio"
+                    name={`${idPrefix}-item-price-preset`}
+                    checked={pricePresetValue === preset.id}
+                    onChange={() => onPreset(preset)}
+                  />
+                  <span>{preset.label}</span>
+                </label>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      </details>
+      {facets.map((field) => {
+        const options = field.options || [];
+        const search = (facetQueryValue[field.key] || "").trim();
+        const visible = search
+          ? options.filter((option) => String(option.value).toLowerCase().includes(search.toLowerCase()))
+          : options;
+        return (
+          <details key={field.key} open className="group border-b border-cardborder py-5">
+            <summary className="flex cursor-pointer list-none items-center justify-between font-bold marker:content-none [&::-webkit-details-marker]:hidden">
+              <span>{field.label_fa}</span>
+              <span className="transition group-open:rotate-180">
+                <Chevron />
+              </span>
+            </summary>
+            <div className="mt-3">
+              {field.type === "number" ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    inputMode="numeric"
+                    value={numberBandValue[field.key]?.min || ""}
+                    onChange={(event) => onBand(field.key, "min", event.target.value)}
+                    placeholder={field.min != null ? String(field.min) : "از"}
+                    aria-label={`${field.label_fa} از`}
+                    className="h-[42px] w-full rounded-lg bg-inputgray px-3"
+                  />
+                  <span className="text-graytext">تا</span>
+                  <input
+                    inputMode="numeric"
+                    value={numberBandValue[field.key]?.max || ""}
+                    onChange={(event) => onBand(field.key, "max", event.target.value)}
+                    placeholder={field.max != null ? String(field.max) : "تا"}
+                    aria-label={`${field.label_fa} تا`}
+                    className="h-[42px] w-full rounded-lg bg-inputgray px-3"
+                  />
+                </div>
+              ) : (
+                <>
+                  {options.length > 6 ? (
+                    <div className="relative mb-3">
+                      <input
+                        type="search"
+                        value={facetQueryValue[field.key] || ""}
+                        onChange={(event) => onFacetSearch(field.key, event.target.value)}
+                        placeholder={`جستجوی ${field.label_fa}`}
+                        aria-label={`جستجوی ${field.label_fa}`}
+                        className="h-[42px] w-full rounded-lg border-2 border-inputgray bg-inputgray pe-10 ps-3 text-[14px] outline-none placeholder:text-filtertext focus:border-focusblue focus:bg-white"
+                      />
+                      <span className="pointer-events-none absolute inset-y-0 end-3 flex items-center">
+                        <SearchIcon />
+                      </span>
+                    </div>
+                  ) : null}
+                  <div className="flex flex-col gap-3">
+                    {visible.map((option) => {
+                      const checked = (pickedValue[field.key] || []).includes(option.value);
+                      return (
+                        <label key={option.value} className="flex items-center justify-between gap-2 text-[14px] leading-[20px]">
+                          <span className="flex min-w-0 items-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => onToggle(field.key, option.value)}
+                            />
+                            <span className="truncate">{option.value}</span>
+                          </span>
+                          <span className="text-filtertext">{toFaDigits(option.count)}</span>
+                        </label>
+                      );
+                    })}
+                    {visible.length === 0 ? <p className="text-[13px] text-filtertext">موردی نیست</p> : null}
+                  </div>
+                </>
+              )}
+            </div>
+          </details>
+        );
+      })}
+    </div>
+    );
+  }
 
   const sidebar = (
     <div className="lg:sticky lg:top-[var(--shop-header-h)] lg:max-h-[calc(100vh-var(--shop-header-h))] lg:overflow-y-auto lg:pe-4">
       <div className="mb-5 flex items-center justify-between">
-        <h2 className="hidden text-[20px] font-bold leading-[30px] lg:block">فیلترها</h2>
+        <h2 className="text-[20px] font-bold leading-[30px]">{FA.filters}</h2>
         {chips.length ? (
           <button type="button" onClick={clearFilters} className="text-[14px] font-bold text-linkblue">
-            پاک کردن
+            {FA.clearFilters}
           </button>
         ) : null}
       </div>
-      <div className="border-t border-cardborder">
-        <details open className="group border-b border-cardborder py-5">
-          <summary className="flex cursor-pointer list-none items-center justify-between font-bold marker:content-none [&::-webkit-details-marker]:hidden">
-            <span>قیمت (تومان)</span>
-            <span className="transition group-open:rotate-180">
-              <Chevron />
+      <FilterFields idPrefix="desk" />
+    </div>
+  );
+
+  const chipRow =
+    chips.length > 0 ? (
+      <div className="mb-5 flex flex-wrap gap-2">
+        {chips.map((chip) => (
+          <button
+            key={chip.id}
+            type="button"
+            onClick={chip.clear}
+            aria-label={`حذف فیلتر ${chip.label}`}
+            className="inline-flex max-w-fit items-center gap-2 rounded-full bg-white px-3 py-1 text-[14px] leading-[20px] outline outline-[0.8px] outline-cardborder"
+          >
+            <span>{chip.label}</span>
+            <span aria-hidden="true" className="text-filtertext">
+              ×
             </span>
-          </summary>
-          <div className="mt-3">
-            <div className="mb-4 flex items-center gap-2">
-              <input
-                inputMode="numeric"
-                value={priceMin}
-                onChange={(event) => changePriceMin(event.target.value)}
-                placeholder="از"
-                aria-label="حداقل قیمت"
-                className="h-[42px] w-full rounded-lg bg-inputgray px-3"
-              />
-              <span className="text-graytext">تا</span>
-              <input
-                inputMode="numeric"
-                value={priceMax}
-                onChange={(event) => changePriceMax(event.target.value)}
-                placeholder="تا"
-                aria-label="حداکثر قیمت"
-                className="h-[42px] w-full rounded-lg bg-inputgray px-3"
-              />
-            </div>
-            {pricePresets.length > 0 ? (
-              <div className="flex flex-col gap-3">
-                {pricePresets.map((preset) => (
-                  <label key={preset.id} className="flex h-6 items-center gap-2 text-[14px] leading-[20px]">
-                    <input
-                      type="radio"
-                      name="item-price-preset"
-                      checked={pricePreset === preset.id}
-                      onChange={() => applyPreset(preset)}
-                    />
-                    <span>{preset.label}</span>
-                  </label>
-                ))}
-              </div>
-            ) : null}
-          </div>
-        </details>
-        {facets.map((field) => {
-          const options = field.options || [];
-          const search = (facetQuery[field.key] || "").trim();
-          const visible = search
-            ? options.filter((option) => String(option.value).toLowerCase().includes(search.toLowerCase()))
-            : options;
-          return (
-            <details key={field.key} open className="group border-b border-cardborder py-5">
-              <summary className="flex cursor-pointer list-none items-center justify-between font-bold marker:content-none [&::-webkit-details-marker]:hidden">
-                <span>{field.label_fa}</span>
-                <span className="transition group-open:rotate-180">
-                  <Chevron />
-                </span>
-              </summary>
-              <div className="mt-3">
-                {field.type === "number" ? (
-                  <div className="flex items-center gap-2">
-                    <input
-                      inputMode="numeric"
-                      value={numberBand[field.key]?.min || ""}
-                      onChange={(event) => setBand(field.key, "min", onlyDigits(event.target.value))}
-                      placeholder={field.min != null ? String(field.min) : "از"}
-                      aria-label={`${field.label_fa} از`}
-                      className="h-[42px] w-full rounded-lg bg-inputgray px-3"
-                    />
-                    <span className="text-graytext">تا</span>
-                    <input
-                      inputMode="numeric"
-                      value={numberBand[field.key]?.max || ""}
-                      onChange={(event) => setBand(field.key, "max", onlyDigits(event.target.value))}
-                      placeholder={field.max != null ? String(field.max) : "تا"}
-                      aria-label={`${field.label_fa} تا`}
-                      className="h-[42px] w-full rounded-lg bg-inputgray px-3"
-                    />
-                  </div>
-                ) : (
-                  <>
-                    {options.length > 6 ? (
-                      <div className="relative mb-3">
-                        <input
-                          type="search"
-                          value={facetQuery[field.key] || ""}
-                          onChange={(event) => setFacetQuery((current) => ({ ...current, [field.key]: event.target.value }))}
-                          placeholder={`جستجوی ${field.label_fa}`}
-                          aria-label={`جستجوی ${field.label_fa}`}
-                          className="h-[42px] w-full rounded-lg border-2 border-inputgray bg-inputgray pe-10 ps-3 text-[14px] outline-none placeholder:text-filtertext focus:border-focusblue focus:bg-white"
-                        />
-                        <span className="pointer-events-none absolute inset-y-0 end-3 flex items-center">
-                          <SearchIcon />
-                        </span>
-                      </div>
-                    ) : null}
-                    <div className="flex flex-col gap-3">
-                      {visible.map((option) => {
-                        const checked = (picked[field.key] || []).includes(option.value);
-                        return (
-                          <label key={option.value} className="flex items-center justify-between gap-2 text-[14px] leading-[20px]">
-                            <span className="flex min-w-0 items-center gap-2">
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={() => toggleValue(field.key, option.value)}
-                              />
-                              <span className="truncate">{option.value}</span>
-                            </span>
-                            <span className="text-filtertext">{toFaDigits(option.count)}</span>
-                          </label>
-                        );
-                      })}
-                      {visible.length === 0 ? <p className="text-[13px] text-filtertext">موردی نیست</p> : null}
-                    </div>
-                  </>
-                )}
-              </div>
-            </details>
-          );
-        })}
+          </button>
+        ))}
       </div>
+    ) : null;
+
+  const searchField = (
+    <div className="relative min-w-0 w-full">
+      <input
+        type="search"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder={searchPlaceholder}
+        aria-label={searchPlaceholder}
+        className="block h-[42px] w-full rounded-lg border-2 border-inputgray bg-inputgray pe-10 ps-3 text-[14px] outline-none placeholder:text-filtertext focus:border-focusblue focus:bg-white"
+      />
+      <span className="pointer-events-none absolute inset-y-0 end-3 flex items-center">
+        <SearchIcon />
+      </span>
     </div>
   );
 
   return (
     <div className="mx-auto flex w-full max-w-[1208px] flex-col gap-6 px-4 pb-16 pt-4 lg:flex-row lg:items-start lg:gap-8 lg:px-6 lg:pt-7">
-      <aside className="w-full shrink-0 lg:w-64">
-        <details open className="rounded-lg bg-white p-4 lg:contents lg:bg-transparent lg:p-0">
-          <summary className="cursor-pointer text-[16px] font-bold lg:hidden">فیلترها</summary>
-          <div className="pt-4 lg:pt-0">{sidebar}</div>
-        </details>
-      </aside>
+      <aside className="hidden w-full shrink-0 lg:block lg:w-64">{sidebar}</aside>
       <div className="min-w-0 flex-1">
-        <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative w-full max-w-[340px]">
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={searchPlaceholder}
-              aria-label={searchPlaceholder}
-              className="block h-[42px] w-full rounded-lg border-2 border-inputgray bg-inputgray pe-10 ps-3 text-[14px] outline-none placeholder:text-filtertext focus:border-focusblue focus:bg-white"
-            />
-            <span className="pointer-events-none absolute inset-y-0 end-3 flex items-center">
-              <SearchIcon />
-            </span>
+        <div className="mb-4 lg:hidden">
+          <div className="mb-4 flex items-center gap-2">
+            <div className="min-w-0 flex-1">{searchField}</div>
+            <button
+              type="button"
+              onClick={openFilters}
+              aria-label={FA.filters}
+              aria-haspopup="dialog"
+              aria-expanded={filterOpen}
+              className={`relative flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-lg bg-white text-ink outline outline-1 ${
+                chips.length ? "outline-ink" : "outline-cardborder"
+              }`}
+            >
+              <FilterIcon />
+              {chips.length ? (
+                <span className="absolute -top-1 -start-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand px-0.5 text-[10px] font-bold text-ink">
+                  {toFaDigits(chips.length)}
+                </span>
+              ) : null}
+            </button>
           </div>
+          {chipRow}
+          <div className="flex min-h-10 items-center justify-between gap-3">
+            <p className="text-[14px] leading-[14px] text-filtertext">{countText}</p>
+            <button
+              type="button"
+              onClick={() => setSortOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={sortOpen}
+              className="flex min-h-[42px] min-w-0 items-center gap-2 rounded-lg px-1 text-[14px] text-ink"
+            >
+              <SortIcon />
+              <span className="truncate">{sortLabel}</span>
+              <span className="text-filtertext">
+                <Chevron />
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div className="mb-5 hidden flex-col gap-4 lg:flex sm:flex-row sm:items-center sm:justify-between">
+          <div className="w-full max-w-[340px]">{searchField}</div>
           <EldSelect
             className="w-full min-w-0 sm:w-[12.5rem]"
-            ariaLabel="مرتب‌سازی آگهی‌ها"
+            ariaLabel={FA.sortBy}
             value={sort}
             onChange={setSort}
             options={SORTS.map((item) => ({ value: item.id, label: item.label }))}
           />
         </div>
-        {chips.length > 0 ? (
-          <div className="mb-5 flex flex-wrap gap-2">
-            {chips.map((chip) => (
-              <button
-                key={chip.id}
-                type="button"
-                onClick={chip.clear}
-                aria-label={`حذف فیلتر ${chip.label}`}
-                className="inline-flex max-w-fit items-center gap-2 rounded-full bg-white px-3 py-1 text-[14px] leading-[20px] outline outline-[0.8px] outline-cardborder"
-              >
-                <span>{chip.label}</span>
-                <span aria-hidden="true" className="text-filtertext">
-                  ×
-                </span>
-              </button>
-            ))}
-          </div>
-        ) : null}
-        <p className="mb-5 text-[14px] leading-[14px] text-filtertext">{countText}</p>
+        <div className="hidden lg:block">
+          {chipRow}
+          <p className="mb-5 text-[14px] leading-[14px] text-filtertext">{countText}</p>
+        </div>
         <AccountOffersGrid offers={rows} embedded />
       </div>
+
+      <ShopBottomSheet
+        open={filterOpen}
+        title={FA.filters}
+        onClose={closeFilters}
+        footer={
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={clearDraft}
+              className="inline-flex min-h-[42px] flex-1 items-center justify-center rounded-lg border-2 border-ink text-[14px] font-bold"
+            >
+              {FA.clearFilters}
+            </button>
+            <button
+              type="button"
+              onClick={applyDraft}
+              className="inline-flex min-h-[42px] flex-[2] items-center justify-center rounded-lg bg-brand text-[14px] font-bold text-ink"
+            >
+              {FA.applyFilters}
+            </button>
+          </div>
+        }
+      >
+        {draft ? <FilterFields idPrefix="sheet" source={draft} onChange={setDraft} /> : null}
+      </ShopBottomSheet>
+
+      <ShopBottomSheet open={sortOpen} title={FA.sortBy} onClose={() => setSortOpen(false)}>
+        <ul className="pb-2">
+          {SORTS.map((item) => {
+            const active = item.id === sort;
+            return (
+              <li key={item.id} className="mb-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSort(item.id);
+                    setSortOpen(false);
+                  }}
+                  className={`flex h-14 w-full items-center justify-between rounded-lg px-5 text-start text-base text-ink ${
+                    active ? "bg-badgebg" : ""
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {active ? (
+                    <span className="text-ink" aria-hidden="true">
+                      <CheckIcon />
+                    </span>
+                  ) : null}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </ShopBottomSheet>
     </div>
   );
 }

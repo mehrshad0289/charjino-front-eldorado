@@ -7,6 +7,7 @@ import InfoBanner from "../../../../components/eldorado/InfoBanner";
 import EmptyState from "../../../../components/eldorado/EmptyState";
 import SellerListingsTable from "../../../../components/eldorado/SellerListingsTable";
 import { DASHBOARD_OFFERS_PAGE } from "../../../../components/eldorado/data/dashboardData";
+import { GAME_LISTING_COPY } from "../../../../components/eldorado/data/listingData";
 import { sellBlockers } from "@/lib/listing";
 
 export const instant = false;
@@ -30,7 +31,7 @@ export default async function DashboardConsoleGamesPage() {
       <DashboardPageHeader
         icon="offers"
         title="بازی"
-        action={{ label: "آگهی جدید", href: "/dashboard/offers/ConsoleGame/new", ariaLabel: "آگهی جدید" }}
+        action={{ label: GAME_LISTING_COPY.newOffer, href: "/dashboard/offers/ConsoleGame/new", ariaLabel: GAME_LISTING_COPY.newOffer }}
       />
       <div className="mt-1 w-full px-6 pb-[50px]">
         <InfoBanner

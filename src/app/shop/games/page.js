@@ -1,34 +1,36 @@
 import Link from "next/link";
-import HeaderBar from "../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../components/eldorado/CategoryNav";
 import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
+import { FA } from "../../../components/eldorado/data/faCopy";
 import { CONSOLE_PLATFORMS } from "../../../lib/console-games";
 
 export const metadata = {
   title: "بازی — شارژینو",
-  description: "دیسک، کارتریج، اکانت و راک کنسول، به‌علاوه گیفت و اشتراک رسمی شارژینو.",
+  description: "کنسول را انتخاب کنید. دیسک، کارتریج، اکانت و راک آگهی کاربر است. گیفت و اشتراک را شارژینو می‌فروشد.",
 };
 
 export default function GamesShopPage() {
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
       <CategoryNav activeCategory="Games" />
       <main className="mx-auto w-full max-w-[1048px] px-4 py-8">
-        <h1 className="text-[30px] font-semibold leading-[36px]">بازی</h1>
+        <h1 className="text-[30px] font-semibold leading-[36px]">{FA.games}</h1>
         <p className="mt-2 max-w-[640px] text-[15px] leading-7 text-graytext">
-          پلتفرم را انتخاب کنید. کالای فیزیکی و اکانت را کاربران می‌فروشند. گیفت، پلاس، گیم‌پس و والت استیم را شارژینو می‌فروشد.
+          کنسول را انتخاب کنید. تب بازی آگهی‌های دیسک، کارتریج، اکانت و راک است. شارژ با آیدی، آیتم و ارز داخل بازی در دستهٔ خودشان می‌مانند.
         </p>
         <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {CONSOLE_PLATFORMS.map((platform) => (
+          {CONSOLE_PLATFORMS.map((console) => (
             <Link
-              key={platform.key}
-              href={`/shop/games/${platform.key}`}
-              className="rounded-xl bg-white p-5 shadow-[0_2px_4px_rgba(9,9,11,0.05)]"
+              key={console.key}
+              href={`/shop/games/${console.key}`}
+              className="flex items-center gap-4 rounded-xl bg-white p-4 shadow-[0_2px_4px_rgba(9,9,11,0.05)]"
             >
-              <h2 className="text-[20px] font-bold">{platform.title}</h2>
-              <p className="mt-2 text-[14px] leading-6 text-graytext">{platform.text}</p>
+              <img src={console.image} alt="" className="h-16 w-16 shrink-0 rounded-lg object-cover" />
+              <span>
+                <span className="block text-[20px] font-bold">{console.title}</span>
+                <span className="mt-1 block text-[13px] leading-5 text-graytext">{console.text}</span>
+              </span>
             </Link>
           ))}
         </div>

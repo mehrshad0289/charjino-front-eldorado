@@ -1,5 +1,4 @@
 import Link from "next/link";
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import Footer from "../../components/eldorado/Footer";
 import InfluencerFaq from "../../components/eldorado/InfluencerFaq";
 import {
@@ -109,7 +108,6 @@ export default function InfluencerProgramPage() {
 
   return (
     <>
-      <HeaderBar />
       <main className="bg-page text-ink">
         {/* Hero */}
         <section className="relative overflow-hidden px-4 pt-8 pb-[60px] lg:px-[174px] lg:pb-[120px]">

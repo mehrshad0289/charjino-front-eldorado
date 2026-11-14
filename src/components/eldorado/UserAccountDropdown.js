@@ -5,9 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getSellerWallet } from "@/actions/market.actions";
 import {
-  accountAvatarUrl,
+  accountAvatarSrc,
   accountDisplayName,
-  accountInitials,
   isDashboardNavActive,
   publicProfileHref,
 } from "@/lib/account-display";
@@ -64,7 +63,7 @@ export default function UserAccountDropdown({ user, avatarAlert = false, onLogou
   const current = navActiveId(pathname);
   const [collapsed, setCollapsed] = useState(() => initialCollapsed(current));
   const [balance, setBalance] = useState(null);
-  const avatar = accountAvatarUrl(user);
+  const avatar = accountAvatarSrc(user);
   const displayName = accountDisplayName(user);
   const phoneName = displayName.includes("***");
   const profileHref = publicProfileHref(user);
@@ -140,12 +139,8 @@ export default function UserAccountDropdown({ user, avatarAlert = false, onLogou
         className="relative flex items-center"
         onClick={() => setOpen((value) => !value)}
       >
-        <span className="size-11 overflow-hidden rounded-full border-2 border-black/0 bg-searchbg text-center text-sm font-bold leading-[44px] text-white">
-          {avatar ? (
-            <img alt="" src={avatar} className="block size-11 object-cover align-middle" />
-          ) : (
-            accountInitials(user)
-          )}
+        <span className="size-11 overflow-hidden rounded-full border-2 border-black/0 bg-searchbg">
+          <img alt="" src={avatar} className="block size-11 object-cover align-middle" />
         </span>
         {avatarAlert ? (
           <span className="absolute right-0 top-0 flex h-4 min-h-4 items-center justify-center rounded-[0.4375rem] bg-[rgb(255,_141,_0)] px-[5px] pt-[2px] text-[12px] leading-[18px] text-ink">
@@ -159,12 +154,8 @@ export default function UserAccountDropdown({ user, avatarAlert = false, onLogou
           className="absolute end-0 top-[calc(100%+8px)] z-[70] flex max-h-[min(720px,calc(100dvh-var(--shop-header-bar)-16px))] w-[min(300px,calc(100vw-16px))] flex-col overflow-hidden rounded-lg border border-cardborder bg-white text-ink shadow-[0_8px_24px_rgba(9,9,11,0.12)]"
         >
           <div className="flex shrink-0 items-start gap-3 border-b border-cardborder px-3 py-3">
-            <div className="size-10 shrink-0 overflow-hidden rounded-full bg-badgebg text-center text-[13px] font-bold leading-10">
-              {avatar ? (
-                <img alt={FA.profileAvatar} src={avatar} className="block size-full object-cover align-middle" />
-              ) : (
-                <span aria-hidden="true">{accountInitials(user)}</span>
-              )}
+            <div className="size-10 shrink-0 overflow-hidden rounded-full bg-badgebg">
+              <img alt={FA.profileAvatar} src={avatar} className="block size-full object-cover align-middle" />
             </div>
             <div className="min-w-0">
               <Link
@@ -217,6 +208,7 @@ export default function UserAccountDropdown({ user, avatarAlert = false, onLogou
                             <Link
                               key={item.id}
                               href={item.href}
+                              prefetch={false}
                               scroll={false}
                               role="menuitem"
                               aria-current={isActive ? "page" : undefined}
@@ -243,6 +235,7 @@ export default function UserAccountDropdown({ user, avatarAlert = false, onLogou
                   <Link
                     key={link.id}
                     href={link.href}
+                    prefetch={false}
                     scroll={false}
                     role="menuitem"
                     aria-current={isActive ? "page" : undefined}

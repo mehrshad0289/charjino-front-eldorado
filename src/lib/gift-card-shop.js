@@ -365,7 +365,7 @@ export async function loadProductHub(hubKey) {
   }
 }
 
-const HUB_TAB_ORDER = ["top-up", "gift-cards", "accounts", "items", "boosting", "currency"];
+const HUB_TAB_ORDER = ["games", "top-up", "gift-cards", "accounts", "items", "boosting", "currency"];
 
 export function bannerTabsFromHub(hub) {
   const rec = asRecord(hub);
@@ -381,6 +381,17 @@ export function bannerTabsFromHub(hub) {
   return sortBannerTabs(tabs);
 }
 
+export function withFallbackHubTab(tabs, fallback) {
+  const rows = Array.isArray(tabs) ? [...tabs] : [];
+  const key = asString(fallback?.key);
+  const label = asString(fallback?.label);
+  const href = asString(fallback?.href);
+  if (!key || !label || !href.startsWith("/")) return sortBannerTabs(rows);
+  const exists = rows.some((tab) => asString(tab.key) === key || asString(tab.href) === href);
+  if (!exists) rows.push({ key, label, href });
+  return sortBannerTabs(rows);
+}
+
 function sortBannerTabs(tabs) {
   return [...tabs].sort((a, b) => {
     const ai = HUB_TAB_ORDER.indexOf(a.key);
@@ -392,15 +403,21 @@ function sortBannerTabs(tabs) {
   });
 }
 
-export async function loadHubByMarketGame(source) {
+export async function loadHubByMarketGame(source, fallbackKey = "") {
   const id = typeof source === "number" ? String(source) : asString(source);
-  if (!id) return null;
   try {
-    return asRecord(await serverFetch(apiPaths.catalogProductHubByMarketGame(id)));
+    if (id) {
+      const hub = asRecord(await serverFetch(apiPaths.catalogProductHubByMarketGame(id)));
+      if (asString(hub.hubKey)) return hub;
+    }
   } catch (error) {
-    if (error instanceof ApiError && error.statusCode === 404) return null;
-    throw error;
+    if (!(error instanceof ApiError && error.statusCode === 404)) throw error;
   }
+  const slug =
+    normalizeGiftPlatform(fallbackKey) ||
+    giftHubPlatform(fallbackKey) ||
+    (id && !/^\d+$/.test(id) ? normalizeGiftPlatform(id) : "");
+  return slug ? loadProductHub(slug) : null;
 }
 
 export function activeHubTabKey(tabs, href, fallbackKey = "gift-cards") {
@@ -437,6 +454,13 @@ export function tabForStoreCategory(hub, categoryKey) {
       }
       if (key === "items") {
         return asString(tab.tabKey) === "items";
+      }
+      if (key === "games") {
+        return (
+          asString(tab.tabKey) === "games" ||
+          asString(tab.catalogGroupSlug) === "game-keys" ||
+          asString(tab.href).includes("/shop/games/")
+        );
       }
       if (key === "currency") {
         const hubCategory = asString(hub?.storeCategoryKey).toLowerCase();

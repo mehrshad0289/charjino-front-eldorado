@@ -2,12 +2,13 @@ import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/actions/auth.actions";
 import { getKycMe, getSellerMe } from "@/actions/market.actions";
-import HeaderBar from "../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../components/eldorado/CategoryNav";
 import Footer from "../../../components/eldorado/Footer";
 import ChatBubble from "../../../components/eldorado/ChatBubble";
 import VerifyStatusActions from "../../../components/eldorado/VerifyStatusActions";
 import VerifyShebaForm from "../../../components/eldorado/VerifyShebaForm";
+import VerifyTermsForm from "../../../components/eldorado/VerifyTermsForm";
+import { WizardStepPills } from "../../../components/eldorado/ListingWizardChrome";
 import { VERIFY_BANNER, VERIFY_KYC, VERIFY_STATUS } from "../../../components/eldorado/data/verifyData";
 
 export const instant = false;
@@ -59,12 +60,23 @@ function kycPhase(seller, kyc) {
   const hasSelfie = uploadedKinds.includes("selfie");
 
   const shebaSet = Boolean(profile?.sheba_set);
+  const shebaVerified = Boolean(profile?.sheba_verified);
   const shebaMasked = profile?.sheba_masked ? String(profile.sheba_masked) : "";
   const holderName = profile?.sheba_holder_name ? String(profile.sheba_holder_name) : "";
+  const termsAccepted = Boolean(profile?.terms_accepted_at);
 
   if (currentLevel >= 2) {
+    if (!termsAccepted) {
+      return { phase: "terms", uploadedKinds, rejectionReason: "", shebaMasked, holderName };
+    }
+    if (!shebaSet) {
+      return { phase: "sheba", uploadedKinds, rejectionReason: "", shebaMasked, holderName };
+    }
+    if (!shebaVerified) {
+      return { phase: "sheba_pending", uploadedKinds, rejectionReason: "", shebaMasked, holderName };
+    }
     return {
-      phase: shebaSet ? "ready" : "sheba",
+      phase: "ready",
       uploadedKinds,
       rejectionReason: "",
       shebaMasked,
@@ -74,7 +86,6 @@ function kycPhase(seller, kyc) {
   if (pending && hasCard && hasSelfie) {
     return { phase: "pending", uploadedKinds, rejectionReason: "", shebaMasked, holderName };
   }
-  if (pending) return { phase: "docs", uploadedKinds, rejectionReason: "", shebaMasked, holderName };
   if (rejected) {
     return {
       phase: "rejected",
@@ -84,7 +95,18 @@ function kycPhase(seller, kyc) {
       holderName,
     };
   }
+  if (!termsAccepted) {
+    return { phase: "terms", uploadedKinds, rejectionReason: "", shebaMasked, holderName };
+  }
+  if (pending) return { phase: "docs", uploadedKinds, rejectionReason: "", shebaMasked, holderName };
   return { phase: "form", uploadedKinds: [], rejectionReason: "", shebaMasked, holderName };
+}
+
+function stepIndex(phase) {
+  if (phase === "terms") return 0;
+  if (phase === "form" || phase === "docs" || phase === "rejected") return 1;
+  if (phase === "pending") return 2;
+  return 3;
 }
 
 export default async function VerifyStatusPage() {
@@ -115,6 +137,15 @@ export default async function VerifyStatusPage() {
             cta: VERIFY_KYC.shebaSubmit,
             reason: false,
           }
+        : phase === "sheba_pending"
+          ? {
+              badge: VERIFY_KYC.pendingBadge,
+              badgeBg: VERIFY_KYC.pendingBadgeBg,
+              title: VERIFY_KYC.shebaPendingTitle,
+              subtitle: VERIFY_KYC.shebaPendingSubtitle,
+              cta: "",
+              reason: false,
+            }
         : phase === "ready"
           ? {
               badge: VERIFY_KYC.verifiedBadge,
@@ -144,21 +175,31 @@ export default async function VerifyStatusPage() {
                 cta: VERIFY_KYC.rejectedCta,
                 reason: true,
               }
-            : {
-                badge: VERIFY_STATUS.badge,
-                badgeBg: VERIFY_STATUS.badgeBg,
-                title: VERIFY_STATUS.title,
-                subtitle: VERIFY_STATUS.subtitle,
-                cta: VERIFY_KYC.submit,
-                reason: false,
-              };
+            : phase === "terms"
+              ? {
+                  badge: VERIFY_STATUS.badge,
+                  badgeBg: VERIFY_STATUS.badgeBg,
+                  title: VERIFY_KYC.termsTitle,
+                  subtitle: VERIFY_KYC.termsSubtitle,
+                  cta: VERIFY_KYC.termsCta,
+                  reason: false,
+                }
+              : {
+                  badge: VERIFY_STATUS.badge,
+                  badgeBg: VERIFY_STATUS.badgeBg,
+                  title: VERIFY_STATUS.title,
+                  subtitle: VERIFY_STATUS.subtitle,
+                  cta: VERIFY_KYC.submit,
+                  reason: false,
+                };
 
   const showForm = phase === "form" || phase === "docs" || phase === "rejected";
   const showSheba = phase === "sheba" || phase === "ready";
+  const showTerms = phase === "terms";
+  const currentStep = stepIndex(phase);
 
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar user={user} />
       <CategoryNav />
       <main className="isolate relative min-h-[1200px]">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[465px] overflow-hidden">
@@ -199,6 +240,14 @@ export default async function VerifyStatusPage() {
                   <InfoIcon />
                 </div>
               </div>
+              <div className="self-stretch">
+                <WizardStepPills
+                  steps={VERIFY_KYC.steps}
+                  currentIndex={currentStep}
+                  ariaLabel="مراحل احراز فروشنده"
+                  embedded
+                />
+              </div>
               <div className="flex flex-col items-start self-stretch">
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col items-start gap-2">
@@ -211,6 +260,11 @@ export default async function VerifyStatusPage() {
                   </div>
                 </div>
               </div>
+              {showTerms ? (
+                <div className="flex items-center justify-start gap-2 self-stretch">
+                  <VerifyTermsForm cta={headline.cta} />
+                </div>
+              ) : null}
               {showForm ? (
                 <div className="flex items-center justify-start gap-2 self-stretch">
                   <VerifyStatusActions
@@ -236,6 +290,12 @@ export default async function VerifyStatusPage() {
                     holderName={holderName}
                   />
                 </div>
+              ) : null}
+              {phase === "sheba_pending" && shebaMasked ? (
+                <p className="self-stretch text-[14px] leading-[21px] text-graytext">
+                  ارسال‌شده: <span dir="ltr">{shebaMasked}</span>
+                  {holderName ? ` — ${holderName}` : ""}
+                </p>
               ) : null}
             </div>
 

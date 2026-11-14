@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { getSessionUser, logout } from "@/actions/auth.actions";
+import { logout } from "@/actions/auth.actions";
+import { clearSessionUser, useSessionUser } from "@/lib/session-client";
 import Logo from "./Logo";
 import SearchOverlay from "./SearchOverlay";
 import MobileMenu from "./MobileMenu";
 import UserAccountDropdown from "./UserAccountDropdown";
+import HeaderSettingsMenu from "./HeaderSettingsMenu";
 import DashboardIcon from "./DashboardIcons";
 import { FA } from "./data/faCopy";
 
@@ -16,28 +18,6 @@ function SearchIcon({ className = "", stroke = "#ffffff", size = 24 }) {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
       <circle cx="11" cy="11" r="7" stroke={stroke} strokeWidth="2" />
       <path d="m20 20-3.5-3.5" stroke={stroke} strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function BurgerIcon() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M3 6.5h18M3 12h18M3 17.5h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function GearIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="2" />
-      <path
-        d="M12 2.8 13 5a7.2 7.2 0 0 1 2.1.9l2.3-.9 1.6 1.6-.9 2.3c.42.65.72 1.36.9 2.1l2.2 1v2.2l-2.2 1a7.2 7.2 0 0 1-.9 2.1l.9 2.3-1.6 1.6-2.3-.9a7.2 7.2 0 0 1-2.1.9l-1 2.2h-2.2l-1-2.2a7.2 7.2 0 0 1-2.1-.9l-2.3.9-1.6-1.6.9-2.3a7.2 7.2 0 0 1-.9-2.1l-2.2-1v-2.2l2.2-1c.18-.74.48-1.45.9-2.1L4 6.6 5.6 5l2.3.9A7.2 7.2 0 0 1 10 5l1-2.2h1Z"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinejoin="round"
-      />
     </svg>
   );
 }
@@ -88,26 +68,13 @@ export default function HeaderBar({
   const captureSession = loggedIn === true;
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [sessionUser, setSessionUser] = useState(user);
-  const [sessionKnown, setSessionKnown] = useState(captureSession);
-  const liveUser = captureSession ? user : sessionUser;
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const session = useSessionUser();
+  const liveUser = captureSession ? user : session.user;
+  const sessionKnown = captureSession || session.known;
   const isLoggedIn = captureSession || Boolean(liveUser);
   const loginHref =
     pathname && pathname !== "/login" ? `/login?next=${encodeURIComponent(pathname)}` : "/login";
-
-  useEffect(() => {
-    if (captureSession) return undefined;
-    let cancelled = false;
-    getSessionUser().then((row) => {
-      if (!cancelled) {
-        setSessionUser(row);
-        setSessionKnown(true);
-      }
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [captureSession]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen || searchOpen ? "hidden" : "";
@@ -117,59 +84,74 @@ export default function HeaderBar({
   }, [menuOpen, searchOpen]);
 
   useEffect(() => {
-    if (!menuOpen && !searchOpen) return;
+    if (!menuOpen && !searchOpen && !settingsOpen) return;
     const onKey = (e) => {
       if (e.key === "Escape") {
         setMenuOpen(false);
         setSearchOpen(false);
+        setSettingsOpen(false);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [menuOpen, searchOpen]);
+  }, [menuOpen, searchOpen, settingsOpen]);
+
+  useEffect(() => {
+    setSettingsOpen(false);
+  }, [pathname]);
 
   async function handleLogout() {
     await logout();
-    setSessionUser(null);
+    clearSessionUser();
     router.refresh();
   }
 
   return (
     <>
     <header className="fixed inset-x-0 top-0 z-50 bg-headerdark">
-      <div className="flex items-center px-4 pt-2.5 lg:h-[60px] lg:px-6 lg:pt-0">
+      <div className="flex items-center px-4 pt-2.5 lg:grid lg:h-[60px] lg:min-h-[60px] lg:grid-cols-[minmax(auto,362px)_minmax(0,1fr)_minmax(max-content,362px)] lg:px-0 lg:pt-0">
         <button
           type="button"
           aria-label={FA.menu}
-          onClick={() => setMenuOpen(true)}
+          onClick={() => {
+            setSettingsOpen(false);
+            setMenuOpen(true);
+          }}
           className="me-1 flex h-[42px] w-[42px] items-center justify-center text-white lg:hidden"
         >
-          <BurgerIcon />
+          <DashboardIcon name="menu" size={24} />
         </button>
 
-        <Link href="/" aria-label={FA.logo} className="shrink-0">
+        <Link href="/" aria-label={FA.logo} className="shrink-0 lg:flex lg:items-center lg:ps-6 lg:pe-[15px]">
           <Logo color="#FFFFFF" className="hidden lg:block" />
           <Logo iconOnly size={42} className="lg:hidden" />
         </Link>
 
-        <div className="hidden flex-1 justify-center px-2 lg:flex">
-          <button
-            type="button"
-            onClick={() => setSearchOpen(true)}
-            className="flex h-[42px] w-full max-w-[1178px] items-center gap-2 rounded-lg border-2 border-searchstroke bg-searchbg px-3 text-start text-sm"
-          >
-            <SearchIcon />
-            <span className="truncate text-placehold">{FA.search}</span>
-          </button>
+        <div className="hidden h-full w-full items-center justify-center lg:flex">
+          <div className="flex w-full max-w-[1178px]">
+            <button
+              type="button"
+              onClick={() => {
+                setSettingsOpen(false);
+                setSearchOpen(true);
+              }}
+              className="m-2 flex h-[42px] w-full items-center gap-2 rounded-lg border-2 border-searchstroke bg-searchbg px-3 text-start text-sm"
+            >
+              <SearchIcon />
+              <span className="truncate text-placehold">{FA.search}</span>
+            </button>
+          </div>
         </div>
 
-        <div className="ms-auto flex shrink-0 items-center gap-1">
-          <Link
-            href="/dashboard/offers/Account"
-            className="inline-flex h-[42px] min-w-[70px] items-center justify-center rounded-lg bg-brand px-4 text-sm font-bold text-ink hover:bg-brand-deep"
-          >
-            {FA.sell}
-          </Link>
+        <div className="ms-auto flex shrink-0 items-center gap-1 lg:ms-0 lg:h-[60px] lg:justify-end lg:gap-2.5 lg:pe-6">
+          {isLoggedIn ? (
+            <Link
+              href="/sell"
+              className="inline-flex h-[42px] min-w-[70px] items-center justify-center rounded-lg bg-brand px-4 text-sm font-bold text-ink hover:bg-brand-deep"
+            >
+              {FA.sell}
+            </Link>
+          ) : null}
           {!sessionKnown ? (
             <span className="inline-flex h-[42px] min-w-[70px]" aria-hidden="true" />
           ) : isLoggedIn ? (
@@ -187,13 +169,16 @@ export default function HeaderBar({
               >
                 {FA.login}
               </Link>
-              <button
-                type="button"
-                aria-label={FA.settings}
-                className="flex h-[42px] w-[42px] items-center justify-center text-white lg:hidden"
-              >
-                <GearIcon />
-              </button>
+              <HeaderSettingsMenu
+                open={settingsOpen}
+                onOpenChange={(next) => {
+                  if (next) {
+                    setMenuOpen(false);
+                    setSearchOpen(false);
+                  }
+                  setSettingsOpen(next);
+                }}
+              />
             </>
           )}
         </div>
@@ -204,7 +189,10 @@ export default function HeaderBar({
       <div className="mt-2 px-4 pb-3 lg:hidden">
         <button
           type="button"
-          onClick={() => setSearchOpen(true)}
+          onClick={() => {
+            setSettingsOpen(false);
+            setSearchOpen(true);
+          }}
           className="flex h-[42px] w-full items-center gap-2.5 rounded-lg border-2 border-searchstroke bg-searchbg px-3 text-start text-sm"
         >
           <SearchIcon stroke="#a0a0aa" size={20} />

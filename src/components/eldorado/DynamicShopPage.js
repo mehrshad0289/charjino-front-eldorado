@@ -1,4 +1,3 @@
-import HeaderBar from "./HeaderBar";
 import CategoryNav from "./CategoryNav";
 import PopularGames from "./PopularGames";
 import AccountOffersGrid from "./AccountOffersGrid";
@@ -19,7 +18,6 @@ export default function DynamicShopPage({
 
   return (
     <>
-      <HeaderBar />
       <CategoryNav activeCategory={activeCategory} />
       <main className="relative py-8">
         <div className="mx-auto max-w-[1208px] px-4 md:px-6">

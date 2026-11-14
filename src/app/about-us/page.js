@@ -1,4 +1,3 @@
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import PageHero from "../../components/eldorado/PageHero";
 import TrustpilotStars, { TrustpilotLogo } from "../../components/eldorado/TrustpilotStars";
@@ -7,7 +6,6 @@ import FaqAccordion from "../../components/eldorado/FaqAccordion";
 import TeamUpSection from "../../components/eldorado/TeamUpSection";
 import Footer from "../../components/eldorado/Footer";
 import ChatBubble from "../../components/eldorado/ChatBubble";
-import { DASHBOARD_USER } from "../../components/eldorado/data/dashboardData";
 import {
   ABOUT_BANNER,
   ABOUT_BREADCRUMB,
@@ -42,7 +40,6 @@ export const metadata = {
 export default function AboutUsPage() {
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
       <CategoryNav />
       <main>
         {/* Banner + breadcrumb + H1 live in a bounded hero (~444px on the

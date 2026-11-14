@@ -1,5 +1,4 @@
 import { notFound, redirect } from "next/navigation";
-import HeaderBar from "../../../../../components/eldorado/HeaderBar";
 import GiftCardBanner from "../../../../../components/eldorado/GiftCardBanner";
 import ProductBanner from "../../../../../components/eldorado/ProductBanner";
 import ProductBreadcrumb from "../../../../../components/eldorado/ProductBreadcrumb";
@@ -22,6 +21,7 @@ import {
   listingToOffer,
   loadMarketListing,
   loadMarketListings,
+  loadPlatformListings,
   loadStoreCategory,
   mediaUrl,
 } from "../../../../../lib/store-engine";
@@ -154,7 +154,8 @@ function listingDetails(listing, { hideGame } = {}) {
   return rows;
 }
 
-function listingTrust(offer) {
+function listingTrust(listing) {
+  const offer = listing.offer_type;
   if (offer === "Currency") {
     return {
       guarantee: "فروشنده بعد از تحویل پول می‌گیرد",
@@ -163,9 +164,13 @@ function listingTrust(offer) {
       supportNote: "اگر تحویل یا آگهی مشکل داشت پیام بده",
     };
   }
+  const format = listing.attributes?.format;
+  const physical = offer === "ConsoleGame" && (format === "disc" || format === "cartridge");
   return {
     guarantee: "فروشنده بعد از تحویل پول می‌گیرد",
-    guaranteeNote: "وقتی اکانت را گرفتی و تأیید کردی، پول آزاد می‌شود",
+    guaranteeNote: physical
+      ? "وقتی کالا را گرفتی و تأیید کردی، پول آزاد می‌شود"
+      : "وقتی اکانت را گرفتی و تأیید کردی، پول آزاد می‌شود",
     support: "پشتیبانی",
     supportNote: "اگر تحویل یا آگهی مشکل داشت پیام بده",
   };
@@ -203,11 +208,17 @@ export default async function ShopListingPage({ params }) {
   const hubTabs = bannerTabsFromHub(hub);
   const tabKey = canonical;
   const hubKey = canonical === "currency" ? await currencyHubKeyForMarket(game) : "";
+  const consolePlatformKey = offer === "ConsoleGame" ? String(listing.attributes?.platform || "") : "";
   const backHref =
-    hubTabs.find((tab) => tab.key === tabKey)?.href ||
-    (hubKey ? `/shop/currency/${encodeURIComponent(hubKey)}` : `/shop/${key}/${encodeURIComponent(game)}`);
-  const relatedOffer = offer === "CustomItem" ? "CustomItem" : offer === "Currency" ? "Currency" : undefined;
-  const related = (await loadMarketListings(game, relatedOffer)).items
+    offer === "ConsoleGame" && consolePlatformKey
+      ? `/shop/games/${encodeURIComponent(consolePlatformKey)}`
+      : hubTabs.find((tab) => tab.key === tabKey)?.href ||
+        (hubKey ? `/shop/currency/${encodeURIComponent(hubKey)}` : `/shop/${key}/${encodeURIComponent(game)}`);
+  const relatedOffer = offer === "CustomItem" ? "CustomItem" : offer === "Currency" ? "Currency" : offer === "ConsoleGame" ? "ConsoleGame" : undefined;
+  const relatedSource = consolePlatformKey
+    ? await loadPlatformListings({ platform: consolePlatformKey, offer: "ConsoleGame", perPage: 24 })
+    : await loadMarketListings(game, relatedOffer);
+  const related = relatedSource.items
     .filter((row) => String(row.id) !== String(listing.id))
     .map((row) => listingToOffer(row, canonical))
     .filter(Boolean);
@@ -236,7 +247,7 @@ export default async function ShopListingPage({ params }) {
     buyLabel: "خرید",
     details: listingDetails(listing, { hideGame: true }),
     showWarranty: offer !== "Currency",
-    trust: listingTrust(offer),
+    trust: listingTrust(listing),
   };
   const desktopOfferCard = { ...offerCard, details: listingDetails(listing) };
   const descriptionChips =
@@ -252,7 +263,6 @@ export default async function ShopListingPage({ params }) {
 
   return (
     <>
-      <HeaderBar />
       <main className="min-h-[1200px]">
         {hubTabs.length > 0 ? (
           <GiftCardBanner active={tabKey} iconAlt={game} gameName={game} gameIcon={images[0]?.url || ""} tabs={hubTabs} />

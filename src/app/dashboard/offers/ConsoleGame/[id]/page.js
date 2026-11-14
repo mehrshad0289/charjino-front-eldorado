@@ -1,50 +1,60 @@
 import { connection } from "next/server";
-import { redirect } from "next/navigation";
-import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
 import { getSessionUser } from "@/actions/auth.actions";
-import { getSellerListing } from "@/actions/market.actions";
+import { getSellerListing, getSellerMe } from "@/actions/market.actions";
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
-import { consoleFormatLabel, consoleModelLabel } from "../../../../../lib/console-games";
-import { formatToman, listingStatusMeta } from "../../../../../lib/listing";
+import ConsoleGameForm from "../../../../../components/eldorado/ConsoleGameForm";
+import { GAME_LISTING_COPY, LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
+import { formatToman, listingStatusMeta, sellBlockers } from "@/lib/listing";
 
 export const instant = false;
+
+export const metadata = {
+  title: "ویرایش آگهی بازی — شارژینو",
+};
 
 export default async function ConsoleGameDraftPage({ params }) {
   await connection();
   const { id } = await params;
   const user = await getSessionUser();
   if (!user) redirect(`/login?next=/dashboard/offers/ConsoleGame/${id}`);
-  const listing = await getSellerListing(id);
-  if (listing.unauthorized) redirect(`/login?next=/dashboard/offers/ConsoleGame/${id}`);
-  const row = listing.ok ? listing.data : null;
-  if (!row || row.offer_type !== "ConsoleGame") redirect("/dashboard/offers/ConsoleGame");
+
+  const [seller, listing] = await Promise.all([getSellerMe(), getSellerListing(id)]);
+  if (seller.unauthorized || listing.unauthorized) {
+    redirect(`/login?next=/dashboard/offers/ConsoleGame/${id}`);
+  }
+  if (!listing.ok || !listing.data || listing.data.offer_type !== "ConsoleGame") notFound();
+
+  const row = listing.data;
+  const editable = row.status === "draft";
   const status = listingStatusMeta(row.status);
-  const attrs = row.attributes || {};
 
   return (
     <>
       <DashboardPageHeader
         icon="offers"
-        title={row.title || "آگهی بازی"}
-        action={{ label: "آگهی‌ها", href: "/dashboard/offers/ConsoleGame", ariaLabel: "آگهی‌ها" }}
+        title={editable ? LISTING_COPY.editOffer : row.title}
+        action={{ label: GAME_LISTING_COPY.title, href: "/dashboard/offers/ConsoleGame", ariaLabel: GAME_LISTING_COPY.title }}
       />
-      <div className="mt-1 w-full max-w-[720px] px-6 pb-[50px]">
-        <div className="rounded-xl bg-white p-6">
-          <p className="text-[14px] font-bold" style={{ color: status.bg }}>{status.label}</p>
-          <p className="mt-3 text-[15px]">{row.game_name}</p>
-          <p className="mt-1 text-[14px] text-graytext">
-            {consoleFormatLabel(attrs.format)} · {consoleModelLabel(attrs.console_model)}
-          </p>
-          <p className="mt-3 text-[18px] font-bold">{formatToman(row.price_amount)} تومان</p>
-          {row.description ? <p className="mt-3 text-[14px] leading-6">{row.description}</p> : null}
-          {row.status === "active" ? (
-            <Link href={`/shop/games/l/${row.id}`} className="mt-5 inline-flex text-[14px] font-bold text-[rgb(71,131,255)]">
-              دیدن در فروشگاه
-            </Link>
-          ) : (
-            <p className="mt-5 text-[14px] text-graytext">تا تأیید ادمین در فروشگاه دیده نمی‌شود.</p>
-          )}
-        </div>
+      <div className="mt-1 w-full px-6 pb-[50px]">
+        {editable ? (
+          <ConsoleGameForm listing={row} blockers={sellBlockers(seller)} />
+        ) : (
+          <div className="rounded-xl bg-white p-6">
+            <span className="inline-flex rounded-lg px-3 py-1 text-[13px] font-bold text-white" style={{ backgroundColor: status.bg }}>
+              {status.label}
+            </span>
+            <p className="mt-4 text-[24px] font-bold">{row.title}</p>
+            <p className="mt-2 text-graytext">
+              {row.game_name} · {formatToman(row.price_amount)} تومان
+            </p>
+            {row.rejection_reason ? (
+              <p className="mt-3 text-[rgb(232,27,22)]">{row.rejection_reason}</p>
+            ) : (
+              <p className="mt-3 text-[rgb(255,141,0)]">{LISTING_COPY.reviewNote}</p>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

@@ -1,4 +1,3 @@
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import GameBanner from "../../components/eldorado/GameBanner";
 import AccountsToolbar from "../../components/eldorado/AccountsToolbar";
@@ -23,7 +22,6 @@ export const metadata = {
 export default function EFootballAccountsPage() {
   return (
     <>
-      <HeaderBar />
       <CategoryNav activeCategory="Accounts" />
       <main className="relative">
         {/* game artwork backdrop, fading into the page background.

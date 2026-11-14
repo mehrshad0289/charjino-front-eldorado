@@ -10,7 +10,7 @@ import { sellBlockers } from "@/lib/listing";
 export const instant = false;
 
 export const metadata = {
-  title: "آگهی آیتم جدید — شارژینو",
+  title: "ثبت آگهی آیتم — شارژینو",
   description: "آگهی فروش آیتم را روی بازی بازارچه بساز.",
 };
 

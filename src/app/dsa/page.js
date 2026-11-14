@@ -1,9 +1,7 @@
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import LegalDoc from "../../components/eldorado/LegalDoc";
 import Footer from "../../components/eldorado/Footer";
 import ChatBubble from "../../components/eldorado/ChatBubble";
-import { DASHBOARD_USER } from "../../components/eldorado/data/dashboardData";
 import { DSA_HTML } from "../../components/eldorado/data/legalData";
 
 /* DSA page /dsa (user-pushed capture `ui ux/dsa/…dsa…make`, decoded
@@ -21,7 +19,6 @@ export const metadata = {
 export default function DsaPage() {
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
       <CategoryNav />
       <main className="isolate">
         <LegalDoc html={DSA_HTML} />

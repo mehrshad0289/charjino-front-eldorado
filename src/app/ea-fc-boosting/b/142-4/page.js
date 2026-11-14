@@ -1,10 +1,8 @@
-import HeaderBar from "../../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../../components/eldorado/CategoryNav";
 import Footer from "../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../components/eldorado/ChatBubble";
 import ShopItemSubNav from "../../../../components/eldorado/ShopItemSubNav";
 import SellerFaq from "../../../../components/eldorado/SellerFaq";
-import { DASHBOARD_USER } from "../../../../components/eldorado/data/dashboardData";
 import BoostingConfigSection from "../../../../components/eldorado/BoostingConfigSection";
 import {
   BOOST_GAME,
@@ -96,7 +94,6 @@ function SealBadge({ size, children, textClass }) {
 export default function EaFcBoostingPage() {
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
       <CategoryNav />
       <main className="isolate relative">
         <ShopItemSubNav game={BOOST_GAME} tabs={BOOST_TABS} contentWidth="md:w-full md:max-w-[1208px]" />

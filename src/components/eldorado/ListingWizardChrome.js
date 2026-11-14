@@ -70,6 +70,38 @@ export function focusListingField(id) {
   }, window.innerWidth < 1024 ? 920 : 580);
 }
 
+export function WizardStepPills({ steps, currentIndex, ariaLabel, embedded = false }) {
+  return (
+    <nav
+      className={`flex w-full min-w-0 gap-2 overflow-x-auto ${embedded ? "" : "rounded-xl bg-white p-2"}`}
+      style={embedded ? undefined : { boxShadow: listingCardShadow }}
+      aria-label={ariaLabel}
+    >
+      {steps.map((step, index) => {
+        const current = index === currentIndex;
+        const done = index < currentIndex;
+        return (
+          <span
+            key={step.id}
+            className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-lg px-3 text-[13px] font-bold ${
+              current ? "bg-ink text-white" : "bg-[rgb(244,244,244)] text-ink"
+            }`}
+          >
+            <span
+              className={`flex size-6 items-center justify-center rounded-full ${
+                done ? "bg-[rgb(33,150,83)] text-white" : current ? "bg-white text-ink" : "bg-white text-ink"
+              }`}
+            >
+              {done ? "✓" : index + 1}
+            </span>
+            {step.label}
+          </span>
+        );
+      })}
+    </nav>
+  );
+}
+
 export function ListingStepNav({ checks, activeSection, onJump, issueList }) {
   return (
     <div className="sticky top-[var(--shop-header-h)] z-20 flex flex-col gap-2">

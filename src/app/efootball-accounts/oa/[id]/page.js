@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import HeaderBar from "../../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../../components/eldorado/CategoryNav";
 import ProductBanner from "../../../../components/eldorado/ProductBanner";
 import ProductBreadcrumb from "../../../../components/eldorado/ProductBreadcrumb";
@@ -46,7 +45,6 @@ export default async function ProductSinglePage({ params }) {
   }
   return (
     <>
-      <HeaderBar />
       <main className="min-h-[1200px]">
         <ProductBanner />
         <ProductBreadcrumb />

@@ -1,5 +1,4 @@
 import { connection } from "next/server";
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import GiftCardBanner from "../../components/eldorado/GiftCardBanner";
 import SubscriptionBuyFlow from "../../components/eldorado/SubscriptionBuyFlow";
@@ -54,7 +53,6 @@ export default async function XboxGamePassPage() {
 
   return (
     <>
-      <HeaderBar />
       <CategoryNav activeCategory="Gift cards" />
       <RecordRecentView
         product={{

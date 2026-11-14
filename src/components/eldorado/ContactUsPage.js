@@ -1,4 +1,3 @@
-import HeaderBar from "./HeaderBar";
 import CategoryNav from "./CategoryNav";
 import PageHero from "./PageHero";
 import Footer from "./Footer";
@@ -22,7 +21,6 @@ export default function ContactUsPage({ user = null }) {
 
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar user={user} />
       <CategoryNav />
       <main>
         <PageHero

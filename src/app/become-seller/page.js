@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { getSessionUser } from "@/actions/auth.actions";
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import Footer from "../../components/eldorado/Footer";
 import ChatBubble from "../../components/eldorado/ChatBubble";
@@ -131,7 +130,6 @@ export default async function BecomeSellerPage() {
   const ctaHref = user ? BS_CTA_HREF : `/login?next=${encodeURIComponent(BS_CTA_HREF)}`;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
       <CategoryNav />
       <main className="isolate relative">
         {/* bg band (capture: bg-repeat-x absolute h-975 z-0) */}

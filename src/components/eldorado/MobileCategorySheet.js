@@ -123,7 +123,7 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
   const showCategory = isGiftMega && giftSearch.kind === "other";
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-white text-ink" role="dialog" aria-modal="true">
+    <div className="shop-sheet-in fixed inset-0 z-[70] overflow-y-auto bg-white text-ink" role="dialog" aria-modal="true">
       <div className="sticky top-0 z-10 bg-white">
         <div className="relative flex h-14 items-center justify-between px-2">
           <button
@@ -158,7 +158,7 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
       </div>
 
       <div className="px-4 pb-24">
-        {q ? (
+        {query ? (
           <>
             {isGiftMega && giftSearch.kind === "other" ? (
               <div className="pt-6">

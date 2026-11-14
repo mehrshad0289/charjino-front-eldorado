@@ -1,4 +1,3 @@
-import HeaderBar from "../components/eldorado/HeaderBar";
 import CategoryNav from "../components/eldorado/CategoryNav";
 import Hero from "../components/eldorado/Hero";
 import PopularCards from "../components/eldorado/PopularCards";
@@ -35,7 +34,6 @@ export default async function Home() {
 
   return (
     <>
-      <HeaderBar />
       <CategoryNav />
       <main className="relative">
         <Hero />

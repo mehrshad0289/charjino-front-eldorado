@@ -1,4 +1,3 @@
-import HeaderBar from "./HeaderBar";
 import CategoryNav from "./CategoryNav";
 import Footer from "./Footer";
 import ChatBubble from "./ChatBubble";
@@ -7,7 +6,6 @@ import { SUPPORT_HOME } from "./data/supportData";
 export default function SupportShell({ title, children }) {
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
       <CategoryNav />
       <main className="mx-auto w-full max-w-[800px] px-4 py-10 md:px-6">
         <p className="text-[13px] font-bold">

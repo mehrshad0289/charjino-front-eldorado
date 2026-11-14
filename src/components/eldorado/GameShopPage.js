@@ -1,4 +1,3 @@
-import HeaderBar from "./HeaderBar";
 import CategoryNav from "./CategoryNav";
 import GiftCardBanner from "./GiftCardBanner";
 import GamePassRegionChips from "./GamePassRegionChips";
@@ -27,7 +26,6 @@ export default function GameShopPage({ game }) {
   const { banner, regionLabel, regions, defaultRegion, variants, defaultVariant, featured, others, seo } = game;
   return (
     <>
-      <HeaderBar />
       <CategoryNav activeCategory={game.category} />
       <main className="relative">
         <div aria-hidden="true" className="absolute left-0 top-0 z-0 h-[465px] w-full overflow-hidden">

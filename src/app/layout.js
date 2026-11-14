@@ -1,4 +1,5 @@
 import { Lato } from "next/font/google";
+import ShopChrome from "../components/eldorado/ShopChrome";
 import "./globals.css";
 
 const lato = Lato({
@@ -19,7 +20,10 @@ export default function RootLayout({ children }) {
        on body it resolved empty and every page silently fell back to the
        system font stack (found via the /blog session-12 font trace). */
     <html lang="fa" dir="rtl" className={`${lato.variable} light-theme`}>
-      <body>{children}</body>
+      <body>
+        <ShopChrome />
+        {children}
+      </body>
     </html>
   );
 }

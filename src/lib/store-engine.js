@@ -240,6 +240,29 @@ export async function loadMarketGameCards(offer, categoryKey) {
   }
 }
 
+export async function loadPlatformListings({ platform, offer, q, perPage = 60 } = {}) {
+  const id = asString(platform);
+  if (!id) return { items: [], meta: null };
+  try {
+    const payload = await serverFetch(
+      apiPaths.marketListings({
+        platform: id,
+        offer: asString(offer) || undefined,
+        q: asString(q) || undefined,
+        page: 1,
+        perPage: Math.min(60, Math.max(1, Number(perPage) || 60)),
+      }),
+    );
+    return {
+      items: Array.isArray(payload?.items) ? payload.items : [],
+      meta: payload?.meta || null,
+    };
+  } catch (error) {
+    if (error instanceof ApiError) return { items: [], meta: null };
+    throw error;
+  }
+}
+
 export async function loadMarketListings(game, offer, perPage = 24) {
   const name = asString(game);
   if (!name) return { items: [], meta: null };
@@ -427,7 +450,7 @@ export function listingToOffer(listing, categoryKey) {
     delivery:
       categoryKey === "currency" && rec.delivery_minutes != null
         ? `${toFaDigits(Number(rec.delivery_minutes))} دقیقه`
-        : delivery || (categoryKey === "items" || categoryKey === "currency" ? "" : "پس از پرداخت"),
+        : delivery || (categoryKey === "items" || categoryKey === "currency" || categoryKey === "games" ? "" : "پس از پرداخت"),
     itemTypeName,
     stock: rec.stock != null ? Number(rec.stock) : null,
     minQuantity: rec.min_quantity != null ? Number(rec.min_quantity) : 1,

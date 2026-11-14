@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import HeaderBar from "./HeaderBar";
 import CategoryNav from "./CategoryNav";
 import Footer from "./Footer";
 import ChatBubble from "./ChatBubble";
@@ -16,7 +15,7 @@ import {
   PROFILE_TABS,
 } from "./data/profileData";
 import { FA } from "./data/faCopy";
-import { accountInitials } from "@/lib/account-display";
+import { NO_SET_PROFILE_SRC } from "@/lib/account-display";
 import { listingMediaUrl } from "@/lib/listing";
 import { toFaDigits } from "@/lib/fa-digits";
 import { formatOrderDate } from "@/lib/order";
@@ -398,7 +397,6 @@ export default function UserProfilePage({
 
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar user={user} />
       <CategoryNav />
       <main className="relative z-[1] isolate grow">
         <div className="relative isolate h-[120px]">
@@ -420,13 +418,11 @@ export default function UserProfilePage({
                   <div className="relative flex h-[100px] w-[100px] items-center justify-center">
                     <div className="absolute left-1/2 top-1/2 z-[2] h-[84px] w-[84px] -translate-x-1/2 -translate-y-1/2">
                       <div className="relative overflow-hidden rounded-[50%] bg-badgebg">
-                        {avatar ? (
-                          <img alt={FA.profileAvatar} src={avatar} className="block h-[84px] w-[84px] object-cover align-middle" />
-                        ) : (
-                          <span className="grid h-[84px] w-[84px] place-items-center text-[28px] font-bold">
-                            {accountInitials({ name: profile.name })}
-                          </span>
-                        )}
+                        <img
+                          alt={FA.profileAvatar}
+                          src={avatar || NO_SET_PROFILE_SRC}
+                          className="block h-[84px] w-[84px] object-cover align-middle"
+                        />
                       </div>
                     </div>
                   </div>

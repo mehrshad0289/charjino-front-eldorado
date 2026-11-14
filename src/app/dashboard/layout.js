@@ -1,4 +1,3 @@
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import DashboardShell from "../../components/eldorado/DashboardShell";
 import ChatBubble from "../../components/eldorado/ChatBubble";
@@ -6,7 +5,6 @@ import ChatBubble from "../../components/eldorado/ChatBubble";
 export default function DashboardLayout({ children }) {
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <DashboardShell>{children}</DashboardShell>

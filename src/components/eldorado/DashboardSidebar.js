@@ -3,11 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { getSessionUser } from "@/actions/auth.actions";
+import { useSessionUser, writeSessionUser } from "@/lib/session-client";
 import {
-  accountAvatarUrl,
+  accountAvatarSrc,
   accountDisplayName,
-  accountInitials,
   accountRegisteredLabel,
   isDashboardNavActive,
   publicProfileHref,
@@ -68,26 +67,16 @@ export default function DashboardSidebar({ active = null, user = null }) {
   const pathname = usePathname();
   const current = navActiveId(pathname, active);
   const [collapsed, setCollapsed] = useState(() => initialCollapsed(current));
-  const [sessionUser, setSessionUser] = useState(user);
-  const liveUser = sessionUser || user;
+  const session = useSessionUser();
+  const liveUser = user?.id ? user : session.user || user;
   const displayName = accountDisplayName(liveUser);
-  const avatar = accountAvatarUrl(liveUser);
+  const avatar = accountAvatarSrc(liveUser);
   const phoneName = displayName.includes("***");
   const profileHref = publicProfileHref(liveUser);
   const [registered, setRegistered] = useState("");
 
   useEffect(() => {
-    if (user?.id) {
-      setSessionUser(user);
-      return undefined;
-    }
-    let cancelled = false;
-    getSessionUser().then((row) => {
-      if (!cancelled) setSessionUser(row);
-    });
-    return () => {
-      cancelled = true;
-    };
+    if (user?.id) writeSessionUser(user);
   }, [user]);
 
   useEffect(() => {
@@ -116,12 +105,8 @@ export default function DashboardSidebar({ active = null, user = null }) {
     >
       <div className="flex h-[62px] justify-start px-[10px] pb-3 pt-[10px]">
         <div className="me-[10px]">
-          <div className="size-10 overflow-hidden rounded-full bg-badgebg text-center text-[13px] font-bold leading-10">
-            {avatar ? (
-              <img alt={FA.profileAvatar} src={avatar} className="block size-full object-cover align-middle" />
-            ) : (
-              <span aria-hidden="true">{accountInitials(liveUser)}</span>
-            )}
+          <div className="size-10 overflow-hidden rounded-full bg-badgebg">
+            <img alt={FA.profileAvatar} src={avatar} className="block size-full object-cover align-middle" />
           </div>
         </div>
         <div className="flex min-w-0 flex-col justify-center">
@@ -164,6 +149,7 @@ export default function DashboardSidebar({ active = null, user = null }) {
                           <Link
                             key={item.id}
                             href={item.href}
+                            prefetch={false}
                             scroll={false}
                             aria-current={isActive ? "page" : undefined}
                             className={sidebarRowClass(isActive, "px-[10px] py-2")}
@@ -184,6 +170,7 @@ export default function DashboardSidebar({ active = null, user = null }) {
                 <Link
                   key={link.id}
                   href={link.href}
+                  prefetch={false}
                   scroll={false}
                   aria-current={isActive ? "page" : undefined}
                   className={sidebarRowClass(isActive, "p-1")}

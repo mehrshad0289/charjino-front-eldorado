@@ -1,4 +1,3 @@
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import LegalDoc from "../../components/eldorado/LegalDoc";
 import Footer from "../../components/eldorado/Footer";
@@ -22,7 +21,6 @@ export const metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
       <CategoryNav />
       <main className="isolate">
         <LegalDoc html={PRIVACY_POLICY_HTML} />

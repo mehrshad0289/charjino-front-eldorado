@@ -1,6 +1,6 @@
 export const LISTING_COPY = {
   title: "آگهی‌ها",
-  newOffer: "آگهی جدید",
+  newOffer: "ثبت آگهی اکانت",
   editOffer: "ویرایش آگهی",
   emptyTitle: "هنوز آگهی نداری",
   emptyText: "بعد از احراز و شبا، آگهی اکانت را با عکس بساز و منتشر کن.",
@@ -38,7 +38,7 @@ export const LISTING_COPY = {
 
 export const ITEM_LISTING_COPY = {
   title: "آگهی‌های آیتم",
-  newOffer: "آگهی جدید",
+  newOffer: "ثبت آگهی آیتم",
   emptyTitle: "هنوز آگهی آیتم نداری",
   emptyText: "بازی را از بازارچه انتخاب کن. فقط بازی‌هایی اینجاست که ادمین تأمین فروشنده و روش تحویلشان را تأیید کرده.",
   gameHint: "اگر اسم فیزر و سیدر فرق داشته باشد، ادمین همان بازی بازارچه را وصل کرده. اینجا همان بازی را انتخاب می‌کنی.",
@@ -54,7 +54,7 @@ export const ITEM_LISTING_COPY = {
 
 export const CURRENCY_LISTING_COPY = {
   title: "آگهی‌های ارز",
-  newOffer: "آگهی جدید",
+  newOffer: "ثبت آگهی ارز",
   emptyTitle: "هنوز آگهی ارز نداری",
   emptyText: "بازی را از بازارچه انتخاب کن، عکس کاور بگذار و نرخ را برای بررسی بفرست.",
   gameHint: "نرخ را برای یک واحد نمایش می‌نویسی. خریدار همان واحد را ضربدر تعداد می‌کند.",
@@ -73,6 +73,24 @@ export const CURRENCY_LISTING_COPY = {
   instructions: "دستور تحویل",
   rwtFallback:
     "اگر خود بازی این ارز را به‌خاطر خرید و فروش حذف کند، شارژینو بعد از تأیید تحویل آن را برنمی‌گرداند. اگر فروشنده در زمان تضمینی تحویل ندهد، سفارش برمی‌گردد.",
+};
+
+export const GAME_LISTING_COPY = {
+  title: "آگهی بازی",
+  newOffer: "ثبت آگهی بازی",
+  emptyTitle: "هنوز آگهی بازی نداری",
+  emptyText: "دیسک، کارتریج، اکانت یا راک را با عکس بساز و برای بررسی بفرست.",
+  gameHint: "پلتفرم و اسم بازی را مشخص کن. نوع و مدل کنسول در مشخصات می‌آید.",
+  platform: "پلتفرم",
+  gameName: "اسم بازی",
+  format: "نوع",
+  model: "کنسول",
+  condition: "وضعیت",
+  region: "ریجن",
+  edition: "نسخه",
+  dlc: "کد الحاقیه",
+  shipping: "ارسال",
+  photosHint: "یک عکس پروفایل لازم است. بقیه اختیاری‌اند.",
 };
 
 export const LISTING_STEPS = [

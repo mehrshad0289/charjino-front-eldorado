@@ -1,4 +1,3 @@
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import GiftCardBanner from "../../components/eldorado/GiftCardBanner";
 import ShopAmountCards from "../../components/eldorado/ShopAmountCards";
@@ -55,7 +54,6 @@ export const metadata = {
 export default function AmazonPrimePage() {
   return (
     <>
-      <HeaderBar />
       <CategoryNav activeCategory="Top ups" />
       <main className="relative">
         {/* banner artwork + fade (capture AND live @390 render it) */}

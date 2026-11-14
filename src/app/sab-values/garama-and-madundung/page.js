@@ -1,4 +1,3 @@
-import HeaderBar from "../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../components/eldorado/CategoryNav";
 import Footer from "../../../components/eldorado/Footer";
 import {
@@ -62,7 +61,6 @@ export default function RobloxPriceHistoryPage() {
   const d = ROBLOX_PRICE_PAGE;
   return (
     <>
-      <HeaderBar />
       <CategoryNav activeCategory="Items" />
       <main className="relative">
         {/* artwork backdrop (capture) */}

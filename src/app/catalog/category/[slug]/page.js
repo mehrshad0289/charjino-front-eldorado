@@ -1,4 +1,3 @@
-import HeaderBar from "../../../../components/eldorado/HeaderBar";
 import CategoryNav from "../../../../components/eldorado/CategoryNav";
 import PopularGames from "../../../../components/eldorado/PopularGames";
 import Footer from "../../../../components/eldorado/Footer";
@@ -43,7 +42,6 @@ export default async function CatalogCategoryPage({ params }) {
 
   return (
     <>
-      <HeaderBar />
       <CategoryNav />
       <main className="relative py-8">
         <div className="mx-auto max-w-[1208px] px-4 md:px-6">

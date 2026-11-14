@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { logout, updateProfile, uploadAvatar } from "@/actions/auth.actions";
-import { accountAvatarUrl, accountInitials } from "@/lib/account-display";
+import { clearSessionUser, writeSessionUser } from "@/lib/session-client";
+import { accountAvatarSrc, accountAvatarUrl, NO_SET_PROFILE_SRC } from "@/lib/account-display";
 import { toFaDigits } from "@/lib/fa-digits";
 import { FA } from "./data/faCopy";
 import { DASHBOARD_SETTINGS_PAGE } from "./data/dashboardData";
@@ -79,7 +80,7 @@ export default function DashboardSettings({ user, seller = null }) {
   const [prefsBusy, setPrefsBusy] = useState(false);
   const [prefsMsg, setPrefsMsg] = useState("");
 
-  const [avatarSrc, setAvatarSrc] = useState(accountAvatarUrl(user));
+  const [avatarSrc, setAvatarSrc] = useState(accountAvatarSrc(user));
   const [avatarBusy, setAvatarBusy] = useState(false);
   const [avatarMsg, setAvatarMsg] = useState("");
 
@@ -120,6 +121,7 @@ export default function DashboardSettings({ user, seller = null }) {
     }
     setEditingName(false);
     setNameMsg("نام نمایشی ذخیره شد.");
+    if (result.user) writeSessionUser(result.user);
     router.refresh();
   }
 
@@ -138,6 +140,7 @@ export default function DashboardSettings({ user, seller = null }) {
       return;
     }
     setBioMsg("توضیح ذخیره شد.");
+    if (result.user) writeSessionUser(result.user);
     router.refresh();
   }
 
@@ -183,6 +186,7 @@ export default function DashboardSettings({ user, seller = null }) {
     const nextUrl = accountAvatarUrl(result.user);
     setAvatarSrc(nextUrl ? `${nextUrl}${nextUrl.includes("?") ? "&" : "?"}v=${Date.now()}` : "");
     setAvatarMsg("تصویر پروفایل ذخیره شد.");
+    if (result.user) writeSessionUser(result.user);
     router.refresh();
   }
 
@@ -190,6 +194,7 @@ export default function DashboardSettings({ user, seller = null }) {
     setLogoutBusy(true);
     setLogoutMsg("");
     await logout();
+    clearSessionUser();
     setLogoutBusy(false);
     router.push("/login");
     router.refresh();
@@ -279,16 +284,12 @@ export default function DashboardSettings({ user, seller = null }) {
         <h4 className="mb-3 text-[24px] font-bold leading-[normal]">{d.pictureTitle}</h4>
         <div className={`mb-[10px] w-full bg-white p-6 ${CARD_SHADOW}`}>
           <div className="flex flex-wrap items-center gap-[5px] gap-y-4 lg:gap-x-[30px]">
-            <div className="relative flex h-[125px] w-[125px] min-w-[125px] items-center justify-center overflow-hidden rounded-[50%] bg-badgebg text-[42px] font-bold">
-              {avatarSrc ? (
-                <img
-                  alt={FA.profileAvatar}
-                  src={avatarSrc}
-                  className="block h-[125px] w-[125px] shrink-0 object-cover align-middle"
-                />
-              ) : (
-                <span aria-hidden="true">{accountInitials(user)}</span>
-              )}
+            <div className="relative flex h-[125px] w-[125px] min-w-[125px] items-center justify-center overflow-hidden rounded-[50%] bg-badgebg">
+              <img
+                alt={FA.profileAvatar}
+                src={avatarSrc || NO_SET_PROFILE_SRC}
+                className="block h-[125px] w-[125px] shrink-0 object-cover align-middle"
+              />
             </div>
             <div className="w-full lg:w-[calc(100%-165px)]">
               <input

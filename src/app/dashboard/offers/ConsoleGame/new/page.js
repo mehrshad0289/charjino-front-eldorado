@@ -4,12 +4,13 @@ import { getSessionUser } from "@/actions/auth.actions";
 import { getSellerMe } from "@/actions/market.actions";
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
 import ConsoleGameForm from "../../../../../components/eldorado/ConsoleGameForm";
+import { GAME_LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
 import { sellBlockers } from "@/lib/listing";
 
 export const instant = false;
 
 export const metadata = {
-  title: "آگهی بازی جدید — شارژینو",
+  title: "ثبت آگهی بازی — شارژینو",
 };
 
 export default async function NewConsoleGamePage({ searchParams }) {
@@ -20,25 +21,16 @@ export default async function NewConsoleGamePage({ searchParams }) {
   if (seller.unauthorized) redirect("/login?next=/dashboard/offers/ConsoleGame/new");
   const query = await searchParams;
   const platform = typeof query.platform === "string" ? query.platform : "playstation";
-  const blockers = sellBlockers(seller);
 
   return (
     <>
       <DashboardPageHeader
         icon="offers"
-        title="آگهی بازی"
-        action={{ label: "آگهی‌ها", href: "/dashboard/offers/ConsoleGame", ariaLabel: "آگهی‌ها" }}
+        title={GAME_LISTING_COPY.newOffer}
+        action={{ label: GAME_LISTING_COPY.title, href: "/dashboard/offers/ConsoleGame", ariaLabel: GAME_LISTING_COPY.title }}
       />
       <div className="mt-1 w-full px-6 pb-[50px]">
-        {blockers.length ? (
-          <div className="mb-5 rounded-xl bg-white p-5">
-            {blockers.map((line) => (
-              <p key={line} className="text-[14px] text-[rgb(232,27,22)]">{line}</p>
-            ))}
-          </div>
-        ) : (
-          <ConsoleGameForm platform={platform} />
-        )}
+        <ConsoleGameForm platform={platform} blockers={sellBlockers(seller)} />
       </div>
     </>
   );

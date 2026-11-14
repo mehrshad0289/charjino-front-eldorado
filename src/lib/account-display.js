@@ -32,8 +32,14 @@ export function accountRegisteredLabel(user) {
   return `${FA.registered}: ${formatted}`;
 }
 
+export const NO_SET_PROFILE_SRC = "/icons/no-set-profile.svg";
+
 export function accountAvatarUrl(user) {
   return user?.avatarUrl || user?.avatar || "";
+}
+
+export function accountAvatarSrc(user) {
+  return accountAvatarUrl(user) || NO_SET_PROFILE_SRC;
 }
 
 export function publicProfileSlug(user) {

@@ -1,4 +1,3 @@
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import Footer from "../../components/eldorado/Footer";
 import { BLOG_ARTICLE_PAGES } from "../../components/eldorado/data/blogArticlesData";
 import { BLOG_CATEGORIES } from "../../components/eldorado/data/blogCategoriesData";
@@ -162,7 +161,6 @@ export default function PageList() {
   const total = GROUPS.reduce((n, g) => n + g.rows.length, 0);
   return (
     <>
-      <HeaderBar />
       <main className="mx-auto w-full max-w-[1160px] px-4 pb-16 pt-6">
         <h1 className="text-3xl font-extrabold uppercase text-ink">Page List</h1>
         <p className="mt-2 max-w-[720px] text-[15px] leading-6 text-secondary">

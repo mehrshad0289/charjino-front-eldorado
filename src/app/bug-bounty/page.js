@@ -1,9 +1,7 @@
-import HeaderBar from "../../components/eldorado/HeaderBar";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import FaqAccordion from "../../components/eldorado/FaqAccordion";
 import Footer from "../../components/eldorado/Footer";
 import ChatBubble from "../../components/eldorado/ChatBubble";
-import { DASHBOARD_USER } from "../../components/eldorado/data/dashboardData";
 import { BUG_BOUNTY_PAGE } from "../../components/eldorado/data/staticPagesData";
 
 /* Bug Bounty page (/bug-bounty) — session 12, implementing the user-pushed
@@ -24,7 +22,6 @@ export default function BugBountyPage() {
   const { hero, title, sections, steps, knownIssues } = BUG_BOUNTY_PAGE;
   return (
     <div className="min-h-screen bg-page text-ink">
-      <HeaderBar loggedIn user={DASHBOARD_USER} />
       <CategoryNav />
       <main>
         <div className="flex h-[238px] w-full items-center justify-center bg-bountycream p-4 max-lg:h-40">

@@ -85,6 +85,60 @@ html[dir="rtl"] img.dashboard-assassin {
   transform: scaleX(-1);
 }
 
+@keyframes shop-sheet-in {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.shop-sheet-in {
+  animation: shop-sheet-in 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes shop-sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes shop-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.shop-sheet-up {
+  animation: shop-sheet-up 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.shop-backdrop-in {
+  animation: shop-backdrop-in 280ms ease-out;
+}
+
+.shop-hub-tabs {
+  scrollbar-width: none;
+}
+.shop-hub-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shop-sheet-in,
+  .shop-sheet-up,
+  .shop-backdrop-in {
+    animation: none;
+  }
+}
+
 /* Blog pages use "Lato Eldorado" (the capture's font-face files) like
    every other page. Session-15 measured WHY the alternate "use next/font
    Google Lato" theory is wrong: canvas '400 18px' on the SAME 65-char

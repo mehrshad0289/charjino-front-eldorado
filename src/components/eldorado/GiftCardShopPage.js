@@ -1,6 +1,5 @@
 import { connection } from "next/server";
 import { notFound, redirect } from "next/navigation";
-import HeaderBar from "./HeaderBar";
 import CategoryNav from "./CategoryNav";
 import GiftCardBanner from "./GiftCardBanner";
 import GiftCardBuyFlow from "./GiftCardBuyFlow";
@@ -57,7 +56,6 @@ export default async function GiftCardShopPage({ platform }) {
 
   return (
     <>
-      <HeaderBar />
       <CategoryNav activeCategory="Gift cards" />
       <RecordRecentView
         product={{
