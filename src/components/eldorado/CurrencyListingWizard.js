@@ -1,28 +1,25 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createListing, placeListing, updateListing, uploadListingImage } from "@/actions/market.actions";
-import {
-  CURRENCY_PHOTO_SLOTS,
-  LISTING_SECTIONS,
-  LISTING_TITLE_MIN,
-  formatToman,
-  listingMediaUrl,
-  listingPriceError,
-  parseToman,
-} from "@/lib/listing";
+import { createListing, deleteListingImage, placeListing, updateListing, uploadListingImage } from "@/actions/market.actions";
+import { CURRENCY_PHOTO_SLOTS, LISTING_SECTIONS, LISTING_TITLE_MIN, formatToman, listingMediaUrl, listingPriceError, parseToman } from "@/lib/listing";
 import { CURRENCY_LISTING_COPY, LISTING_COPY } from "./data/listingData";
-
-const inputClass =
-  "block h-[42px] w-full rounded-lg border-2 border-[rgb(239,239,241)] bg-[rgb(239,239,241)] px-3 text-[14px] text-ink outline-none";
-const invalidClass = "border-[rgb(232,27,22)] bg-[rgb(255,244,244)]";
-const cardShadow = "0 2px 4px 0 rgba(9,9,11,0.05), 0 12px 8px 0 rgba(9,9,11,0.02)";
-
-function controlClass(invalid) {
-  return `${inputClass} mt-1 ${invalid ? invalidClass : ""}`;
-}
+import {
+  ListingFieldNote,
+  ListingMobileBar,
+  ListingPhotoTile,
+  ListingPreviewAside,
+  ListingSection,
+  ListingStepNav,
+  focusListingField,
+  jumpToListingSection,
+  listingCardShadow,
+  listingControlClass,
+} from "./ListingWizardChrome";
+import LoadingSpinner from "./LoadingSpinner";
+import EldSelect from "./EldSelect";
 
 function initialPhotos(listing) {
   const next = {};
@@ -37,6 +34,7 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
   const router = useRouter();
   const blocked = blockers.length > 0;
   const initialGame = games.find((row) => row.game_name === listing?.game_name) || null;
+  const [activeSection, setActiveSection] = useState(LISTING_SECTIONS[0].id);
   const [query, setQuery] = useState("");
   const [game, setGame] = useState(initialGame);
   const [region, setRegion] = useState(listing?.attributes?.region || initialGame?.regions?.[0] || "");
@@ -61,6 +59,13 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
     return rows.slice(0, 8);
   }, [games, query]);
 
+  useEffect(() => {
+    const id = window.location.hash.replace("#", "");
+    if (!id.startsWith("listing-")) return undefined;
+    const timer = window.setTimeout(() => jumpToListingSection(id, setActiveSection), 280);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const photoReady = Boolean(photos.profile?.file || photos.profile?.server);
   const titleReady = title.trim().length >= LISTING_TITLE_MIN;
   const priceReady = !listingPriceError(price);
@@ -81,11 +86,55 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
     { id: "listing-price", label: "قیمت", ok: priceReady && stockReady },
   ];
 
+  function jump(id) {
+    jumpToListingSection(id, setActiveSection);
+  }
+
+  function clearIssue(key) {
+    setIssues((current) => {
+      if (!current[key]) return current;
+      const next = { ...current };
+      delete next[key];
+      return next;
+    });
+  }
+
   function pickGame(row) {
     setGame(row);
     setRegion(row.regions?.[0] || "");
     setDelivery(row.delivery_methods?.[0]?.value || "");
     setIssues({});
+    window.setTimeout(() => {
+      jump("listing-details");
+      focusListingField("listing-title");
+    }, 180);
+  }
+
+  function setPhotoFile(slot, file) {
+    if (!file) return;
+    setPhotos((current) => {
+      const previous = current[slot]?.previewUrl;
+      if (previous?.startsWith("blob:")) URL.revokeObjectURL(previous);
+      return {
+        ...current,
+        [slot]: { file, previewUrl: URL.createObjectURL(file), server: current[slot]?.server || null },
+      };
+    });
+    clearIssue("photo");
+    clearIssue(`photo-${slot}`);
+  }
+
+  async function removePhoto(slot) {
+    const current = photos[slot];
+    if (current?.server?.id && listingId) {
+      const result = await deleteListingImage(listingId, current.server.id);
+      if (!result.ok) {
+        setIssues({ form: result.message || "حذف عکس انجام نشد." });
+        return;
+      }
+    }
+    if (current?.previewUrl?.startsWith("blob:")) URL.revokeObjectURL(current.previewUrl);
+    setPhotos((rows) => ({ ...rows, [slot]: { file: null, previewUrl: "", server: null } }));
   }
 
   function collectIssues(publish) {
@@ -99,6 +148,28 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
     if (listingPriceError(price)) next.price = listingPriceError(price);
     if (publish && !photoReady) next.photo = CURRENCY_LISTING_COPY.mediaMissing;
     return next;
+  }
+
+  function firstIssueTarget(next) {
+    if (next.game) return { section: "listing-game", fieldId: "listing-game-search" };
+    if (next.region) return { section: "listing-details", fieldId: "listing-region" };
+    if (next.delivery) return { section: "listing-details", fieldId: "listing-delivery" };
+    if (next.minutes) return { section: "listing-details", fieldId: "listing-minutes" };
+    if (next.title) return { section: "listing-details", fieldId: "listing-title" };
+    if (next.photo) return { section: "listing-media", fieldId: "listing-photo-profile" };
+    if (next.stock) return { section: "listing-price", fieldId: "listing-stock" };
+    if (next.price) return { section: "listing-price", fieldId: "listing-price" };
+    return { section: "listing-details", fieldId: "listing-title" };
+  }
+
+  function sectionIssueText(id) {
+    if (id === "listing-game") return issues.game || "";
+    if (id === "listing-details") {
+      return [issues.region, issues.delivery, issues.minutes, issues.title].filter(Boolean).join(" · ");
+    }
+    if (id === "listing-media") return issues.photo || "";
+    if (id === "listing-price") return [issues.stock, issues.price].filter(Boolean).join(" · ");
+    return "";
   }
 
   function buildForm() {
@@ -139,14 +210,22 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
     const nextIssues = collectIssues(publish);
     if (Object.keys(nextIssues).length) {
       setIssues(nextIssues);
+      const target = firstIssueTarget(nextIssues);
+      jump(target.section);
+      window.setTimeout(() => focusListingField(target.fieldId), 280);
       return;
     }
     setLoading(true);
+    setIssues({});
     const saved = listingId ? await updateListing(listingId, buildForm()) : await createListing(buildForm());
     if (!saved.ok) {
       setLoading(false);
       if (saved.unauthorized) {
         router.push("/login?next=/dashboard/offers/Currency/new");
+        return;
+      }
+      if (saved.blocked) {
+        router.push("/verify/status");
         return;
       }
       setIssues({ form: saved.message || "ثبت آگهی انجام نشد." });
@@ -158,6 +237,7 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
     if (!media.ok) {
       setLoading(false);
       setIssues({ form: media.message || "آپلود عکس انجام نشد." });
+      jump("listing-media");
       return;
     }
     if (publish) {
@@ -176,7 +256,7 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
 
   if (blocked) {
     return (
-      <div className="rounded-xl bg-white p-6" style={{ boxShadow: cardShadow }}>
+      <div className="rounded-xl bg-white p-6" style={{ boxShadow: listingCardShadow }}>
         <p className="text-[24px] font-bold">{LISTING_COPY.blockedTitle}</p>
         <ul className="mt-3 list-disc ps-5 text-graytext">
           {blockers.map((item) => (
@@ -196,31 +276,37 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
 
   const previewCover = photos.profile?.previewUrl;
   const rateLabel = unit ? `نرخ هر ${unit} (تومان)` : CURRENCY_LISTING_COPY.rate;
+  const issueList = [...new Set(Object.entries(issues).filter(([key]) => key !== "form").map(([, message]) => message))];
+  const saveButtons = (
+    <>
+      <button type="button" disabled={loading} onClick={() => onSave(true)} className="inline-flex min-h-[42px] items-center justify-center rounded-lg bg-brand px-4 text-[14px] font-bold text-ink disabled:opacity-60">
+        {loading ? <LoadingSpinner variant="inline" className="text-ink" /> : LISTING_COPY.place}
+      </button>
+      <button type="button" disabled={loading} onClick={() => onSave(false)} className="inline-flex min-h-[42px] items-center justify-center rounded-lg border-2 border-ink px-4 text-[14px] font-bold disabled:opacity-60">
+        {LISTING_COPY.saveDraft}
+      </button>
+    </>
+  );
 
   return (
     <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start lg:gap-6">
       <div className="flex flex-col gap-4 pb-28 lg:pb-6">
-        <nav className="flex gap-2 overflow-x-auto rounded-xl bg-white p-2" style={{ boxShadow: cardShadow }} aria-label="بخش‌های آگهی">
-          {LISTING_SECTIONS.map((section, index) => {
-            const done = checks.find((item) => item.id === section.id)?.ok;
-            return (
-              <a key={section.id} href={`#${section.id}`} className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-lg bg-[rgb(244,244,244)] px-3 text-[13px] font-bold">
-                <span className={`flex size-6 items-center justify-center rounded-full ${done ? "bg-[rgb(33,150,83)] text-white" : "bg-white"}`}>
-                  {done ? "✓" : index + 1}
-                </span>
-                {section.label}
-              </a>
-            );
-          })}
-        </nav>
+        <ListingStepNav checks={checks} activeSection={activeSection} onJump={jump} issueList={issueList} />
 
-        <section id="listing-game" className="rounded-xl bg-white p-5" style={{ boxShadow: cardShadow }}>
-          <h2 className="text-[18px] font-bold">{LISTING_COPY.pickGame}</h2>
-          <p className="mt-1 text-[14px] text-graytext">{CURRENCY_LISTING_COPY.gameHint}</p>
-          <label className="mt-4 block text-[14px] font-bold" htmlFor="currency-game-search">
+        <ListingSection id="listing-game" title={LISTING_COPY.pickGame} hint={CURRENCY_LISTING_COPY.gameHint}>
+          <label className="text-[14px] font-bold" htmlFor="listing-game-search">
             {LISTING_COPY.searchGame}
-            <input id="currency-game-search" value={query} onChange={(event) => setQuery(event.target.value)} className={controlClass(Boolean(issues.game))} />
+            <input
+              id="listing-game-search"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                clearIssue("game");
+              }}
+              className={listingControlClass(Boolean(issues.game))}
+            />
           </label>
+          <ListingFieldNote message={issues.game} />
           <p className="mt-3 text-[13px] font-bold text-graytext">{query.trim() ? "نتیجه" : "پیشنهادی"}</p>
           <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
             {filteredGames.map((row) => {
@@ -240,52 +326,80 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
               );
             })}
           </div>
-          {issues.game ? <p className="mt-2 text-[13px] text-[rgb(232,27,22)]">{issues.game}</p> : null}
-        </section>
+        </ListingSection>
 
-        <section id="listing-details" className="rounded-xl bg-white p-5" style={{ boxShadow: cardShadow }}>
-          <h2 className="text-[18px] font-bold">مشخصات</h2>
-          <p className="mt-1 text-[14px] text-graytext">{CURRENCY_LISTING_COPY.detailsHint}</p>
-          <div className="mt-4 flex flex-col gap-4">
+        <ListingSection id="listing-details" title="مشخصات" hint={CURRENCY_LISTING_COPY.detailsHint}>
+          <div className="flex flex-col gap-4">
             {(game?.regions || []).length > 0 ? (
-              <label className="text-[14px] font-bold">
+              <label className="text-[14px] font-bold" htmlFor="listing-region">
                 {CURRENCY_LISTING_COPY.region}
-                <select value={region} onChange={(event) => setRegion(event.target.value)} className={controlClass(Boolean(issues.region))}>
-                  {game.regions.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
+                <EldSelect
+                  id="listing-region"
+                  className="mt-1"
+                  ariaLabel={CURRENCY_LISTING_COPY.region}
+                  value={region}
+                  invalid={Boolean(issues.region)}
+                  onChange={(value) => {
+                    setRegion(value);
+                    clearIssue("region");
+                  }}
+                  options={game.regions.map((item) => ({ value: item, label: item }))}
+                />
+                <ListingFieldNote message={issues.region} />
               </label>
             ) : null}
-            {issues.region ? <p className="text-[13px] text-[rgb(232,27,22)]">{issues.region}</p> : null}
-            <label className="text-[14px] font-bold">
+            <label className="text-[14px] font-bold" htmlFor="listing-delivery">
               {CURRENCY_LISTING_COPY.delivery}
-              <select value={delivery} onChange={(event) => setDelivery(event.target.value)} className={controlClass(Boolean(issues.delivery))} disabled={!game}>
-                {(game?.delivery_methods || []).map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
-                ))}
-              </select>
+              <EldSelect
+                id="listing-delivery"
+                className="mt-1"
+                ariaLabel={CURRENCY_LISTING_COPY.delivery}
+                value={delivery}
+                invalid={Boolean(issues.delivery)}
+                disabled={!game}
+                onChange={(value) => {
+                  setDelivery(value);
+                  clearIssue("delivery");
+                }}
+                options={(game?.delivery_methods || []).map((item) => ({ value: item.value, label: item.label }))}
+              />
+              <ListingFieldNote message={issues.delivery} />
             </label>
-            {issues.delivery ? <p className="text-[13px] text-[rgb(232,27,22)]">{issues.delivery}</p> : null}
-            <label className="text-[14px] font-bold">
+            <label className="text-[14px] font-bold" htmlFor="listing-minutes">
               {CURRENCY_LISTING_COPY.minutes}
-              <input value={minutes} inputMode="numeric" onChange={(event) => setMinutes(event.target.value)} className={controlClass(Boolean(issues.minutes))} />
+              <input
+                id="listing-minutes"
+                value={minutes}
+                inputMode="numeric"
+                aria-invalid={issues.minutes ? "true" : undefined}
+                onChange={(event) => {
+                  setMinutes(event.target.value);
+                  clearIssue("minutes");
+                }}
+                className={listingControlClass(Boolean(issues.minutes))}
+              />
+              <span className="mt-1 block text-[13px] font-normal text-graytext">{CURRENCY_LISTING_COPY.minutesHint}</span>
+              <ListingFieldNote message={issues.minutes} />
             </label>
-            <p className="text-[13px] font-normal text-graytext">{CURRENCY_LISTING_COPY.minutesHint}</p>
-            {issues.minutes ? <p className="text-[13px] text-[rgb(232,27,22)]">{issues.minutes}</p> : null}
-            <label className="text-[14px] font-bold" htmlFor="currency-title">
+            <label className="text-[14px] font-bold" htmlFor="listing-title">
               {LISTING_COPY.accountTitle}
-              <input id="currency-title" value={title} maxLength={120} onChange={(event) => setTitle(event.target.value)} className={controlClass(Boolean(issues.title))} />
+              <input
+                id="listing-title"
+                value={title}
+                maxLength={120}
+                aria-invalid={issues.title ? "true" : undefined}
+                onChange={(event) => {
+                  setTitle(event.target.value);
+                  clearIssue("title");
+                }}
+                className={listingControlClass(Boolean(issues.title))}
+              />
+              <ListingFieldNote message={issues.title} />
             </label>
-            {issues.title ? <p className="text-[13px] text-[rgb(232,27,22)]">{issues.title}</p> : null}
-            <label className="text-[14px] font-bold" htmlFor="currency-description">
+            <label className="text-[14px] font-bold" htmlFor="listing-description">
               {CURRENCY_LISTING_COPY.instructions}
               <textarea
-                id="currency-description"
+                id="listing-description"
                 value={description}
                 rows={4}
                 onChange={(event) => setDescription(event.target.value)}
@@ -293,110 +407,96 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
               />
             </label>
           </div>
-        </section>
+        </ListingSection>
 
-        <section id="listing-media" className="rounded-xl bg-white p-5" style={{ boxShadow: cardShadow }}>
-          <h2 className="text-[18px] font-bold">مدیا</h2>
-          <p className="mt-1 text-[14px] text-graytext">{CURRENCY_LISTING_COPY.photosHint}</p>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            {CURRENCY_PHOTO_SLOTS.map((slot) => {
-              const row = photos[slot.slot];
-              const invalid = slot.required && Boolean(issues.photo) && !row?.previewUrl;
-              return (
-                <div key={slot.slot} className={`rounded-lg p-3 ${invalid ? "bg-[rgb(255,244,244)] ring-2 ring-[rgb(232,27,22)]" : "bg-[rgb(244,244,244)]"}`}>
-                  <p className="text-[13px] font-bold">
-                    {slot.label}
-                    {slot.required ? " *" : ""}
-                  </p>
-                  <p className="text-[12px] text-graytext">{slot.hint}</p>
-                  {row?.previewUrl ? (
-                    <img src={row.previewUrl} alt="" className="mt-2 h-28 w-full rounded-lg object-cover" />
-                  ) : (
-                    <div className="mt-2 flex h-28 items-center justify-center rounded-lg border border-dashed border-[rgb(198,198,204)] text-[12px] text-graytext">
-                      jpg / png / webp
-                    </div>
-                  )}
-                  <label className="mt-2 inline-flex min-h-9 cursor-pointer items-center rounded-lg bg-ink px-3 text-[12px] font-bold text-white">
-                    انتخاب
-                    <input
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp"
-                      className="sr-only"
-                      onChange={(event) => {
-                        const file = event.target.files?.[0];
-                        if (!file) return;
-                        const previewUrl = URL.createObjectURL(file);
-                        setPhotos((current) => ({ ...current, [slot.slot]: { file, previewUrl, server: null } }));
-                      }}
-                    />
-                  </label>
-                </div>
-              );
-            })}
+        <ListingSection id="listing-media" title="مدیا" hint={CURRENCY_LISTING_COPY.photosHint}>
+          <div className="grid grid-cols-2 gap-3">
+            {CURRENCY_PHOTO_SLOTS.map((slot) => (
+              <ListingPhotoTile
+                key={slot.slot}
+                slot={slot}
+                row={photos[slot.slot]}
+                invalid={slot.required && Boolean(issues.photo) && !photos[slot.slot]?.previewUrl}
+                onPick={(file) => setPhotoFile(slot.slot, file)}
+                onRemove={() => removePhoto(slot.slot)}
+              />
+            ))}
           </div>
-          {issues.photo ? <p className="mt-2 text-[13px] text-[rgb(232,27,22)]">{issues.photo}</p> : null}
-        </section>
+          <ListingFieldNote message={issues.photo} />
+        </ListingSection>
 
-        <section id="listing-price" className="rounded-xl bg-white p-5" style={{ boxShadow: cardShadow }}>
-          <h2 className="text-[18px] font-bold">{LISTING_COPY.priceStep}</h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <label className="text-[14px] font-bold" htmlFor="currency-stock">
+        <ListingSection id="listing-price" title={LISTING_COPY.priceStep}>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="text-[14px] font-bold" htmlFor="listing-stock">
               {CURRENCY_LISTING_COPY.stock}
               {unit ? ` (${unit})` : ""}
-              <input id="currency-stock" value={stock} inputMode="numeric" onChange={(event) => setStock(event.target.value)} className={controlClass(Boolean(issues.stock))} />
+              <input
+                id="listing-stock"
+                value={stock}
+                inputMode="numeric"
+                aria-invalid={issues.stock ? "true" : undefined}
+                onChange={(event) => {
+                  setStock(event.target.value);
+                  clearIssue("stock");
+                }}
+                className={listingControlClass(Boolean(issues.stock))}
+              />
             </label>
-            <label className="text-[14px] font-bold" htmlFor="currency-min">
+            <label className="text-[14px] font-bold" htmlFor="listing-min">
               {CURRENCY_LISTING_COPY.min}
-              <input id="currency-min" value={minQuantity} inputMode="numeric" onChange={(event) => setMinQuantity(event.target.value)} className={controlClass(Boolean(issues.stock))} />
+              <input
+                id="listing-min"
+                value={minQuantity}
+                inputMode="numeric"
+                aria-invalid={issues.stock ? "true" : undefined}
+                onChange={(event) => {
+                  setMinQuantity(event.target.value);
+                  clearIssue("stock");
+                }}
+                className={listingControlClass(Boolean(issues.stock))}
+              />
             </label>
           </div>
-          {issues.stock ? <p className="mt-2 text-[13px] text-[rgb(232,27,22)]">{issues.stock}</p> : null}
-          <label className="mt-4 block text-[14px] font-bold" htmlFor="currency-price">
+          <ListingFieldNote message={issues.stock} />
+          <label className="mt-4 block text-[14px] font-bold" htmlFor="listing-price">
             {rateLabel}
-            <input id="currency-price" value={price} inputMode="numeric" dir="ltr" onChange={(event) => setPrice(event.target.value)} className={`${controlClass(Boolean(issues.price))} text-start`} />
-            <span className="mt-2 block font-normal text-graytext">{parseToman(price) ? `${formatToman(parseToman(price))} تومان` : ""}</span>
+            <input
+              id="listing-price"
+              value={price}
+              inputMode="numeric"
+              dir="ltr"
+              aria-invalid={issues.price ? "true" : undefined}
+              onChange={(event) => {
+                setPrice(event.target.value);
+                clearIssue("price");
+              }}
+              className={`${listingControlClass(Boolean(issues.price))} text-start`}
+            />
+            <ListingFieldNote message={issues.price} />
+            <span className="mt-2 block text-[14px] font-normal text-graytext">{parseToman(price) ? `${formatToman(parseToman(price))} تومان` : ""}</span>
           </label>
-          {issues.price ? <p className="mt-2 text-[13px] text-[rgb(232,27,22)]">{issues.price}</p> : null}
           <p className="mt-4 text-[13px] leading-[20px] text-graytext">{game?.rwt_notice || CURRENCY_LISTING_COPY.rwtFallback}</p>
-        </section>
-        {issues.form ? <p className="text-[14px] text-[rgb(232,27,22)]">{issues.form}</p> : null}
-      </div>
-
-      <aside className="mt-4 lg:sticky lg:top-[var(--shop-header-h)] lg:mt-0">
-        <div className="rounded-xl bg-white p-4" style={{ boxShadow: cardShadow }}>
-          <p className="text-[13px] font-bold text-graytext">پیش‌نمایش آگهی</p>
-          {previewCover ? (
-            <img src={previewCover} alt="" className="mt-3 h-36 w-full rounded-lg object-cover" />
-          ) : (
-            <div className="mt-3 flex h-36 items-center justify-center rounded-lg bg-[rgb(244,244,244)] text-[13px] text-graytext">بدون عکس</div>
-          )}
-          <p className="mt-3 text-[16px] font-bold">{title.trim() || "عنوان آگهی"}</p>
-          <p className="text-[13px] text-graytext">{game?.game_name_fa || game?.game_name || "بازی انتخاب نشده"}</p>
-          <p className="mt-1 text-[14px] text-graytext">
-            {game?.delivery_methods?.find((item) => item.value === delivery)?.label || CURRENCY_LISTING_COPY.delivery}
-            {unit ? ` · هر ${unit}` : ""}
+        </ListingSection>
+        {issues.form ? (
+          <p className="text-[14px] text-[rgb(232,27,22)]" role="alert">
+            {issues.form}
           </p>
-          <p className="mt-1 text-[18px] font-bold">{parseToman(price) ? `${formatToman(parseToman(price))} تومان` : "قیمت"}</p>
-          <p className="mt-4 text-[13px] text-graytext">{LISTING_COPY.liveNote}</p>
-          <div className="mt-4 hidden flex-col gap-2 lg:flex">
-            <button type="button" disabled={loading} onClick={() => onSave(true)} className="inline-flex min-h-[42px] items-center justify-center rounded-lg bg-brand px-4 text-[14px] font-bold text-ink disabled:opacity-60">
-              {loading ? "…" : LISTING_COPY.place}
-            </button>
-            <button type="button" disabled={loading} onClick={() => onSave(false)} className="inline-flex min-h-[42px] items-center justify-center rounded-lg border-2 border-ink px-4 text-[14px] font-bold disabled:opacity-60">
-              {LISTING_COPY.saveDraft}
-            </button>
-          </div>
-        </div>
-      </aside>
-
-      <div className="fixed inset-x-0 bottom-0 z-30 flex gap-2 border-t border-[rgb(231,231,231)] bg-white p-3 lg:hidden">
-        <button type="button" disabled={loading} onClick={() => onSave(false)} className="inline-flex min-h-[42px] flex-1 items-center justify-center rounded-lg border-2 border-ink text-[14px] font-bold disabled:opacity-60">
-          پیش‌نویس
-        </button>
-        <button type="button" disabled={loading} onClick={() => onSave(true)} className="inline-flex min-h-[42px] flex-[2] items-center justify-center rounded-lg bg-brand text-[14px] font-bold text-ink disabled:opacity-60">
-          {loading ? "…" : LISTING_COPY.place}
-        </button>
+        ) : null}
       </div>
+
+      <ListingPreviewAside
+        cover={previewCover}
+        title={title.trim() || "عنوان آگهی"}
+        subtitle={game?.game_name_fa || game?.game_name || "بازی انتخاب نشده"}
+        extra={`${game?.delivery_methods?.find((item) => item.value === delivery)?.label || CURRENCY_LISTING_COPY.delivery}${unit ? ` · هر ${unit}` : ""}`}
+        priceLabel={parseToman(price) ? `${formatToman(parseToman(price))} تومان` : "قیمت"}
+        checks={checks}
+        sectionIssueText={sectionIssueText}
+        onJump={jump}
+        actions={saveButtons}
+      />
+
+      <ListingMobileBar loading={loading} onDraft={() => onSave(false)} onPlace={() => onSave(true)} placeLabel={LISTING_COPY.place} />
     </div>
   );
 }

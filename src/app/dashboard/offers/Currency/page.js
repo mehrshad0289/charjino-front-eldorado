@@ -2,14 +2,9 @@ import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/actions/auth.actions";
 import { getSellerListings, getSellerMe } from "@/actions/market.actions";
-import HeaderBar from "../../../../components/eldorado/HeaderBar";
-import CategoryNav from "../../../../components/eldorado/CategoryNav";
-import DashboardShell from "../../../../components/eldorado/DashboardShell";
 import DashboardPageHeader from "../../../../components/eldorado/DashboardPageHeader";
 import InfoBanner from "../../../../components/eldorado/InfoBanner";
 import EmptyState from "../../../../components/eldorado/EmptyState";
-import Footer from "../../../../components/eldorado/Footer";
-import ChatBubble from "../../../../components/eldorado/ChatBubble";
 import ItemOffersShelf from "../../../../components/eldorado/ItemOffersShelf";
 import { DASHBOARD_OFFERS_PAGE } from "../../../../components/eldorado/data/dashboardData";
 import { CURRENCY_LISTING_COPY, LISTING_COPY } from "../../../../components/eldorado/data/listingData";
@@ -41,13 +36,9 @@ export default async function DashboardOffersCurrencyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-page text-ink">
-      <HeaderBar user={user} />
-      <CategoryNav />
-      <main className="isolate">
-        <DashboardShell active="Currency" user={user}>
-          <DashboardPageHeader icon={DASHBOARD_OFFERS_PAGE.icon} title={CURRENCY_LISTING_COPY.title} action={action} />
-          <div className="mt-1 max-w-[1048px] px-6 pb-[50px]">
+    <>
+      <DashboardPageHeader icon={DASHBOARD_OFFERS_PAGE.icon} title={CURRENCY_LISTING_COPY.title} action={action} />
+      <div className="mt-1 w-full px-6 pb-[50px]">
             <InfoBanner title="بررسی ادمین" bodyParts={[LISTING_COPY.liveNote]} />
             {blockers.length ? (
               <div className="mb-5 rounded-xl bg-white p-5">
@@ -75,10 +66,6 @@ export default async function DashboardOffersCurrencyPage() {
               <ItemOffersShelf items={items} editBase="/dashboard/offers/Currency" />
             )}
           </div>
-        </DashboardShell>
-      </main>
-      <Footer />
-      <ChatBubble />
-    </div>
+    </>
   );
 }

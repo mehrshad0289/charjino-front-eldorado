@@ -36,6 +36,21 @@ export function accountAvatarUrl(user) {
   return user?.avatarUrl || user?.avatar || "";
 }
 
+export function publicProfileSlug(user) {
+  const slug = typeof user?.profileSlug === "string" ? user.profileSlug.trim() : "";
+  if (slug) return slug;
+  const id = typeof user?.id === "string" ? user.id.trim() : "";
+  return id;
+}
+
+export function publicProfileHref(user, tab = "") {
+  const slug = publicProfileSlug(user);
+  if (!slug) return "/dashboard/settings";
+  const base = `/users/${encodeURIComponent(slug)}`;
+  if (!tab || tab === "shop") return base;
+  return `${base}/${tab}`;
+}
+
 export function isDashboardNavActive(active, item) {
   if (!active) return false;
   return active === item.id || active === item.label;

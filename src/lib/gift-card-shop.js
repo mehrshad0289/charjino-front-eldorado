@@ -568,10 +568,17 @@ export async function loadGiftCardShop(platform, options = {}) {
         seenRegion.add(amountRegion);
         regions.push(amountRegion);
       }
+      const face = sku.face && typeof sku.face === "object" ? sku.face : null;
+      const faceLabel = asString(face?.label);
+      const usdLabel = asString(face?.usdLabel);
       amounts.push({
         key: `${handle}:${sku.id || name}`,
         skuId: sku.id || null,
-        label: skuLabel(gameName, name),
+        label: faceLabel || skuLabel(gameName, name),
+        faceLabel,
+        usdLabel,
+        faceCurrency: asString(face?.currency),
+        faceApproximate: face?.approximate === true,
         from: formatTomanPrice(price),
         img: thumbnail,
         region: amountRegion,

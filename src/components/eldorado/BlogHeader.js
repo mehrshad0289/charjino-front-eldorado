@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Logo from "./Logo";
-import { BLOG_LOGO } from "./data/blogData";
 
 function Caret({ color = "currentColor", className = "ml-[3px] inline-block h-6 w-[20.5px] align-middle" }) {
   /* The capture's chevron glyph (icomoon) decodes empty — filled-triangle
@@ -57,17 +56,11 @@ export default function BlogHeader() {
               <div className="flex items-center">
                 <div className="mr-[8px]">
                   <a
-                    aria-label="Eldorado Blog"
+                    aria-label="شارژینو"
                     className="flex min-h-[70px] items-center"
                     href="https://www.eldorado.gg/blog/"
                   >
-                    <img
-                      alt="Eldorado Blog"
-                      className="block max-w-full align-middle"
-                      height="40"
-                      src={BLOG_LOGO}
-                      width="202"
-                    />
+                    <Logo color="#ffffff" />
                   </a>
                 </div>
               </div>
@@ -127,7 +120,7 @@ export default function BlogHeader() {
               70px row + hairline (live y=0..71) */}
           <div className="flex items-center justify-between lg:hidden">
             <div className="flex items-center">
-              <a aria-label="Eldorado Blog" className="-ml-2 flex items-center" href="https://www.eldorado.gg/blog/">
+              <a aria-label="شارژینو" className="-ml-2 flex items-center" href="https://www.eldorado.gg/blog/">
                 <Logo color="#ffffff" iconOnly size={40} />
               </a>
               <button
@@ -214,7 +207,7 @@ export default function BlogHeader() {
             >
               ×
             </button>
-            <a aria-label="Eldorado Blog" className="flex items-center" href="https://www.eldorado.gg/blog/">
+            <a aria-label="شارژینو" className="flex items-center" href="https://www.eldorado.gg/blog/">
               <Logo color="#ffffff" iconOnly size={40} />
             </a>
             <a

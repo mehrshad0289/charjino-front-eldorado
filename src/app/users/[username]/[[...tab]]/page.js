@@ -1,32 +1,81 @@
+import { connection } from "next/server";
+import { notFound, redirect } from "next/navigation";
+import { getSessionUser } from "@/actions/auth.actions";
 import UserProfilePage from "../../../../components/eldorado/UserProfilePage";
+import { listingToShopCard, loadPublicProfile, loadSellerPublicListings, loadSellerPublicReviews } from "@/lib/store-engine";
 
-/* Public user profile pages (session 18, View Profile captures):
-   /users/NewFloat-0una            -> Shop tab (live's default redirect target)
-   /users/NewFloat-0una/shop       -> Shop tab (chip Currency active)
-   /users/NewFloat-0una/reviews    -> Reviews tab (live-first content)
-   /users/NewFloat-0una/about      -> About tab
-   The username is accepted dynamically (the clone renders the captured
-   NewFloat-0una profile for any username, like the product-single route
-   renders the captured offer for any id). */
+export const instant = false;
 
-export function generateStaticParams() {
-  return [
-    { username: "NewFloat-0una", tab: [] },
-    { username: "NewFloat-0una", tab: ["shop"] },
-    { username: "NewFloat-0una", tab: ["reviews"] },
-    { username: "NewFloat-0una", tab: ["about"] },
-  ];
+const TABS = new Set(["shop", "reviews", "about"]);
+
+function decodeSlug(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
 }
 
 export async function generateMetadata({ params }) {
   const { username } = await params;
+  const profile = await loadPublicProfile(decodeSlug(username));
+  if (!profile) return { title: "فروشنده پیدا نشد — شارژینو" };
   return {
-    title: `${username} - Eldorado`,
-    description: `View ${username}'s profile, shop and reviews on Eldorado.`,
+    title: `${profile.name} — شارژینو`,
+    description: `فروشگاه، نظرات و درباره ${profile.name} در شارژینو.`,
   };
 }
 
-export default async function UserProfileRoute({ params }) {
+export default async function UserProfileRoute({ params, searchParams }) {
+  await connection();
   const { username, tab } = await params;
-  return <UserProfilePage username={username} tab={tab?.[0]} />;
+  const query = searchParams ? await searchParams : {};
+  const tabName = tab?.[0] || "shop";
+  if (tab?.[0] && !TABS.has(tab[0])) notFound();
+
+  const slug = decodeSlug(username);
+  const profile = await loadPublicProfile(slug);
+  if (!profile) notFound();
+
+  const canonical = profile.slug || profile.id;
+  const rest = tab?.[0] ? `/${tab[0]}` : "";
+  if (canonical && canonical !== slug) {
+    const search = new URLSearchParams();
+    if (query.offer) search.set("offer", String(query.offer));
+    if (query.game) search.set("game", String(query.game));
+    if (query.sentiment) search.set("sentiment", String(query.sentiment));
+    const qs = search.toString();
+    redirect(`/users/${encodeURIComponent(canonical)}${rest}${qs ? `?${qs}` : ""}`);
+  }
+
+  const offer = String(query.offer || "");
+  const game = String(query.game || "");
+  const sentiment = String(query.sentiment || "");
+  const listings =
+    tabName === "shop"
+      ? (await loadSellerPublicListings(profile.id, { offer, game, perPage: 60 })).items
+          .map(listingToShopCard)
+          .filter(Boolean)
+      : [];
+  const reviewFeed =
+    tabName === "reviews"
+      ? await loadSellerPublicReviews(profile.id, { sentiment, perPage: 20 })
+      : { items: [] };
+  const user = await getSessionUser();
+
+  return (
+    <UserProfilePage
+      username={canonical}
+      tab={tabName}
+      profile={profile}
+      listings={listings}
+      reviews={reviewFeed.items}
+      offer={offer}
+      game={game}
+      sentiment={sentiment}
+      user={user}
+    />
+  );
 }

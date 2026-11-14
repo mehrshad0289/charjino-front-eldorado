@@ -28,7 +28,7 @@ export default async function DashboardOrdersSoldPage({ searchParams }) {
   const { emptyState } = DASHBOARD_ORDERS_SOLD_PAGE;
 
   return (
-    <OrderDashboardFrame user={user} active="Sold orders" title={ORDER_COPY.soldTitle}>
+    <OrderDashboardFrame title={ORDER_COPY.soldTitle}>
       <DashboardOrderFilters
         status={filters.status}
         period={filters.period}
@@ -48,7 +48,7 @@ export default async function DashboardOrdersSoldPage({ searchParams }) {
           text={ORDER_COPY.emptySoldText}
         />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-1 gap-3 min-[961px]:grid-cols-2">
           {items.map((order) => (
             <OrderCard
               key={order.order_no}

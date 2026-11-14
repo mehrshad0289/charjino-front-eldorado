@@ -108,6 +108,8 @@ const GROUPS = [
       { title: "Dashboard — Loyalty", href: "/dashboard/loyalty" },
       { title: "Dashboard — Wallet", href: "/dashboard/wallet" },
       { title: "Dashboard — Messages", href: "/dashboard/messages" },
+      { title: "Dashboard — Tickets", href: "/dashboard/tickets" },
+      { title: "Dashboard — New ticket", href: "/dashboard/tickets/new" },
       { title: "Dashboard — Notifications", href: "/dashboard/notifications" },
       { title: "Dashboard — Boosting (My requests)", href: "/dashboard/boosting/my-requests" },
       { title: "Dashboard — Feedback", href: "/dashboard/feedback" },

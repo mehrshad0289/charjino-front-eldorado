@@ -5,6 +5,7 @@ import { verifyTestPayment } from "../../actions/market.actions";
 import { formatToman } from "../../lib/listing";
 import { toFaDigits } from "../../lib/fa-digits";
 import { ORDER_COPY } from "./data/orderData";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function TestBankGateway({ reference, orderNo, amount, title }) {
   const [loading, setLoading] = useState(false);
@@ -67,7 +68,7 @@ export default function TestBankGateway({ reference, orderNo, amount, title }) {
             disabled={loading || !reference}
             className="mt-5 w-full rounded-lg bg-[rgb(33,150,83)] py-3 text-[16px] font-bold text-white disabled:opacity-60"
           >
-            {loading ? "…" : ORDER_COPY.bankPay}
+            {loading ? <LoadingSpinner variant="inline" className="text-white" /> : ORDER_COPY.bankPay}
           </button>
           <a href={cancelHref} className="mt-3 block w-full rounded-lg py-3 text-center text-[14px] font-bold text-graytext">
             {ORDER_COPY.bankCancel}

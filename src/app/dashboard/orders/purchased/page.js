@@ -28,7 +28,7 @@ export default async function DashboardOrdersPurchasedPage({ searchParams }) {
   const { emptyState } = DASHBOARD_ORDERS_PURCHASED_PAGE;
 
   return (
-    <OrderDashboardFrame user={user} active="Purchased orders" title={ORDER_COPY.purchasedTitle}>
+    <OrderDashboardFrame title={ORDER_COPY.purchasedTitle}>
       <DashboardOrderFilters
         status={filters.status}
         period={filters.period}
@@ -45,7 +45,7 @@ export default async function DashboardOrdersPurchasedPage({ searchParams }) {
           text={ORDER_COPY.emptyBuyText}
         />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-1 gap-3 min-[961px]:grid-cols-2">
           {items.map((order) => (
             <OrderCard
               key={order.order_no}

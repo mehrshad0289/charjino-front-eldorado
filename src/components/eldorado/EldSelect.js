@@ -18,22 +18,25 @@ function CheckIcon() {
   );
 }
 
-/* Global single-select — live eld-dropdown (size s): gray 42px trigger,
-   chevron rotates when open, menu below (max-height 200px, min-width
-   max-content / 10.5rem), selected row shows an 18px check. */
+/* Global single-select — same control as dashboard purchased-orders
+   "All statuses": gray 42px trigger, menu matches trigger width (no page
+   overflow), selected row is a yellow inset box, hover is gray. */
 export default function EldSelect({
   options = [],
   value,
   onChange,
-  ariaLabel = "Single-select dropdown",
+  name,
+  id,
+  ariaLabel = "انتخاب",
   className = "",
   disabled = false,
   placeholder = "",
+  invalid = false,
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
   const listId = useId();
-  const selected = options.find((item) => item.value === value) ?? null;
+  const selected = options.find((item) => String(item.value) === String(value)) ?? null;
 
   useEffect(() => {
     if (!open) return undefined;
@@ -57,16 +60,18 @@ export default function EldSelect({
   };
 
   return (
-    <div ref={rootRef} className={`eld-dropdown relative ${open ? "open" : ""} ${className}`}>
+    <div ref={rootRef} className={`eld-dropdown relative min-w-0 ${open ? "open" : ""} ${className}`.trim()}>
+      {name ? <input type="hidden" name={name} value={value ?? ""} /> : null}
       <div
+        id={id}
         role="combobox"
         tabIndex={disabled ? -1 : 0}
         aria-disabled={disabled}
+        aria-invalid={invalid ? "true" : undefined}
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-controls={listId}
         aria-label={ariaLabel}
-        aria-required="false"
         onClick={() => {
           if (!disabled) setOpen((current) => !current);
         }}
@@ -77,16 +82,14 @@ export default function EldSelect({
             setOpen((current) => !current);
           }
         }}
-        className={`flex min-h-[42px] w-full cursor-pointer items-center justify-between overflow-hidden rounded-lg bg-inputgray px-[14px] py-2 leading-[19.6px] outline-none ${
-          open ? "shadow-[inset_0_0_0_1px_rgb(20,19,26)]" : "shadow-[inset_0_0_0_1px_transparent]"
+        className={`flex min-h-[42px] w-full min-w-0 cursor-pointer items-center justify-between overflow-hidden rounded-lg bg-inputgray px-[14px] py-2 leading-[19.6px] outline-none ${
+          open ? "shadow-[inset_0_0_0_1px_rgb(20,19,26)]" : invalid ? "shadow-[inset_0_0_0_2px_rgb(232,27,22)]" : "shadow-[inset_0_0_0_1px_transparent]"
         } ${disabled ? "pointer-events-none opacity-70" : ""}`}
       >
-        <span className="min-w-0 max-w-full flex-1 truncate overflow-hidden whitespace-nowrap text-[14px] text-filtertext">
+        <span className="min-w-0 flex-1 truncate text-[14px] text-filtertext">
           {selected?.label ?? placeholder}
         </span>
-        <span
-          className={`ms-2 shrink-0 text-placehold transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-        >
+        <span className={`ms-2 shrink-0 text-placehold transition-transform duration-200 ${open ? "rotate-180" : ""}`}>
           <ChevronDown />
         </span>
       </div>
@@ -95,35 +98,33 @@ export default function EldSelect({
           role="listbox"
           id={listId}
           aria-multiselectable="false"
-          className="absolute start-0 z-30 mt-1 overflow-auto rounded-lg bg-white py-1 shadow-[0_8px_24px_rgba(9,9,11,0.12),0_0_0_1px_rgba(9,9,11,0.06)]"
-          style={{ maxHeight: 200, minWidth: "max-content" }}
+          className="absolute inset-x-0 z-30 mt-1 max-h-[200px] overflow-x-hidden overflow-y-auto rounded-lg bg-white py-1 shadow-[0_8px_24px_rgba(9,9,11,0.12),0_0_0_1px_rgba(9,9,11,0.06)]"
         >
-          <div className="min-w-[10.5rem]">
-            {options.map((item) => {
-              const isSelected = item.value === selected?.value;
-              return (
-                <div
-                  key={String(item.value)}
-                  role="option"
-                  id={`${listId}-option-${String(item.value)}`}
-                  tabIndex={-1}
-                  aria-selected={isSelected}
-                  aria-disabled="false"
-                  onClick={() => pick(item.value)}
-                  className="flex cursor-pointer items-center justify-between gap-3 px-[14px] py-2 text-base hover:bg-badgebg"
-                >
-                  <span>{item.label}</span>
-                  {isSelected ? (
-                    <span className="shrink-0 text-placehold" aria-hidden="true">
-                      <CheckIcon />
-                    </span>
-                  ) : (
-                    <span className="inline-block size-[18px] shrink-0" aria-hidden="true" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          {options.map((item) => {
+            const isSelected = String(item.value) === String(selected?.value ?? "");
+            return (
+              <div
+                key={String(item.value)}
+                role="option"
+                id={`${listId}-option-${String(item.value)}`}
+                tabIndex={-1}
+                aria-selected={isSelected}
+                onClick={() => pick(item.value)}
+                className={`mx-[6px] my-[2px] flex cursor-pointer items-center justify-between gap-3 overflow-hidden rounded-md px-2 py-2 text-[14px] leading-[20px] ${
+                  isSelected ? "bg-brand text-ink" : "text-ink hover:bg-badgebg"
+                }`}
+              >
+                <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                {isSelected ? (
+                  <span className="shrink-0 text-ink" aria-hidden="true">
+                    <CheckIcon />
+                  </span>
+                ) : (
+                  <span className="inline-block size-[18px] shrink-0" aria-hidden="true" />
+                )}
+              </div>
+            );
+          })}
         </div>
       ) : null}
     </div>

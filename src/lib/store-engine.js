@@ -14,7 +14,7 @@ import {
 import { preferFaTitle } from "./catalog-region";
 import { humanizeTopupHub, joinTopupSearchText, pickTopupDisplayName, topupShopHref } from "./topup-hub";
 
-export const STORE_CATEGORY_KEYS = ["currency", "accounts", "top-ups", "items", "boosting", "gift-cards"];
+export const STORE_CATEGORY_KEYS = ["currency", "accounts", "top-ups", "items", "boosting", "games", "gift-cards"];
 
 function asRecord(value) {
   return value && typeof value === "object" ? value : {};
@@ -68,6 +68,7 @@ function tabMatchesStoreCategory(tab, categoryKey) {
   }
   if (categoryKey === "accounts") return href.includes("/shop/accounts/");
   if (categoryKey === "boosting") return href.includes("/shop/boosting/");
+  if (categoryKey === "games") return href.includes("/shop/games/");
   if (categoryKey === "currency") return href.includes("/shop/currency/");
   return href.includes(`/shop/${categoryKey}/`);
 }
@@ -261,6 +262,69 @@ export async function loadMarketListings(game, offer, perPage = 24) {
   }
 }
 
+export function shopCategoryForOffer(offer) {
+  if (offer === "CustomItem") return "items";
+  if (offer === "Currency") return "currency";
+  if (offer === "ConsoleGame") return "games";
+  return "accounts";
+}
+
+export async function loadPublicProfile(slug) {
+  const key = asString(slug);
+  if (!key) return null;
+  try {
+    return asRecord(await serverFetch(apiPaths.marketPublicProfile(key)));
+  } catch (error) {
+    if (error instanceof ApiError && error.statusCode === 404) return null;
+    throw error;
+  }
+}
+
+export async function loadSellerPublicListings(sellerId, params = {}) {
+  const id = asString(sellerId);
+  if (!id) return { items: [], meta: null };
+  try {
+    const payload = await serverFetch(
+      apiPaths.marketSellerPublicListings(id, {
+        offer: asString(params.offer) || undefined,
+        game: asString(params.game) || undefined,
+        page: params.page || 1,
+        perPage: Math.min(60, Math.max(1, Number(params.perPage) || 24)),
+      }),
+    );
+    return {
+      items: Array.isArray(payload?.items) ? payload.items : [],
+      meta: payload?.meta || null,
+    };
+  } catch (error) {
+    if (error instanceof ApiError) return { items: [], meta: null };
+    throw error;
+  }
+}
+
+export async function loadSellerPublicReviews(sellerId, params = {}) {
+  const id = asString(sellerId);
+  if (!id) return { items: [], meta: null, rating_avg: null, rating_count: 0 };
+  try {
+    const payload = await serverFetch(
+      apiPaths.marketSellerPublicReviews(id, {
+        sentiment: asString(params.sentiment) || undefined,
+        page: params.page || 1,
+        perPage: Math.min(20, Math.max(1, Number(params.perPage) || 20)),
+      }),
+    );
+    return {
+      items: Array.isArray(payload?.items) ? payload.items : [],
+      meta: payload?.meta || null,
+      rating_avg: payload?.rating_avg ?? null,
+      rating_count: payload?.rating_count ?? 0,
+    };
+  } catch (error) {
+    if (error instanceof ApiError) return { items: [], meta: null, rating_avg: null, rating_count: 0 };
+    throw error;
+  }
+}
+
 export async function loadMarketListing(id) {
   const listingId = String(id || "").trim();
   if (!listingId) return null;
@@ -347,6 +411,11 @@ export function listingToOffer(listing, categoryKey) {
         : chips.join(" · ") || itemTypeName || asString(rec.description) || asString(rec.game_name),
     img: mediaUrl(cover.url || firstImage.url || rec.cover),
     seller: asString(seller.name) || "فروشنده",
+    sellerHref: asString(seller.slug)
+      ? `/users/${encodeURIComponent(asString(seller.slug))}`
+      : asString(seller.id)
+        ? `/users/${encodeURIComponent(asString(seller.id))}`
+        : "",
     rating: sellerRating(seller),
     price:
       Number.isFinite(price) && price > 0
@@ -366,6 +435,21 @@ export function listingToOffer(listing, categoryKey) {
     priceUnitLabel: asString(rec.price_unit_label),
     deliveryMinutes: rec.delivery_minutes != null ? Number(rec.delivery_minutes) : null,
     listingId: id,
+  };
+}
+
+export function listingToShopCard(listing) {
+  const rec = asRecord(listing);
+  const card = listingToOffer(rec, shopCategoryForOffer(rec.offer_type));
+  if (!card) return null;
+  return {
+    id: String(rec.id),
+    href: card.href,
+    title: card.title,
+    gameName: asString(rec.game_name),
+    img: card.img,
+    price: card.price,
+    delivery: card.delivery,
   };
 }
 

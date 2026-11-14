@@ -5,6 +5,7 @@ import { createMarketOrder } from "../../actions/market.actions";
 import { formatTomanPrice } from "../../lib/format-toman";
 import { toFaDigits } from "../../lib/fa-digits";
 import { CURRENCY_LISTING_COPY } from "./data/listingData";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function AccountCheckoutForm({
   listingId,
@@ -178,7 +179,7 @@ export default function AccountCheckoutForm({
         disabled={loading || isOwn}
         className="mt-5 block w-full rounded-lg bg-darkbtn py-3 text-[16px] font-bold text-white disabled:opacity-60"
       >
-        {loading ? "رفتن به درگاه…" : loggedIn ? "پرداخت امن" : "ورود و ادامه خرید"}
+        {loading ? <LoadingSpinner variant="inline" className="text-white" /> : loggedIn ? "پرداخت امن" : "ورود و ادامه خرید"}
       </button>
     </form>
   );

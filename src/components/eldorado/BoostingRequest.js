@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { submitBoostRequest, uploadBoostImage } from "../../actions/market.actions";
+import LoadingSpinner from "./LoadingSpinner";
+import EldSelect from "./EldSelect";
 
 function emptyValue(field) {
   if (field.type === "multi_select") return [];
@@ -97,7 +99,7 @@ export default function BoostingRequest({ gameId, gameName, form }) {
         ))}
         {error ? <p className="text-[14px] text-red-600">{error}</p> : null}
         <button type="submit" disabled={loading} className="rounded-lg bg-darkbtn px-5 py-3 font-bold text-white disabled:opacity-60">
-          {loading ? "…" : "ثبت درخواست"}
+          {loading ? <LoadingSpinner variant="inline" className="text-white" /> : "ثبت درخواست"}
         </button>
       </section>
       <aside className="h-fit rounded-lg bg-white p-5 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px]">
@@ -114,12 +116,17 @@ function Field({ field, value, onChange, onFile }) {
   if (field.type === "number") return <input inputMode="numeric" className={box} value={value || ""} onChange={(event) => onChange(event.target.value)} />;
   if (field.type === "select") {
     return (
-      <select className={box} value={value || ""} onChange={(event) => onChange(event.target.value)}>
-        <option value="">انتخاب کن</option>
-        {(field.options || []).map((option) => (
-          <option key={option} value={option}>{option}</option>
-        ))}
-      </select>
+      <EldSelect
+        className="mt-1"
+        ariaLabel={field.label}
+        value={value || ""}
+        onChange={onChange}
+        placeholder="انتخاب کن"
+        options={[
+          { value: "", label: "انتخاب کن" },
+          ...(field.options || []).map((option) => ({ value: option, label: option })),
+        ]}
+      />
     );
   }
   if (field.type === "radio") {

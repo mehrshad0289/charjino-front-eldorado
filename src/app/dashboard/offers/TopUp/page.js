@@ -1,12 +1,7 @@
-import HeaderBar from "../../../../components/eldorado/HeaderBar";
-import CategoryNav from "../../../../components/eldorado/CategoryNav";
-import DashboardShell from "../../../../components/eldorado/DashboardShell";
 import DashboardPageHeader from "../../../../components/eldorado/DashboardPageHeader";
 import InfoBanner from "../../../../components/eldorado/InfoBanner";
 import DashboardFilters from "../../../../components/eldorado/DashboardFilters";
 import EmptyState from "../../../../components/eldorado/EmptyState";
-import Footer from "../../../../components/eldorado/Footer";
-import ChatBubble from "../../../../components/eldorado/ChatBubble";
 import { DASHBOARD_OFFERS_TOPUP_PAGE } from "../../../../components/eldorado/data/dashboardData";
 
 /* Dashboard offers page /dashboard/offers/TopUp (own .make capture,
@@ -25,21 +20,13 @@ export default function DashboardOffersTopUpPage() {
   const { icon, title, action, infoBanner, filters, emptyState } =
     DASHBOARD_OFFERS_TOPUP_PAGE;
   return (
-    <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
-      <CategoryNav />
-      <main className="isolate">
-        <DashboardShell active="Top Ups">
-          <DashboardPageHeader icon={icon} title={title} action={action} />
-          <div className="mt-1 max-w-[1048px] px-6 pb-[50px]">
-            <InfoBanner title={infoBanner.title} bodyParts={infoBanner.bodyParts} />
-            <DashboardFilters {...filters} />
-            <EmptyState {...emptyState} />
-          </div>
-        </DashboardShell>
-      </main>
-      <Footer />
-      <ChatBubble />
-    </div>
+    <>
+      <DashboardPageHeader icon={icon} title={title} action={action} />
+      <div className="mt-1 w-full px-6 pb-[50px]">
+        <InfoBanner title={infoBanner.title} bodyParts={infoBanner.bodyParts} />
+        <DashboardFilters {...filters} />
+        <EmptyState {...emptyState} />
+      </div>
+    </>
   );
 }

@@ -83,9 +83,9 @@ function AchievementCard({ card }) {
 export default function DashboardLoyalty() {
   const { streak, points, achievements, dedication } = LOYALTY_PAGE;
   return (
-    <div className="grid relative mt-[16px] gap-[56px] max-w-[1048px] pt-0 pr-0 pb-[50px] pl-6">
+    <div className="relative mt-[16px] grid w-full gap-[56px] px-6 pb-[50px] pt-0">
       {/* Row 1 — streak banner + available points card */}
-      <div style={{ gridArea: "1 / 1 / 2 / 2" }}>
+      <div className="grid grid-cols-1 gap-6 min-[961px]:grid-cols-2" style={{ gridArea: "1 / 1 / 2 / 2" }}>
         <div className="relative">
           <div className="flex flex-col items-center min-h-[230px] rounded-lg bg-[rgb(252,_231,_182)] pt-0 pr-4 pb-4 pl-4">
             <div className="mt-[16px] text-[20px] font-bold leading-[30px]">{streak.title}</div>

@@ -6,6 +6,7 @@ import { saveSellerBank } from "@/actions/market.actions";
 import { toEnDigits } from "@/lib/fa-digits";
 import { iranianShebaError, SHEBA_HOLDER } from "@/lib/sheba";
 import { VERIFY_KYC } from "./data/verifyData";
+import LoadingSpinner from "./LoadingSpinner";
 
 const inputClass =
   "block h-[42px] w-full rounded-lg border-2 border-[rgb(239,239,241)] bg-[rgb(239,239,241)] px-3 text-[14px] text-ink outline-none";
@@ -113,7 +114,7 @@ export default function VerifyShebaForm({ cta, shebaMasked = "", holderName = ""
         className="inline-block min-h-[42px] min-w-[70px] overflow-hidden rounded-lg bg-[rgb(34,_33,_39)] px-4 pb-[10px] pt-[10px] text-center text-[14px] font-bold leading-[21px] text-white disabled:opacity-60"
       >
         <span className="flex items-center justify-center gap-[6px] text-center">
-          <span className="block text-center">{loading ? "…" : cta}</span>
+          <span className="block text-center">{loading ? <LoadingSpinner variant="inline" className="text-white" /> : cta}</span>
           <ArrowRightIcon />
         </span>
       </button>

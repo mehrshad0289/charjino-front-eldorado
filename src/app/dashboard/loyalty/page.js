@@ -1,10 +1,5 @@
-import HeaderBar from "../../../components/eldorado/HeaderBar";
-import CategoryNav from "../../../components/eldorado/CategoryNav";
-import DashboardShell from "../../../components/eldorado/DashboardShell";
 import DashboardPageHeader from "../../../components/eldorado/DashboardPageHeader";
 import DashboardLoyalty from "../../../components/eldorado/DashboardLoyalty";
-import Footer from "../../../components/eldorado/Footer";
-import ChatBubble from "../../../components/eldorado/ChatBubble";
 import { FA } from "../../../components/eldorado/data/faCopy";
 
 /* Dashboard page /dashboard/loyalty (own .make capture, 1920-only,
@@ -22,17 +17,9 @@ export const metadata = {
 
 export default function DashboardLoyaltyPage() {
   return (
-    <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
-      <CategoryNav />
-      <main className="isolate">
-        <DashboardShell active="Loyalty">
-          <DashboardPageHeader icon="loyalty" title={FA.loyalty} />
-          <DashboardLoyalty />
-        </DashboardShell>
-      </main>
-      <Footer />
-      <ChatBubble />
-    </div>
+    <>
+      <DashboardPageHeader icon="loyalty" title={FA.loyalty} />
+      <DashboardLoyalty />
+    </>
   );
 }

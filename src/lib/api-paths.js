@@ -60,6 +60,9 @@ export const apiPaths = {
     const search = new URLSearchParams();
     if (params.game) search.set("game", String(params.game));
     if (params.offer) search.set("offer", String(params.offer));
+    if (params.platform) search.set("platform", String(params.platform));
+    if (params.format) search.set("format", String(params.format));
+    if (params.q) search.set("q", String(params.q));
     if (params.page) search.set("page", String(params.page));
     if (params.perPage) search.set("perPage", String(params.perPage));
     const qs = search.toString();
@@ -67,6 +70,26 @@ export const apiPaths = {
   },
   marketListingFacets: (game) => `/market/listings/facets?game=${encodeURIComponent(game)}`,
   marketListing: (id) => `/market/listings/${encodeURIComponent(id)}`,
+  marketPublicProfile: (slug) => `/market/profiles/${encodeURIComponent(slug)}`,
+  marketSellerPublicListings: (sellerId, params = {}) => {
+    const search = new URLSearchParams();
+    if (params.offer) search.set("offer", String(params.offer));
+    if (params.game) search.set("game", String(params.game));
+    if (params.page) search.set("page", String(params.page));
+    if (params.perPage) search.set("perPage", String(params.perPage));
+    const qs = search.toString();
+    const path = `/market/sellers/${encodeURIComponent(sellerId)}/listings`;
+    return qs ? `${path}?${qs}` : path;
+  },
+  marketSellerPublicReviews: (sellerId, params = {}) => {
+    const search = new URLSearchParams();
+    if (params.sentiment) search.set("sentiment", String(params.sentiment));
+    if (params.page) search.set("page", String(params.page));
+    if (params.perPage) search.set("perPage", String(params.perPage));
+    const qs = search.toString();
+    const path = `/market/sellers/${encodeURIComponent(sellerId)}/reviews`;
+    return qs ? `${path}?${qs}` : path;
+  },
   marketQuote: (listingId, quantity) => {
     const search = new URLSearchParams();
     search.set("listingId", String(listingId));
@@ -81,6 +104,13 @@ export const apiPaths = {
   marketOrderReveal: (orderNo) => `/market/orders/${encodeURIComponent(orderNo)}/reveal`,
   marketOrderConfirm: (orderNo) => `/market/orders/${encodeURIComponent(orderNo)}/confirm`,
   marketOrderMessages: (orderNo) => `/market/orders/${encodeURIComponent(orderNo)}/messages`,
+  marketChats: (params = {}) => {
+    const search = new URLSearchParams();
+    if (params.side) search.set("side", String(params.side));
+    if (params.unread) search.set("unread", "1");
+    const qs = search.toString();
+    return qs ? `/market/chats?${qs}` : "/market/chats";
+  },
   marketPaymentVerify: (gateway) => `/market/payments/verify/${encodeURIComponent(gateway)}`,
   marketSellerOrders: "/market/seller/orders",
   marketSellerOrdersInvoice: "/market/seller/orders/invoice",
@@ -90,6 +120,15 @@ export const apiPaths = {
   marketBoostForm: (gameId) => `/market/boost-forms/${encodeURIComponent(gameId)}`,
   marketBoostRequests: "/market/boost-requests",
   marketBoostImages: "/market/boost-forms/images",
+  tickets: (params = {}) => {
+    const search = new URLSearchParams();
+    if (params.page) search.set("page", String(params.page));
+    if (params.perPage) search.set("perPage", String(params.perPage));
+    const qs = search.toString();
+    return qs ? `/tickets?${qs}` : "/tickets";
+  },
+  ticket: (id) => `/tickets/${encodeURIComponent(id)}`,
+  ticketMessages: (id) => `/tickets/${encodeURIComponent(id)}/messages`,
   smartSearch: (params) => {
     const search = new URLSearchParams();
     search.set("q", String(params.q ?? "").slice(0, 100));

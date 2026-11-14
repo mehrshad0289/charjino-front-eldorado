@@ -111,6 +111,15 @@ export default function MobileMenu({ onClose }) {
         </li>
         {CATEGORY_NAV.map((c) => (
           <li key={c.key} className="mb-2">
+            {c.mega === false ? (
+              <a
+                href={c.href}
+                onClick={onClose}
+                className="flex h-14 w-full items-center rounded-lg bg-page px-5 text-start text-base text-ink"
+              >
+                {c.label}
+              </a>
+            ) : (
             <button
               type="button"
               onClick={() => setOpenCategory(c)}
@@ -121,6 +130,7 @@ export default function MobileMenu({ onClose }) {
                 <ChevronRight />
               </span>
             </button>
+            )}
           </li>
         ))}
         <li className="mb-2">

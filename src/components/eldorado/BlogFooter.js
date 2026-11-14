@@ -29,19 +29,19 @@ const PAYMENTS = [
 ];
 
 const SOCIALS = [
-  ["Reddit URL", "https://www.reddit.com/r/EldoradoGG/", "24c0ea50e8b2ee2b3392d3f45301ba2105fdbd49.svg?generation=1793788935217117&alt=media"],
-  ["TikTok URL", "https://www.tiktok.com/@eldoradogg1", "eab55aff40f0afb3c27cc158f9da02fd043b4c64.svg?generation=1793788935244284&alt=media"],
-  ["X URL", "https://x.com/EldoradoGg", "825ef0d4ee29edd42832a3226c36356d2e026741.svg?generation=1793788935241489&alt=media"],
-  ["Instagram URL", "https://www.instagram.com/eldoradogg_official/", "fe82ec5524f351595f78d64848079548d99fac94.svg?generation=1793788935242257&alt=media"],
-  ["Facebook URL", "https://www.facebook.com/people/EldoradoGg/61574942990991/", "10498d44aae78ff288510c905c85512c7de46799.svg?generation=1793788935245279&alt=media"],
-  ["Youtube URL", "https://www.youtube.com/@Eldorado.gg_Official", "35deca371d795df3f7f8dcc8ba44e98e76acae9a.svg?generation=1793788935372136&alt=media"],
+  ["Reddit URL", "https://www.reddit.com/r/EldoradoGG/", "/icons/social/reddit-icon.svg"],
+  ["TikTok URL", "https://www.tiktok.com/@eldoradogg1", "/icons/social/tiktok-icon.svg"],
+  ["X URL", "https://x.com/EldoradoGg", "/icons/social/twitter-icon.svg"],
+  ["Instagram URL", "https://www.instagram.com/eldoradogg_official/", "/icons/social/instagram-icon.svg"],
+  ["Facebook URL", "https://www.facebook.com/people/EldoradoGg/61574942990991/", "/icons/social/facebook-icon.svg"],
+  ["Youtube URL", "https://www.youtube.com/@Eldorado.gg_Official", "/icons/social/youtube-icon.svg"],
 ];
 
 /* Column links verbatim from the capture (title case). First column is
    font-bold (capture), the support columns are regular. */
 const MARKET_LINKS = [
   ["Help Center", "https://support.eldorado.gg/en"],
-  ["Contact Us", "https://www.eldorado.gg/contact-us"],
+  ["تماس با ما", "/contact-us"],
   ["About Us", "https://www.eldorado.gg/about-us"],
   ["Careers", "https://careers.eldorado.gg/"],
   ["Bug Bounty", "https://www.eldorado.gg/bug-bounty"],
@@ -139,7 +139,7 @@ export default function BlogFooter() {
                       <img
                         alt={alt}
                         className="inline-block size-[24px] max-w-full align-middle"
-                        src={ASSET + asset}
+                        src={asset}
                       />
                     </a>
                   </li>

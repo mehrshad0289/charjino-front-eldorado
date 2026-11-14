@@ -9,6 +9,7 @@ import { iranianNationalIdError } from "@/lib/national-id";
 import { iranianShebaError, normalizeSheba, SHEBA_HOLDER } from "@/lib/sheba";
 import { testPayUrl } from "@/lib/order";
 import { EMPTY_ORDER_STATUS_COUNTS, orderListApiQuery } from "@/lib/order-list-query";
+import { listingToShopCard, loadSellerPublicListings, loadSellerPublicReviews } from "@/lib/store-engine";
 
 function extraErrorText(error) {
   if (!(error instanceof ApiError)) return "";
@@ -254,6 +255,34 @@ export async function getGameSchema(gameId) {
       return { ok: true, fields: [] };
     }
     return fromMarketError(error);
+  }
+}
+
+export async function getPublicSellerListings(sellerId, params = {}) {
+  try {
+    const data = await loadSellerPublicListings(sellerId, {
+      offer: params.offer,
+      game: params.game,
+      perPage: 60,
+    });
+    return {
+      ok: true,
+      items: data.items.map(listingToShopCard).filter(Boolean),
+    };
+  } catch (error) {
+    return { ok: false, items: [], message: toActionMessage(error) };
+  }
+}
+
+export async function getPublicSellerReviews(sellerId, params = {}) {
+  try {
+    const data = await loadSellerPublicReviews(sellerId, {
+      sentiment: params.sentiment,
+      perPage: 20,
+    });
+    return { ok: true, items: data.items };
+  } catch (error) {
+    return { ok: false, items: [], message: toActionMessage(error) };
   }
 }
 
@@ -742,6 +771,19 @@ export async function confirmBuyerOrder(orderNo) {
     });
     revalidateOrderPaths(orderNo);
     return { ok: true, data };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function getMarketChats({ side, unreadOnly } = {}) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true };
+  try {
+    const data = await serverFetch(apiPaths.marketChats({ side, unread: unreadOnly ? 1 : undefined }), {
+      headers: bearerHeaders(accessToken),
+    });
+    return { ok: true, items: Array.isArray(data?.items) ? data.items : [] };
   } catch (error) {
     return fromMarketError(error);
   }

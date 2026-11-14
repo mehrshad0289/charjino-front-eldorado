@@ -7,6 +7,7 @@ import { requestOtp, verifyOtp } from "@/actions/auth.actions";
 import { onlyDigits, toFaDigits } from "@/lib/fa-digits";
 import { isIranianMobile } from "@/lib/phone";
 import Logo from "./Logo";
+import LoadingSpinner from "./LoadingSpinner";
 import { FA } from "./data/faCopy";
 
 const OTP_SECONDS = 120;
@@ -102,7 +103,7 @@ export default function LoginCard({ nextPath = "/" }) {
                   </div>
                   {error ? <p className="text-[rgb(255,_99,_99)]">{error}</p> : null}
                   <button type="submit" className={yellowButtonClass} disabled={loading}>
-                    {loading ? "…" : FA.otpSendCode}
+                    {loading ? <LoadingSpinner variant="inline" className="text-ink" /> : FA.otpSendCode}
                   </button>
                 </div>
               </form>
@@ -151,7 +152,7 @@ export default function LoginCard({ nextPath = "/" }) {
                       className={yellowButtonClass}
                       disabled={loading || code.length < 4}
                     >
-                      {loading ? "…" : FA.otpSubmit}
+                      {loading ? <LoadingSpinner variant="inline" className="text-ink" /> : FA.otpSubmit}
                     </button>
                     <button
                       type="button"

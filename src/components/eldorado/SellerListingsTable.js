@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { pauseListing, resumeListing } from "@/actions/market.actions";
-import { formatToman, listingMediaUrl, listingStatusMeta } from "@/lib/listing";
+import { formatToman, listingCardHref, listingMediaUrl, listingStatusMeta } from "@/lib/listing";
 import { LISTING_COPY } from "./data/listingData";
 
 export default function SellerListingsTable({ items = [], editBase = "/dashboard/offers/Account" }) {
@@ -29,17 +29,19 @@ export default function SellerListingsTable({ items = [], editBase = "/dashboard
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      {error ? <p className="text-[14px] text-[rgb(232,27,22)]">{error}</p> : null}
+    <div>
+      {error ? <p className="mb-3 text-[14px] text-[rgb(232,27,22)]">{error}</p> : null}
+      <div className="grid grid-cols-1 gap-3 min-[961px]:grid-cols-2">
       {items.map((row) => {
         const status = listingStatusMeta(row.status);
         const editable = row.status === "draft";
+        const href = listingCardHref(row, editBase);
         return (
           <article
             key={row.id}
             className="flex flex-col gap-3 rounded-xl bg-white p-4 shadow-[0_2px_4px_rgba(9,9,11,0.05),0_12px_8px_rgba(9,9,11,0.02)]"
           >
-            <div className="flex flex-wrap items-start justify-between gap-3">
+            <Link href={href} className="flex flex-wrap items-start justify-between gap-3 rounded-lg outline-none hover:bg-[#fafafa]">
               <div className="flex min-w-0 items-start gap-3">
                 {listingMediaUrl(row.cover_image?.url) ? (
                   <img src={listingMediaUrl(row.cover_image.url)} alt="" className="h-14 w-14 shrink-0 rounded-lg object-cover" />
@@ -61,7 +63,7 @@ export default function SellerListingsTable({ items = [], editBase = "/dashboard
               >
                 {status.label}
               </span>
-            </div>
+            </Link>
             {row.rejection_reason ? (
               <p className="text-[14px] text-[rgb(232,27,22)]">{row.rejection_reason}</p>
             ) : null}
@@ -98,6 +100,7 @@ export default function SellerListingsTable({ items = [], editBase = "/dashboard
           </article>
         );
       })}
+      </div>
     </div>
   );
 }

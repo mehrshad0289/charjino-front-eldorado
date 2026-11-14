@@ -6,6 +6,7 @@ import { submitKycLevel2 } from "@/actions/market.actions";
 import { onlyDigits } from "@/lib/fa-digits";
 import { iranianNationalIdError } from "@/lib/national-id";
 import { VERIFY_KYC } from "./data/verifyData";
+import LoadingSpinner from "./LoadingSpinner";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const ACCEPT = "image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp";
@@ -181,7 +182,7 @@ export default function VerifyStatusActions({ phase, cta, uploadedKinds = [] }) 
         className="inline-block min-h-[42px] min-w-[70px] overflow-hidden rounded-lg bg-[rgb(34,_33,_39)] px-4 pb-[10px] pt-[10px] text-center text-[14px] font-bold leading-[21px] text-white disabled:opacity-60"
       >
         <span className="flex items-center justify-center gap-[6px] text-center">
-          <span className="block text-center">{loading ? "…" : cta}</span>
+          <span className="block text-center">{loading ? <LoadingSpinner variant="inline" className="text-white" /> : cta}</span>
           <ArrowRightIcon />
         </span>
       </button>

@@ -298,10 +298,10 @@ export default function SupportSellerRulesPage() {
                 Explore Eldorado
               </a>
               <a
-                href="https://www.eldorado.gg/contact-us"
+                href="/contact-us"
                 className="block whitespace-nowrap rounded-lg px-3 pb-2 pt-2 text-[14px] leading-[14px] text-white/78"
               >
-                Contact us
+                تماس با ما
               </a>
             </nav>
             <div className="flex shrink-0 items-center whitespace-nowrap rounded-lg px-3 pb-2 pt-2 text-[14px] leading-[14px] text-white/78">

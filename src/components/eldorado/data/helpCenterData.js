@@ -24,7 +24,7 @@ export const HELP_COPY = {
   mostViewed: "پربازدیدترین مقاله‌ها",
   collections: "مجموعه‌ها",
   stillNeed: "هنوز کمک لازم داری؟",
-  stillDesc: "تیم پشتیبانی ۲۴ ساعته در گفتگوی زنده در دسترس است.",
+  stillDesc: "تیکت بفرست. گفتگو در داشبورد، بخش تیکت‌ها است.",
   allCollections: "همهٔ مجموعه‌ها",
   articlesCount: (n) => `${n} مقاله`,
 };

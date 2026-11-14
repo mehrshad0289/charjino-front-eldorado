@@ -49,6 +49,7 @@ export const ITEM_LISTING_COPY = {
   stock: "موجودی",
   min: "حداقل خرید",
   unitPrice: "قیمت هر عدد (تومان)",
+  photosHint: "یک عکس پروفایل لازم است. بقیه اختیاری‌اند.",
 };
 
 export const CURRENCY_LISTING_COPY = {

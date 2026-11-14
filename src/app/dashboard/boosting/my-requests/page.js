@@ -1,10 +1,5 @@
-import HeaderBar from "../../../../components/eldorado/HeaderBar";
-import CategoryNav from "../../../../components/eldorado/CategoryNav";
-import DashboardShell from "../../../../components/eldorado/DashboardShell";
 import DashboardPageHeader from "../../../../components/eldorado/DashboardPageHeader";
 import EmptyState from "../../../../components/eldorado/EmptyState";
-import Footer from "../../../../components/eldorado/Footer";
-import ChatBubble from "../../../../components/eldorado/ChatBubble";
 import { DASHBOARD_BOOSTING_REQUESTS_PAGE } from "../../../../components/eldorado/data/dashboardExtraData";
 import { FA } from "../../../../components/eldorado/data/faCopy";
 
@@ -22,23 +17,15 @@ export const metadata = {
 export default function DashboardBoostingRequestsPage() {
   const { icon, title, emptyState } = DASHBOARD_BOOSTING_REQUESTS_PAGE;
   return (
-    <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
-      <CategoryNav />
-      <main className="isolate">
-        <DashboardShell active="My requests">
-          <DashboardPageHeader
-            icon={icon}
-            title={title}
-            action={{ label: FA.newRequest, href: "/become-seller", ariaLabel: FA.newRequest }}
-          />
-          <div className="relative mt-8 max-w-[1048px] px-6 pb-[50px]">
-            <EmptyState {...emptyState} />
-          </div>
-        </DashboardShell>
-      </main>
-      <Footer />
-      <ChatBubble />
-    </div>
+    <>
+      <DashboardPageHeader
+        icon={icon}
+        title={title}
+        action={{ label: FA.newRequest, href: "/become-seller", ariaLabel: FA.newRequest }}
+      />
+      <div className="relative mt-8 w-full px-6 pb-[50px]">
+        <EmptyState {...emptyState} />
+      </div>
+    </>
   );
 }

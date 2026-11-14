@@ -67,6 +67,27 @@ export function listingStatusMeta(status) {
   return LISTING_STATUS[status] || { label: status || "نامشخص", bg: "rgb(106, 102, 123)" };
 }
 
+export function listingShopCategory(offer) {
+  if (offer === "CustomItem") return "items";
+  if (offer === "Currency") return "currency";
+  if (offer === "ConsoleGame") return "games";
+  return "accounts";
+}
+
+export function listingShopHref(row) {
+  const id = row?.id;
+  if (id == null || id === "") return "";
+  return `/shop/${listingShopCategory(row.offer_type)}/l/${encodeURIComponent(String(id))}`;
+}
+
+export function listingCardHref(row, editBase = "/dashboard/offers/Account") {
+  if (row?.status === "active") {
+    const shopHref = listingShopHref(row);
+    if (shopHref) return shopHref;
+  }
+  return row?.id != null ? `${editBase}/${row.id}` : "";
+}
+
 export function listingMediaUrl(url) {
   const value = typeof url === "string" ? url.trim() : "";
   if (!value || value.startsWith("blob:") || value.startsWith("data:")) return value;

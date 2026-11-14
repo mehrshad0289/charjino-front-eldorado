@@ -25,7 +25,7 @@ export default async function SoldOrderPage({ params }) {
   if (!result.ok || !result.data) notFound();
 
   return (
-    <OrderDashboardFrame user={user} active="Sold orders" title={`${ORDER_COPY.soldTitle} ${toFaDigits(orderNo)}`}>
+    <OrderDashboardFrame title={`${ORDER_COPY.soldTitle} ${toFaDigits(orderNo)}`}>
       <a href="/dashboard/orders/sold" className="mb-4 inline-flex text-[14px] font-bold text-linkblue">
         {ORDER_COPY.backSold}
       </a>

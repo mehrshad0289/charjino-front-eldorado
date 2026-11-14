@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { getSessionUser } from "@/actions/auth.actions";
 import {
   accountAvatarUrl,
@@ -8,97 +10,15 @@ import {
   accountInitials,
   accountRegisteredLabel,
   isDashboardNavActive,
+  publicProfileHref,
 } from "@/lib/account-display";
 import { FA } from "./data/faCopy";
+import DashboardIcon from "./DashboardIcons";
 import {
   DASHBOARD_NAV_GROUPS,
   DASHBOARD_NAV_LINKS,
   DASHBOARD_VIEW_PROFILE,
 } from "./data/dashboardData";
-
-/* Small icon set standing in for the capture's empty icomoon glyphs
-   (project pattern). Keys come from dashboardData.js. */
-const stroke = { stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" };
-
-const ICONS = {
-  orders: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M4 7h13.2l-1 8.5H6.2L4.6 4.5H3" {...stroke} />
-      <circle cx="7.2" cy="19" r="1.4" fill="currentColor" />
-      <circle cx="15.2" cy="19" r="1.4" fill="currentColor" />
-    </svg>
-  ),
-  offers: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h5l9 9-6.5 6.5-9-9v-5Z" {...stroke} />
-      <circle cx="8.3" cy="8.3" r="1.2" fill="currentColor" />
-    </svg>
-  ),
-  boosting: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12.5 15.5c4.5-3 6.8-6.5 7-11-4.5.2-8 2.5-11 7l-3.5.8L4 14l3.5.5L8 18l1.7 1 1.5-3.5h1.3Z" {...stroke} />
-      <circle cx="14" cy="9.5" r="1.3" fill="currentColor" />
-    </svg>
-  ),
-  loyalty: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="m12 4 2.3 4.9 5.2.6-3.9 3.6 1.1 5.2L12 15.6l-4.7 2.7 1.1-5.2L4.5 9.5l5.2-.6L12 4Z" {...stroke} />
-    </svg>
-  ),
-  wallet: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3.5" y="6.5" width="17" height="12" rx="2" {...stroke} />
-      <path d="M3.5 9.5h17" {...stroke} />
-      <circle cx="16.5" cy="14" r="1.2" fill="currentColor" />
-    </svg>
-  ),
-  seller: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M5 9h14l-1 10H6L5 9Z" {...stroke} />
-      <path d="M9 11V7a3 3 0 0 1 6 0v4" {...stroke} />
-    </svg>
-  ),
-  messages: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3.5" y="5.5" width="17" height="12" rx="2" {...stroke} />
-      <path d="m4.5 7 7.5 6 7.5-6" {...stroke} />
-    </svg>
-  ),
-  notifications: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 4a6 6 0 0 1 6 6v3.5l1.5 2.5h-15L6 13.5V10a6 6 0 0 1 6-6Z" {...stroke} />
-      <path d="M10 19a2 2 0 0 0 4 0" {...stroke} />
-    </svg>
-  ),
-  feedback: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M4.5 6.5A2 2 0 0 1 6.5 4.5h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H10l-4 3.5v-3.5h-1.5a2 2 0 0 1-2-2v-7Z" {...stroke} />
-    </svg>
-  ),
-  settings: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.8" />
-      <path
-        d="M12 3v2.2M12 18.8V21M21 12h-2.2M5.2 12H3M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6M18.4 18.4l-1.6-1.6M7.2 7.2 5.6 5.6"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-    </svg>
-  ),
-  profile: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="12" cy="8.5" r="3.5" {...stroke} />
-      <path d="M5 19.5c1.2-3.2 3.8-4.8 7-4.8s5.8 1.6 7 4.8" {...stroke} />
-    </svg>
-  ),
-  tag: (
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h5l9 9-6.5 6.5-9-9v-5Z" {...stroke} />
-      <circle cx="8.3" cy="8.3" r="1.2" fill="currentColor" />
-    </svg>
-  ),
-};
 
 const CHEVRON = (
   <svg width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden="true">
@@ -107,7 +27,17 @@ const CHEVRON = (
 );
 
 function SidebarIcon({ name, className = "" }) {
-  return <div className={`shrink-0 ${className}`}>{ICONS[name] ?? ICONS.profile}</div>;
+  return (
+    <div className={`grid size-6 shrink-0 place-items-center ${className}`.trim()}>
+      <DashboardIcon name={name} size={24} />
+    </div>
+  );
+}
+
+function sidebarRowClass(isActive, extra = "") {
+  return `flex items-center overflow-hidden rounded-lg text-ink ${extra} ${
+    isActive ? "bg-brand" : "hover:bg-badgebg"
+  }`;
 }
 
 /* Data-driven dashboard navigation (user block, collapsible groups,
@@ -115,13 +45,35 @@ function SidebarIcon({ name, className = "" }) {
    row highlights yellow exactly like the capture. Below lg the same block
    spans full width above the content (no mobile reference exists for the
    logged-in dashboard — capture is 1920-only). */
+function navItems() {
+  return [...DASHBOARD_NAV_GROUPS.flatMap((group) => group.children), ...DASHBOARD_NAV_LINKS];
+}
+
+function navActiveId(pathname, fallback) {
+  const hit = navItems()
+    .filter((item) => pathname === item.href || pathname.startsWith(`${item.href}/`))
+    .sort((a, b) => b.href.length - a.href.length)[0];
+  return hit?.id || fallback || null;
+}
+
+function initialCollapsed(active) {
+  const next = {};
+  for (const group of DASHBOARD_NAV_GROUPS) {
+    next[group.id] = !group.children.some((item) => isDashboardNavActive(active, item));
+  }
+  return next;
+}
+
 export default function DashboardSidebar({ active = null, user = null }) {
-  const [collapsed, setCollapsed] = useState({});
+  const pathname = usePathname();
+  const current = navActiveId(pathname, active);
+  const [collapsed, setCollapsed] = useState(() => initialCollapsed(current));
   const [sessionUser, setSessionUser] = useState(user);
   const liveUser = sessionUser || user;
   const displayName = accountDisplayName(liveUser);
   const avatar = accountAvatarUrl(liveUser);
   const phoneName = displayName.includes("***");
+  const profileHref = publicProfileHref(liveUser);
   const [registered, setRegistered] = useState("");
 
   useEffect(() => {
@@ -142,37 +94,51 @@ export default function DashboardSidebar({ active = null, user = null }) {
     setRegistered(accountRegisteredLabel(liveUser));
   }, [liveUser]);
 
+  useEffect(() => {
+    setCollapsed((state) => {
+      const next = { ...state };
+      for (const group of DASHBOARD_NAV_GROUPS) {
+        if (group.children.some((item) => isDashboardNavActive(current, item))) {
+          next[group.id] = false;
+        }
+      }
+      return next;
+    });
+  }, [current]);
+
   const toggle = (id) =>
     setCollapsed((c) => ({ ...c, [id]: !c[id] }));
 
   return (
-    <div className="h-full w-[260px] bg-white">
-      <nav id="dashboard-sidebar" className="sticky start-0 top-[var(--shop-header-h)]">
-        <div className="flex h-[62px] justify-start px-[10px] pb-3 pt-[10px]">
-          <div className="me-[10px]">
-            <div className="size-10 overflow-hidden rounded-full bg-badgebg text-center text-[13px] font-bold leading-10">
-              {avatar ? (
-                <img alt={FA.profileAvatar} src={avatar} className="block size-full object-cover align-middle" />
-              ) : (
-                <span aria-hidden="true">{accountInitials(liveUser)}</span>
-              )}
-            </div>
-          </div>
-          <div className="flex min-w-0 flex-col justify-center">
-            <h5 className="flex items-center gap-1 text-[14px] font-bold leading-[19.6px]">
-              <a
-                href={DASHBOARD_VIEW_PROFILE.href}
-                className="block truncate"
-                dir={phoneName ? "ltr" : "auto"}
-              >
-                {displayName}
-              </a>
-            </h5>
-            {registered ? <p className="text-[14px] leading-[21px] text-graytext">{registered}</p> : null}
+    <nav
+      id="dashboard-sidebar"
+      className="sticky top-[var(--shop-header-h)] z-[2] max-h-[calc(100dvh-var(--shop-header-h))] w-[260px] overflow-x-clip overflow-y-auto bg-white"
+    >
+      <div className="flex h-[62px] justify-start px-[10px] pb-3 pt-[10px]">
+        <div className="me-[10px]">
+          <div className="size-10 overflow-hidden rounded-full bg-badgebg text-center text-[13px] font-bold leading-10">
+            {avatar ? (
+              <img alt={FA.profileAvatar} src={avatar} className="block size-full object-cover align-middle" />
+            ) : (
+              <span aria-hidden="true">{accountInitials(liveUser)}</span>
+            )}
           </div>
         </div>
+        <div className="flex min-w-0 flex-col justify-center">
+          <h5 className="flex items-center gap-1 text-[14px] font-bold leading-[19.6px]">
+            <a
+              href={profileHref}
+              className="block truncate"
+              dir={phoneName ? "ltr" : "auto"}
+            >
+              {displayName}
+            </a>
+          </h5>
+          {registered ? <p className="text-[14px] leading-[21px] text-graytext">{registered}</p> : null}
+        </div>
+      </div>
 
-        <div className="border-t-[0.8px] border-cardborder px-[10px] pb-3 pt-3">
+      <div className="border-t-[0.8px] border-cardborder px-[10px] pb-3 pt-3">
           <div className="mb-2 mt-2 flex flex-col gap-2">
             {DASHBOARD_NAV_GROUPS.map((group) => {
               const isCollapsed = !!collapsed[group.id];
@@ -182,27 +148,28 @@ export default function DashboardSidebar({ active = null, user = null }) {
                     type="button"
                     onClick={() => toggle(group.id)}
                     aria-expanded={!isCollapsed}
-                    className="flex items-center text-start"
+                    className="flex items-center rounded-lg px-1 py-1 text-start hover:bg-badgebg"
                   >
                     <SidebarIcon name={group.icon} className="ms-[4px] me-[12px]" />
-                    <span className="block">{group.label}</span>
-                    <span className={`ms-auto text-ink/70 transition-transform ${isCollapsed ? "-rotate-90" : ""}`}>
+                    <span className="block min-w-0 truncate">{group.label}</span>
+                    <span className={`ms-auto shrink-0 text-ink/70 transition-transform ${isCollapsed ? "rotate-90" : ""}`}>
                       {CHEVRON}
                     </span>
                   </button>
                   {!isCollapsed && (
                     <div className="flex flex-col ps-7">
                       {group.children.map((item) => {
-                        const isActive = isDashboardNavActive(active, item);
+                        const isActive = isDashboardNavActive(current, item);
                         return (
-                          <a
+                          <Link
                             key={item.id}
                             href={item.href}
+                            scroll={false}
                             aria-current={isActive ? "page" : undefined}
-                            className={`block py-2 px-[10px] ${isActive ? "bg-brand" : "hover:text-brand"}`}
+                            className={sidebarRowClass(isActive, "px-[10px] py-2")}
                           >
-                            <span>{item.label}</span>
-                          </a>
+                            <span className="min-w-0 truncate">{item.label}</span>
+                          </Link>
                         );
                       })}
                     </div>
@@ -212,32 +179,32 @@ export default function DashboardSidebar({ active = null, user = null }) {
             })}
 
             {DASHBOARD_NAV_LINKS.map((link) => {
-              const isActive = isDashboardNavActive(active, link);
+              const isActive = isDashboardNavActive(current, link);
               return (
-                <a
+                <Link
                   key={link.id}
                   href={link.href}
+                  scroll={false}
                   aria-current={isActive ? "page" : undefined}
-                  className={`flex items-center p-1 ${isActive ? "bg-brand" : "hover:text-brand"}`}
+                  className={sidebarRowClass(isActive, "p-1")}
                 >
                   <SidebarIcon name={link.icon} className="me-[12px]" />
-                  <span className="block">{link.label}</span>
-                </a>
+                  <span className="block min-w-0 truncate">{link.label}</span>
+                </Link>
               );
             })}
           </div>
         </div>
 
-        <a
-          href={DASHBOARD_VIEW_PROFILE.href}
-          className="block border-t-[0.8px] border-cardborder leading-[19px]"
+        <Link
+          href={profileHref}
+          className="block border-t-[0.8px] border-cardborder leading-[19px] hover:bg-badgebg"
         >
           <div className="my-[12px] mx-[10px] flex items-center p-1">
             <SidebarIcon name={DASHBOARD_VIEW_PROFILE.icon} />
             <span className="ms-[7px] block">{DASHBOARD_VIEW_PROFILE.label}</span>
           </div>
-        </a>
-      </nav>
-    </div>
+        </Link>
+    </nav>
   );
 }

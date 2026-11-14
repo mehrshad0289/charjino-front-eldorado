@@ -42,8 +42,13 @@ function Row({ amount, selected, onSelect, horizontal, valueLabel, fromLabel, im
         )}
       </div>
       <div className="min-w-0 grow lg:mt-3">
-        <div className="text-[14px] leading-[19.6px]">{amount.label}</div>
-        <div className="text-[12px] leading-[18px] text-graytext">{valueLabel}</div>
+        <div className="flex flex-wrap items-baseline gap-x-2">
+          <div className="text-[14px] leading-[19.6px]">{amount.label}</div>
+          {amount.usdLabel && amount.faceCurrency && amount.faceCurrency !== "USD" ? (
+            <div className="text-[12px] leading-[18px] text-graytext">{amount.usdLabel}</div>
+          ) : null}
+        </div>
+        {amount.faceLabel ? null : <div className="text-[12px] leading-[18px] text-graytext">{valueLabel}</div>}
       </div>
       <div className={horizontal ? "shrink-0 text-[14px] leading-[21px]" : "mt-6 shrink-0 text-[14px] leading-[21px]"}>
         <span>{fromLabel}</span>

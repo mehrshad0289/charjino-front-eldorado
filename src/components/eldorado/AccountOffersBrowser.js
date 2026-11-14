@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import AccountOffersGrid from "./AccountOffersGrid";
 import { toFaDigits } from "../../lib/fa-digits";
+import EldSelect from "./EldSelect";
 
 const SORTS = [
   { id: "newest", label: "پیشنهادی" },
@@ -29,14 +30,6 @@ function SearchIcon() {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-filtertext">
       <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8" />
       <path d="m16 16 5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function SortIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   );
 }
@@ -330,21 +323,13 @@ export default function AccountOffersBrowser({
               <SearchIcon />
             </span>
           </div>
-          <label className="flex min-h-[42px] items-center gap-2 rounded-lg bg-[rgb(244,244,244)] px-3.5 text-[14px]">
-            <SortIcon />
-            <select
-              value={sort}
-              onChange={(event) => setSort(event.target.value)}
-              aria-label="مرتب‌سازی آگهی‌ها"
-              className="h-[42px] min-w-[8rem] bg-transparent px-1"
-            >
-              {SORTS.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <EldSelect
+            className="w-full min-w-0 sm:w-[12.5rem]"
+            ariaLabel="مرتب‌سازی آگهی‌ها"
+            value={sort}
+            onChange={setSort}
+            options={SORTS.map((item) => ({ value: item.id, label: item.label }))}
+          />
         </div>
         {chips.length > 0 ? (
           <div className="mb-5 flex flex-wrap gap-2">

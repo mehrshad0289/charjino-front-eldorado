@@ -26,7 +26,7 @@ export default async function PurchasedOrderPage({ params, searchParams }) {
   if (!result.ok || !result.data) notFound();
 
   return (
-    <OrderDashboardFrame user={user} active="Purchased orders" title={`${ORDER_COPY.purchasedTitle} ${toFaDigits(orderNo)}`}>
+    <OrderDashboardFrame title={`${ORDER_COPY.purchasedTitle} ${toFaDigits(orderNo)}`}>
       <a href="/dashboard/orders/purchased" className="mb-4 inline-flex text-[14px] font-bold text-linkblue">
         {ORDER_COPY.backPurchased}
       </a>

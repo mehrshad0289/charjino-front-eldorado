@@ -27,6 +27,8 @@ import {
   parseToman,
 } from "@/lib/listing";
 import { LISTING_COPY } from "./data/listingData";
+import LoadingSpinner from "./LoadingSpinner";
+import EldSelect from "./EldSelect";
 
 const inputClass =
   "block h-[42px] w-full rounded-lg border-2 border-[rgb(239,239,241)] bg-[rgb(239,239,241)] px-3 text-[14px] text-ink outline-none";
@@ -495,23 +497,22 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
                 {field.label_fa}
                 {field.required ? " *" : ""}
                 {field.type === "select" ? (
-                  <select
+                  <EldSelect
                     id={`attr-${field.key}`}
+                    className="mt-1"
+                    ariaLabel={field.label_fa}
                     value={attributes[field.key] || ""}
-                    aria-invalid={issues[field.key] ? "true" : undefined}
-                    onChange={(event) => {
-                      setAttributes((current) => ({ ...current, [field.key]: event.target.value }));
+                    invalid={Boolean(issues[field.key])}
+                    placeholder="انتخاب کن"
+                    onChange={(value) => {
+                      setAttributes((current) => ({ ...current, [field.key]: value }));
                       clearIssue(field.key);
                     }}
-                    className={controlClass(Boolean(issues[field.key]))}
-                  >
-                    <option value="">انتخاب کن</option>
-                    {(field.options || []).map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
+                    options={[
+                      { value: "", label: "انتخاب کن" },
+                      ...(field.options || []).map((option) => ({ value: option, label: option })),
+                    ]}
+                  />
                 ) : (
                   <input
                     id={`attr-${field.key}`}
@@ -674,7 +675,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
           <p className="mt-4 text-[13px] text-graytext">{LISTING_COPY.liveNote}</p>
           <div className="mt-4 hidden flex-col gap-2 lg:flex">
             <button type="button" disabled={loading} onClick={() => onSave(true)} className="inline-flex min-h-[42px] items-center justify-center rounded-lg bg-brand px-4 text-[14px] font-bold text-ink disabled:opacity-60">
-              {loading ? "…" : LISTING_COPY.place}
+              {loading ? <LoadingSpinner variant="inline" className="text-ink" /> : LISTING_COPY.place}
             </button>
             <button type="button" disabled={loading} onClick={() => onSave(false)} className="inline-flex min-h-[42px] items-center justify-center rounded-lg border-2 border-ink px-4 text-[14px] font-bold disabled:opacity-60">
               {LISTING_COPY.saveDraft}
@@ -688,7 +689,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
           پیش‌نویس
         </button>
         <button type="button" disabled={loading} onClick={() => onSave(true)} className="inline-flex min-h-[42px] flex-[2] items-center justify-center rounded-lg bg-brand text-[14px] font-bold text-ink disabled:opacity-60">
-          {loading ? "…" : LISTING_COPY.place}
+          {loading ? <LoadingSpinner variant="inline" className="text-ink" /> : LISTING_COPY.place}
         </button>
       </div>
     </div>

@@ -31,12 +31,14 @@ export const instant = false;
 function offerKind(offer) {
   if (offer === "CustomItem") return "آیتم";
   if (offer === "Currency") return "ارز";
+  if (offer === "ConsoleGame") return "بازی";
   return "اکانت";
 }
 
 function categoryForOffer(offer) {
   if (offer === "CustomItem") return "items";
   if (offer === "Currency") return "currency";
+  if (offer === "ConsoleGame") return "games";
   return "accounts";
 }
 
@@ -88,6 +90,49 @@ function listingPrice(listing) {
 function listingDetails(listing, { hideGame } = {}) {
   const game = listing.game_name || "";
   const rows = [{ label: "بازی", value: game, mobileHidden: hideGame }];
+  if (listing.offer_type === "ConsoleGame") {
+    const attrs = listing.attributes || {};
+    const labels = {
+      platform: "پلتفرم",
+      format: "نوع",
+      console_model: "کنسول",
+      condition: "وضعیت",
+      region: "ریجن",
+      edition: "نسخه",
+      dlc: "الحاقیه",
+      shipping: "تحویل",
+    };
+    const values = {
+      playstation: "پلی‌استیشن",
+      xbox: "ایکس‌باکس",
+      nintendo: "نینتندو",
+      pc: "PC",
+      disc: "دیسک",
+      cartridge: "کارتریج",
+      account: "اکانت",
+      rack: "راک",
+      new: "آکبند",
+      used: "کارکرده",
+      none: "ندارد",
+      unused: "استفاده نشده",
+      post: "پست",
+      meetup: "تحویل حضوری",
+      ps4: "PS4",
+      ps5: "PS5",
+      "xbox-one": "Xbox One",
+      "xbox-series": "Xbox Series",
+      "xbox-series-s": "Xbox Series S",
+      "xbox-series-x": "Xbox Series X",
+      switch: "Switch",
+      "switch-2": "Switch 2",
+    };
+    for (const key of Object.keys(labels)) {
+      const raw = attrs[key];
+      if (!raw) continue;
+      rows.push({ label: labels[key], value: values[raw] || String(raw) });
+    }
+    return rows;
+  }
   if (listing.offer_type === "Currency") {
     if (listing.price_unit_label) rows.push({ label: "واحد", value: listing.price_unit_label });
     if (listing.attributes?.region) rows.push({ label: "ریجن یا سرور", value: String(listing.attributes.region) });
@@ -236,6 +281,8 @@ export default async function ShopListingPage({ params }) {
               <div className="mb-2 text-[16px] font-bold leading-[24px]">فروشنده</div>
               <ProductSellerCard
                 seller={{
+                  id: seller.id,
+                  slug: seller.slug,
                   name: seller.name || "فروشنده",
                   feedback,
                   reviews,
@@ -272,6 +319,8 @@ export default async function ShopListingPage({ params }) {
               <ProductProtectCard title="خرید چطور محافظت می‌شود" items={PROTECT} />
               <ProductSellerCard
                 seller={{
+                  id: seller.id,
+                  slug: seller.slug,
                   name: seller.name || "فروشنده",
                   feedback,
                   reviews,

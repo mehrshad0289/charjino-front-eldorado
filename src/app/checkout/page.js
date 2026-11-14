@@ -1,12 +1,12 @@
 import Link from "next/link";
 import AccountCheckoutPage from "../../components/eldorado/AccountCheckoutPage";
+import Logo from "../../components/eldorado/Logo";
 import Footer from "../../components/eldorado/Footer";
 import ChatBubble from "../../components/eldorado/ChatBubble";
 import TrustpilotStars, {
   TrustpilotLogo,
 } from "../../components/eldorado/TrustpilotStars";
 import {
-  CK_LOGO,
   CK_PRODUCT,
   CK_PAYMENTS,
   CK_SAFE_PAYMENT,
@@ -53,8 +53,6 @@ export const metadata = {
   title: "Checkout - Eldorado",
   description: "Secure checkout — complete your Eldorado order.",
 };
-
-export const dynamic = "force-dynamic";
 
 function LockIcon() {
   return (
@@ -107,13 +105,9 @@ export default async function CheckoutPage({ searchParams }) {
       <header className="flex min-h-[72px] w-full bg-card shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,_rgba(9,9,11,0.02)_0px_12px_8px_0px]">
         <div className="flex basis-full justify-start pl-4 lg:basis-[60%] lg:justify-end lg:pl-0">
           <div className="flex w-full max-w-[726px] items-center gap-1">
-            <Link href="/" aria-label="Eldorado logo" className="flex items-center text-[14px] leading-[21px]">
+            <Link href="/" aria-label="شارژینو" className="flex items-center text-[14px] leading-[21px]">
               <div className="flex py-2 pl-4 pr-[15px] lg:pl-6">
-                <div className="flex">
-                  <div className="h-10 w-[164px] overflow-hidden align-middle">
-                    <img src={CK_LOGO} alt="Eldorado" className="block size-full" />
-                  </div>
-                </div>
+                <Logo color="#0A0A0A" />
               </div>
             </Link>
           </div>

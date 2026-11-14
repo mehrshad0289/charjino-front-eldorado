@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { formatTomanPrice } from "../../lib/format-toman";
 import { toFaDigits } from "../../lib/fa-digits";
 import { CURRENCY_LISTING_COPY } from "./data/listingData";
+import EldSelect from "./EldSelect";
 
 const SORTS = [
   { id: "recommended", label: "پیشنهادی" },
@@ -64,21 +65,17 @@ export default function CurrencyOffersBrowser({ offers = [], unitLabel = "", reg
         {regionOptions.length > 0 ? (
           <label className="mt-4 block text-[14px] font-bold">
             ریجن یا سرور
-            <select
+            <EldSelect
+              className="mt-1"
+              ariaLabel="ریجن یا سرور"
               value={region}
-              onChange={(event) => {
-                setRegion(event.target.value);
+              onChange={(value) => {
+                setRegion(value);
                 setSelectedId("");
                 setQuantity(0);
               }}
-              className="mt-1 block h-[42px] w-full rounded-lg bg-inputgray px-3 font-normal"
-            >
-              {regionOptions.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
+              options={regionOptions.map((item) => ({ value: item, label: item }))}
+            />
           </label>
         ) : null}
         {selected ? (

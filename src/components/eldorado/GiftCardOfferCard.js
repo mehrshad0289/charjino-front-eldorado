@@ -60,7 +60,7 @@ export default function GiftCardOfferCard({
   onBuyerFieldChange,
   coupon = null,
 }) {
-  const heading = selected ? selected.name || selected.label || title : title;
+  const heading = selected ? selected.faceLabel || selected.name || selected.label || title : title;
   const icon = selected?.img || productIcon;
   const region = catalogRegionLabel(selected?.region) || selected?.region || "";
   const price = selected?.from || "";
@@ -93,6 +93,23 @@ export default function GiftCardOfferCard({
               <span className="font-bold">{region}</span>
             </div>
           ) : null}
+          {selected.faceLabel ? (
+            <div className="flex justify-between gap-3 px-3.5 py-2.5 md:px-6 md:py-3">
+              <span className="text-graytext">{GIFT_SHOP_CHROME.regionAmount}</span>
+              <span className="font-bold">{selected.faceLabel}</span>
+            </div>
+          ) : null}
+          {selected.usdLabel ? (
+            <div className="flex flex-col gap-1 px-3.5 py-2.5 md:px-6 md:py-3">
+              <div className="flex justify-between gap-3">
+                <span className="text-graytext">{GIFT_SHOP_CHROME.usdValue}</span>
+                <span className="font-bold">{selected.usdLabel}</span>
+              </div>
+              {selected.faceApproximate ? (
+                <span className="text-[12px] text-graytext">{GIFT_SHOP_CHROME.usdApproxNote}</span>
+              ) : null}
+            </div>
+          ) : null}
           <div className="flex justify-between border-y border-cardborder px-3.5 py-3 md:px-6 md:py-3.5">
             <div className="flex items-center gap-1 text-graytext">
               <span>{GIFT_SHOP_CHROME.deliveryTime}</span>
@@ -118,6 +135,7 @@ export default function GiftCardOfferCard({
           </div>
           {price || payable ? (
             <div className="flex flex-col gap-1 px-3.5 py-2.5 md:px-6 md:pb-3">
+              <span className="text-sm text-graytext">{GIFT_SHOP_CHROME.purchasePrice}</span>
               {payable ? (
                 <>
                   {price ? <span className="text-sm font-normal text-graytext line-through">{price}</span> : null}

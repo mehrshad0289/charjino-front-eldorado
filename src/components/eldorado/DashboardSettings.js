@@ -8,6 +8,7 @@ import { accountAvatarUrl, accountInitials } from "@/lib/account-display";
 import { toFaDigits } from "@/lib/fa-digits";
 import { FA } from "./data/faCopy";
 import { DASHBOARD_SETTINGS_PAGE } from "./data/dashboardData";
+import LoadingSpinner from "./LoadingSpinner";
 
 const CARD_SHADOW = "shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,_rgba(9,9,11,0.02)_0px_12px_8px_0px]";
 const LOCKED_INPUT =
@@ -195,7 +196,8 @@ export default function DashboardSettings({ user, seller = null }) {
   }
 
   return (
-    <div className="mt-1 max-w-[1048px] px-6 pb-[50px]">
+    <div className="mt-1 w-full px-6 pb-[50px]">
+      <div className="grid grid-cols-1 items-start gap-x-6 min-[961px]:grid-cols-2">
       <section className="mt-8">
         <h4 className="mb-3 text-[24px] font-bold leading-[normal]">{d.profileTitle}</h4>
         <div className={`mb-[10px] bg-white ${CARD_SHADOW}`}>
@@ -237,7 +239,7 @@ export default function DashboardSettings({ user, seller = null }) {
                       disabled={nameBusy || name.trim().length < 2}
                       className="absolute end-3 text-[12px] font-bold uppercase tracking-[0.36px] text-[rgb(71,131,255)] disabled:opacity-50"
                     >
-                      {nameBusy ? d.saving : d.save}
+                      {nameBusy ? <LoadingSpinner variant="inline" size={14} className="text-[rgb(71,131,255)]" /> : d.save}
                     </button>
                   ) : (
                     <button
@@ -302,7 +304,7 @@ export default function DashboardSettings({ user, seller = null }) {
                 onClick={() => fileRef.current?.click()}
                 className={DARK_BTN}
               >
-                {avatarBusy ? d.saving : d.uploadImage}
+                {avatarBusy ? <LoadingSpinner variant="inline" className="text-white" /> : d.uploadImage}
               </button>
               <div className="mt-[10px] text-[14px] text-[rgb(98,99,98)]">{d.pictureNote}</div>
               {avatarMsg ? <p className="mt-2 text-[14px] text-[rgb(106,102,123)]">{avatarMsg}</p> : null}
@@ -348,7 +350,7 @@ export default function DashboardSettings({ user, seller = null }) {
                       onClick={logoutEverywhere}
                       className={GRAY_BTN}
                     >
-                      {logoutBusy ? d.saving : d.logoutCta}
+                      {logoutBusy ? <LoadingSpinner variant="inline" className="text-ink" /> : d.logoutCta}
                     </button>
                     <p className="mb-1 mt-[10px] max-w-[620px] text-[14px] leading-[21px] text-[rgb(106,102,123)]">
                       {d.logoutBody}
@@ -408,7 +410,7 @@ export default function DashboardSettings({ user, seller = null }) {
         {prefsMsg ? <p className="mb-2 text-[14px] text-[rgb(106,102,123)]">{prefsMsg}</p> : null}
       </section>
 
-      <section className="mt-[30px]">
+      <section className="mt-[30px] min-[961px]:col-span-2">
         <h4 className="mb-3 text-[24px] font-bold leading-[normal]">{d.descriptionTitle}</h4>
         <div className={`mb-[10px] w-full bg-white px-[30px] py-6 ${CARD_SHADOW}`}>
           <form onSubmit={saveBio} className="max-w-[540px]">
@@ -424,12 +426,13 @@ export default function DashboardSettings({ user, seller = null }) {
               />
             </div>
             <button type="submit" disabled={bioBusy} className={`${DARK_BTN} min-h-[42px] min-w-[70px]`}>
-              {bioBusy ? d.saving : d.changeDescription}
+              {bioBusy ? <LoadingSpinner variant="inline" className="text-white" /> : d.changeDescription}
             </button>
             {bioMsg ? <p className="mt-3 text-[14px] text-[rgb(106,102,123)]">{bioMsg}</p> : null}
           </form>
         </div>
       </section>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import MegaMenu from "./MegaMenu";
 import { CATEGORY_NAV, FA } from "./data/faCopy";
 import { loadNavMega, peekNavMega, prefetchNavMegas } from "./nav-mega-client";
@@ -72,7 +73,7 @@ export default function CategoryNav({ activeCategory = null }) {
   };
 
   useEffect(() => {
-    const keys = CATEGORY_NAV.map((item) => item.key);
+    const keys = CATEGORY_NAV.filter((item) => item.mega).map((item) => item.key);
     prefetchNavMegas(keys);
     keys.forEach((key) => {
       loadNavMega(key).finally(() => markSettled(key));
@@ -116,17 +117,23 @@ export default function CategoryNav({ activeCategory = null }) {
           {CATEGORY_NAV.map((c) => {
             const expanded = openCategory === c.key;
             const active = expanded || activeCategory === c.key;
+            const itemClass = `flex h-10 items-center gap-1 px-3 pb-0.5 text-sm font-bold tracking-[0.48px] ${
+              active ? "rounded-t-sm bg-catactive text-white" : "text-white hover:text-brand"
+            }`;
             return (
               <li key={c.key}>
+                {c.mega === false ? (
+                  <Link href={c.href} className={itemClass}>
+                    {c.label}
+                  </Link>
+                ) : (
                 <button
                   type="button"
                   aria-expanded={expanded}
                   aria-haspopup="true"
                   aria-controls={expanded ? `nav-mega-${c.key}` : undefined}
                   onClick={() => toggleMenu(c.key)}
-                  className={`flex h-10 items-center gap-1 px-3 pb-0.5 text-sm font-bold tracking-[0.48px] ${
-                    active ? "rounded-t-sm bg-catactive text-white" : "text-white hover:text-brand"
-                  }`}
+                  className={itemClass}
                 >
                   {c.label}
                   <svg
@@ -146,6 +153,7 @@ export default function CategoryNav({ activeCategory = null }) {
                     />
                   </svg>
                 </button>
+                )}
               </li>
             );
           })}

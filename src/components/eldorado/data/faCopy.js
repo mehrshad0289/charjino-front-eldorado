@@ -22,6 +22,8 @@ export const FA = {
   logo: "شارژینو",
   notifications: "اعلان‌ها",
   messages: "پیام‌ها",
+  tickets: "تیکت‌ها",
+  newTicket: "تیکت جدید",
   favorites: "علاقه‌مندی‌ها",
   accountMenu: "منوی حساب",
   themeToggle: "تغییر پوسته",
@@ -38,6 +40,8 @@ export const FA = {
   feedback: "نظرات",
   accountSettings: "تنظیمات حساب",
   viewProfile: "مشاهده پروفایل",
+  becomeSeller: "فروشنده شو",
+  bronzeRank: "رتبه برنز",
   registered: "ثبت‌نام",
   profileAvatar: "تصویر پروفایل",
   newOffer: "آگهی جدید",
@@ -50,6 +54,7 @@ export const FA = {
   currency: "ارز",
   items: "آیتم",
   boosting: "بوستینگ",
+  games: "بازی",
   popular: "محبوب",
   popularGames: "بازی‌های محبوب",
   recentlyViewedGames: "بازی‌های اخیراً دیده‌شده",
@@ -86,6 +91,7 @@ export const SHOP_GIFT_CARDS_HREF = "/shop/gift-cards";
 export const SHOP_TOPUPS_HREF = "/shop/top-ups";
 export const SHOP_ITEMS_HREF = "/shop/items";
 export const SHOP_BOOSTING_HREF = "/shop/boosting";
+export const SHOP_GAMES_HREF = "/shop/games";
 export const SHOP_CURRENCY_HREF = "/shop/currency";
 export const CONTACT_HREF = "/contact-us";
 export const SUPPORT_HREF = "/support";
@@ -95,7 +101,7 @@ export const CATEGORY_NAV = [
   { key: "Accounts", label: FA.accounts, href: SHOP_ACCOUNTS_HREF, mega: true },
   { key: "Top ups", label: FA.topUps, href: SHOP_TOPUPS_HREF, mega: true },
   { key: "Items", label: FA.items, href: SHOP_ITEMS_HREF, mega: true },
-  { key: "Boosting", label: FA.boosting, href: SHOP_BOOSTING_HREF, mega: true },
+  { key: "Games", label: FA.games, href: SHOP_GAMES_HREF, mega: false },
   { key: "Gift cards", label: FA.giftCards, href: SHOP_GIFT_CARDS_HREF, mega: true },
   { key: "Currency", label: FA.currency, href: SHOP_CURRENCY_HREF, mega: true },
 ];

@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import SellerListingsTable from "./SellerListingsTable";
 import { ITEM_LISTING_COPY } from "./data/listingData";
+import EldSelect from "./EldSelect";
 
 const DELIVERY = {
   in_game_trade: "ترید داخل بازی",
@@ -44,18 +45,16 @@ export default function ItemOffersShelf({ items = [], editBase = "/dashboard/off
         </label>
         <label className="text-[14px] font-bold">
           {ITEM_LISTING_COPY.delivery}
-          <select
+          <EldSelect
+            className="mt-1"
+            ariaLabel={ITEM_LISTING_COPY.delivery}
             value={delivery}
-            onChange={(event) => setDelivery(event.target.value)}
-            className="mt-1 block h-[42px] w-full rounded-lg border-2 border-[rgb(239,239,241)] bg-[rgb(239,239,241)] px-3 text-[14px] font-normal outline-none"
-          >
-            <option value="all">همه</option>
-            {methods.map((method) => (
-              <option key={method} value={method}>
-                {DELIVERY[method] || method}
-              </option>
-            ))}
-          </select>
+            onChange={setDelivery}
+            options={[
+              { value: "all", label: "همه" },
+              ...methods.map((method) => ({ value: method, label: DELIVERY[method] || method })),
+            ]}
+          />
         </label>
       </div>
       {visible.length === 0 ? (

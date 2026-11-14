@@ -51,13 +51,8 @@ export const DASHBOARD_NAV_GROUPS = [
       { id: "Items", label: FA.items, href: "/dashboard/offers/CustomItem" },
       { id: "Gift Cards", label: FA.giftCards, href: "/dashboard/offers/GiftCard" },
       { id: "Currency", label: FA.currency, href: "/dashboard/offers/Currency" },
+      { id: "Games", label: FA.games, href: "/dashboard/offers/ConsoleGame" },
     ],
-  },
-  {
-    icon: "boosting",
-    id: "Boosting",
-    label: FA.boosting,
-    children: [{ id: "My requests", label: FA.myRequests, href: "/dashboard/boosting/my-requests" }],
   },
 ];
 
@@ -70,16 +65,16 @@ export const DASHBOARD_NAV_LINKS = [
   { icon: "loyalty", id: "Loyalty", label: FA.loyalty, href: "/dashboard/loyalty" },
   { icon: "wallet", id: "Wallet", label: FA.wallet, href: "/dashboard/wallet" },
   { icon: "messages", id: "Messages", label: FA.messages, href: "/dashboard/messages" },
+  { icon: "tickets", id: "Tickets", label: FA.tickets, href: "/dashboard/tickets" },
   { icon: "notifications", id: "Notifications", label: FA.notifications, href: "/dashboard/notifications" },
   { icon: "feedback", id: "Feedback", label: FA.feedback, href: "/dashboard/feedback" },
   { icon: "settings", id: "Account settings", label: FA.accountSettings, href: "/dashboard/settings" },
 ];
 
 export const DASHBOARD_VIEW_PROFILE = {
-  icon: "profile",
+  icon: "viewProfile",
   id: "View Profile",
   label: FA.viewProfile,
-  href: "/dashboard/settings",
 };
 
 /* /dashboard/offers/Account page content (empty state — the capture's
@@ -243,15 +238,30 @@ export const DASHBOARD_WALLET_PAGE = {
   },
 };
 
+export const DASHBOARD_TICKETS_PAGE = {
+  icon: "tickets",
+  title: FA.tickets,
+  action: { label: FA.newTicket, href: "/dashboard/tickets/new", ariaLabel: FA.newTicket },
+  listAction: { label: "تیکت‌های من", href: "/dashboard/tickets", ariaLabel: "تیکت‌های من" },
+};
+
 export const DASHBOARD_MESSAGES_PAGE = {
   icon: "messages",
   title: FA.messages,
-  /* Session 22 (messages-notempty capture): the empty state is gone —
-     the page now renders a filter chip row + an "Unread messages only"
-     toggle above an (in every reference) client-rendered chat container.
-     Chips verbatim: All active (dark), the rest on rgb(244,244,244). */
-  chips: ["All", "Boosting", "Orders", "Support", "Pre-purchase"],
-  unreadToggleLabel: "Unread messages only",
+  chips: [
+    { id: "all", label: "همه" },
+    { id: "buy", label: "خرید" },
+    { id: "sell", label: "فروش" },
+  ],
+  unreadToggleLabel: "فقط خوانده‌نشده",
+  emptyTitle: "هنوز گفتگویی نیست",
+  emptyText: "وقتی سفارشی بخرید یا بفروشید، همان گفتگوی سفارش اینجا هم می‌ماند تا بعد از خروج دوباره پیدایش کنید.",
+  openOrder: "مشاهده سفارش",
+  youPrefix: "شما: ",
+  arbiterName: "داور شارژینو",
+  placeholder: "پیام…",
+  send: "ارسال",
+  back: "بازگشت به فهرست",
 };
 
 /* Session 18 layout kept (white cards, 24px h4, 42px inputs, dark

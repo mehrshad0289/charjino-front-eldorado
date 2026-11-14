@@ -47,17 +47,18 @@ export default function DashboardWalletTable({ balances, items }) {
 
   return (
     <>
-      <div className="flex justify-between">
-        <div
-          className={`mb-10 grid w-full max-w-[500px] items-center gap-2.5 bg-white py-[17px] px-6 ${CARD_SHADOW}`}
-          style={{ gridTemplateColumns: "1fr 105px" }}
-        >
-          <div className="relative flex flex-col">
-            <h5 className="mb-[7px] text-[14px] font-bold leading-normal">{page.balanceLabel}</h5>
-            <h4 className="text-[24px] font-bold leading-[28.8px]">
-              {formatToman(balances?.withdrawable)} تومان
-            </h4>
-          </div>
+      <div className="mb-10 grid grid-cols-1 gap-2.5 min-[961px]:grid-cols-2">
+        <div className={`bg-white py-[17px] px-6 ${CARD_SHADOW}`}>
+          <h5 className="mb-[7px] text-[14px] font-bold leading-normal">{page.withdrawableLabel}</h5>
+          <h4 className="text-[24px] font-bold leading-[28.8px]">
+            {formatToman(balances?.withdrawable)} تومان
+          </h4>
+        </div>
+        <div className={`bg-white py-[17px] px-6 ${CARD_SHADOW}`}>
+          <h5 className="mb-[7px] text-[14px] font-bold leading-normal">{page.pendingLabel}</h5>
+          <h4 className="text-[24px] font-bold leading-[28.8px]">
+            {formatToman(balances?.pending)} تومان
+          </h4>
         </div>
       </div>
       <div className="mb-[22px] flex">

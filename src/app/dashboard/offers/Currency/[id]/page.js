@@ -2,12 +2,7 @@ import { connection } from "next/server";
 import { notFound, redirect } from "next/navigation";
 import { getSessionUser } from "@/actions/auth.actions";
 import { getCurrencyOfferGames, getSellerListing, getSellerMe } from "@/actions/market.actions";
-import HeaderBar from "../../../../../components/eldorado/HeaderBar";
-import CategoryNav from "../../../../../components/eldorado/CategoryNav";
-import DashboardShell from "../../../../../components/eldorado/DashboardShell";
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
-import Footer from "../../../../../components/eldorado/Footer";
-import ChatBubble from "../../../../../components/eldorado/ChatBubble";
 import CurrencyListingWizard from "../../../../../components/eldorado/CurrencyListingWizard";
 import { CURRENCY_LISTING_COPY, LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
 import { formatToman, listingStatusMeta, sellBlockers } from "@/lib/listing";
@@ -36,17 +31,13 @@ export default async function EditCurrencyOfferPage({ params }) {
   const unit = row.price_unit_label ? ` / ${row.price_unit_label}` : "";
 
   return (
-    <div className="min-h-screen bg-page text-ink">
-      <HeaderBar user={user} />
-      <CategoryNav />
-      <main className="isolate">
-        <DashboardShell active="Currency" user={user}>
-          <DashboardPageHeader
-            icon="tag"
-            title={editable ? LISTING_COPY.editOffer : row.title}
-            action={{ label: CURRENCY_LISTING_COPY.title, href: "/dashboard/offers/Currency", ariaLabel: CURRENCY_LISTING_COPY.title }}
-          />
-          <div className="mt-1 max-w-[1048px] px-6 pb-[50px]">
+    <>
+      <DashboardPageHeader
+        icon="tag"
+        title={editable ? LISTING_COPY.editOffer : row.title}
+        action={{ label: CURRENCY_LISTING_COPY.title, href: "/dashboard/offers/Currency", ariaLabel: CURRENCY_LISTING_COPY.title }}
+      />
+      <div className="mt-1 w-full px-6 pb-[50px]">
             {editable ? (
               <CurrencyListingWizard games={games.ok ? games.items : []} listing={row} blockers={sellBlockers(seller)} />
             ) : (
@@ -64,10 +55,6 @@ export default async function EditCurrencyOfferPage({ params }) {
               </div>
             )}
           </div>
-        </DashboardShell>
-      </main>
-      <Footer />
-      <ChatBubble />
-    </div>
+    </>
   );
 }

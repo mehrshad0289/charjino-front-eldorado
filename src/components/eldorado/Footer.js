@@ -62,36 +62,12 @@ const LEGAL_LINKS = [
 ];
 
 const SOCIALS = [
-  {
-    name: "Reddit",
-    href: "https://www.reddit.com/r/EldoradoGG/",
-    path: "M14.5 2.5c-.3 0-.5.1-.7.3l-2.6 2.8A8.5 8.5 0 0 0 8 5.5c-2.4 0-4.5.8-5.7 2.1A2.3 2.3 0 0 0 2.3 12c-.1.4-.2.8-.2 1.2 0 3.3 3.4 6 7.6 6s7.6-2.7 7.6-6c0-.4-.1-.8-.2-1.2a2.3 2.3 0 0 0 .1-4.4c.1-.3.1-.6.1-.9 0-1.1-.9-2-2-2-.4 0-.8.2-1.1.4l-2.4-2.6h-.3Zm-.4 1.5 2 2.1c-.1.2-.1.4-.1.6 0 .8.5 1.5 1.2 1.8l-.3 1.5a.6.6 0 0 1-.6.5H7.7a.6.6 0 0 1-.6-.5l-.3-1.5c.7-.3 1.2-1 1.2-1.8 0-.2 0-.4-.1-.6l2.1-2.1h4.1ZM8 8.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm5.5 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM9.5 12h3v.5c0 1-.7 1.5-1.5 1.5s-1.5-.5-1.5-1.5V12Z",
-  },
-  {
-    name: "TikTok",
-    href: "https://www.tiktok.com/@eldoradogg1",
-    path: "M16.6 3c.3 1.7 1.4 3.1 3.4 3.3v2.9c-1.3 0-2.5-.4-3.4-1v5.6c0 3.4-2.3 5.7-5.4 5.7A5.2 5.2 0 0 1 6 14.2c0-3 2.3-5.3 5.4-5.2v3c-.3-.1-.6-.1-.9-.1-1.3.1-2.2 1.1-2.1 2.4.1 1.2 1.1 2.2 2.4 2.2 1.4 0 2.4-1 2.4-2.6V3h3.4Z",
-  },
-  {
-    name: "Twitter",
-    href: "https://x.com/EldoradoGg",
-    path: "M19.6 5.9c-.6.3-1.2.4-1.9.5.7-.4 1.2-1 1.4-1.8-.6.4-1.3.6-2.1.8a3.3 3.3 0 0 0-5.7 2.3c0 .3 0 .5.1.8a9.3 9.3 0 0 1-6.8-3.4 3.3 3.3 0 0 0 1 4.4c-.5 0-1-.2-1.5-.4 0 1.6 1.1 2.9 2.6 3.2-.3.1-.6.1-.9.1l-.6-.1a3.3 3.3 0 0 0 3.1 2.3A6.6 6.6 0 0 1 4 15.9a9.3 9.3 0 0 0 5 1.5c6 0 9.3-5 9.3-9.3v-.4c.6-.5 1.2-1.1 1.6-1.8h.3Z",
-  },
-  {
-    name: "Facebook",
-    href: "https://www.facebook.com/eldoradogg.official/",
-    path: "M13.5 21v-7h2.4l.4-2.8h-2.8V9.4c0-.8.2-1.4 1.4-1.4h1.5V5.5c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2h-2.4V14h2.4v7h3Z",
-  },
-  {
-    name: "Instagram",
-    href: "https://www.instagram.com/eldoradogg_official/",
-    path: "M11 4c1.9 0 2.2 0 3 .1.8 0 1.3.2 1.7.3.5.2.8.4 1.2.8.4.4.6.7.8 1.2.1.4.3.9.3 1.7.1.8.1 1.1.1 3s0 2.2-.1 3c0 .8-.2 1.3-.3 1.7-.2.5-.4.8-.8 1.2-.4.4-.7.6-1.2.8-.4.1-.9.3-1.7.3-.8.1-1.1.1-3 .1s-2.2 0-3-.1c-.8 0-1.3-.2-1.7-.3-.5-.2-.8-.4-1.2-.8-.4-.4-.6-.7-.8-1.2-.1-.4-.3-.9-.3-1.7-.1-.8-.1-1.1-.1-3s0-2.2.1-3c0-.8.2-1.3.3-1.7.2-.5.4-.8.8-1.2.4-.4.7-.6 1.2-.8.4-.1.9-.3 1.7-.3.8-.1 1.1-.1 3-.1Zm0 1.8c-1.9 0-2.1 0-2.9.1-.7 0-1.1.1-1.4.2-.3.1-.6.3-.8.5-.2.2-.4.5-.5.8-.1.3-.2.7-.2 1.4-.1.8-.1 1-.1 2.9s0 2.1.1 2.9c0 .7.1 1.1.2 1.4.1.3.3.6.5.8.2.2.5.4.8.5.3.1.7.2 1.4.2.8.1 1 .1 2.9.1s2.1 0 2.9-.1c.7 0 1.1-.1 1.4-.2.3-.1.6-.3.8-.5.2-.2.4-.5.5-.8.1-.3.2-.7.2-1.4.1-.8.1-1 .1-2.9s0-2.1-.1-2.9c0-.7-.1-1.1-.2-1.4-.1-.3-.3-.6-.5-.8a2 2 0 0 0-.8-.5c-.3-.1-.7-.2-1.4-.2-.8-.1-1-.1-2.9-.1Zm0 2.9a3.9 3.9 0 1 1 0 7.8 3.9 3.9 0 0 1 0-7.8Zm0 1.8a2.1 2.1 0 1 0 0 4.2 2.1 2.1 0 1 0 0-4.2Zm4.1-3a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8Z",
-  },
-  {
-    name: "Youtube",
-    href: "https://www.youtube.com/@Eldorado.gg_Official",
-    path: "M19.6 7.2a2 2 0 0 0-1.4-1.4C16.9 5.4 11 5.4 11 5.4s-5.9 0-7.2.4A2 2 0 0 0 2.4 7.2 21 21 0 0 0 2 11c0 1.3.1 2.6.4 3.8a2 2 0 0 0 1.4 1.4c1.3.4 7.2.4 7.2.4s5.9 0 7.2-.4a2 2 0 0 0 1.4-1.4c.3-1.2.4-2.5.4-3.8s-.1-2.6-.4-3.8ZM9.2 13.7V8.3l4.8 2.7-4.8 2.7Z",
-  },
+  { name: "Reddit", href: "https://www.reddit.com/r/EldoradoGG/", src: "/icons/social/reddit-icon.svg" },
+  { name: "TikTok", href: "https://www.tiktok.com/@eldoradogg1", src: "/icons/social/tiktok-icon.svg" },
+  { name: "Twitter", href: "https://x.com/EldoradoGg", src: "/icons/social/twitter-icon.svg" },
+  { name: "Facebook", href: "https://www.facebook.com/eldoradogg.official/", src: "/icons/social/facebook-icon.svg" },
+  { name: "Instagram", href: "https://www.instagram.com/eldoradogg_official/", src: "/icons/social/instagram-icon.svg" },
+  { name: "Youtube", href: "https://www.youtube.com/@Eldorado.gg_Official", src: "/icons/social/youtube-icon.svg" },
 ];
 
 function GlobeIcon() {
@@ -142,7 +118,7 @@ export default function Footer({ showLang = true }) {
         {/* brand + 3 link columns (4-col grid per reference) */}
         <div className="mb-[72px] grid grid-cols-1 gap-6 pt-[54px] sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex max-w-[255px] flex-col gap-6">
-            <Link href="/" aria-label="Eldorado logo">
+            <Link href="/" aria-label="شارژینو">
               <Logo color="#FFFFFF" />
             </Link>
             <p className="text-base leading-normal text-white">
@@ -156,11 +132,9 @@ export default function Footer({ showLang = true }) {
                   aria-label={s.name}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white hover:text-brand"
+                  className="opacity-100 hover:opacity-80"
                 >
-                  <svg width="24" height="24" viewBox="0 0 22 24" fill="currentColor" aria-hidden="true">
-                    <path d={s.path} />
-                  </svg>
+                  <img src={s.src} alt="" width={24} height={24} className="block size-6" />
                 </a>
               ))}
             </div>

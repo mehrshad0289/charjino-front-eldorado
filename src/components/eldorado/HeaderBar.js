@@ -7,8 +7,9 @@ import { getSessionUser, logout } from "@/actions/auth.actions";
 import Logo from "./Logo";
 import SearchOverlay from "./SearchOverlay";
 import MobileMenu from "./MobileMenu";
+import UserAccountDropdown from "./UserAccountDropdown";
+import DashboardIcon from "./DashboardIcons";
 import { FA } from "./data/faCopy";
-import { accountAvatarUrl, accountInitials } from "@/lib/account-display";
 
 function SearchIcon({ className = "", stroke = "#ffffff", size = 24 }) {
   return (
@@ -41,166 +42,38 @@ function GearIcon() {
   );
 }
 
-/* Logged-in right side (dashboard capture): three 42px rounded icon
-   buttons + 44px avatar. The capture's icomoon glyphs decode empty, so
-   the buttons draw neutral SVGs (bell / chat / favorites — unnamed in any
-   reference, documented assumption) and the avatar opens no menu.
-   Session 20 (/verify/status capture): the same header can carry a yellow
-   count badge on the MIDDLE icon (bg rgb(255,201,80), ink text 12px,
-   top-right, overhangs the button edge) and an orange "!" alert badge on
-   the avatar (bg rgb(255,141,0), 12px, top-right of the 44px circle) —
-   both optional props, off by default so every verified page is untouched.
-   Session 22 (messages-notempty capture): the FOURTH icon (Favorites)
-   can carry the same yellow badge with a "9+" value — optional favCount
-   prop, default off. */
+/* Logged-in right side: notifications + messages (reference heder glyphs)
+   then the avatar dropdown. Optional yellow count on notifications and
+   orange "!" on the avatar. */
 function LoggedInActions({
   user,
   notiCount = null,
-  favCount = null,
   avatarAlert = false,
-  accountMenu = false,
   onLogout,
 }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const avatar = accountAvatarUrl(user);
-
   return (
     <>
-      <button
-        type="button"
+      <Link
+        href="/dashboard/notifications"
         aria-label={FA.notifications}
-        className="hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
-      >
-        <BellIcon />
-      </button>
-      <button
-        type="button"
-        aria-label={FA.messages}
         className="relative hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
       >
-        <ChatIcon />
+        <DashboardIcon name="notifications" size={24} />
         {notiCount != null && (
-          <span className="absolute -right-1 top-0 block min-h-4 rounded-[0.4375rem] bg-[rgb(255,_201,_80)] px-[5px] py-[2px] text-[12px] leading-[normal] text-ink">
+          <span className="absolute -end-1 top-0 block min-h-4 rounded-[0.4375rem] bg-brand px-[5px] py-[2px] text-[12px] leading-[normal] text-ink">
             {notiCount}
           </span>
         )}
-      </button>
-      <button
-        type="button"
-        aria-label={FA.favorites}
-        className="relative hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
+      </Link>
+      <Link
+        href="/dashboard/messages"
+        aria-label={FA.messages}
+        className="hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
       >
-        <HeartIcon />
-        {favCount != null && (
-          <span className="absolute -right-1 top-0 block min-h-4 rounded-[0.4375rem] bg-[rgb(255,_201,_80)] px-[5px] py-[2px] text-[12px] leading-[normal] text-ink">
-            {favCount}
-          </span>
-        )}
-      </button>
-      <div className="relative ms-1 flex items-center">
-        <button
-          type="button"
-          aria-label={FA.accountMenu}
-          aria-expanded={accountMenu ? menuOpen : undefined}
-          className="relative flex items-center"
-          onClick={() => {
-            if (accountMenu) setMenuOpen((open) => !open);
-          }}
-        >
-          <span className="size-11 overflow-hidden rounded-full border-2 border-black/0 bg-searchbg text-center text-sm font-bold leading-[44px] text-white">
-            {avatar ? (
-              <img alt="" src={avatar} className="block size-11 object-cover align-middle" />
-            ) : (
-              accountInitials(user)
-            )}
-          </span>
-          {avatarAlert && (
-            <span className="absolute right-0 top-0 flex h-4 min-h-4 items-center justify-center rounded-[0.4375rem] bg-[rgb(255,_141,_0)] px-[5px] pt-[2px] text-[12px] leading-[18px] text-ink">
-              !
-            </span>
-          )}
-        </button>
-        {accountMenu && menuOpen ? (
-          <div className="absolute end-0 top-[calc(100%+8px)] z-50 min-w-[160px] rounded-lg border border-searchstroke bg-headerdark p-2 text-sm text-white">
-            <Link
-              href="/dashboard/orders/purchased"
-              className="block rounded-md px-3 py-2 hover:bg-white/10"
-              onClick={() => setMenuOpen(false)}
-            >
-              {FA.purchasedOrders}
-            </Link>
-            <Link
-              href="/dashboard/orders/sold"
-              className="block rounded-md px-3 py-2 hover:bg-white/10"
-              onClick={() => setMenuOpen(false)}
-            >
-              {FA.soldOrders}
-            </Link>
-            <Link
-              href="/dashboard/offers/Account/new#listing-game"
-              className="block rounded-md px-3 py-2 hover:bg-white/10"
-              onClick={() => setMenuOpen(false)}
-            >
-              {FA.sellAccount}
-            </Link>
-            <Link
-              href="/dashboard/settings"
-              className="block rounded-md px-3 py-2 hover:bg-white/10"
-              onClick={() => setMenuOpen(false)}
-            >
-              {FA.dashboard}
-            </Link>
-            <button
-              type="button"
-              className="block w-full rounded-md px-3 py-2 text-start hover:bg-white/10"
-              onClick={() => {
-                setMenuOpen(false);
-                onLogout?.();
-              }}
-            >
-              {FA.logout}
-            </button>
-          </div>
-        ) : null}
-      </div>
+        <DashboardIcon name="messages" size={24} />
+      </Link>
+      <UserAccountDropdown user={user} avatarAlert={avatarAlert} onLogout={onLogout} />
     </>
-  );
-}
-
-function BellIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M12 4a6 6 0 0 1 6 6v3.5l1.5 2.5h-15L6 13.5V10a6 6 0 0 1 6-6Z"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function ChatIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3.5" y="5.5" width="17" height="12" rx="2" stroke="currentColor" strokeWidth="1.8" />
-      <path d="m4.5 7 7.5 6 7.5-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function HeartIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M12 19.5S4 15 4 9.8C4 7.4 5.9 5.5 8.2 5.5c1.5 0 2.9.8 3.8 2 .9-1.2 2.3-2 3.8-2 2.3 0 4.2 1.9 4.2 4.3 0 5.2-8 9.7-8 9.7Z"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
 
@@ -208,7 +81,6 @@ export default function HeaderBar({
   loggedIn = false,
   user = null,
   notiCount = null,
-  favCount = null,
   avatarAlert = false,
 }) {
   const pathname = usePathname();
@@ -294,7 +166,7 @@ export default function HeaderBar({
         <div className="ms-auto flex shrink-0 items-center gap-1">
           <Link
             href="/dashboard/offers/Account"
-            className="inline-flex h-[42px] items-center px-3 text-sm font-bold text-white hover:text-brand"
+            className="inline-flex h-[42px] min-w-[70px] items-center justify-center rounded-lg bg-brand px-4 text-sm font-bold text-ink hover:bg-brand-deep"
           >
             {FA.sell}
           </Link>
@@ -304,9 +176,7 @@ export default function HeaderBar({
             <LoggedInActions
               user={liveUser}
               notiCount={notiCount}
-              favCount={favCount}
               avatarAlert={avatarAlert}
-              accountMenu={!captureSession}
               onLogout={handleLogout}
             />
           ) : (

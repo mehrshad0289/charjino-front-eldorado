@@ -1,11 +1,6 @@
-import HeaderBar from "../../../components/eldorado/HeaderBar";
-import CategoryNav from "../../../components/eldorado/CategoryNav";
-import DashboardShell from "../../../components/eldorado/DashboardShell";
 import DashboardPageHeader from "../../../components/eldorado/DashboardPageHeader";
 import DashboardFeedbackStats from "../../../components/eldorado/DashboardFeedbackStats";
 import EmptyState from "../../../components/eldorado/EmptyState";
-import Footer from "../../../components/eldorado/Footer";
-import ChatBubble from "../../../components/eldorado/ChatBubble";
 import { DASHBOARD_FEEDBACK_PAGE } from "../../../components/eldorado/data/dashboardData";
 
 /* Dashboard page /dashboard/feedback (own .make capture `ui ux/Feedback/
@@ -24,20 +19,12 @@ export const metadata = {
 export default function DashboardFeedbackPage() {
   const { icon, title, stats, filters, emptyState } = DASHBOARD_FEEDBACK_PAGE;
   return (
-    <div className="min-h-screen bg-page text-ink">
-      <HeaderBar />
-      <CategoryNav />
-      <main className="isolate">
-        <DashboardShell active="Feedback">
-          <DashboardPageHeader icon={icon} title={title} />
-          <div className="relative mt-8 max-w-[1048px] px-6 pb-[50px]">
-            <DashboardFeedbackStats stats={stats} filters={filters} />
-            <EmptyState {...emptyState} />
-          </div>
-        </DashboardShell>
-      </main>
-      <Footer />
-      <ChatBubble />
-    </div>
+    <>
+      <DashboardPageHeader icon={icon} title={title} />
+      <div className="relative mt-8 w-full px-6 pb-[50px]">
+        <DashboardFeedbackStats stats={stats} filters={filters} />
+        <EmptyState {...emptyState} />
+      </div>
+    </>
   );
 }

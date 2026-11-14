@@ -1,4 +1,5 @@
 import { PRODUCT_SELLER } from "./data/productData";
+import { publicProfileHref } from "@/lib/account-display";
 
 /* Seller card.
    Desktop (product .make capture): white card — 48px round avatar + name +
@@ -51,28 +52,64 @@ function GrayIcon({ kind }) {
 
 export default function ProductSellerCard({ seller }) {
   const s = seller || PRODUCT_SELLER;
+  const profileHref =
+    s.profileHref ||
+    publicProfileHref({
+      profileSlug: s.slug,
+      name: s.name,
+      id: s.id,
+    });
+  const reviewsHref = s.reviewsHref || (profileHref && profileHref !== "/dashboard/settings" ? `${profileHref}/reviews` : "");
+  const nameNode = profileHref && profileHref !== "/dashboard/settings" ? (
+    <a href={profileHref} className="block hover:underline">
+      {s.name}
+    </a>
+  ) : (
+    <span className="block">{s.name}</span>
+  );
+  const reviewsNode = reviewsHref ? (
+    <a href={reviewsHref} className="ms-1 underline decoration-solid">
+      {s.reviews || "نظرات"}
+    </a>
+  ) : (
+    <span className="ms-1 underline decoration-solid">{s.reviews || "2,701 reviews"}</span>
+  );
+  const feedbackNode = reviewsHref ? (
+    <a href={reviewsHref} className="ml-[4px] text-[14px] underline decoration-solid text-linkblue">
+      {s.feedbackNote || `${s.feedback} نظر`}
+    </a>
+  ) : (
+    <button type="button" className="ml-[4px] text-[14px] underline decoration-solid text-linkblue">
+      {s.feedbackNote || `${s.feedback} positive feedback`}
+    </button>
+  );
   const avatar = s.avatar ? (
     <img alt={s.name} src={s.avatar} className="block h-12 w-12 object-cover align-middle" />
   ) : (
     <span className="flex h-12 w-12 items-center justify-center bg-badgebg text-[16px] font-bold">{(s.name || "ف").slice(0, 1)}</span>
+  );
+  const avatarWrap = profileHref && profileHref !== "/dashboard/settings" ? (
+    <a href={profileHref} className="h-12 w-12 shrink-0 overflow-hidden rounded-full">
+      {avatar}
+    </a>
+  ) : (
+    <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full">{avatar}</div>
   );
   return (
     <>
       {/* mobile compact card (live @390) */}
       <div className="rounded-lg bg-white p-4 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] lg:hidden">
         <div className="flex items-center gap-[10px]">
-          <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full">
-            {avatar}
-          </div>
+          {avatarWrap}
           <div className="flex flex-col justify-center gap-[7px]">
             <div className="flex items-center gap-1 text-[14px] font-bold leading-[17px]">
-              <span className="block">{s.name}</span>
+              {nameNode}
               <VerifiedBadge />
             </div>
             <div className="flex items-center gap-1.5 text-[14px] leading-[17px]">
               <ThumbsUp />
               <span className="font-bold">{s.feedback}</span>
-              <span className="ms-1 underline decoration-solid">{s.reviews || "2,701 reviews"}</span>
+              {reviewsNode}
             </div>
           </div>
         </div>
@@ -81,19 +118,15 @@ export default function ProductSellerCard({ seller }) {
       {/* desktop capture card */}
       <div className="hidden rounded-lg bg-white shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px] lg:block">
         <div className="flex items-center gap-[12px] px-6 pb-4 pt-6">
-          <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full">
-            {avatar}
-          </div>
+          {avatarWrap}
           <div className="grow">
             <div className="flex items-center gap-1 font-bold">
-              <span className="block">{s.name}</span>
+              {nameNode}
               <VerifiedBadge />
             </div>
             <div className="mt-[4px] flex items-center gap-1 text-[14px] leading-[19.6px]">
               <ThumbsUp />
-              <button type="button" className="ml-[4px] text-[14px] underline decoration-solid text-linkblue">
-                {s.feedbackNote || `${s.feedback} positive feedback`}
-              </button>
+              {feedbackNode}
             </div>
           </div>
         </div>

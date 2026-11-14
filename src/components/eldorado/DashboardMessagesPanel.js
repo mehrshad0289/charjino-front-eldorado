@@ -1,44 +1,130 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { getMarketChats, getOrderMessages, sendOrderMessage } from "@/actions/market.actions";
 import MessagesChat from "./MessagesChat";
 
-/* Session 22 — /dashboard/messages content per the user-pushed
-   "messages-notempty" capture (ui ux/messages-notempty/, decoded with
-   decode_session22_messages.py). Replaces the session-17 empty state:
-   filter chip row (All active dark rgb(34,33,39); others bg
-   rgb(244,244,244); all font-bold 14/21 min-h-42 min-w-70 px-4 py-[10px]
-   rounded-lg, row gap 8) + "Unread messages only" toggle (track 48x20
-   rounded-2xl rgb(231,231,231), knob 24 white shadow, checked = knob
-   rgb(71,131,255) on rgba(71,131,255,0.2) per the settings-capture
-   toggle pattern; no ON state exists in this capture — documented
-   assumption) + an aria-label="Chat" container that is EMPTY in every
-   reference (the real chat is a client-rendered app; nothing invented).
-   The capture is 1920-only. Session 27: below lg the chip row no
-   longer wraps onto a second line — it becomes a single-line
-   horizontal scroll row (borderless scrollbar), matching the mobile
-   chip-row convention used across the shop pages. */
-export default function DashboardMessagesPanel({ chips, unreadToggleLabel }) {
-  const [active, setActive] = useState(chips[0]);
+export default function DashboardMessagesPanel({ chips, unreadToggleLabel, copy }) {
+  const [activeChip, setActiveChip] = useState(chips[0]?.id || "all");
   const [unreadOnly, setUnreadOnly] = useState(false);
+  const [conversations, setConversations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [activeOrderNo, setActiveOrderNo] = useState(null);
+  const [threadOpen, setThreadOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [threadLoading, setThreadLoading] = useState(false);
+  const [draft, setDraft] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
+  const activeOrderNoRef = useRef(null);
+
+  const loadInbox = useCallback(async (keepOrderNo) => {
+    setError("");
+    const side = activeChip === "buy" || activeChip === "sell" ? activeChip : null;
+    const result = await getMarketChats({ side, unreadOnly });
+    if (!result.ok) {
+      setConversations([]);
+      setError(result.message || "گفتگوها خوانده نشد.");
+      return [];
+    }
+    const items = result.items;
+    setConversations(items);
+    if (items.length === 0) {
+      setActiveOrderNo(null);
+      setThreadOpen(false);
+      return items;
+    }
+    const stillThere = keepOrderNo && items.some((item) => item.order_no === keepOrderNo);
+    if (stillThere) return items;
+    setActiveOrderNo(items[0].order_no);
+    return items;
+  }, [activeChip, unreadOnly]);
+
+  useEffect(() => {
+    activeOrderNoRef.current = activeOrderNo;
+  }, [activeOrderNo]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    loadInbox(activeOrderNoRef.current).finally(() => {
+      if (!cancelled) setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [loadInbox]);
+
+  const loadThread = useCallback(async (orderNo) => {
+    if (!orderNo) {
+      setMessages([]);
+      return;
+    }
+    setThreadLoading(true);
+    const result = await getOrderMessages(orderNo);
+    setThreadLoading(false);
+    if (result.ok) {
+      setMessages(result.items);
+      setConversations((rows) => rows.map((row) => (row.order_no === orderNo ? { ...row, unread: 0 } : row)));
+    }
+  }, []);
+
+  useEffect(() => {
+    loadThread(activeOrderNo);
+  }, [activeOrderNo, loadThread]);
+
+  useEffect(() => {
+    if (!activeOrderNo) return undefined;
+    const timer = window.setInterval(() => {
+      loadThread(activeOrderNo);
+    }, 8000);
+    return () => window.clearInterval(timer);
+  }, [activeOrderNo, loadThread]);
+
+  const openConversation = (orderNo) => {
+    setActiveOrderNo(orderNo);
+    setThreadOpen(true);
+    setDraft("");
+    setSendError("");
+  };
+
+  const send = async (event) => {
+    event.preventDefault();
+    const text = draft.trim();
+    if (!text || !activeOrderNo) return;
+    setSending(true);
+    setSendError("");
+    const result = await sendOrderMessage(activeOrderNo, text);
+    setSending(false);
+    if (!result.ok) {
+      setSendError(result.message || "ارسال نشد.");
+      return;
+    }
+    setDraft("");
+    setMessages((items) => [...items, result.data]);
+    await loadInbox(activeOrderNo);
+  };
+
+  const active = conversations.find((item) => item.order_no === activeOrderNo) || null;
 
   return (
     <div className="flex h-full flex-col gap-4">
       <div className="flex flex-nowrap gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-wrap lg:pb-0">
         {chips.map((chip) => (
-          <div key={chip} className="min-w-fit shrink-0">
+          <div key={chip.id} className="min-w-fit shrink-0">
             <button
               type="button"
-              aria-label={chip}
-              aria-pressed={active === chip}
-              onClick={() => setActive(chip)}
+              aria-label={chip.label}
+              aria-pressed={activeChip === chip.id}
+              onClick={() => setActiveChip(chip.id)}
               className={`inline-block min-h-[42px] min-w-[70px] shrink-0 overflow-hidden rounded-lg px-4 py-[10px] text-center text-[14px] font-bold leading-[21px] ${
-                active === chip
+                activeChip === chip.id
                   ? "bg-[rgb(34,_33,_39)] text-white"
                   : "bg-[rgb(244,_244,_244)] text-[rgb(20,_20,_26)]"
               }`}
             >
-              {chip}
+              {chip.label}
             </button>
           </div>
         ))}
@@ -70,12 +156,24 @@ export default function DashboardMessagesPanel({ chips, unreadToggleLabel }) {
       </div>
       <div className="flex grow basis-[0%] flex-col">
         <div className="h-full min-h-0">
-          {/* Session 26: the capture leaves this container empty (the real
-              chat is a client-rendered app) — the user asked for the chat
-              page to be built, so it now renders MessagesChat (content
-              provenance: messagesChatData.js). */}
           <div aria-label="Chat" className="size-full min-h-0 overflow-hidden">
-            <MessagesChat />
+            <MessagesChat
+              copy={copy}
+              loading={loading}
+              error={error}
+              conversations={conversations}
+              active={active}
+              messages={messages}
+              threadLoading={threadLoading}
+              threadOpen={threadOpen}
+              draft={draft}
+              sending={sending}
+              sendError={sendError}
+              onDraftChange={setDraft}
+              onOpen={openConversation}
+              onBack={() => setThreadOpen(false)}
+              onSend={send}
+            />
           </div>
         </div>
       </div>
