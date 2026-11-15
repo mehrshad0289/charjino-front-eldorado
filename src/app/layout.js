@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Lato } from "next/font/google";
 import ShopChrome from "../components/eldorado/ShopChrome";
 import "./globals.css";
@@ -21,7 +22,9 @@ export default function RootLayout({ children }) {
        system font stack (found via the /blog session-12 font trace). */
     <html lang="fa" dir="rtl" className={`${lato.variable} light-theme`}>
       <body>
-        <ShopChrome />
+        <Suspense fallback={null}>
+          <ShopChrome />
+        </Suspense>
         {children}
       </body>
     </html>

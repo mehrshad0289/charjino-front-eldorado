@@ -1,5 +1,6 @@
 import ComingSoonPage, { comingSoonMetadata } from "../../../components/eldorado/ComingSoonPage";
 
+export const instant = false;
 export const metadata = comingSoonMetadata("تعویض ایمیل اکانت بازی");
 
 export default function ChangeGameEmailPage() {

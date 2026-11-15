@@ -1,5 +1,6 @@
 import ComingSoonPage, { comingSoonMetadata } from "../../components/eldorado/ComingSoonPage";
 
+export const instant = false;
 export const metadata = comingSoonMetadata("درباره ما");
 
 export default function AboutUsPage() {
