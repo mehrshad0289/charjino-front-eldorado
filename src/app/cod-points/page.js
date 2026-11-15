@@ -5,7 +5,6 @@ import ShopAmountCards from "../../components/eldorado/ShopAmountCards";
 import ShopFeaturedOffer from "../../components/eldorado/ShopFeaturedOffer";
 import GamePassSellerCard from "../../components/eldorado/GamePassSellerCard";
 import GamePassOffers from "../../components/eldorado/GamePassOffers";
-import GiftCardReviews from "../../components/eldorado/GiftCardReviews";
 import GiftCardProcessSteps from "../../components/eldorado/GiftCardProcessSteps";
 import GiftCardFaq from "../../components/eldorado/GiftCardFaq";
 import GiftCardTrustCard from "../../components/eldorado/GiftCardTrustCard";
@@ -138,7 +137,6 @@ export default function CodPointsPage() {
             </div>
             {/* social proof + process (gamepass geometry) */}
             <div className="mx-auto mt-12 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-12 lg:gap-[128px] lg:px-6">
-              <GiftCardReviews />
               <GiftCardProcessSteps />
             </div>
             {/* FAQ + trust card (max-w-3xl column, gamepass pattern) */}

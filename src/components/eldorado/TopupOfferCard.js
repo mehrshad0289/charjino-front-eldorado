@@ -7,6 +7,7 @@ import { TOPUP_SHOP_CHROME } from "./data/giftShopCopy";
 import { catalogRegionLabel } from "../../lib/catalog-region";
 import { formatTomanPrice } from "../../lib/format-toman";
 import CheckoutCouponField from "./CheckoutCouponField";
+import LoadingSpinner from "./LoadingSpinner";
 import { BoltIcon, ShieldIcon, SupportIcon, TrustRow } from "./TrustRows";
 
 function Caret() {
@@ -71,6 +72,7 @@ export default function TopupOfferCard({
   buyerValues = {},
   onBuyerFieldChange,
   coupon = null,
+  busy = false,
 }) {
   const region = showRegion ? catalogRegionLabel(selected?.region) || selected?.region || "" : "";
   const deviceText = String(deviceValue || "").trim();
@@ -224,13 +226,20 @@ export default function TopupOfferCard({
           type="button"
           aria-label={TOPUP_SHOP_CHROME.buyNow}
           data-sku-id={selected?.skuId || undefined}
-          className="block min-h-14 w-full rounded-lg bg-darkbtn px-4 py-3 text-center font-bold text-white"
+          disabled={busy}
+          className="block min-h-14 w-full rounded-lg bg-darkbtn px-4 py-3 text-center font-bold text-white disabled:opacity-60"
           onClick={() => onBuy?.()}
         >
-          <span className="block lg:hidden">
-            {displayPrice ? `${TOPUP_SHOP_CHROME.buyNow} (${displayPrice})` : TOPUP_SHOP_CHROME.buyNow}
-          </span>
-          <span className="hidden lg:block">{TOPUP_SHOP_CHROME.buyNow}</span>
+          {busy ? (
+            <LoadingSpinner variant="inline" className="text-white" />
+          ) : (
+            <>
+              <span className="block lg:hidden">
+                {displayPrice ? `${TOPUP_SHOP_CHROME.buyNow} (${displayPrice})` : TOPUP_SHOP_CHROME.buyNow}
+              </span>
+              <span className="hidden lg:block">{TOPUP_SHOP_CHROME.buyNow}</span>
+            </>
+          )}
         </button>
       </div>
 
@@ -238,9 +247,9 @@ export default function TopupOfferCard({
         <TrustRow icon={<ShieldIcon />} label={TOPUP_SHOP_CHROME.moneyBack} note={TOPUP_SHOP_CHROME.moneyBackNote} />
         <TrustRow icon={<BoltIcon />} label={TOPUP_SHOP_CHROME.fastCheckout}>
           <span className="flex shrink-0 gap-1">
-            <PayBadge src={GIFT_CARD_IMAGES.applePay} alt="Apple Pay" />
+            {/* <PayBadge src={GIFT_CARD_IMAGES.applePay} alt="Apple Pay" />
             <PayBadge src={GIFT_CARD_IMAGES.googlePay} alt="Google Pay" />
-            <PayBadge src={GIFT_CARD_IMAGES.paypal} alt="PayPal" />
+            <PayBadge src={GIFT_CARD_IMAGES.paypal} alt="PayPal" /> */}
           </span>
         </TrustRow>
         <TrustRow icon={<SupportIcon />} label={TOPUP_SHOP_CHROME.liveSupport} note={TOPUP_SHOP_CHROME.liveSupportNote} />

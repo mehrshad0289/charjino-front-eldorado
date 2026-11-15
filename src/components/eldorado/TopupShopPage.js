@@ -1,7 +1,6 @@
 import CategoryNav from "./CategoryNav";
 import GiftCardBanner from "./GiftCardBanner";
 import TopupBuyFlow from "./TopupBuyFlow";
-import GiftCardReviews from "./GiftCardReviews";
 import GiftCardProcessSteps from "./GiftCardProcessSteps";
 import GiftCardFaq from "./GiftCardFaq";
 import GiftCardTrustCard from "./GiftCardTrustCard";
@@ -9,7 +8,7 @@ import GiftCardSeoText from "./GiftCardSeoText";
 import Footer from "./Footer";
 import ChatBubble from "./ChatBubble";
 import RecordRecentView from "./RecordRecentView";
-import { GIFT_SHOP_CHROME, TOPUP_SHOP_CHROME, topupShopFaq, topupShopSeo } from "./data/giftShopCopy";
+import { TOPUP_SHOP_CHROME, topupShopFaq, topupShopSeo } from "./data/giftShopCopy";
 import { SHOP_SUBSCRIPTION_IMAGES } from "./data/shopSubscriptionData";
 
 function hubFaq(shop, name) {
@@ -80,7 +79,6 @@ export default function TopupShopPage({ catalog, tabs = [], activeTab = "top-up"
               />
             </div>
             <div className="mx-auto mt-12 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-12 lg:gap-[128px] lg:px-6">
-              <GiftCardReviews title={GIFT_SHOP_CHROME.reviewsTitle} />
               <GiftCardProcessSteps title={TOPUP_SHOP_CHROME.processTitle} steps={TOPUP_SHOP_CHROME.processSteps} />
             </div>
             <div className="mx-auto mt-12 w-full max-w-3xl px-4 lg:mt-[128px] lg:px-3.5">

@@ -154,9 +154,14 @@ export default function UserAccountDropdown({ user, avatarAlert = false, onLogou
           className="absolute end-0 top-[calc(100%+8px)] z-[70] flex max-h-[min(720px,calc(100dvh-var(--shop-header-bar)-16px))] w-[min(300px,calc(100vw-16px))] flex-col overflow-hidden rounded-lg border border-cardborder bg-white text-ink shadow-[0_8px_24px_rgba(9,9,11,0.12)]"
         >
           <div className="flex shrink-0 items-start gap-3 border-b border-cardborder px-3 py-3">
-            <div className="size-10 shrink-0 overflow-hidden rounded-full bg-badgebg">
-              <img alt={FA.profileAvatar} src={avatar} className="block size-full object-cover align-middle" />
-            </div>
+            <Link
+              href={profileHref}
+              aria-label={FA.viewProfile}
+              className="size-10 shrink-0 overflow-hidden rounded-full bg-badgebg"
+              onClick={() => setOpen(false)}
+            >
+              <img alt="" src={avatar} className="block size-full object-cover align-middle" />
+            </Link>
             <div className="min-w-0">
               <Link
                 href={profileHref}

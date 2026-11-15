@@ -10,6 +10,8 @@ function VerifiedBadge() {
   );
 }
 
+import OfferPrice from "./OfferPrice";
+
 function DeliveryIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -60,12 +62,8 @@ export default function AccountCard({ offer }) {
           </div>
           {offer.rating && <div>{offer.rating.replace(/\s{2,}/g, " ")}</div>}
         </div>
-        <div className="mt-2.5 flex items-center justify-between">
-          <div>
-            <strong aria-label="amount-price" className="text-[18px] font-bold leading-[27px]">
-              {offer.price}
-            </strong>
-          </div>
+        <div className="mt-2.5 flex items-start justify-between gap-2">
+          <OfferPrice amount={offer.priceAmount} words={offer.priceWords} fallback={offer.price} />
           <div aria-label="Delivery time" className="flex items-center gap-1 text-graytext">
             <DeliveryIcon />
             <div className="text-[14px] leading-[19.6px]">{offer.delivery}</div>

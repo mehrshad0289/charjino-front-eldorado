@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { FA } from "./data/faCopy";
-import { GiftMegaEmpty, GiftNotSoldBanner, MegaSearchField, useGiftMegaSearch } from "./GiftMegaSearch";
+import { GiftMegaEmpty, GiftNotSoldBanner, MegaSearchField, useMegaSearch } from "./GiftMegaSearch";
 import { ItemsPromo } from "./MegaMenu";
 import { loadNavMega, peekNavMega } from "./nav-mega-client";
-import { readRecentGames } from "./nav-recent";
-import { filterMegaGames } from "../../lib/mega-gift-search";
 
 function CloseIcon() {
   return (
@@ -59,14 +57,12 @@ function GameList({ title, games, fallbackHref, showCategory = false }) {
   );
 }
 
-function applyMegaData(data, categoryKey, setters) {
+function applyMegaData(data, setters) {
   const nextPopular = Array.isArray(data.popular) ? data.popular : [];
   const nextAll = Array.isArray(data.all) ? data.all : [];
   setters.setPopular(nextPopular);
   setters.setAllGames(nextAll);
   setters.setShowPromo(Boolean(data.promo));
-  const stored = readRecentGames(categoryKey);
-  setters.setRecent(stored.length > 0 ? stored : nextPopular.slice(0, 2));
 }
 
 export default function MobileCategorySheet({ category, onBack, onClose }) {
@@ -75,12 +71,6 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
   const [query, setQuery] = useState("");
   const [popular, setPopular] = useState(() => (Array.isArray(cached?.popular) ? cached.popular : []));
   const [allGames, setAllGames] = useState(() => (Array.isArray(cached?.all) ? cached.all : []));
-  const [recent, setRecent] = useState(() => {
-    if (typeof window === "undefined") return [];
-    const stored = readRecentGames(categoryKey);
-    if (stored.length > 0) return stored;
-    return Array.isArray(cached?.popular) ? cached.popular.slice(0, 2) : [];
-  });
   const [showPromo, setShowPromo] = useState(() => Boolean(cached?.promo) || categoryKey === "Items");
 
   useEffect(() => {
@@ -95,32 +85,27 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
 
   useEffect(() => {
     let cancelled = false;
-    const setters = { setPopular, setAllGames, setShowPromo, setRecent };
+    const setters = { setPopular, setAllGames, setShowPromo };
     const existing = peekNavMega(categoryKey);
-    if (existing) applyMegaData(existing, categoryKey, setters);
+    if (existing) applyMegaData(existing, setters);
 
     loadNavMega(categoryKey).then((data) => {
       if (cancelled) return;
       if (data) {
-        applyMegaData(data, categoryKey, setters);
+        applyMegaData(data, setters);
         return;
       }
       if (peekNavMega(categoryKey)) return;
-      applyMegaData(
-        { popular: [], all: [], promo: categoryKey === "Items" },
-        categoryKey,
-        setters,
-      );
+      applyMegaData({ popular: [], all: [], promo: categoryKey === "Items" }, setters);
     });
     return () => {
       cancelled = true;
     };
   }, [categoryKey]);
 
-  const isGiftMega = categoryKey === "Gift cards";
-  const giftSearch = useGiftMegaSearch(isGiftMega, query, allGames);
-  const filtered = isGiftMega ? giftSearch.rows : filterMegaGames(allGames, query);
-  const showCategory = isGiftMega && giftSearch.kind === "other";
+  const search = useMegaSearch(categoryKey, query, allGames);
+  const filtered = search.rows;
+  const showCategory = search.showCategory;
 
   return (
     <div className="shop-sheet-in fixed inset-0 z-[70] overflow-y-auto bg-white text-ink" role="dialog" aria-modal="true">
@@ -160,17 +145,17 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
       <div className="px-4 pb-24">
         {query ? (
           <>
-            {isGiftMega && giftSearch.kind === "other" ? (
+            {categoryKey === "Gift cards" && search.kind === "other" ? (
               <div className="pt-6">
                 <GiftNotSoldBanner />
               </div>
             ) : null}
-            {isGiftMega && giftSearch.kind === "empty" ? (
+            {search.kind === "empty" ? (
               <div className="pt-6">
                 <GiftMegaEmpty />
               </div>
             ) : null}
-            {giftSearch.kind === "pending" ? null : (
+            {search.kind === "pending" ? null : (
               <GameList games={filtered} fallbackHref={category.href} showCategory={showCategory} />
             )}
           </>
@@ -181,7 +166,6 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
                 <ItemsPromo />
               </div>
             ) : null}
-            <GameList title={FA.recentlyViewedGames} games={recent} fallbackHref={category.href} />
             <GameList title={FA.popularGames} games={popular.slice(0, 12)} fallbackHref={category.href} />
             <GameList title={FA.allGames} games={filtered} fallbackHref={category.href} />
           </>

@@ -1,25 +1,36 @@
+import { connection } from "next/server";
+import { redirect } from "next/navigation";
+import { getSessionUser } from "@/actions/auth.actions";
+import { getMarketNotifications } from "@/actions/market.actions";
 import DashboardPageHeader from "../../../components/eldorado/DashboardPageHeader";
 import DashboardNotificationsPanel from "../../../components/eldorado/DashboardNotificationsPanel";
 import { DASHBOARD_NOTIFICATIONS_PAGE } from "../../../components/eldorado/data/dashboardExtraData";
 
-/* Dashboard page /dashboard/notifications — session 26. The sidebar
-   linked here (DASHBOARD_NAV_LINKS) but no page existed. No capture
-   pushed for this route: chip-filtered notification list in the
-   dashboard's own design language (data: dashboardExtraData.js,
-   template-generated). Sidebar active row: Notifications. */
+export const instant = false;
 
 export const metadata = {
-  title: "Dashboard Notifications - Eldorado",
-  description: "Your Eldorado notifications: orders, messages, disputes and payment updates.",
+  title: "اعلان‌ها — شارژینو",
+  description: "اعلان‌های واقعی حساب شارژینو: پرداخت، احراز، تیکت و نظرات.",
 };
 
-export default function DashboardNotificationsPage() {
-  const { icon, title, tabs, items } = DASHBOARD_NOTIFICATIONS_PAGE;
+export default async function DashboardNotificationsPage() {
+  await connection();
+  const user = await getSessionUser();
+  if (!user) redirect("/login?next=/dashboard/notifications");
+
+  const feed = await getMarketNotifications();
+  if (feed.unauthorized) redirect("/login?next=/dashboard/notifications");
+
+  const { icon, title } = DASHBOARD_NOTIFICATIONS_PAGE;
   return (
     <>
       <DashboardPageHeader icon={icon} title={title} />
       <div className="relative mt-[14px] w-full px-6 pb-[50px]">
-        <DashboardNotificationsPanel tabs={tabs} items={items} />
+        {!feed.ok && feed.marketOff ? (
+          <p className="text-[14px] text-[rgb(232,27,22)]">{feed.message || "اعلان‌ها در دسترس نیست."}</p>
+        ) : (
+          <DashboardNotificationsPanel items={feed.items} meta={feed.meta} />
+        )}
       </div>
     </>
   );

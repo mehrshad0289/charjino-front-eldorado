@@ -5,7 +5,8 @@ import { getMarketGames, getSellerListing, getSellerMe } from "@/actions/market.
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
 import ListingWizard from "../../../../../components/eldorado/ListingWizard";
 import { LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
-import { formatToman, listingStatusMeta, sellBlockers } from "@/lib/listing";
+import { listingStatusMeta, sellBlockers } from "@/lib/listing";
+import { formatTomanInWords } from "@/lib/price";
 
 export const instant = false;
 
@@ -53,7 +54,7 @@ export default async function EditAccountOfferPage({ params }) {
                 </span>
                 <p className="mt-4 text-[24px] font-bold">{row.title}</p>
                 <p className="mt-2 text-graytext">
-                  {row.game_name} · {formatToman(row.price_amount)} تومان
+                  {row.game_name} · {formatTomanInWords(row.price_amount)}
                 </p>
                 {row.rejection_reason ? (
                   <p className="mt-3 text-[rgb(232,27,22)]">{row.rejection_reason}</p>

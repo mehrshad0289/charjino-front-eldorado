@@ -2,10 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FA, SHOP_ACCOUNTS_HREF, SHOP_ITEMS_HREF } from "./data/faCopy";
-import { GiftMegaEmpty, GiftNotSoldBanner, MegaSearchField, useGiftMegaSearch } from "./GiftMegaSearch";
+import { GiftMegaEmpty, GiftNotSoldBanner, MegaSearchField, useMegaSearch } from "./GiftMegaSearch";
 import { loadNavMega, peekNavMega } from "./nav-mega-client";
-import { readRecentGames } from "./nav-recent";
-import { filterMegaGames } from "../../lib/mega-gift-search";
 
 const PROMO_ICONS = [
   {
@@ -94,14 +92,12 @@ export function ItemsPromo() {
   );
 }
 
-function applyMegaData(data, categoryKey, setters) {
+function applyMegaData(data, setters) {
   const nextPopular = Array.isArray(data.popular) ? data.popular : [];
   const nextAll = Array.isArray(data.all) ? data.all : [];
   setters.setPopular(nextPopular);
   setters.setAllGames(nextAll);
   setters.setShowPromo(Boolean(data.promo));
-  const stored = readRecentGames(categoryKey);
-  setters.setRecent(stored.length > 0 ? stored : nextPopular.slice(0, 2));
 }
 
 export default function MegaMenu({ onClose, categoryKey, fallbackHref = SHOP_ACCOUNTS_HREF }) {
@@ -109,12 +105,6 @@ export default function MegaMenu({ onClose, categoryKey, fallbackHref = SHOP_ACC
   const [query, setQuery] = useState("");
   const [popular, setPopular] = useState(() => (Array.isArray(cached?.popular) ? cached.popular : []));
   const [allGames, setAllGames] = useState(() => (Array.isArray(cached?.all) ? cached.all : []));
-  const [recent, setRecent] = useState(() => {
-    if (typeof window === "undefined") return [];
-    const stored = readRecentGames(categoryKey);
-    if (stored.length > 0) return stored;
-    return Array.isArray(cached?.popular) ? cached.popular.slice(0, 2) : [];
-  });
   const [showPromo, setShowPromo] = useState(() => Boolean(cached?.promo) || categoryKey === "Items");
   const panelRef = useRef(null);
 
@@ -128,34 +118,29 @@ export default function MegaMenu({ onClose, categoryKey, fallbackHref = SHOP_ACC
 
   useEffect(() => {
     let cancelled = false;
-    const setters = { setPopular, setAllGames, setShowPromo, setRecent };
+    const setters = { setPopular, setAllGames, setShowPromo };
     const existing = peekNavMega(categoryKey);
-    if (existing) applyMegaData(existing, categoryKey, setters);
+    if (existing) applyMegaData(existing, setters);
 
     loadNavMega(categoryKey).then((data) => {
       if (cancelled) return;
       if (data) {
-        applyMegaData(data, categoryKey, setters);
+        applyMegaData(data, setters);
         return;
       }
       if (peekNavMega(categoryKey)) return;
-      applyMegaData(
-        { popular: [], all: [], promo: categoryKey === "Items" },
-        categoryKey,
-        setters,
-      );
+      applyMegaData({ popular: [], all: [], promo: categoryKey === "Items" }, setters);
     });
     return () => {
       cancelled = true;
     };
   }, [categoryKey]);
 
-  const isGiftMega = categoryKey === "Gift cards";
-  const giftSearch = useGiftMegaSearch(isGiftMega, query, allGames);
   const source = allGames.length > 0 ? allGames : [];
-  const all = isGiftMega ? giftSearch.rows : filterMegaGames(source, query);
-  const popularRows = popular.slice(0, 12);
-  const showCategory = isGiftMega && giftSearch.kind === "other";
+  const search = useMegaSearch(categoryKey, query, source);
+  const all = search.rows;
+  const popularRows = query.trim() ? [] : popular.slice(0, 12);
+  const showCategory = search.showCategory;
 
   return (
     <div
@@ -166,8 +151,7 @@ export default function MegaMenu({ onClose, categoryKey, fallbackHref = SHOP_ACC
         <div className="flex max-w-[1070px] overflow-hidden rounded-[10px] bg-white text-ink shadow-[rgba(47,47,55,0.15)_0px_2px_4px_0px,rgba(47,47,55,0.1)_0px_24px_60px_0px,rgba(47,47,55,0.05)_0px_12px_24px_0px]">
           <div className="w-[63%]">
             <div className="flex flex-col gap-6 bg-white p-6">
-              {showPromo ? <ItemsPromo /> : null}
-              <GameSection title={FA.recentlyViewedGames} games={recent} fallbackHref={fallbackHref} />
+              {/* {showPromo ? <ItemsPromo /> : null} */}
               <GameSection title={FA.popularGames} games={popularRows} fallbackHref={fallbackHref} />
             </div>
           </div>
@@ -177,9 +161,9 @@ export default function MegaMenu({ onClose, categoryKey, fallbackHref = SHOP_ACC
                 <p className="text-[14px] font-bold leading-[19.6px] tracking-[0.14px]">{FA.allGames}</p>
                 <MegaSearchField query={query} onChange={setQuery} onClear={() => setQuery("")} />
                 <div>
-                  {isGiftMega && giftSearch.kind === "other" ? <GiftNotSoldBanner /> : null}
-                  {isGiftMega && giftSearch.kind === "empty" ? <GiftMegaEmpty /> : null}
-                  {giftSearch.kind === "pending"
+                  {categoryKey === "Gift cards" && search.kind === "other" ? <GiftNotSoldBanner /> : null}
+                  {search.kind === "empty" ? <GiftMegaEmpty /> : null}
+                  {search.kind === "pending"
                     ? null
                     : all.map((g) => (
                         <div key={`${g.category || ""}:${g.href || ""}:${g.name}`} className="pb-1">

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AccountCheckoutPage from "../../components/eldorado/AccountCheckoutPage";
+import CatalogCheckoutPage from "../../components/eldorado/CatalogCheckoutPage";
 import Logo from "../../components/eldorado/Logo";
 import Footer from "../../components/eldorado/Footer";
 import ChatBubble from "../../components/eldorado/ChatBubble";
@@ -49,10 +50,21 @@ import {
    stack (summary BELOW the form, DOM order kept), pr-118/pl-14 gutters
    relax to px-4. */
 
-export const metadata = {
-  title: "Checkout - Eldorado",
-  description: "Secure checkout — complete your Eldorado order.",
-};
+export const instant = false;
+
+export async function generateMetadata({ searchParams }) {
+  const query = searchParams ? await searchParams : {};
+  if (query.listing || query.sku) {
+    return {
+      title: "تسویه امن — شارژینو",
+      description: "پرداخت امن سفارش شارژینو.",
+    };
+  }
+  return {
+    title: "Checkout - Eldorado",
+    description: "Secure checkout — complete your Eldorado order.",
+  };
+}
 
 function LockIcon() {
   return (
@@ -99,6 +111,16 @@ function GuaranteeIcon() {
 export default async function CheckoutPage({ searchParams }) {
   const query = searchParams ? await searchParams : {};
   if (query.listing) return <AccountCheckoutPage listingId={String(query.listing)} quantity={query.quantity} />;
+  if (query.sku) {
+    return (
+      <CatalogCheckoutPage
+        skuId={query.sku}
+        handle={String(query.handle || "")}
+        couponCode={String(query.coupon || "")}
+        from={String(query.from || "")}
+      />
+    );
+  }
   return (
     <div className="flex min-h-screen flex-col bg-page text-ink">
       {/* Minimal checkout header (capture: no site nav, logo only) */}

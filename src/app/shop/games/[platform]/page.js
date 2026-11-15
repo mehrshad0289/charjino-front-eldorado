@@ -6,11 +6,14 @@ import ChatBubble from "../../../../components/eldorado/ChatBubble";
 import AccountOffersBrowser from "../../../../components/eldorado/AccountOffersBrowser";
 import GiftCardBanner from "../../../../components/eldorado/GiftCardBanner";
 import { GIFT_CARD_IMAGES } from "../../../../components/eldorado/data/giftCardData";
+import { getConsoles, getConsoleSchema } from "../../../../actions/market.actions";
 import {
   consoleOfferFacets,
   consolePlatform,
   consoleShopKey,
+  defaultConsoleSchemaFields,
   labelConsoleOffer,
+  schemaConsoleFacets,
 } from "../../../../lib/console-games";
 import { activeHubTabKey, bannerTabsFromHub, loadProductHub, withFallbackHubTab } from "../../../../lib/gift-card-shop";
 import { serverFetch, ApiError } from "../../../../lib/server-fetcher";
@@ -36,6 +39,11 @@ export default async function ConsolePlatformPage({ params, searchParams }) {
   if (hubKey !== requested) redirect(`/shop/games/${hubKey}`);
 
   const row = consolePlatform(hubKey);
+  if (!row) notFound();
+  const [catalog, schema] = await Promise.all([getConsoles(), getConsoleSchema(hubKey)]);
+  const apiRow = catalog.ok ? catalog.items.find((item) => item.platform === hubKey) : null;
+  const sell = apiRow ? Boolean(apiRow.sell_enabled) : Boolean(row.sell);
+  const titleFa = apiRow?.title_fa || row.title;
   const hub = await loadProductHub(hubKey);
   const tabs = withFallbackHubTab(
     bannerTabsFromHub(hub).filter((tab) =>
@@ -45,15 +53,16 @@ export default async function ConsolePlatformPage({ params, searchParams }) {
   );
   const href = `/shop/games/${hubKey}`;
   const q = typeof query.q === "string" ? query.q.trim() : "";
-  const listings = row.sell ? await loadPlatformListings({ platform: hubKey, offer: "ConsoleGame", q, perPage: 60 }) : { items: [] };
+  const listings = sell ? await loadPlatformListings({ platform: hubKey, offer: "ConsoleGame", q, perPage: 60 }) : { items: [] };
   const offers = listings.items
     .map((item) => listingToOffer(item, "games"))
     .filter(Boolean)
     .map(labelConsoleOffer);
-  const facets = consoleOfferFacets(hubKey, offers);
+  const schemaFields = schema.ok && schema.fields?.length ? schema.fields : defaultConsoleSchemaFields(hubKey);
+  const facets = schemaFields.length ? schemaConsoleFacets(schemaFields, offers) : consoleOfferFacets(hubKey, offers);
 
   let keys = [];
-  if (!row.sell && q) {
+  if (!sell && q) {
     try {
       const payload = await serverFetch(
         apiPaths.catalogProducts({
@@ -88,12 +97,12 @@ export default async function ConsolePlatformPage({ params, searchParams }) {
         <div className="relative z-10">
           <GiftCardBanner
             active={activeHubTabKey(tabs, href, "games")}
-            iconAlt={row.title}
-            gameName={row.title}
+            iconAlt={titleFa}
+            gameName={titleFa}
             gameIcon={row.image || ""}
             tabs={tabs}
           />
-          {row.sell ? (
+          {sell ? (
             <AccountOffersBrowser
               offers={offers}
               facets={facets}

@@ -1,34 +1,53 @@
 "use client";
 
 import { useState } from "react";
+import { catalogCheckoutHref, saveCatalogCheckoutDraft } from "../../lib/catalog-checkout";
 
 export function useCheckoutPreview() {
   const [ack, setAck] = useState(false);
   const [message, setMessage] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  async function preview(selected, extraFields = {}) {
-    const skuId = selected?.skuId;
-    if (!skuId) {
+  async function preview(selected, extraFields = {}, extra = {}) {
+    const skuId = Number(selected?.skuId);
+    if (!Number.isInteger(skuId) || skuId < 1) {
       setMessage("پیشنهاد معتبری انتخاب نشده است.");
       return;
     }
     setMessage("");
-    const response = await fetch("/api/checkout-preview", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
+    setBusy(true);
+    try {
+      const fields = { instantUseAck: ack, ...extraFields };
+      const response = await fetch("/api/checkout-preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ skuId, fields }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload?.success === false) {
+        setMessage(payload?.message || "پیش‌نمایش خرید انجام نشد.");
+        return;
+      }
+      const couponCode = String(extra.couponCode || "").trim();
+      const from = String(extra.from || "").trim();
+      saveCatalogCheckoutDraft(skuId, {
+        fields,
+        couponCode,
+        handle: selected.handle || "",
+        from,
+      });
+      window.location.href = catalogCheckoutHref({
         skuId,
-        fields: { instantUseAck: ack, ...extraFields },
-      }),
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok || payload?.success === false) {
-      setMessage(payload?.message || "پیش‌نمایش خرید انجام نشد.");
-      return;
+        handle: selected.handle,
+        couponCode,
+        from,
+      });
+    } catch {
+      setMessage("اتصال به سرور برقرار نشد.");
+    } finally {
+      setBusy(false);
     }
-    const price = payload?.data?.price;
-    setMessage(price ? `پیش‌نمایش ثبت شد؛ مبلغ ${price} تومان. سفارشی ساخته نشد.` : "پیش‌نمایش ثبت شد. سفارشی ساخته نشد.");
   }
 
-  return { ack, setAck, message, preview };
+  return { ack, setAck, message, preview, busy };
 }

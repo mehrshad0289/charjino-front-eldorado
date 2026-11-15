@@ -19,13 +19,18 @@ import {
   LISTING_SECTIONS,
   LISTING_TITLE_MIN,
   emptyAttributes,
-  formatToman,
   listingMediaUrl,
   listingPhotoNeeded,
   listingPhotoSlots,
   listingPriceError,
   parseToman,
+  schemaFieldFilled,
+  schemaFieldVisible,
+  schemaItemNoun,
 } from "@/lib/listing";
+import { formatTomanInWords } from "@/lib/price";
+import ItemListField from "./ItemListField";
+import PriceField from "./PriceField";
 import { LISTING_COPY } from "./data/listingData";
 import LoadingSpinner from "./LoadingSpinner";
 import EldSelect from "./EldSelect";
@@ -119,7 +124,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
   const [issues, setIssues] = useState({});
   const [listingId, setListingId] = useState(listing?.id || "");
 
-  const fields = fieldsForGame(schemaFields, custom);
+  const fields = fieldsForGame(schemaFields, custom).filter((field) => schemaFieldVisible(field, attributes));
   const photoSlots = useMemo(() => listingPhotoSlots(custom ? [] : schemaFields), [custom, schemaFields]);
 
   useEffect(() => {
@@ -156,7 +161,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
   });
   const titleReady = title.trim().length >= LISTING_TITLE_MIN;
   const priceReady = !listingPriceError(price);
-  const detailsReady = titleReady && fields.every((field) => !field.required || String(attributes[field.key] || "").trim());
+  const detailsReady = titleReady && fields.every((field) => !field.required || schemaFieldFilled(field, attributes));
   const checks = [
     { id: "listing-game", label: "بازی", ok: Boolean(gameName.trim()) },
     { id: "listing-details", label: "مشخصات", ok: detailsReady },
@@ -256,8 +261,10 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
     if (!gameName.trim()) next.game = "بازی را انتخاب کن.";
     if (title.trim().length < LISTING_TITLE_MIN) next.title = "عنوان آگهی را بنویس. حداقل ۵ کاراکتر.";
     for (const field of fields) {
-      if (field.required && !String(attributes[field.key] || "").trim()) {
-        next[field.key] = `${field.label_fa} را کامل کن.`;
+      if (field.required && !schemaFieldFilled(field, attributes)) {
+        next[field.key] = field.multiline
+          ? `حداقل یک ${schemaItemNoun(field)} اضافه کن.`
+          : `${field.label_fa} را کامل کن.`;
       }
     }
     const priceMessage = listingPriceError(price);
@@ -492,43 +499,60 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
               />
               <FieldNote message={issues.title} />
             </label>
-            {fields.map((field) => (
-              <label key={field.key} className="text-[14px] font-bold" htmlFor={`attr-${field.key}`}>
-                {field.label_fa}
-                {field.required ? " *" : ""}
-                {field.type === "select" ? (
-                  <EldSelect
-                    id={`attr-${field.key}`}
-                    className="mt-1"
-                    ariaLabel={field.label_fa}
-                    value={attributes[field.key] || ""}
-                    invalid={Boolean(issues[field.key])}
-                    placeholder="انتخاب کن"
-                    onChange={(value) => {
-                      setAttributes((current) => ({ ...current, [field.key]: value }));
-                      clearIssue(field.key);
-                    }}
-                    options={[
-                      { value: "", label: "انتخاب کن" },
-                      ...(field.options || []).map((option) => ({ value: option, label: option })),
-                    ]}
-                  />
-                ) : (
-                  <input
-                    id={`attr-${field.key}`}
-                    value={attributes[field.key] || ""}
-                    aria-invalid={issues[field.key] ? "true" : undefined}
-                    inputMode={field.type === "number" ? "numeric" : "text"}
-                    onChange={(event) => {
-                      setAttributes((current) => ({ ...current, [field.key]: event.target.value }));
-                      clearIssue(field.key);
-                    }}
-                    className={controlClass(Boolean(issues[field.key]))}
-                  />
-                )}
-                <FieldNote message={issues[field.key]} />
-              </label>
-            ))}
+            {fields.map((field) =>
+              field.multiline ? (
+                <ItemListField
+                  key={field.key}
+                  id={`attr-${field.key}`}
+                  label={field.label_fa}
+                  required={Boolean(field.required)}
+                  value={attributes[field.key] || ""}
+                  invalid={Boolean(issues[field.key])}
+                  error={issues[field.key]}
+                  itemNoun={schemaItemNoun(field)}
+                  onChange={(value) => {
+                    setAttributes((current) => ({ ...current, [field.key]: value }));
+                    clearIssue(field.key);
+                  }}
+                />
+              ) : (
+                <label key={field.key} className="text-[14px] font-bold" htmlFor={`attr-${field.key}`}>
+                  {field.label_fa}
+                  {field.required ? " *" : ""}
+                  {field.type === "select" ? (
+                    <EldSelect
+                      id={`attr-${field.key}`}
+                      className="mt-1"
+                      ariaLabel={field.label_fa}
+                      value={attributes[field.key] || ""}
+                      invalid={Boolean(issues[field.key])}
+                      placeholder="انتخاب کن"
+                      onChange={(value) => {
+                        setAttributes((current) => ({ ...current, [field.key]: value }));
+                        clearIssue(field.key);
+                      }}
+                      options={[
+                        { value: "", label: "انتخاب کن" },
+                        ...(field.options || []).map((option) => ({ value: option, label: option })),
+                      ]}
+                    />
+                  ) : (
+                    <input
+                      id={`attr-${field.key}`}
+                      value={attributes[field.key] || ""}
+                      aria-invalid={issues[field.key] ? "true" : undefined}
+                      inputMode={field.type === "number" ? "numeric" : "text"}
+                      onChange={(event) => {
+                        setAttributes((current) => ({ ...current, [field.key]: event.target.value }));
+                        clearIssue(field.key);
+                      }}
+                      className={controlClass(Boolean(issues[field.key]))}
+                    />
+                  )}
+                  <FieldNote message={issues[field.key]} />
+                </label>
+              ),
+            )}
             <label className="text-[14px] font-bold" htmlFor="listing-description">
               {LISTING_COPY.description}
               <textarea
@@ -617,25 +641,17 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
         </Section>
 
         <Section id="listing-price" title={LISTING_COPY.priceStep}>
-          <label className="text-[14px] font-bold" htmlFor="listing-price">
-            {LISTING_COPY.price}
-            <input
-              id="listing-price"
-              value={price}
-              inputMode="numeric"
-              dir="ltr"
-              aria-invalid={issues.price ? "true" : undefined}
-              onChange={(event) => {
-                setPrice(event.target.value);
-                clearIssue("price");
-              }}
-              className={`${controlClass(Boolean(issues.price))} text-start`}
-            />
-            <FieldNote message={issues.price} />
-            <span className="mt-2 block text-[14px] font-normal text-graytext">
-              {parseToman(price) ? `${formatToman(parseToman(price))} تومان` : ""}
-            </span>
-          </label>
+          <PriceField
+            id="listing-price"
+            label={LISTING_COPY.price}
+            hint={issues.price || "تومان"}
+            previewState={issues.price ? "error" : "default"}
+            value={price}
+            onChange={(next) => {
+              setPrice(next);
+              clearIssue("price");
+            }}
+          />
         </Section>
         {issues.form ? <p className="text-[14px] text-[rgb(232,27,22)]" role="alert">{issues.form}</p> : null}
       </div>
@@ -653,7 +669,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
             {(selectedGame?.game_name_fa || gameName || "بازی انتخاب نشده")}
             {publisher ? ` · ${publisher}` : ""}
           </p>
-          <p className="mt-1 text-[18px] font-bold">{parseToman(price) ? `${formatToman(parseToman(price))} تومان` : "قیمت"}</p>
+          <p className="mt-1 text-[18px] font-bold">{parseToman(price) ? formatTomanInWords(parseToman(price)) : "قیمت"}</p>
           <ul className="mt-4 flex flex-col gap-2">
             {checks.map((item) => {
               const reason = sectionIssueText(item.id);

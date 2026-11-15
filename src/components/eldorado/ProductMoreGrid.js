@@ -1,4 +1,5 @@
 import { PRODUCT_MORE_CARDS, PRODUCT_MORE_EXTRA } from "./data/productData";
+import OfferPrice from "./OfferPrice";
 
 /* Bottom "More like this" grid (product .make capture, desktop only — the
    live mobile flow shows the top carousel with an "All offers" link instead
@@ -69,8 +70,8 @@ export default function ProductMoreGrid({ cards, allHref = "/efootball-accounts"
                 {c.feedback}&nbsp;{c.count}
               </span>
             </div>
-            <div className="mt-[10px] flex items-center justify-between">
-              <strong className="text-[18px] font-bold leading-[27px]">{c.price}</strong>
+            <div className="mt-[10px] flex items-start justify-between gap-2">
+              <OfferPrice amount={c.priceAmount} words={c.priceWords} fallback={c.price} />
               <span aria-label="Delivery time" className="flex items-center gap-[2px]">
                 <Bolt />
                 <span className="leading-[19.6px] text-graytext">{c.delivery}</span>

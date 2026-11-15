@@ -64,7 +64,13 @@ export default function GiftCardBuyFlow({
           buyerValues={buyerValues}
           onBuyerFieldChange={(name, value) => setBuyerValues((prev) => ({ ...prev, [name]: value }))}
           coupon={coupon}
-          onBuy={() => checkout.preview(selected, buyerValues)}
+          busy={checkout.busy}
+          onBuy={() =>
+            checkout.preview(selected, buyerValues, {
+              couponCode: coupon.quote?.code || "",
+              from: typeof window !== "undefined" ? window.location.pathname : "",
+            })
+          }
         />
       </aside>
     </div>

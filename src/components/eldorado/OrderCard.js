@@ -22,7 +22,7 @@ export default function OrderCard({ order, href, amountKey = "buyer_paid_amount"
           <p className="mt-1 text-[13px] text-graytext">{toFaDigits(order?.order_no || "")}</p>
         </div>
         <span className="rounded-lg px-3 py-1 text-[13px] font-bold text-white" style={{ backgroundColor: status.bg }}>
-          {status.label}
+          {order?.statusLabelFa || status.label}
         </span>
       </div>
       {order?.created_at ? <p className="text-[13px] text-graytext">{formatOrderDate(order.created_at)}</p> : null}

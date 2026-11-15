@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createListing, deleteListingImage, placeListing, updateListing, uploadListingImage } from "@/actions/market.actions";
-import { LISTING_PHOTO_SLOTS, LISTING_SECTIONS, LISTING_TITLE_MIN, formatToman, listingMediaUrl, listingPriceError, parseToman } from "@/lib/listing";
+import { LISTING_PHOTO_SLOTS, LISTING_SECTIONS, LISTING_TITLE_MIN, listingMediaUrl, listingPriceError, parseToman } from "@/lib/listing";
+import { formatTomanInWords } from "@/lib/price";
 import { ITEM_LISTING_COPY, LISTING_COPY } from "./data/listingData";
 import {
   ListingFieldNote,
@@ -20,6 +21,7 @@ import {
 } from "./ListingWizardChrome";
 import LoadingSpinner from "./LoadingSpinner";
 import EldSelect from "./EldSelect";
+import PriceField from "./PriceField";
 
 function initialPhotos(listing) {
   const next = {};
@@ -452,23 +454,19 @@ export default function ItemListingWizard({ games = [], listing = null, blockers
             </label>
           </div>
           <ListingFieldNote message={issues.stock} />
-          <label className="mt-4 block text-[14px] font-bold" htmlFor="listing-price">
-            {ITEM_LISTING_COPY.unitPrice}
-            <input
+          <div className="mt-4">
+            <PriceField
               id="listing-price"
+              label={ITEM_LISTING_COPY.unitPrice}
+              hint={issues.price || "تومان"}
+              previewState={issues.price ? "error" : "default"}
               value={price}
-              inputMode="numeric"
-              dir="ltr"
-              aria-invalid={issues.price ? "true" : undefined}
-              onChange={(event) => {
-                setPrice(event.target.value);
+              onChange={(next) => {
+                setPrice(next);
                 clearIssue("price");
               }}
-              className={`${listingControlClass(Boolean(issues.price))} text-start`}
             />
-            <ListingFieldNote message={issues.price} />
-            <span className="mt-2 block text-[14px] font-normal text-graytext">{parseToman(price) ? `${formatToman(parseToman(price))} تومان` : ""}</span>
-          </label>
+          </div>
         </ListingSection>
         {issues.form ? (
           <p className="text-[14px] text-[rgb(232,27,22)]" role="alert">
@@ -482,7 +480,7 @@ export default function ItemListingWizard({ games = [], listing = null, blockers
         title={title.trim() || "عنوان آگهی"}
         subtitle={`${game?.game_name_fa || game?.game_name || "بازی انتخاب نشده"}${type ? ` · ${type.name}` : ""}`}
         extra={type?.delivery_label || ITEM_LISTING_COPY.delivery}
-        priceLabel={parseToman(price) ? `${formatToman(parseToman(price))} تومان` : "قیمت"}
+        priceLabel={parseToman(price) ? formatTomanInWords(parseToman(price)) : "قیمت"}
         checks={checks}
         sectionIssueText={sectionIssueText}
         onJump={jump}

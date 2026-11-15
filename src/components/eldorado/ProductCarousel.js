@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { PRODUCT_CAROUSEL } from "./data/productData";
+import OfferPrice from "./OfferPrice";
 
 /* Top "More like this" carousel (product .make capture + live):
    bold header (18px desktop / 16px mobile), capture adds the gray
@@ -116,8 +117,13 @@ export default function ProductCarousel({ cards, allHref = "/efootball-accounts"
                   {c.feedback}&nbsp;{c.count}
                 </span>
               </div>
-              <div className="mt-[10px] flex items-center justify-between">
-                <strong className="text-[18px] font-bold">{c.price}</strong>
+              <div className="mt-[10px] flex items-start justify-between">
+                <OfferPrice
+                  amount={c.priceAmount}
+                  words={c.priceWords}
+                  fallback={c.price}
+                  className="text-[18px] font-bold"
+                />
                 <span className="flex items-center gap-[4px] text-filtertext">
                   <Bolt />
                 </span>

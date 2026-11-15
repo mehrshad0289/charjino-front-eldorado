@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { logout } from "@/actions/auth.actions";
+import { getMarketNotificationsUnread } from "@/actions/market.actions";
+import { toFaDigits } from "@/lib/fa-digits";
 import { clearSessionUser, useSessionUser } from "@/lib/session-client";
 import Logo from "./Logo";
 import SearchOverlay from "./SearchOverlay";
@@ -39,9 +41,9 @@ function LoggedInActions({
         className="relative hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
       >
         <DashboardIcon name="notifications" size={24} />
-        {notiCount != null && (
+        {notiCount != null && Number(notiCount) > 0 && (
           <span className="absolute -end-1 top-0 block min-h-4 rounded-[0.4375rem] bg-brand px-[5px] py-[2px] text-[12px] leading-[normal] text-ink">
-            {notiCount}
+            {toFaDigits(notiCount)}
           </span>
         )}
       </Link>
@@ -73,6 +75,7 @@ export default function HeaderBar({
   const liveUser = captureSession ? user : session.user;
   const sessionKnown = captureSession || session.known;
   const isLoggedIn = captureSession || Boolean(liveUser);
+  const [liveUnread, setLiveUnread] = useState(null);
   const loginHref =
     pathname && pathname !== "/login" ? `/login?next=${encodeURIComponent(pathname)}` : "/login";
 
@@ -99,6 +102,25 @@ export default function HeaderBar({
   useEffect(() => {
     setSettingsOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (captureSession || !isLoggedIn) {
+      setLiveUnread(null);
+      return undefined;
+    }
+    let cancelled = false;
+    async function load() {
+      const result = await getMarketNotificationsUnread();
+      if (cancelled || !result.ok) return;
+      setLiveUnread(result.unread > 0 ? result.unread : null);
+    }
+    load();
+    const timer = window.setInterval(load, 60000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, [captureSession, isLoggedIn, pathname]);
 
   async function handleLogout() {
     await logout();
@@ -157,7 +179,7 @@ export default function HeaderBar({
           ) : isLoggedIn ? (
             <LoggedInActions
               user={liveUser}
-              notiCount={notiCount}
+              notiCount={captureSession ? notiCount : liveUnread}
               avatarAlert={avatarAlert}
               onLogout={handleLogout}
             />

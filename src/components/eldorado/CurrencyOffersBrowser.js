@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { formatTomanPrice } from "../../lib/format-toman";
+import { formatTomanInWords } from "../../lib/price";
 import { toFaDigits } from "../../lib/fa-digits";
 import { CURRENCY_LISTING_COPY } from "./data/listingData";
 import EldSelect from "./EldSelect";
@@ -84,7 +84,7 @@ export default function CurrencyOffersBrowser({ offers = [], unitLabel = "", reg
               نرخ هر {unit || "واحد"}
             </p>
             <p className="text-[22px] font-bold">
-              {selected.price}
+              {formatTomanInWords(selected.priceAmount) || selected.price}
               {unit ? <span className="text-[14px] font-bold text-graytext"> / {unit}</span> : null}
             </p>
             <p className="mt-2 text-[14px]">فروشنده: {selected.seller}</p>
@@ -117,7 +117,7 @@ export default function CurrencyOffersBrowser({ offers = [], unitLabel = "", reg
               </p>
             )}
             <p className="mt-4 text-[14px] text-graytext">جمع کالا، بدون کارمزد</p>
-            <p className="text-[18px] font-bold">{formatTomanPrice(goods)}</p>
+            <p className="text-[18px] font-bold">{formatTomanInWords(goods)}</p>
             <a
               href={`/checkout?listing=${encodeURIComponent(selected.listingId)}&quantity=${qty}`}
               className="mt-4 block rounded-lg bg-darkbtn py-3 text-center text-[16px] font-bold text-white"

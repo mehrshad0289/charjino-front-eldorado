@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { createMarketOrder } from "../../actions/market.actions";
-import { formatTomanPrice } from "../../lib/format-toman";
+import { formatTomanInWords } from "../../lib/price";
 import { toFaDigits } from "../../lib/fa-digits";
 import { CURRENCY_LISTING_COPY } from "./data/listingData";
 import LoadingSpinner from "./LoadingSpinner";
@@ -147,15 +147,15 @@ export default function AccountCheckoutForm({
       <dl className="mb-5 space-y-2 text-[14px]">
         <div className="flex items-center justify-between gap-3">
           <dt className="text-graytext">قیمت کالا</dt>
-          <dd className="font-bold">{formatTomanPrice(totals.price) || "—"}</dd>
+          <dd className="font-bold">{formatTomanInWords(totals.price) || "—"}</dd>
         </div>
         <div className="flex items-center justify-between gap-3">
           <dt className="text-graytext">کارمزد خریدار</dt>
-          <dd>{formatTomanPrice(totals.fee) || "۰ تومان"}</dd>
+          <dd>{formatTomanInWords(totals.fee) || "۰ تومان"}</dd>
         </div>
         <div className="flex items-center justify-between gap-3 border-t border-cardborder pt-2">
           <dt className="font-bold">جمع پرداختی</dt>
-          <dd className="text-[18px] font-bold">{formatTomanPrice(totals.paid) || "—"}</dd>
+          <dd className="text-[18px] font-bold">{formatTomanInWords(totals.paid) || "—"}</dd>
         </div>
       </dl>
       <label className="flex items-start gap-3 text-[14px] leading-[22px]">

@@ -7,7 +7,7 @@ import ShopNoResults from "./ShopNoResults";
 import {
   collectOtherMegaHits,
   filterMegaGames,
-  partitionSearchItems,
+  mapSmartSearchItems,
   uniqueMegaGames,
 } from "../../lib/mega-gift-search";
 
@@ -27,80 +27,95 @@ const SEARCH_LABELS = {
   accounts: FA.accounts,
   items: FA.items,
   boosting: FA.boosting,
+  games: FA.games,
 };
 
-export function useGiftMegaSearch(enabled, query, giftGames) {
+const VERTICAL_GROUP = {
+  "Gift cards": "gift-card",
+  "Top ups": "game-topup",
+  Games: "game-keys",
+  Currency: "steam-wallet",
+};
+
+function loadSearch(url) {
+  return fetch(url)
+    .then((res) => res.json())
+    .catch(() => null);
+}
+
+export function useMegaSearch(categoryKey, query, localGames) {
   const q = String(query || "").trim();
-  const localGift = useMemo(
-    () => (enabled && q ? filterMegaGames(giftGames, q) : []),
-    [enabled, q, giftGames],
+  const group = VERTICAL_GROUP[categoryKey] || "";
+  const ownLabel = VERTICAL_LABELS[categoryKey] || "";
+  const local = useMemo(
+    () => (q ? filterMegaGames(localGames, q) : []),
+    [q, localGames],
   );
-  const [remote, setRemote] = useState({ gift: [], other: [], q: "" });
+  const [remote, setRemote] = useState({ q: "", scoped: [], global: [] });
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
-    if (!enabled || !q || localGift.length > 0) {
-      setRemote({ gift: [], other: [], q });
+    if (q.length < 2) {
+      setRemote({ q, scoped: [], global: [] });
       setPending(false);
       return undefined;
     }
-
     let cancelled = false;
     setPending(true);
     const timer = window.setTimeout(() => {
       const encoded = encodeURIComponent(q);
-      const load = (url) =>
-        fetch(url)
-          .then((res) => res.json())
-          .catch(() => null);
+      const scopedUrl = group
+        ? `/api/search?q=${encoded}&per_page=20&mode=products&group=${encodeURIComponent(group)}`
+        : "";
       Promise.all([
-        load(`/api/search?q=${encoded}&per_page=20&group=gift-card`),
-        load(`/api/search?q=${encoded}&per_page=20`),
+        scopedUrl ? loadSearch(scopedUrl) : Promise.resolve(null),
+        loadSearch(`/api/search?q=${encoded}&per_page=12&mode=auto`),
       ])
-        .then(([giftPayload, allPayload]) => {
+        .then(([scopedPayload, globalPayload]) => {
           if (cancelled) return;
-          const groupedGift = partitionSearchItems(giftPayload?.data?.items, SEARCH_LABELS).gift;
-          const split = partitionSearchItems(allPayload?.data?.items, SEARCH_LABELS);
           setRemote({
             q,
-            gift: groupedGift.length > 0 ? groupedGift : split.gift,
-            other: split.other,
+            scoped: mapSmartSearchItems(scopedPayload?.data?.items, SEARCH_LABELS),
+            global: mapSmartSearchItems(globalPayload?.data?.items, SEARCH_LABELS),
           });
         })
         .finally(() => {
           if (!cancelled) setPending(false);
         });
     }, 220);
-
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [enabled, q, localGift.length]);
+  }, [q, group]);
 
-  const freshRemote = remote.q === q ? remote : { gift: [], other: [] };
-
-  if (!enabled) {
-    return { kind: "plain", rows: [], pending: false };
-  }
   if (!q) {
-    return { kind: "all", rows: Array.isArray(giftGames) ? giftGames : [], pending: false };
+    return { kind: "browse", rows: Array.isArray(localGames) ? localGames : [], pending: false, showCategory: false };
   }
-  if (localGift.length > 0) {
-    return { kind: "gift", rows: localGift, pending: false };
+  if (q.length >= 2 && remote.q !== q) {
+    if (local.length > 0) {
+      return { kind: "match", rows: local, pending: true, showCategory: false };
+    }
+    return { kind: "pending", rows: [], pending: true, showCategory: false };
   }
-  if (freshRemote.gift.length > 0) {
-    return { kind: "gift", rows: freshRemote.gift, pending: false };
+  const fresh = remote.q === q ? remote : { scoped: [], global: [] };
+  const inVertical = uniqueMegaGames([
+    ...fresh.scoped,
+    ...local,
+    ...fresh.global.filter((row) => ownLabel && row.category === ownLabel),
+  ]);
+  if (inVertical.length > 0) {
+    return { kind: "match", rows: inVertical, pending, showCategory: false };
   }
   const other = uniqueMegaGames([
+    ...fresh.global.filter((row) => !ownLabel || row.category !== ownLabel),
     ...collectOtherMegaHits(q, peekNavMega, VERTICAL_LABELS),
-    ...freshRemote.other,
   ]);
   if (other.length > 0) {
-    return { kind: "other", rows: other, pending: false };
+    return { kind: "other", rows: other, pending: false, showCategory: true };
   }
-  const waiting = pending || remote.q !== q;
-  return { kind: waiting ? "pending" : "empty", rows: [], pending: waiting };
+  const waiting = pending || (q.length >= 2 && remote.q !== q);
+  return { kind: waiting ? "pending" : "empty", rows: [], pending: waiting, showCategory: false };
 }
 
 function InfoCircleIcon() {

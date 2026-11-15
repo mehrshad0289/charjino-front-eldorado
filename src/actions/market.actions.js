@@ -222,6 +222,29 @@ export async function getMarketGames() {
   }
 }
 
+export async function getConsoles() {
+  try {
+    const data = await serverFetch(apiPaths.marketConsoles);
+    return { ok: true, items: Array.isArray(data?.items) ? data.items : [] };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function getConsoleSchema(platform) {
+  if (!platform) return { ok: true, fields: [] };
+  try {
+    const data = await serverFetch(apiPaths.marketConsoleSchema(platform));
+    const fields = Array.isArray(data) ? data : Array.isArray(data?.fields) ? data.fields : [];
+    return { ok: true, fields };
+  } catch (error) {
+    if (error instanceof ApiError && (error.statusCode === 404 || error.statusCode === 422)) {
+      return { ok: true, fields: [] };
+    }
+    return fromMarketError(error);
+  }
+}
+
 export async function getGameSchema(gameId) {
   if (!gameId) return { ok: true, fields: [] };
   try {
@@ -793,6 +816,75 @@ export async function sendOrderMessage(orderNo, body) {
     });
     revalidateOrderPaths(orderNo);
     return { ok: true, data };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+function revalidateNotificationPaths() {
+  revalidatePath("/dashboard/notifications");
+}
+
+export async function getMarketNotifications() {
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    return { ok: false, unauthorized: true, items: [], meta: { unread: 0, action_required: 0 } };
+  }
+  try {
+    const data = await serverFetch(apiPaths.marketNotifications, {
+      headers: bearerHeaders(accessToken),
+    });
+    return {
+      ok: true,
+      items: Array.isArray(data?.items) ? data.items : [],
+      meta: data?.meta || { unread: 0, action_required: 0 },
+    };
+  } catch (error) {
+    return { ...fromMarketError(error), items: [], meta: { unread: 0, action_required: 0 } };
+  }
+}
+
+export async function getMarketNotificationsUnread() {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true, unread: 0 };
+  try {
+    const data = await serverFetch(apiPaths.marketNotificationsUnread, {
+      headers: bearerHeaders(accessToken),
+    });
+    const unread = Number(data?.unread);
+    return { ok: true, unread: Number.isFinite(unread) ? unread : 0 };
+  } catch (error) {
+    return { ...fromMarketError(error), unread: 0 };
+  }
+}
+
+export async function markMarketNotificationRead(id) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true };
+  const key = Number(id);
+  if (!Number.isInteger(key) || key < 1) return { ok: false, message: "اعلان پیدا نشد." };
+  try {
+    await serverFetch(apiPaths.marketNotificationRead(key), {
+      method: "POST",
+      headers: bearerHeaders(accessToken),
+    });
+    revalidateNotificationPaths();
+    return { ok: true };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
+export async function markAllMarketNotificationsRead() {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true };
+  try {
+    const data = await serverFetch(apiPaths.marketNotificationsReadAll, {
+      method: "POST",
+      headers: bearerHeaders(accessToken),
+    });
+    revalidateNotificationPaths();
+    return { ok: true, read: Number(data?.read) || 0 };
   } catch (error) {
     return fromMarketError(error);
   }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FA } from "./data/faCopy";
+import { mapSmartSearchItems } from "../../lib/mega-gift-search";
 
 function SearchGlyph({ stroke }) {
   return (
@@ -31,7 +32,10 @@ function ResultRows({ items, desktop }) {
                 <img src={it.icon} alt="" width="28" height="28" className="block h-7 w-7 object-cover align-middle" />
               </span>
             ) : null}
-            <span className="block overflow-hidden text-ellipsis">{it.name}</span>
+            <span className="block min-w-0 flex-1 overflow-hidden text-ellipsis" dir="auto">
+              {it.name}
+            </span>
+            {it.category ? <span className="shrink-0 text-xs text-navgray">{it.category}</span> : null}
           </div>
         ) : (
           <span className="flex items-center gap-4 py-[11px]">
@@ -40,13 +44,26 @@ function ResultRows({ items, desktop }) {
                 <img src={it.icon} alt="" width="32" height="32" className="block h-8 w-8 object-cover align-middle" />
               </span>
             ) : null}
-            <span className="text-base text-ink hover:underline">{it.name}</span>
+            <span className="min-w-0 flex-1 truncate text-base text-ink hover:underline" dir="auto">
+              {it.name}
+            </span>
+            {it.category ? <span className="shrink-0 text-sm text-graytext">{it.category}</span> : null}
           </span>
         )}
       </a>
     </div>
   ));
 }
+
+const SEARCH_LABELS = {
+  giftCards: FA.giftCards,
+  topUps: FA.topUps,
+  currency: FA.currency,
+  accounts: FA.accounts,
+  items: FA.items,
+  boosting: FA.boosting,
+  games: FA.games,
+};
 
 export default function SearchOverlay({ onClose }) {
   const [query, setQuery] = useState("");
@@ -74,24 +91,28 @@ export default function SearchOverlay({ onClose }) {
       setResults(null);
       return undefined;
     }
+    let cancelled = false;
     const timer = setTimeout(() => {
-      fetch(`/api/search?q=${encodeURIComponent(q)}&mode=auto`)
+      fetch(`/api/search?q=${encodeURIComponent(q)}&mode=auto&per_page=12`)
         .then((res) => res.json())
         .then((payload) => {
-          const items = Array.isArray(payload?.data?.items) ? payload.data.items : [];
-          setResults(
-            items
-              .map((row) => ({
-                name: row.title || row.name,
-                icon: row.thumbnail || "",
-                href: row.href || "",
-              }))
-              .filter((row) => row.name && row.href),
-          );
+          if (cancelled) return;
+          const items = mapSmartSearchItems(payload?.data?.items, SEARCH_LABELS).map((row) => ({
+            name: row.name,
+            icon: row.img,
+            href: row.href,
+            category: row.category,
+          }));
+          setResults(items);
         })
-        .catch(() => setResults([]));
+        .catch(() => {
+          if (!cancelled) setResults([]);
+        });
     }, 300);
-    return () => clearTimeout(timer);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [query]);
 
   const list = results ?? idleItems;
@@ -121,7 +142,10 @@ export default function SearchOverlay({ onClose }) {
         </div>
 
         <div className="mb-1 mt-6">
-          <OverlayLabel />
+          {results === null ? <OverlayLabel /> : null}
+          {results && results.length === 0 ? (
+            <p className="py-6 text-center text-sm text-graytext">{FA.nothingFound}</p>
+          ) : null}
         </div>
 
         <ul>
@@ -148,7 +172,10 @@ export default function SearchOverlay({ onClose }) {
           </div>
 
           <div className="mb-4 mt-2 max-h-[440px] overflow-auto px-6">
-            <OverlayLabel />
+            {results === null ? <OverlayLabel /> : null}
+            {results && results.length === 0 ? (
+              <p className="py-6 text-center text-sm text-navgray">{FA.nothingFound}</p>
+            ) : null}
             <div className="flex flex-col gap-2">
               <ResultRows items={list} desktop />
             </div>

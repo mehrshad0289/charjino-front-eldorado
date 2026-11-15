@@ -12,8 +12,9 @@ import ProductMoreGrid from "../../../../../components/eldorado/ProductMoreGrid"
 import Footer from "../../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../../components/eldorado/ChatBubble";
 import { CURRENCY_LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
+import { consolePlatform, normalizeConsoleAttributeValue } from "../../../../../lib/console-games";
 import { toFaDigits } from "../../../../../lib/fa-digits";
-import { formatTomanPrice } from "../../../../../lib/format-toman";
+import { formatTomanInWords } from "../../../../../lib/price";
 import { bannerTabsFromHub, loadHubByMarketGame } from "../../../../../lib/gift-card-shop";
 import {
   currencyHubKeyForMarket,
@@ -79,7 +80,7 @@ function imagesOf(listing, title) {
 }
 
 function listingPrice(listing) {
-  const base = formatTomanPrice(listing.price_amount);
+  const base = formatTomanInWords(listing.price_amount);
   if (!base) return "";
   if (listing.offer_type === "Currency" && listing.price_unit_label) {
     return `${base} / ${listing.price_unit_label}`;
@@ -92,8 +93,18 @@ function listingDetails(listing, { hideGame } = {}) {
   const rows = [{ label: "بازی", value: game, mobileHidden: hideGame }];
   if (listing.offer_type === "ConsoleGame") {
     const attrs = listing.attributes || {};
+    const platformKey = String(attrs.platform || "");
+    const platformTitle = consolePlatform(platformKey)?.title || platformKey;
+    if (platformTitle) rows.push({ label: "پلتفرم", value: platformTitle });
+    const schemaRows = rowsOf(listing).filter((row) => row.key !== "platform");
+    if (schemaRows.length) {
+      for (const row of schemaRows) {
+        if (!row.value) continue;
+        rows.push({ label: row.label_fa || row.key, value: String(row.value) });
+      }
+      return rows;
+    }
     const labels = {
-      platform: "پلتفرم",
       format: "نوع",
       console_model: "کنسول",
       condition: "وضعیت",
@@ -102,34 +113,10 @@ function listingDetails(listing, { hideGame } = {}) {
       dlc: "الحاقیه",
       shipping: "تحویل",
     };
-    const values = {
-      playstation: "پلی‌استیشن",
-      xbox: "ایکس‌باکس",
-      nintendo: "نینتندو",
-      pc: "PC",
-      disc: "دیسک",
-      cartridge: "کارتریج",
-      account: "اکانت",
-      rack: "راک",
-      new: "آکبند",
-      used: "کارکرده",
-      none: "ندارد",
-      unused: "استفاده نشده",
-      post: "پست",
-      meetup: "تحویل حضوری",
-      ps4: "PS4",
-      ps5: "PS5",
-      "xbox-one": "Xbox One",
-      "xbox-series": "Xbox Series",
-      "xbox-series-s": "Xbox Series S",
-      "xbox-series-x": "Xbox Series X",
-      switch: "Switch",
-      "switch-2": "Switch 2",
-    };
     for (const key of Object.keys(labels)) {
       const raw = attrs[key];
       if (!raw) continue;
-      rows.push({ label: labels[key], value: values[raw] || String(raw) });
+      rows.push({ label: labels[key], value: normalizeConsoleAttributeValue(key, raw) || String(raw) });
     }
     return rows;
   }
@@ -164,8 +151,8 @@ function listingTrust(listing) {
       supportNote: "اگر تحویل یا آگهی مشکل داشت پیام بده",
     };
   }
-  const format = listing.attributes?.format;
-  const physical = offer === "ConsoleGame" && (format === "disc" || format === "cartridge");
+  const format = String(listing.attributes?.format || "");
+  const physical = offer === "ConsoleGame" && ["disc", "cartridge", "دیسک", "کارتریج"].includes(format);
   return {
     guarantee: "فروشنده بعد از تحویل پول می‌گیرد",
     guaranteeNote: physical
@@ -229,6 +216,8 @@ export default async function ShopListingPage({ params }) {
     feedback: item.rating,
     count: "",
     price: item.price,
+    priceAmount: item.priceAmount,
+    priceWords: item.priceWords,
   }));
   const more = related.map((item) => ({
     href: item.href,
@@ -237,11 +226,15 @@ export default async function ShopListingPage({ params }) {
     feedback: item.rating,
     count: "",
     price: item.price,
+    priceAmount: item.priceAmount,
+    priceWords: item.priceWords,
     delivery: item.delivery,
     img: item.img,
   }));
   const offerCard = {
     price,
+    priceAmount: listing.price_amount,
+    priceWords: formatTomanInWords(listing.price_amount),
     banner: listingBanner(listing),
     buyHref: `/checkout?listing=${encodeURIComponent(String(listing.id))}`,
     buyLabel: "خرید",

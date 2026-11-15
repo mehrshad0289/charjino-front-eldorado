@@ -174,7 +174,13 @@ export default function TopupBuyFlow({
       buyerValues={buyerValues}
       onBuyerFieldChange={(name, value) => setBuyerValues((prev) => ({ ...prev, [name]: value }))}
       coupon={coupon}
-      onBuy={() => checkout.preview(selected, checkoutFields())}
+      busy={checkout.busy}
+      onBuy={() =>
+        checkout.preview(selected, checkoutFields(), {
+          couponCode: coupon.quote?.code || "",
+          from: typeof window !== "undefined" ? window.location.pathname : "",
+        })
+      }
     />
   );
 

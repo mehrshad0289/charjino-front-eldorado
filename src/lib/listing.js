@@ -1,4 +1,5 @@
 import { onlyDigits, toFaDigits } from "./fa-digits";
+import { formatTomanInWords } from "./price";
 
 export const LISTING_PRICE_MIN = 10_000;
 export const LISTING_PRICE_MAX = 2_000_000_000;
@@ -118,12 +119,48 @@ export function formatToman(value) {
 export function listingPriceError(value) {
   const amount = parseToman(value);
   if (amount < LISTING_PRICE_MIN) {
-    return `حداقل قیمت ${formatToman(LISTING_PRICE_MIN)} تومان است.`;
+    return `حداقل قیمت ${formatTomanInWords(LISTING_PRICE_MIN)} است.`;
   }
   if (amount > LISTING_PRICE_MAX) {
-    return `حداکثر قیمت ${formatToman(LISTING_PRICE_MAX)} تومان است.`;
+    return `حداکثر قیمت ${formatTomanInWords(LISTING_PRICE_MAX)} است.`;
   }
   return null;
+}
+
+export function splitItemList(value) {
+  return String(value || "")
+    .split(/\r\n|\n|\r/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+export function joinItemList(items) {
+  const seen = new Set();
+  const out = [];
+  for (const raw of Array.isArray(items) ? items : []) {
+    const item = String(raw || "").trim();
+    if (!item || seen.has(item)) continue;
+    seen.add(item);
+    out.push(item);
+  }
+  return out.join("\n");
+}
+
+export function schemaItemNoun(field) {
+  if (field?.key === "games_list" || /بازی/.test(String(field?.label_fa || ""))) return "بازی";
+  return "مورد";
+}
+
+export function schemaFieldFilled(field, attributes) {
+  const value = attributes?.[field?.key];
+  if (field?.multiline) return splitItemList(value).length > 0;
+  return Boolean(String(value || "").trim());
+}
+
+export function schemaFieldVisible(field, attributes) {
+  const when = field?.visible_when;
+  if (!when?.key || !Array.isArray(when.values) || when.values.length === 0) return true;
+  return when.values.includes(String(attributes?.[when.key] ?? ""));
 }
 
 export function schemaFields(raw) {

@@ -36,7 +36,7 @@ export default function PopularGames({ items, title }) {
                 {row.img ? (
                   <img
                     src={row.img}
-                    alt={row.name}
+                    alt=""
                     width="40"
                     height="40"
                     loading="lazy"

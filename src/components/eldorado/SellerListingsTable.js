@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { pauseListing, resumeListing } from "@/actions/market.actions";
-import { formatToman, listingCardHref, listingMediaUrl, listingStatusMeta } from "@/lib/listing";
+import { listingCardHref, listingMediaUrl, listingStatusMeta } from "@/lib/listing";
+import { formatTomanInWords } from "@/lib/price";
 import { LISTING_COPY } from "./data/listingData";
 
 export default function SellerListingsTable({ items = [], editBase = "/dashboard/offers/Account" }) {
@@ -51,7 +52,7 @@ export default function SellerListingsTable({ items = [], editBase = "/dashboard
                 <div className="min-w-0">
                   <p className="text-[16px] font-bold">{row.title}</p>
                   <p className="text-[14px] text-graytext">
-                    {row.game_name} · {formatToman(row.price_amount)} تومان
+                    {row.game_name} · {formatTomanInWords(row.price_amount)}
                     {row.price_unit_label ? ` / ${row.price_unit_label}` : ""}
                     {row.delivery_minutes ? ` · ${row.delivery_minutes} دقیقه` : ""}
                   </p>

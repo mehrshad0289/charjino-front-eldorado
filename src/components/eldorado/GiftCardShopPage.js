@@ -3,7 +3,6 @@ import { notFound, redirect } from "next/navigation";
 import CategoryNav from "./CategoryNav";
 import GiftCardBanner from "./GiftCardBanner";
 import GiftCardBuyFlow from "./GiftCardBuyFlow";
-import GiftCardReviews from "./GiftCardReviews";
 import GiftCardProcessSteps from "./GiftCardProcessSteps";
 import GiftCardFaq from "./GiftCardFaq";
 import GiftCardTrustCard from "./GiftCardTrustCard";
@@ -95,7 +94,6 @@ export default async function GiftCardShopPage({ platform }) {
               />
             </div>
             <div className="mx-auto mt-10 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-16 lg:gap-[128px] lg:px-6">
-              <GiftCardReviews title={GIFT_SHOP_CHROME.reviewsTitle} />
               <GiftCardProcessSteps
                 title={GIFT_SHOP_CHROME.processTitle}
                 steps={GIFT_SHOP_CHROME.processSteps}

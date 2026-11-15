@@ -5,7 +5,8 @@ import { getItemOfferGames, getSellerListing, getSellerMe } from "@/actions/mark
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
 import ItemListingWizard from "../../../../../components/eldorado/ItemListingWizard";
 import { ITEM_LISTING_COPY, LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
-import { formatToman, listingStatusMeta, sellBlockers } from "@/lib/listing";
+import { listingStatusMeta, sellBlockers } from "@/lib/listing";
+import { formatTomanInWords } from "@/lib/price";
 
 export const instant = false;
 
@@ -46,7 +47,7 @@ export default async function EditItemOfferPage({ params }) {
                 </span>
                 <p className="mt-4 text-[24px] font-bold">{row.title}</p>
                 <p className="mt-2 text-graytext">
-                  {row.game_name} · {formatToman(row.price_amount)} تومان
+                  {row.game_name} · {formatTomanInWords(row.price_amount)}
                   {row.stock ? ` · موجودی ${row.stock}` : ""}
                 </p>
                 {row.rejection_reason ? <p className="mt-3 text-[rgb(232,27,22)]">{row.rejection_reason}</p> : <p className="mt-3 text-[rgb(255,141,0)]">{LISTING_COPY.reviewNote}</p>}

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PRODUCT, PRODUCT_PAYMENTS, PRODUCT_WARRANTY_TOOLTIP } from "./data/productData";
+import OfferPrice from "./OfferPrice";
 import { ShieldIcon, BoltIcon, SupportIcon, TrustRow } from "./TrustRows";
 
 /* Offer card (product .make capture + live @390/1920):
@@ -118,7 +119,7 @@ function DetailRow({ row }) {
           <span className="font-bold">{row.value}</span>
         </div>
       ) : (
-        <div>{row.value}</div>
+        <div className="max-w-[60%] whitespace-pre-line text-end">{row.value}</div>
       )}
     </div>
   );
@@ -213,6 +214,8 @@ function BuyNow({ href, label }) {
 
 export default function ProductOfferCard({ offer }) {
   const price = offer?.price || PRODUCT.price;
+  const priceWords = offer?.priceWords || "";
+  const priceAmount = offer?.priceAmount;
   const details = offer?.details || PRODUCT.details;
   const banner = offer?.banner || "Full email access included";
   const buyHref = offer?.buyHref || "";
@@ -231,7 +234,14 @@ export default function ProductOfferCard({ offer }) {
               <InfoIcon />
             </span>
           </div>
-          <strong className="mt-3 block text-[28px] font-bold leading-[34px]">{price}</strong>
+          <div className="mt-3">
+            <OfferPrice
+              amount={priceAmount}
+              words={priceWords}
+              fallback={price}
+              className="block text-[28px] font-bold leading-[34px]"
+            />
+          </div>
         </div>
         <div className="mt-3 border-t-[0.8px] border-cardborder">
           {mobileRows.map((row) => (
@@ -260,7 +270,12 @@ export default function ProductOfferCard({ offer }) {
           </span>
         </div>
         <div className="flex flex-col gap-[16px] border-b-[0.8px] border-cardborder px-6 pb-4 pt-6">
-          <strong className="block text-[24px] font-bold leading-[28.8px]">{price}</strong>
+          <OfferPrice
+            amount={priceAmount}
+            words={priceWords}
+            fallback={price}
+            className="block text-[24px] font-bold leading-[28.8px]"
+          />
         </div>
         {details.map((row) => (
           <DetailRow key={row.label} row={row} />

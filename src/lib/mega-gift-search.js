@@ -100,7 +100,8 @@ function categoryLabel(item, labels) {
   const text = `${asString(rec.categoryName)} ${asString(rec.group)}`;
   if (slug === "gift-card" || slug === "gift_card") return labels.giftCards;
   if (slug === "game-topup" || slug === "call-of-duty-mobile" || slug === "free-fire") return labels.topUps;
-  if (slug === "steam-wallet" || slug === "game-keys") return labels.currency;
+  if (slug === "game-keys") return labels.games;
+  if (slug === "steam-wallet" || slug === "steam-gifts") return labels.currency;
   if (/گیفت|gift\s*-?\s*card/i.test(text)) return labels.giftCards;
   if (/شارژ|top\s*-?\s*up/i.test(text)) return labels.topUps;
   if (/ارز|currency|wallet|کلید/i.test(text)) return labels.currency;
@@ -108,6 +109,41 @@ function categoryLabel(item, labels) {
   if (/بوست|boost/i.test(text)) return labels.boosting;
   if (/اکانت|account/i.test(text)) return labels.accounts;
   return asString(rec.categoryName) || asString(rec.group) || labels.accounts;
+}
+
+function categoryFromHref(href, labels) {
+  if (href.startsWith("/gift-card/") || href.startsWith("/shop/gift-cards") || href.includes("/playstation-plus") || href.includes("/xbox-game-pass")) {
+    return labels.giftCards;
+  }
+  if (href.startsWith("/shop/top-ups")) return labels.topUps;
+  if (href.includes("/game-keys") || href.startsWith("/shop/games")) return labels.games;
+  if (href.includes("steam-wallet") || href.includes("steam-gifts") || href.startsWith("/shop/currency")) return labels.currency;
+  if (href.startsWith("/shop/accounts")) return labels.accounts;
+  if (href.startsWith("/shop/items")) return labels.items;
+  if (href.startsWith("/shop/boosting")) return labels.boosting;
+  return "";
+}
+
+export function mapSmartSearchItems(items, labels) {
+  const rows = [];
+  for (const item of Array.isArray(items) ? items : []) {
+    const rec = asRecord(item);
+    const type = asString(rec.result_type) || "product";
+    const name = asString(rec.title) || asString(rec.name);
+    const href = asString(rec.href);
+    if (!name || !href) continue;
+    const fromHref = categoryFromHref(href, labels);
+    const category =
+      type === "category" || type === "group" ? "" : fromHref || categoryLabel(rec, labels);
+    rows.push({
+      name,
+      nameEn: [rec.title_en, rec.titleEn, rec.name_en, rec.name, rec.title].map(asString).filter(Boolean).join(" "),
+      img: asString(rec.thumbnail) || asString(rec.image) || asString(rec.icon),
+      href,
+      category,
+    });
+  }
+  return uniqueMegaGames(rows);
 }
 
 function searchItemToGame(item, category) {

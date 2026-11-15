@@ -23,6 +23,8 @@ export const apiPaths = {
   marketListingResume: (id) => `/market/listings/${encodeURIComponent(id)}/resume`,
   marketListingArchive: (id) => `/market/listings/${encodeURIComponent(id)}/archive`,
   marketGameSchema: (id) => `/market/games/${encodeURIComponent(id)}/attribute-schema`,
+  marketConsoles: "/market/consoles",
+  marketConsoleSchema: (platform) => `/market/consoles/${encodeURIComponent(platform)}/attribute-schema`,
   marketKycMe: "/market/kyc/me",
   marketKycUpgrade: "/market/kyc/upgrade",
   marketKycDocuments: "/market/kyc/documents",
@@ -38,6 +40,20 @@ export const apiPaths = {
   catalogStoreCategory: (key) => `/catalog/store-categories/${encodeURIComponent(key)}`,
   catalogCheckoutPreview: "/catalog/checkout-preview",
   checkoutCoupon: "/checkout/coupon",
+  orders: "/orders",
+  ordersQuery: (page = 1, perPage) => {
+    const search = new URLSearchParams();
+    if (page > 1) search.set("page", String(page));
+    if (perPage) search.set("perPage", String(perPage));
+    const qs = search.toString();
+    return qs ? `/orders?${qs}` : "/orders";
+  },
+  order: (number) => `/orders/${encodeURIComponent(number)}`,
+  payOrder: (number) => `/orders/${encodeURIComponent(number)}/pay`,
+  revealOrder: (number) => `/orders/${encodeURIComponent(number)}/reveal`,
+  refreshOrder: (number) => `/orders/${encodeURIComponent(number)}/refresh`,
+  paymentVerifyZibal: "/payments/verify/zibal",
+  paymentCallbackMock: "/payments/callback/mock",
   catalogProducts: (params = {}) => {
     const search = new URLSearchParams();
     if (params.category) search.set("category", String(params.category));
@@ -115,6 +131,10 @@ export const apiPaths = {
   marketSellerOrders: "/market/seller/orders",
   marketSellerOrdersInvoice: "/market/seller/orders/invoice",
   marketSellerOrder: (orderNo) => `/market/seller/orders/${encodeURIComponent(orderNo)}`,
+  marketNotifications: "/market/notifications",
+  marketNotificationsUnread: "/market/notifications/unread",
+  marketNotificationsReadAll: "/market/notifications/read-all",
+  marketNotificationRead: (id) => `/market/notifications/${encodeURIComponent(id)}/read`,
   marketSellerWallet: "/market/seller/wallet",
   marketSellerTransactions: "/market/seller/transactions",
   marketBoostForm: (gameId) => `/market/boost-forms/${encodeURIComponent(gameId)}`,

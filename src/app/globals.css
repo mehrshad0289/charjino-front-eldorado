@@ -124,6 +124,20 @@ html[dir="rtl"] img.dashboard-assassin {
   animation: shop-backdrop-in 280ms ease-out;
 }
 
+.popular-cards-viewport {
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.popular-cards-viewport.is-grabbing {
+  cursor: grabbing;
+}
+
+.popular-cards-track {
+  will-change: transform;
+}
+
 .shop-hub-tabs {
   scrollbar-width: none;
 }

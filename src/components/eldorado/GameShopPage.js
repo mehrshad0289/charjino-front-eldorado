@@ -5,7 +5,6 @@ import ShopAmountCards from "./ShopAmountCards";
 import ShopFeaturedOffer from "./ShopFeaturedOffer";
 import GamePassSellerCard from "./GamePassSellerCard";
 import GamePassOffers from "./GamePassOffers";
-import GiftCardReviews from "./GiftCardReviews";
 import GiftCardProcessSteps from "./GiftCardProcessSteps";
 import GiftCardFaq from "./GiftCardFaq";
 import GiftCardTrustCard from "./GiftCardTrustCard";
@@ -93,7 +92,6 @@ export default function GameShopPage({ game }) {
               </div>
             </div>
             <div className="mx-auto mt-12 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-12 lg:gap-[128px] lg:px-6">
-              <GiftCardReviews />
               <GiftCardProcessSteps />
             </div>
             <div className="mx-auto mt-12 w-full max-w-3xl px-4 lg:mt-[128px] lg:px-3.5">

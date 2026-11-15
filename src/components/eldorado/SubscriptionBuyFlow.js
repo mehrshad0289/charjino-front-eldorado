@@ -90,7 +90,13 @@ export default function SubscriptionBuyFlow({
           onAckChange={checkout.setAck}
           message={checkout.message}
           coupon={coupon}
-          onBuy={() => checkout.preview(selected)}
+          busy={checkout.busy}
+          onBuy={() =>
+            checkout.preview(selected, {}, {
+              couponCode: coupon.quote?.code || "",
+              from: typeof window !== "undefined" ? window.location.pathname : "",
+            })
+          }
         />
       </aside>
     </div>

@@ -1,11 +1,14 @@
 import { connection } from "next/server";
 import { notFound, redirect } from "next/navigation";
 import { getSessionUser } from "@/actions/auth.actions";
+import { getMyCatalogOrder } from "@/actions/checkout.actions";
 import { getBuyerOrder } from "@/actions/market.actions";
 import OrderDashboardFrame from "../../../../../components/eldorado/OrderDashboardFrame";
 import BuyerOrderPanel from "../../../../../components/eldorado/BuyerOrderPanel";
+import CatalogOrderPanel from "../../../../../components/eldorado/CatalogOrderPanel";
 import { ORDER_COPY } from "../../../../../components/eldorado/data/orderData";
 import { toFaDigits } from "@/lib/fa-digits";
+import { isCatalogOrderNumber } from "@/lib/purchased-orders";
 
 export const instant = false;
 
@@ -21,16 +24,48 @@ export default async function PurchasedOrderPage({ params, searchParams }) {
   const user = await getSessionUser();
   const next = `/dashboard/orders/purchased/${encodeURIComponent(orderNo)}`;
   if (!user) redirect(`/login?next=${encodeURIComponent(next)}`);
-  const result = await getBuyerOrder(orderNo);
-  if (result.unauthorized) redirect(`/login?next=${encodeURIComponent(next)}`);
-  if (!result.ok || !result.data) notFound();
 
-  return (
-    <OrderDashboardFrame title={`${ORDER_COPY.purchasedTitle} ${toFaDigits(orderNo)}`}>
-      <a href="/dashboard/orders/purchased" className="mb-4 inline-flex text-[14px] font-bold text-linkblue">
-        {ORDER_COPY.backPurchased}
-      </a>
-      <BuyerOrderPanel order={result.data} payment={String(query.payment || "")} />
-    </OrderDashboardFrame>
-  );
+  const catalogFirst = isCatalogOrderNumber(orderNo);
+  const catalog = catalogFirst ? await getMyCatalogOrder(orderNo) : null;
+  if (catalog?.unauthorized) redirect(`/login?next=${encodeURIComponent(next)}`);
+  if (catalog?.ok && catalog.data) {
+    return (
+      <OrderDashboardFrame title={`${ORDER_COPY.purchasedTitle} ${toFaDigits(orderNo)}`}>
+        <a href="/dashboard/orders/purchased" className="mb-4 inline-flex text-[14px] font-bold text-linkblue">
+          {ORDER_COPY.backPurchased}
+        </a>
+        <CatalogOrderPanel order={catalog.data} payment={String(query.payment || "")} />
+      </OrderDashboardFrame>
+    );
+  }
+
+  const market = await getBuyerOrder(orderNo);
+  if (market.unauthorized) redirect(`/login?next=${encodeURIComponent(next)}`);
+  if (market.ok && market.data) {
+    return (
+      <OrderDashboardFrame title={`${ORDER_COPY.purchasedTitle} ${toFaDigits(orderNo)}`}>
+        <a href="/dashboard/orders/purchased" className="mb-4 inline-flex text-[14px] font-bold text-linkblue">
+          {ORDER_COPY.backPurchased}
+        </a>
+        <BuyerOrderPanel order={market.data} payment={String(query.payment || "")} />
+      </OrderDashboardFrame>
+    );
+  }
+
+  if (!catalogFirst) {
+    const fallback = await getMyCatalogOrder(orderNo);
+    if (fallback.unauthorized) redirect(`/login?next=${encodeURIComponent(next)}`);
+    if (fallback.ok && fallback.data) {
+      return (
+        <OrderDashboardFrame title={`${ORDER_COPY.purchasedTitle} ${toFaDigits(orderNo)}`}>
+          <a href="/dashboard/orders/purchased" className="mb-4 inline-flex text-[14px] font-bold text-linkblue">
+            {ORDER_COPY.backPurchased}
+          </a>
+          <CatalogOrderPanel order={fallback.data} payment={String(query.payment || "")} />
+        </OrderDashboardFrame>
+      );
+    }
+  }
+
+  notFound();
 }

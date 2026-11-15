@@ -5,7 +5,8 @@ import { getCurrencyOfferGames, getSellerListing, getSellerMe } from "@/actions/
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
 import CurrencyListingWizard from "../../../../../components/eldorado/CurrencyListingWizard";
 import { CURRENCY_LISTING_COPY, LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
-import { formatToman, listingStatusMeta, sellBlockers } from "@/lib/listing";
+import { listingStatusMeta, sellBlockers } from "@/lib/listing";
+import { formatTomanInWords } from "@/lib/price";
 
 export const instant = false;
 
@@ -47,7 +48,7 @@ export default async function EditCurrencyOfferPage({ params }) {
                 </span>
                 <p className="mt-4 text-[24px] font-bold">{row.title}</p>
                 <p className="mt-2 text-graytext">
-                  {row.game_name} · {formatToman(row.price_amount)} تومان{unit}
+                  {row.game_name} · {formatTomanInWords(row.price_amount)}{unit}
                   {row.stock ? ` · موجودی ${row.stock}` : ""}
                   {row.delivery_minutes ? ` · ${row.delivery_minutes} دقیقه` : ""}
                 </p>

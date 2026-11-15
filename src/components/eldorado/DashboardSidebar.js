@@ -103,25 +103,25 @@ export default function DashboardSidebar({ active = null, user = null }) {
       id="dashboard-sidebar"
       className="sticky top-[var(--shop-header-h)] z-[2] max-h-[calc(100dvh-var(--shop-header-h))] w-[260px] overflow-x-clip overflow-y-auto bg-white"
     >
-      <div className="flex h-[62px] justify-start px-[10px] pb-3 pt-[10px]">
+      <Link
+        href={profileHref}
+        aria-label={FA.viewProfile}
+        className="flex h-[62px] justify-start px-[10px] pb-3 pt-[10px] hover:bg-badgebg"
+      >
         <div className="me-[10px]">
           <div className="size-10 overflow-hidden rounded-full bg-badgebg">
-            <img alt={FA.profileAvatar} src={avatar} className="block size-full object-cover align-middle" />
+            <img alt="" src={avatar} className="block size-full object-cover align-middle" />
           </div>
         </div>
         <div className="flex min-w-0 flex-col justify-center">
           <h5 className="flex items-center gap-1 text-[14px] font-bold leading-[19.6px]">
-            <a
-              href={profileHref}
-              className="block truncate"
-              dir={phoneName ? "ltr" : "auto"}
-            >
+            <span className="block truncate" dir={phoneName ? "ltr" : "auto"}>
               {displayName}
-            </a>
+            </span>
           </h5>
           {registered ? <p className="text-[14px] leading-[21px] text-graytext">{registered}</p> : null}
         </div>
-      </div>
+      </Link>
 
       <div className="border-t-[0.8px] border-cardborder px-[10px] pb-3 pt-3">
           <div className="mb-2 mt-2 flex flex-col gap-2">

@@ -2,7 +2,6 @@ import { connection } from "next/server";
 import CategoryNav from "../../components/eldorado/CategoryNav";
 import GiftCardBanner from "../../components/eldorado/GiftCardBanner";
 import SubscriptionBuyFlow from "../../components/eldorado/SubscriptionBuyFlow";
-import GiftCardReviews from "../../components/eldorado/GiftCardReviews";
 import GiftCardProcessSteps from "../../components/eldorado/GiftCardProcessSteps";
 import GiftCardFaq from "../../components/eldorado/GiftCardFaq";
 import GiftCardTrustCard from "../../components/eldorado/GiftCardTrustCard";
@@ -81,7 +80,6 @@ export default async function XboxGamePassPage() {
               />
             </div>
             <div className="mx-auto mt-12 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-12 lg:gap-[128px] lg:px-6">
-              <GiftCardReviews title={GIFT_SHOP_CHROME.reviewsTitle} />
               <GiftCardProcessSteps
                 title={GIFT_SHOP_CHROME.processTitle}
                 steps={GIFT_SHOP_CHROME.processSteps}

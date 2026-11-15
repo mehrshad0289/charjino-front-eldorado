@@ -2,7 +2,8 @@ import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
 import { getBackendUrl } from "./env";
 import { toFaDigits } from "./fa-digits";
-import { formatTomanPrice, productHref } from "./format-toman";
+import { productHref } from "./format-toman";
+import { formatTomanInWords } from "./price";
 import {
   giftShopHrefFromProduct,
   isGiftCardProduct,
@@ -440,11 +441,9 @@ export function listingToOffer(listing, categoryKey) {
         ? `/users/${encodeURIComponent(asString(seller.id))}`
         : "",
     rating: sellerRating(seller),
-    price:
-      Number.isFinite(price) && price > 0
-        ? `${formatTomanPrice(price)}${categoryKey === "currency" && unitLabel ? ` / ${unitLabel}` : ""}`
-        : "",
+    price: Number.isFinite(price) && price > 0 ? formatTomanInWords(price) : "",
     priceAmount: Number.isFinite(price) ? price : 0,
+    priceWords: Number.isFinite(price) && price > 0 ? formatTomanInWords(price) : "",
     attributes,
     filterLabels,
     delivery:
@@ -472,6 +471,8 @@ export function listingToShopCard(listing) {
     gameName: asString(rec.game_name),
     img: card.img,
     price: card.price,
+    priceAmount: card.priceAmount,
+    priceWords: card.priceWords,
     delivery: card.delivery,
   };
 }

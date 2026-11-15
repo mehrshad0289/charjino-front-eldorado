@@ -2,6 +2,10 @@ import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
 import { discountLabel, formatTomanPrice, productHref, categoryHref } from "./format-toman";
 import { giftShopHrefFromProduct, isGiftCardProduct } from "./gift-card-shop";
+import { SHOP_GIFT_CARDS_HREF, SHOP_TOPUPS_HREF } from "../components/eldorado/data/faCopy";
+
+const CURRENCY_GROUP_SLUG = "game-topup";
+const CURRENCY_CTA = "خرید";
 
 function asRecord(value) {
   return value && typeof value === "object" ? value : {};
@@ -19,6 +23,50 @@ function asNumber(value) {
 function productHandle(item) {
   const raw = asRecord(item);
   return asString(raw.handle) || asString(raw.slug);
+}
+
+function badgeOf(item) {
+  return asRecord(asRecord(item).badge);
+}
+
+function categorySlugOf(item, fallback = "") {
+  const rec = asRecord(item);
+  return (
+    asString(fallback) ||
+    asString(rec.categorySlug) ||
+    asString(asRecord(rec.category).slug) ||
+    asString(badgeOf(rec).category)
+  );
+}
+
+function enrichHomeProduct(item, groupSlug = "") {
+  const rec = asRecord(item);
+  const handle = productHandle(rec);
+  const slug = categorySlugOf(rec, groupSlug);
+  return {
+    ...rec,
+    handle,
+    slug: handle,
+    platform: asString(rec.platform) || asString(badgeOf(rec).platform),
+    categorySlug: slug,
+    category: rec.category || { slug },
+  };
+}
+
+function homeProductHref(item, groupSlug = "") {
+  const rec = enrichHomeProduct(item, groupSlug);
+  const handle = asString(rec.handle);
+  if (!handle) return "";
+  if (asString(rec.categorySlug) === "gift-card" || isGiftCardProduct(rec)) {
+    return giftShopHrefFromProduct(rec) || productHref(handle);
+  }
+  return productHref(handle);
+}
+
+function groupHref(slug) {
+  if (slug === "game-topup") return SHOP_TOPUPS_HREF;
+  if (slug === "gift-card") return SHOP_GIFT_CARDS_HREF;
+  return categoryHref(slug);
 }
 
 export async function getCatalogHome() {
@@ -54,13 +102,14 @@ export function mapPopularCards(home) {
       const rec = asRecord(item);
       const handle = productHandle(rec);
       const title = asString(rec.title) || asString(rec.name);
-      if (!handle || !title) return null;
+      const href = homeProductHref(rec);
+      if (!handle || !title || !href) return null;
       const flash = flashByHandle.get(handle);
       const priceValue = flash ? asNumber(flash.price) : asNumber(rec.price ?? rec.minPrice);
-      const original = asNumber(flash?.originalPrice ?? asRecord(flash?.badge).originalPrice ?? asRecord(rec.badge).originalPrice);
+      const original = asNumber(flash?.originalPrice ?? asRecord(flash?.badge).originalPrice ?? badgeOf(rec).originalPrice);
       const discount = original > 0 ? discountLabel(priceValue, original) : null;
       const image = asString(rec.thumbnail) || asString(rec.image);
-      const game = asString(rec.categoryName) || asString(asRecord(rec.badge).publisher);
+      const game = asString(rec.categoryName) || asString(badgeOf(rec).publisher);
       return {
         key: handle,
         game,
@@ -70,34 +119,23 @@ export function mapPopularCards(home) {
         oldPrice: discount ? formatTomanPrice(original) : "",
         discount: discount || "",
         img: image,
-        href: isGiftCardProduct(rec) ? giftShopHrefFromProduct(rec) || productHref(handle) : productHref(handle),
+        href,
       };
     })
     .filter(Boolean)
     .slice(0, 8);
 }
 
-export function mapPopularGames(home, categories = []) {
-  const fromCategories = mapCategorySuggestions(categories).slice(0, 9);
-  if (fromCategories.length > 0) {
-    return fromCategories.map((row) => ({
-      key: row.href,
-      name: row.name,
-      tag: "",
-      img: row.icon,
-      href: row.href,
-    }));
-  }
+export function mapPopularGames(home) {
   const groups = Array.isArray(home?.groups) ? home.groups : [];
   return groups
     .filter((group) => asString(group?.slug) && asString(group?.name))
-    .slice(0, 9)
     .map((group) => ({
       key: group.slug,
       name: group.name,
       tag: "",
-      img: "",
-      href: categoryHref(group.slug),
+      img: asString(group.imageUrl),
+      href: groupHref(group.slug),
     }));
 }
 
@@ -118,30 +156,32 @@ export function mapCategorySuggestions(categories) {
     .map((row) => ({
       name: row.title,
       icon: asString(row.imageUrl),
-      href: categoryHref(row.slug),
+      href: groupHref(row.slug),
     }));
 }
 
-export function mapCurrencyCards(page) {
-  const products = Array.isArray(page?.products) ? page.products : [];
-  const rows = products
+function mapHomeProductsToCurrency(products, groupSlug) {
+  const rows = (Array.isArray(products) ? products : [])
     .map((item) => {
       const rec = asRecord(item);
       const handle = productHandle(rec);
       const title = asString(rec.title) || asString(rec.name);
-      if (!handle || !title) return null;
+      const href = homeProductHref(rec, groupSlug);
+      if (!handle || !title || !href) return null;
       const image = asString(rec.thumbnail) || asString(rec.image);
+      const game = asString(rec.categoryName) || asString(badgeOf(rec).publisher);
       return {
+        key: handle,
         name: title,
-        game: asString(rec.categoryName) || asString(asRecord(rec.badge).publisher),
+        game,
         price: formatTomanPrice(rec.price ?? rec.minPrice),
         unit: "",
         icon: image,
-        href: isGiftCardProduct(rec) ? giftShopHrefFromProduct(rec) || productHref(handle) : productHref(handle),
+        href,
         img: image,
-        sellers: asString(rec.categoryName),
-        per: asString(asRecord(rec.badge).publisher),
-        cta: "خرید",
+        sellers: game,
+        per: asString(badgeOf(rec).platform),
+        cta: CURRENCY_CTA,
       };
     })
     .filter(Boolean);
@@ -159,4 +199,10 @@ export function mapCurrencyCards(page) {
     },
     small: rows.slice(1, 7),
   };
+}
+
+export function mapCurrencyCards(home) {
+  const groups = Array.isArray(home?.groups) ? home.groups : [];
+  const group = groups.find((row) => asString(row?.slug) === CURRENCY_GROUP_SLUG);
+  return mapHomeProductsToCurrency(group?.products, CURRENCY_GROUP_SLUG);
 }

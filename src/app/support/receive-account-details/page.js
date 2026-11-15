@@ -1,5 +1,7 @@
-import { redirect } from "next/navigation";
+import ComingSoonPage, { comingSoonMetadata } from "../../../components/eldorado/ComingSoonPage";
 
-export default function ReceiveAccountDetailsRedirect() {
-  redirect("/support/articles/8408991-receive-your-account-details");
+export const metadata = comingSoonMetadata("دریافت مشخصات اکانت");
+
+export default function ReceiveAccountDetailsPage() {
+  return <ComingSoonPage title="دریافت مشخصات اکانت" />;
 }

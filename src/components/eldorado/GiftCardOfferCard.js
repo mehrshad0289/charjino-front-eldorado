@@ -6,6 +6,7 @@ import { FA } from "./data/faCopy";
 import { catalogRegionLabel } from "../../lib/catalog-region";
 import { formatTomanPrice } from "../../lib/format-toman";
 import CheckoutCouponField from "./CheckoutCouponField";
+import LoadingSpinner from "./LoadingSpinner";
 import { BoltIcon, ShieldIcon, SupportIcon, TrustRow } from "./TrustRows";
 
 /* Gift-card offer sidebar: live Eldorado gift shop (product img + amount
@@ -59,6 +60,7 @@ export default function GiftCardOfferCard({
   buyerValues = {},
   onBuyerFieldChange,
   coupon = null,
+  busy = false,
 }) {
   const heading = selected ? selected.faceLabel || selected.name || selected.label || title : title;
   const icon = selected?.img || productIcon;
@@ -190,11 +192,12 @@ export default function GiftCardOfferCard({
           type="button"
           aria-label={buyLabel}
           data-sku-id={selected?.skuId || undefined}
-          className={buyClassName}
+          disabled={busy}
+          className={`${buyClassName} disabled:opacity-60`}
           onClick={() => onBuy?.()}
         >
           <span className="flex items-center justify-center gap-1.5">
-            <span className="block">{buyLabel}</span>
+            {busy ? <LoadingSpinner variant="inline" className="text-white" /> : <span className="block">{buyLabel}</span>}
           </span>
         </button>
       </div>
@@ -202,9 +205,9 @@ export default function GiftCardOfferCard({
         <TrustRow icon={<ShieldIcon />} label={moneyBack} note={moneyBackNote} />
         <TrustRow icon={<BoltIcon />} label={fastCheckout}>
           <span className="flex shrink-0 gap-1">
-            <PayBadge src={GIFT_CARD_IMAGES.applePay} alt="Apple Pay" />
+            {/* <PayBadge src={GIFT_CARD_IMAGES.applePay} alt="Apple Pay" />
             <PayBadge src={GIFT_CARD_IMAGES.googlePay} alt="Google Pay" />
-            <PayBadge src={GIFT_CARD_IMAGES.paypal} alt="PayPal" />
+            <PayBadge src={GIFT_CARD_IMAGES.paypal} alt="PayPal" /> */}
           </span>
         </TrustRow>
         <TrustRow icon={<SupportIcon />} label={liveSupport} note={liveSupportNote} />

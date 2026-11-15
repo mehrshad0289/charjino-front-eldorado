@@ -117,12 +117,96 @@ export function consoleConditionLabel(value) {
   return CONDITION_LABELS[value] || value || "";
 }
 
+const SHIPPING_LABELS = { post: "پست", meetup: "تحویل حضوری", account: "اکانت" };
+const DLC_LABELS = { none: "ندارد", unused: "استفاده نشده", used: "استفاده شده" };
+
+export function normalizeConsoleAttributeValue(key, value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  if (key === "format") return consoleFormatLabel(raw);
+  if (key === "console_model") return consoleModelLabel(raw);
+  if (key === "condition") return consoleConditionLabel(raw);
+  if (key === "shipping") return SHIPPING_LABELS[raw] || raw;
+  if (key === "dlc") return DLC_LABELS[raw] || raw;
+  return raw;
+}
+
 export function labelConsoleOffer(offer) {
   const attributes = { ...(offer?.attributes || {}) };
-  if (attributes.format) attributes.format = consoleFormatLabel(attributes.format);
-  if (attributes.console_model) attributes.console_model = consoleModelLabel(attributes.console_model);
-  if (attributes.condition) attributes.condition = consoleConditionLabel(attributes.condition);
+  for (const key of Object.keys(attributes)) {
+    attributes[key] = normalizeConsoleAttributeValue(key, attributes[key]) || attributes[key];
+  }
   return { ...offer, attributes };
+}
+
+export function defaultConsoleSchemaFields(platform) {
+  const formatOptions =
+    platform === "nintendo" ? ["کارتریج"] : platform === "pc" ? ["اکانت"] : ["دیسک", "اکانت", "راک"];
+  const modelOptions =
+    platform === "playstation"
+      ? ["PS4", "PS5"]
+      : platform === "xbox"
+        ? ["Xbox One", "Xbox Series", "Xbox Series S", "Xbox Series X"]
+        : platform === "nintendo"
+          ? ["Switch", "Switch 2"]
+          : platform === "pc"
+            ? ["PC"]
+            : [];
+  if (!modelOptions.length) return [];
+  const libraryWhen = ["اکانت", "راک"].filter((value) => formatOptions.includes(value));
+  const library = libraryWhen.length
+    ? [
+        {
+          key: "games_count",
+          label_fa: "تعداد بازی‌های روی اکانت",
+          type: "number",
+          required: true,
+          filterable: true,
+          card: true,
+          detail: true,
+          visible_when: { key: "format", values: libraryWhen },
+        },
+        {
+          key: "games_list",
+          label_fa: "بازی‌های روی اکانت",
+          type: "text",
+          multiline: true,
+          required: true,
+          detail: true,
+          visible_when: { key: "format", values: libraryWhen },
+        },
+      ]
+    : [];
+  return [
+    { key: "format", label_fa: "نوع", type: "select", options: formatOptions, required: true, filterable: true, card: true, detail: true },
+    ...library,
+    { key: "console_model", label_fa: "کنسول", type: "select", options: modelOptions, required: true, filterable: true, card: true, detail: true },
+    { key: "condition", label_fa: "وضعیت", type: "select", options: ["آکبند", "کارکرده"], required: true, filterable: true, detail: true },
+    { key: "region", label_fa: "ریجن", type: "text", detail: true },
+    { key: "edition", label_fa: "نسخه", type: "text", detail: true },
+    { key: "dlc", label_fa: "دانلودی / DLC", type: "select", options: ["ندارد", "استفاده نشده", "استفاده شده"], detail: true },
+    { key: "shipping", label_fa: "روش تحویل", type: "select", options: ["پست", "تحویل حضوری", "اکانت"], required: true, detail: true },
+  ];
+}
+
+export function schemaConsoleFacets(fields, offers) {
+  const rows = Array.isArray(offers) ? offers : [];
+  const count = (key, value) => rows.filter((offer) => offer.attributes?.[key] === value).length;
+  return (Array.isArray(fields) ? fields : [])
+    .filter((field) => field?.filterable)
+    .map((field) => {
+      if (field.type === "number") {
+        return { key: field.key, label_fa: field.label_fa, type: "number" };
+      }
+      if (!Array.isArray(field.options) || !field.options.length) return null;
+      return {
+        key: field.key,
+        label_fa: field.label_fa,
+        type: field.type || "select",
+        options: field.options.map((value) => ({ value, count: count(field.key, value) })),
+      };
+    })
+    .filter(Boolean);
 }
 
 export function consoleOfferFacets(platform, offers) {

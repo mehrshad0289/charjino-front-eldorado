@@ -10,8 +10,12 @@ const inputClass =
   "block h-[42px] w-full rounded-lg border-2 border-[rgb(239,239,241)] bg-[rgb(239,239,241)] px-3 text-[14px] text-ink outline-none";
 const invalidClass = "border-[rgb(232,27,22)] bg-[rgb(255,244,244)]";
 
+export function listingInputClass(invalid) {
+  return `${inputClass} ${invalid ? invalidClass : ""}`;
+}
+
 export function listingControlClass(invalid) {
-  return `${inputClass} mt-1 ${invalid ? invalidClass : ""}`;
+  return `${listingInputClass(invalid)} mt-1`;
 }
 
 export function ListingFieldNote({ message }) {

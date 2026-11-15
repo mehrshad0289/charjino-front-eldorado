@@ -2,7 +2,7 @@ import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
 import { discountLabel, formatTomanPrice, shopTopupHref } from "./format-toman";
 import { preferFaTitle } from "./catalog-region";
-import { canonicalTopupHrefKey, pickTopupDisplayName, topupHubKeyFromProduct } from "./topup-hub";
+import { canonicalTopupHrefKey, pickTopupDisplayName, topupHubKey, topupHubKeyFromProduct, topupShopHref } from "./topup-hub";
 
 function asRecord(value) {
   return value && typeof value === "object" ? value : {};
@@ -63,7 +63,8 @@ export function isTopupProduct(product) {
   const rec = asRecord(product);
   const slug = asString(rec.category?.slug || rec.categorySlug || rec.product_type).toLowerCase();
   if (slug === "game-topup" || slug === "topup") return true;
-  return asString(rec.fulfillmentType).toLowerCase() === "topup";
+  if (asString(rec.fulfillmentType).toLowerCase() === "topup") return true;
+  return /شارژ بازی/.test(`${asString(rec.categoryName)} ${asString(rec.group)}`);
 }
 
 export function shopTopupHrefFromProduct(product) {
@@ -80,18 +81,42 @@ export function giftShopHrefFromProduct(product) {
   return giftShopHref(derivedGiftPlatform(product));
 }
 
+function hrefQuery(href, key) {
+  const query = asString(href).split("?")[1] || "";
+  return new URLSearchParams(query).get(key) || "";
+}
+
+function landingHref(current) {
+  if (current.includes("/catalog/category/gift-card")) {
+    const platform = hrefQuery(current, "platform");
+    return giftShopHref(platform) || "/shop/gift-cards";
+  }
+  if (current.includes("/catalog/category/game-topup")) {
+    const platform = hrefQuery(current, "platform");
+    const hub = topupHubKey(platform);
+    return (hub ? topupShopHref(hub) : "") || "/shop/top-ups";
+  }
+  return current;
+}
+
+function storefrontSearchHref(row) {
+  const rec = asRecord(row);
+  const type = asString(rec.result_type) || "product";
+  const current = asString(rec.href);
+  if (type === "product") {
+    if (isGiftCardProduct(rec)) return giftShopHrefFromProduct(rec) || current;
+    if (isTopupProduct(rec)) return shopTopupHrefFromProduct(rec) || current;
+    return current;
+  }
+  if (type === "tag") return current;
+  return landingHref(current);
+}
+
 export function rewriteGiftSearchItems(items) {
   return (Array.isArray(items) ? items : []).map((row) => {
     const rec = asRecord(row);
-    if (isGiftCardProduct(rec)) {
-      const href = giftShopHrefFromProduct(rec);
-      return href ? { ...rec, href } : rec;
-    }
-    if (isTopupProduct(rec)) {
-      const href = shopTopupHrefFromProduct(rec);
-      return href ? { ...rec, href } : rec;
-    }
-    return rec;
+    const href = storefrontSearchHref(rec);
+    return href && href !== asString(rec.href) ? { ...rec, href } : rec;
   });
 }
 

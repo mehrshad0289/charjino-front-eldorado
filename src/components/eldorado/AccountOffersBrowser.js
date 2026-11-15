@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import AccountOffersGrid from "./AccountOffersGrid";
 import { toFaDigits } from "../../lib/fa-digits";
 import EldSelect from "./EldSelect";
+import PriceField from "./PriceField";
 import ShopBottomSheet from "./ShopBottomSheet";
 import { FA } from "./data/faCopy";
 
@@ -120,12 +121,12 @@ export default function AccountOffersBrowser({
 
   function changePriceMin(value) {
     setPricePreset("");
-    setPriceMin(onlyDigits(value));
+    setPriceMin(value);
   }
 
   function changePriceMax(value) {
     setPricePreset("");
-    setPriceMax(onlyDigits(value));
+    setPriceMax(value);
   }
 
   const chips = useMemo(() => {
@@ -248,9 +249,9 @@ export default function AccountOffersBrowser({
     const facetQueryValue = usingDraft ? source.facetQuery : facetQuery;
     const patch = (partial) => onChange((current) => ({ ...current, ...partial }));
     const onPriceMin = (value) =>
-      usingDraft ? patch({ priceMin: onlyDigits(value), pricePreset: "" }) : changePriceMin(value);
+      usingDraft ? patch({ priceMin: value, pricePreset: "" }) : changePriceMin(value);
     const onPriceMax = (value) =>
-      usingDraft ? patch({ priceMax: onlyDigits(value), pricePreset: "" }) : changePriceMax(value);
+      usingDraft ? patch({ priceMax: value, pricePreset: "" }) : changePriceMax(value);
     const onPreset = (preset) => {
       if (!usingDraft) {
         applyPreset(preset);
@@ -302,22 +303,20 @@ export default function AccountOffersBrowser({
         </summary>
         <div className="mt-3">
           <div className="mb-4 flex items-center gap-2">
-            <input
-              inputMode="numeric"
-              value={priceMinValue}
-              onChange={(event) => onPriceMin(event.target.value)}
+            <PriceField
+              label=""
               placeholder="از"
-              aria-label="حداقل قیمت"
-              className="h-[42px] w-full rounded-lg bg-inputgray px-3"
+              ariaLabel="حداقل قیمت"
+              value={priceMinValue}
+              onChange={onPriceMin}
             />
             <span className="text-graytext">تا</span>
-            <input
-              inputMode="numeric"
-              value={priceMaxValue}
-              onChange={(event) => onPriceMax(event.target.value)}
+            <PriceField
+              label=""
               placeholder="تا"
-              aria-label="حداکثر قیمت"
-              className="h-[42px] w-full rounded-lg bg-inputgray px-3"
+              ariaLabel="حداکثر قیمت"
+              value={priceMaxValue}
+              onChange={onPriceMax}
             />
           </div>
           {pricePresets.length > 0 ? (
