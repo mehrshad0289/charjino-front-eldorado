@@ -2,9 +2,17 @@
 
 import { revalidatePath } from "next/cache";
 import { ApiError, serverFetch } from "@/lib/server-fetcher";
-import { clearAuthCookies, getAccessToken, setAuthTokens } from "@/lib/auth-cookies";
+import {
+  clearAuthCookies,
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+  setAuthTokens,
+} from "@/lib/auth-cookies";
 import { apiPaths } from "@/lib/api-paths";
+import { ensureAccessToken } from "@/lib/ensure-access-token";
 import { isIranianMobile, normalizeIranianMobile } from "@/lib/phone";
+import { RefreshAuthError, requestNewAccessToken } from "@/lib/request-access-token";
 
 function toActionMessage(error) {
   if (error instanceof ApiError && error.message) return error.message;
@@ -52,6 +60,30 @@ export async function verifyOtp(rawPhone, code) {
   }
 }
 
+function isRefreshAuthError(error) {
+  return (
+    error instanceof RefreshAuthError ||
+    (error instanceof Error && error.name === "RefreshAuthError")
+  );
+}
+
+export async function refreshAccessToken() {
+  const refreshToken = await getRefreshToken();
+  if (!refreshToken) {
+    throw new ApiError("توکن بازیابی موجود نیست", 401);
+  }
+
+  try {
+    const accessToken = await requestNewAccessToken(refreshToken);
+    await setAccessToken(accessToken);
+  } catch (error) {
+    if (isRefreshAuthError(error)) {
+      await clearAuthCookies();
+    }
+    throw error;
+  }
+}
+
 export async function logout() {
   const accessToken = await getAccessToken();
   try {
@@ -86,7 +118,7 @@ function revalidateAccountPaths() {
 }
 
 export async function updateProfile(payload) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const user = await serverFetch(apiPaths.authProfile, {
@@ -105,7 +137,7 @@ export async function updateProfile(payload) {
 }
 
 export async function uploadAvatar(formData) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   const body = new FormData();
   const file = formData.get("file");

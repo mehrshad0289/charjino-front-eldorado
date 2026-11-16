@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { ApiError, serverFetch } from "@/lib/server-fetcher";
-import { getAccessToken } from "@/lib/auth-cookies";
+import { ensureAccessToken } from "@/lib/ensure-access-token";
 import { apiPaths } from "@/lib/api-paths";
 
 function toActionMessage(error) {
@@ -44,7 +44,7 @@ function appendImages(body, files) {
 }
 
 export async function listTickets() {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید.", items: [] };
   try {
     const data = await serverFetch(apiPaths.tickets({ page: 1, perPage: 30 }), {
@@ -57,7 +57,7 @@ export async function listTickets() {
 }
 
 export async function getTicket(id) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   const key = String(id || "").trim();
   if (!key) return { ok: false, notFound: true, message: "تیکت پیدا نشد." };
@@ -72,7 +72,7 @@ export async function getTicket(id) {
 }
 
 export async function createTicket(formData) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   const body = new FormData();
   body.set("subject", String(formData.get("subject") || "").trim());
@@ -96,7 +96,7 @@ export async function createTicket(formData) {
 }
 
 export async function replyTicket(id, formData) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   const key = String(id || "").trim();
   if (!key) return { ok: false, notFound: true, message: "تیکت پیدا نشد." };

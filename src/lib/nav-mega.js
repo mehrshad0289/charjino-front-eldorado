@@ -1,7 +1,13 @@
 import { serverFetch } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
-import { productHref, categoryHref } from "./format-toman";
-import { derivedGiftPlatform, giftShopHref, shopTopupHrefFromProduct } from "./gift-card-shop";
+import {
+  derivedGiftPlatform,
+  giftShopGroupKey,
+  giftShopHref,
+  isTelegramDirectProduct,
+  shopTopupHrefFromProduct,
+  storefrontProductHref,
+} from "./gift-card-shop";
 import { preferFaTitle } from "./catalog-region";
 import { hubCardsFromCategory, loadStoreCategory } from "./store-engine";
 import {
@@ -25,16 +31,6 @@ import {
   SHOP_ITEMS_HREF,
   SHOP_TOPUPS_HREF,
 } from "../components/eldorado/data/faCopy";
-
-const BRAND_HUB_BY_PLATFORM = {
-  "google-play": "google-play",
-  itunes: "apple-itunes",
-  playstation: "playstation",
-  steam: "steam",
-  xbox: "xbox",
-  valorant: "valorant",
-  "free-fire": "free-fire",
-};
 
 export const NAV_VERTICALS = {
   Currency: { source: "market", offer: "Currency", landing: SHOP_CURRENCY_HREF, shopKey: "currency" },
@@ -82,6 +78,14 @@ function catalogPageItems(payload) {
   return Array.isArray(payload?.items) ? payload.items : Array.isArray(payload) ? payload : [];
 }
 
+async function fetchGiftMegaProducts() {
+  const [gift, telegram] = await Promise.all([
+    fetchCatalogPages("gift-card"),
+    fetchCatalogPages("telegram").catch(() => []),
+  ]);
+  return [...telegram, ...gift];
+}
+
 async function fetchCatalogPages(slug) {
   const first = await serverFetch(apiPaths.catalogProducts({ category: slug, page: 1, perPage: 100 }));
   const rows = [...catalogPageItems(first)];
@@ -113,11 +117,7 @@ function catalogHref(product, verticalKey) {
   const rec = asRecord(product);
   if (verticalKey === "Gift cards") return giftShopHref(derivedGiftPlatform(rec));
   if (verticalKey === "Top ups") return shopTopupHrefFromProduct(rec) || topupShopHref(asString(rec.platform) || asString(rec.handle));
-  const platform = asString(rec.platform);
-  const handle = asString(rec.handle);
-  const hub = BRAND_HUB_BY_PLATFORM[platform];
-  if (hub) return categoryHref(hub);
-  return handle ? productHref(handle) : "";
+  return storefrontProductHref(rec);
 }
 
 function topupCatalogExtras(products) {
@@ -202,8 +202,6 @@ async function mapTopupMega() {
   for (const card of cards) {
     const key = canonicalTopupHrefKey(card.key) || asString(card.key);
     if (!key || seen.has(key)) continue;
-    const href = asString(card.href);
-    if (href && !href.startsWith("/shop/top-ups/")) continue;
     const catalog = extras.get(key) || extras.get(topupHubKey(card.key)) || {};
     const extra = {
       ...catalog,
@@ -263,9 +261,16 @@ function uniqueCatalogGames(products, verticalKey) {
     if (!title) continue;
     if (!handle) continue;
     const derived = verticalKey === "Gift cards" ? derivedGiftPlatform(rec) : "";
+    const group = verticalKey === "Gift cards" ? giftShopGroupKey(rec) : "";
     const platform = verticalKey === "Gift cards" ? derived : asString(rec.platform);
-    const key = platform ? `p:${platform}` : `t:${stripRegion(rec.titleEn || title).toLowerCase()}`;
+    const key = group
+      ? `g:${group}`
+      : platform
+        ? `p:${platform}`
+        : `t:${stripRegion(rec.titleEn || title).toLowerCase()}`;
     const current = seen.get(key);
+    const rank =
+      (rec.isPopular ? 2 : 0) + (verticalKey === "Gift cards" && isTelegramDirectProduct(rec) ? 1 : 0);
     const row = {
       name: stripRegion(title) || title,
       nameEn: stripRegion(asString(rec.titleEn) || asString(rec.nameEn)),
@@ -273,12 +278,13 @@ function uniqueCatalogGames(products, verticalKey) {
       href: catalogHref(rec, verticalKey),
       popular: Boolean(rec.isPopular),
       platform,
+      rank,
     };
     if (!current) {
       seen.set(key, row);
       continue;
     }
-    if (row.popular && !current.popular) seen.set(key, { ...row, img: row.img || current.img });
+    if (rank > (current.rank || 0)) seen.set(key, { ...row, img: row.img || current.img });
     else if (!current.img && row.img) current.img = row.img;
   }
   return [...seen.values()].filter((row) => row.href);
@@ -417,7 +423,10 @@ export async function buildNavMega(verticalKey) {
         const storeMega = await mapTopupMega();
         if (storeMega.all.length > 0) return { ...storeMega, promo: Boolean(config.promo) };
       }
-      const products = await fetchCatalogPages(config.slug);
+      const products =
+        verticalKey === "Gift cards"
+          ? await fetchGiftMegaProducts()
+          : await fetchCatalogPages(config.slug);
       const mapped = mapCatalogMega(products, verticalKey);
       return { ...mapped, promo: Boolean(config.promo) };
     }

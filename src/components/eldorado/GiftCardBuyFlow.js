@@ -6,15 +6,18 @@ import GiftCardAmountGrid from "./GiftCardAmountGrid";
 import GiftCardOfferCard from "./GiftCardOfferCard";
 import { useCheckoutPreview } from "./useCheckoutPreview";
 import { useCheckoutCoupon } from "./useCheckoutCoupon";
+import { amountForSku } from "../../lib/sku-query";
 
 export default function GiftCardBuyFlow({
   regions = [],
   amounts = [],
   productIcon = "",
   buyerFieldsByHandle = {},
+  initialSkuId = null,
 }) {
-  const [region, setRegion] = useState(null);
-  const [selectedKey, setSelectedKey] = useState(null);
+  const preset = amountForSku(amounts, initialSkuId);
+  const [region, setRegion] = useState(preset?.region || null);
+  const [selectedKey, setSelectedKey] = useState(preset?.key || null);
   const [buyerValues, setBuyerValues] = useState({});
   const checkout = useCheckoutPreview();
 
@@ -36,14 +39,16 @@ export default function GiftCardBuyFlow({
   return (
     <div className="flex flex-col gap-6 lg:mb-8 lg:flex-row lg:gap-9">
       <div className="min-w-0 grow">
-        <GiftCardRegionStep
-          regions={regions}
-          value={region}
-          onChange={(next) => {
-            setRegion(next);
-            setSelectedKey(null);
-          }}
-        />
+        {regions.length > 0 ? (
+          <GiftCardRegionStep
+            regions={regions}
+            value={region}
+            onChange={(next) => {
+              setRegion(next);
+              setSelectedKey(null);
+            }}
+          />
+        ) : null}
         <GiftCardAmountGrid
           amounts={visibleAmounts}
           selectedKey={selectedKey}

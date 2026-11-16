@@ -36,7 +36,7 @@ function hubSeo(shop, name) {
   return { title: `خرید شارژ ${name}`, blocks: blocks.length ? blocks : [{ p: text }] };
 }
 
-export default function TopupShopPage({ catalog, tabs = [], activeTab = "top-up", href }) {
+export default function TopupShopPage({ catalog, tabs = [], activeTab = "top-up", href, initialSkuId = null }) {
   const name = catalog?.bannerName || catalog?.gameName || "";
   const icon = catalog?.bannerIcon || "";
   const seo = hubSeo(catalog?.shop, name);
@@ -76,6 +76,7 @@ export default function TopupShopPage({ catalog, tabs = [], activeTab = "top-up"
                 productIcon={icon}
                 buyerFieldsByHandle={catalog?.buyerFieldsByHandle || {}}
                 shop={catalog?.shop || null}
+                initialSkuId={initialSkuId}
               />
             </div>
             <div className="mx-auto mt-12 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-12 lg:gap-[128px] lg:px-6">

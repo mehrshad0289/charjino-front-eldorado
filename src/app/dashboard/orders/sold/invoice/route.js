@@ -1,6 +1,6 @@
 import { connection } from "next/server";
 import { NextResponse } from "next/server";
-import { getAccessToken } from "@/lib/auth-cookies";
+import { ensureAccessToken } from "@/lib/ensure-access-token";
 import { getBackendUrl } from "@/lib/env";
 import { apiPaths } from "@/lib/api-paths";
 
@@ -8,7 +8,7 @@ export const instant = false;
 
 export async function GET(request) {
   await connection();
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   const login = new URL("/login", request.url);
   login.searchParams.set("next", "/dashboard/orders/sold");
 

@@ -320,7 +320,7 @@ export const DASHBOARD_SETTINGS_PAGE = {
 };
 
 /* Login page (login.eldorado.gg capture) */
-export const LOGIN_BG = `${ASSET}fdbcce785891c023ba5cef0f78a6cfaa2620fc0b.png?generation=1793786228667980&alt=media`;
+export const LOGIN_BG = "/home/login-background.png";
 
 export const LOGIN_PAGE = {
   logo: `${ASSET}bc849c6408d54615c9db00832e00c681bd67d757.svg?generation=1793786228679019&alt=media`,

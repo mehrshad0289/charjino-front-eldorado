@@ -21,6 +21,7 @@ import {
   loadGiftCardShop,
   loadProductHub,
 } from "../../lib/gift-card-shop";
+import { skuIdFromQuery } from "../../lib/sku-query";
 
 export const instant = false;
 
@@ -40,8 +41,9 @@ export async function generateMetadata() {
   };
 }
 
-export default async function XboxGamePassPage() {
+export default async function XboxGamePassPage({ searchParams }) {
   await connection();
+  const query = searchParams ? await searchParams : {};
   const catalog = await loadGiftCardShop("xbox-game-pass");
   const hub = await loadProductHub("xbox");
   const brandPage = await loadGiftBrandPage("xbox-game-pass");
@@ -77,6 +79,7 @@ export default async function XboxGamePassPage() {
                 amounts={catalog.amounts}
                 offerTitle={FA.gamePass}
                 productIcon={catalog.bannerIcon}
+                initialSkuId={skuIdFromQuery(query.sku)}
               />
             </div>
             <div className="mx-auto mt-12 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-12 lg:gap-[128px] lg:px-6">

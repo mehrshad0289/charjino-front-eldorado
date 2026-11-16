@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
 import { CATEGORY_NAV, FA } from "./data/faCopy";
 import MobileCategorySheet from "./MobileCategorySheet";
 import { prefetchNavMegas } from "./nav-mega-client";
@@ -60,16 +61,17 @@ export default function MobileMenu({ onClose }) {
         {CATEGORY_NAV.map((category) => (
           <li key={category.key} className="mb-2">
             {category.mega === false ? (
-              <a
+              <Link
                 href={category.href}
                 onClick={onClose}
+                prefetch
                 className="flex h-14 w-full items-center justify-between rounded-lg bg-badgebg px-5 text-start text-base text-ink"
               >
                 {category.label}
                 <span className="text-ink rtl:rotate-180">
                   <ChevronRight />
                 </span>
-              </a>
+              </Link>
             ) : (
               <button
                 type="button"

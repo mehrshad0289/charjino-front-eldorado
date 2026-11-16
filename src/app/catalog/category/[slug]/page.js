@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import CategoryNav from "../../../../components/eldorado/CategoryNav";
 import PopularGames from "../../../../components/eldorado/PopularGames";
 import Footer from "../../../../components/eldorado/Footer";
@@ -5,12 +6,14 @@ import ChatBubble from "../../../../components/eldorado/ChatBubble";
 import { serverFetch, ApiError } from "../../../../lib/server-fetcher";
 import { apiPaths } from "../../../../lib/api-paths";
 import { productHref } from "../../../../lib/format-toman";
-import { giftShopHrefFromProduct, isGiftCardProduct } from "../../../../lib/gift-card-shop";
+import { storefrontGroupHref, storefrontProductHref } from "../../../../lib/gift-card-shop";
 
 export const instant = false;
 
 export default async function CatalogCategoryPage({ params }) {
   const { slug } = await params;
+  const groupHref = storefrontGroupHref(slug);
+  if (groupHref) redirect(groupHref);
   let payload = { category: { title: slug }, products: [] };
   try {
     payload = await serverFetch(apiPaths.catalogCategory(slug));
@@ -25,10 +28,9 @@ export default async function CatalogCategoryPage({ params }) {
   const items = [];
   for (const row of products) {
     if (!row?.handle || !row?.title) continue;
-    const gift = slug === "gift-card" || isGiftCardProduct(row);
-    const href = gift ? giftShopHrefFromProduct(row) : productHref(row.handle);
+    const href = storefrontProductHref(row) || productHref(row.handle);
     if (!href) continue;
-    const key = gift ? href : row.handle;
+    const key = href;
     if (seen.has(key)) continue;
     seen.add(key);
     items.push({

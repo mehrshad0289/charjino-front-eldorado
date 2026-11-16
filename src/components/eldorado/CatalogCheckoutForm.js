@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   catalogOrderHref,
   catalogRequirements,
@@ -21,6 +22,7 @@ export default function CatalogCheckoutForm({
   price = 0,
   couponCode = "",
 }) {
+  const router = useRouter();
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -49,7 +51,7 @@ export default function CatalogCheckoutForm({
       return;
     }
     if (!loggedIn) {
-      window.location.href = `/login?next=${encodeURIComponent(next)}`;
+      router.push(`/login?next=${encodeURIComponent(next)}`);
       return;
     }
     setLoading(true);
@@ -64,7 +66,8 @@ export default function CatalogCheckoutForm({
       { couponCode: coupon.quote?.code || coupon.input || "" },
     );
     if (created.unauthorized) {
-      window.location.href = `/login?next=${encodeURIComponent(next)}`;
+      setLoading(false);
+      router.push(`/login?next=${encodeURIComponent(next)}`);
       return;
     }
     if (!created.ok) {
@@ -75,7 +78,8 @@ export default function CatalogCheckoutForm({
     }
     const pay = await startOrderPayment(created.data.number, window.location.origin);
     if (pay.unauthorized) {
-      window.location.href = `/login?next=${encodeURIComponent(next)}`;
+      setLoading(false);
+      router.push(`/login?next=${encodeURIComponent(next)}`);
       return;
     }
     if (!pay.ok) {

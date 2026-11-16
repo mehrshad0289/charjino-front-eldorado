@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { FA } from "./data/faCopy";
 import { mapSmartSearchItems } from "../../lib/mega-gift-search";
 
@@ -21,10 +22,10 @@ function OverlayLabel() {
   );
 }
 
-function ResultRows({ items, desktop }) {
+function ResultRows({ items, desktop, onSelect }) {
   return items.map((it) => (
     <div key={it.href + it.name}>
-      <a href={it.href} aria-label={it.name} className="text-sm leading-[21px]">
+      <Link href={it.href || "/"} prefetch aria-label={it.name} onClick={onSelect} className="text-sm leading-[21px]">
         {desktop ? (
           <div className="flex h-[42px] items-center gap-2 truncate rounded-lg text-base leading-6 text-white">
             {it.icon ? (
@@ -50,7 +51,7 @@ function ResultRows({ items, desktop }) {
             {it.category ? <span className="shrink-0 text-sm text-graytext">{it.category}</span> : null}
           </span>
         )}
-      </a>
+      </Link>
     </div>
   ));
 }
@@ -149,7 +150,7 @@ export default function SearchOverlay({ onClose }) {
         </div>
 
         <ul>
-          <ResultRows items={list} desktop={false} />
+          <ResultRows items={list} desktop={false} onSelect={onClose} />
         </ul>
       </div>
 
@@ -177,7 +178,7 @@ export default function SearchOverlay({ onClose }) {
               <p className="py-6 text-center text-sm text-navgray">{FA.nothingFound}</p>
             ) : null}
             <div className="flex flex-col gap-2">
-              <ResultRows items={list} desktop />
+              <ResultRows items={list} desktop onSelect={onClose} />
             </div>
           </div>
         </div>

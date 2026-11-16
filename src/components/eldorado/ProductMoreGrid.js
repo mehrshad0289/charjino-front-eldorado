@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PRODUCT_MORE_CARDS, PRODUCT_MORE_EXTRA } from "./data/productData";
 import OfferPrice from "./OfferPrice";
 
@@ -35,9 +36,9 @@ export default function ProductMoreGrid({ cards, allHref = "/efootball-accounts"
     <section aria-label="More offers" className="hidden lg:block">
       <div className="flex items-center justify-between">
         <h2 className="text-[24px] font-bold leading-[normal]">{heading}</h2>
-        <a href={allHref} className="text-[14px] leading-[21px] text-linkblue underline">
+        <Link href={allHref || "/"} prefetch className="text-[14px] leading-[21px] text-linkblue underline">
           {heading === "More like this" ? "All offers" : "همه آگهی‌ها"}
-        </a>
+        </Link>
       </div>
       <div className="mt-4 grid grid-cols-3 gap-4">
         {rows.map((c, i) => (
@@ -48,7 +49,7 @@ export default function ProductMoreGrid({ cards, allHref = "/efootball-accounts"
             <div className="flex grow items-start justify-between">
               <div className="flex min-w-0 flex-col items-start gap-[8px]">
                 {c.href ? (
-                  <a href={c.href} className="flow-root overflow-hidden text-[14px] leading-[19.6px]">{c.title}</a>
+                  <Link href={c.href} prefetch className="flow-root overflow-hidden text-[14px] leading-[19.6px]">{c.title}</Link>
                 ) : (
                   <div className="flow-root overflow-hidden text-[14px] leading-[19.6px]">{c.title}</div>
                 )}

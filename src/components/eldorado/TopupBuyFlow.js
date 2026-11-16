@@ -10,6 +10,7 @@ import { FA } from "./data/faCopy";
 import { TOPUP_SHOP_CHROME } from "./data/giftShopCopy";
 import { useCheckoutPreview } from "./useCheckoutPreview";
 import { useCheckoutCoupon } from "./useCheckoutCoupon";
+import { amountForSku } from "../../lib/sku-query";
 
 function asShop(value) {
   return value && typeof value === "object" ? value : {};
@@ -71,6 +72,7 @@ export default function TopupBuyFlow({
   productIcon = "",
   buyerFieldsByHandle = {},
   shop = null,
+  initialSkuId = null,
 }) {
   const chrome = asShop(shop);
   const devices = useMemo(() => deviceList(chrome), [shop]);
@@ -78,10 +80,17 @@ export default function TopupBuyFlow({
   const showServers = !showDevices && regions.length >= 2;
   const deviceHeading = String(chrome.deviceLabel || "").trim() || TOPUP_SHOP_CHROME.gameDevice;
 
-  const [region, setRegion] = useState(showServers ? regions[0] : null);
-  const [device, setDevice] = useState(showDevices ? firstMatchingDevice(devices, amounts) : null);
+  const preset = amountForSku(amounts, initialSkuId);
+  const [region, setRegion] = useState(() => {
+    if (preset?.region && regions.includes(preset.region)) return preset.region;
+    return showServers ? regions[0] : null;
+  });
+  const [device, setDevice] = useState(() => {
+    if (preset?.region && devices.some((item) => item.key === preset.region)) return preset.region;
+    return showDevices ? firstMatchingDevice(devices, amounts) : null;
+  });
   const [selectedKey, setSelectedKey] = useState(
-    () => (amounts.find((row) => row.popular) || amounts[0] || {}).key || null,
+    () => preset?.key || (amounts.find((row) => row.popular) || amounts[0] || {}).key || null,
   );
   const [buyerValues, setBuyerValues] = useState({});
   const checkout = useCheckoutPreview();

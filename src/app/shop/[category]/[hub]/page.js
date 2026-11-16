@@ -32,6 +32,7 @@ import {
   tabForStoreCategory,
 } from "../../../../lib/gift-card-shop";
 import { canonicalTopupHrefKey, topupShopHref } from "../../../../lib/topup-hub";
+import { hrefWithSku, skuIdFromQuery } from "../../../../lib/sku-query";
 import { serverFetch, ApiError } from "../../../../lib/server-fetcher";
 import { apiPaths } from "../../../../lib/api-paths";
 import {
@@ -71,15 +72,17 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function ShopHubPage({ params }) {
+export default async function ShopHubPage({ params, searchParams }) {
   const { category, hub } = await params;
+  const query = searchParams ? await searchParams : {};
+  const initialSkuId = skuIdFromQuery(query.sku);
   const key = String(category || "").toLowerCase();
   const rawHub = normalizeGiftPlatform(hub) || decodeURIComponent(String(hub || ""));
   const hubKey = key === "top-ups" ? canonicalTopupHrefKey(rawHub) || rawHub : rawHub;
   if (!isStoreCategoryKey(key) || !hubKey) notFound();
-  if (key === "top-ups" && hubKey !== rawHub) redirect(topupShopHref(hubKey));
-  if (isPlayStationPlusPlatform(hubKey)) redirect("/playstation-plus");
-  if (isXboxGamePassPlatform(hubKey)) redirect("/xbox-game-pass");
+  if (key === "top-ups" && hubKey !== rawHub) redirect(hrefWithSku(topupShopHref(hubKey), query.sku));
+  if (isPlayStationPlusPlatform(hubKey)) redirect(hrefWithSku("/playstation-plus", query.sku));
+  if (isXboxGamePassPlatform(hubKey)) redirect(hrefWithSku("/xbox-game-pass", query.sku));
 
   const store = await loadStoreCategory(key);
   if (!store) notFound();
@@ -90,7 +93,7 @@ export default async function ShopHubPage({ params }) {
   }
   const tab = tabForStoreCategory(catalogHub, key);
   if (tab?.renderer === "code-card") {
-    return <GiftCardShopPage platform={tab.sourceId || hubKey} />;
+    return <GiftCardShopPage platform={tab.sourceId || hubKey} initialSkuId={initialSkuId} />;
   }
   if (tab?.renderer === "subscription") {
     const sourceId = tab.sourceId || hubKey;
@@ -113,6 +116,7 @@ export default async function ShopHubPage({ params }) {
               amounts={catalog.amounts}
               offerTitle={tab.label || FA.subscription}
               productIcon={catalog.bannerIcon}
+              initialSkuId={initialSkuId}
             />
           </div>
         </main>
@@ -142,6 +146,7 @@ export default async function ShopHubPage({ params }) {
           tabs={tabs}
           activeTab={activeHubTabKey(tabs, href, isFcFamilyHub(hubKey) || tabs.some((item) => item.key === hubKey) ? hubKey : tab.tabKey || "top-up")}
           href={href}
+          initialSkuId={initialSkuId}
         />
       );
     }
@@ -161,6 +166,7 @@ export default async function ShopHubPage({ params }) {
               amounts={catalog.amounts}
               offerTitle={tab.label || FA.subscription}
               productIcon={catalog.bannerIcon}
+              initialSkuId={initialSkuId}
             />
           </div>
         </main>
@@ -181,6 +187,7 @@ export default async function ShopHubPage({ params }) {
         tabs={tabs}
         activeTab={activeHubTabKey(tabs, href, isFcFamilyHub(hubKey) || tabs.some((item) => item.key === hubKey) ? hubKey : "top-up")}
         href={href}
+        initialSkuId={initialSkuId}
       />
     );
   }

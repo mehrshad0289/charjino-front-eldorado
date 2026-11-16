@@ -18,8 +18,8 @@ export const GIFT_CARD_IMAGES = {
   applePay: `${GCS}dd6e842fcce7d583e70dddf074d9307e29d69a8e.svg?generation=1793768744578617&alt=media`,
   googlePay: `${GCS}8916ddaefd4ac6e1dfdec635acab443637130fa2.svg?generation=1793768744565450&alt=media`,
   paypal: `${GCS}30c574904376dfec8831a78ecd59a0a32c9f79bb.svg?generation=1793768744543155&alt=media`,
-  trustBackdrop: `${GCS}054d0db0f48c525aee94314b804cdb674aafbb26.png?generation=1793768744750982&alt=media`,
-  check: `${GCS}9fd83d67e2df0f879fc4a52ceb09e2c62495082f.svg?generation=1788944034703253&alt=media`,
+  trustBackdrop: "/home/trust-background.webp",
+  check: "/home/trust-check.svg",
 };
 
 // Dropdown was captured closed; regions match the currencies sold on the page.

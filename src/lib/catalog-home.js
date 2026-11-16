@@ -1,8 +1,8 @@
 import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
-import { discountLabel, formatTomanPrice, productHref, categoryHref } from "./format-toman";
-import { giftShopHrefFromProduct, isGiftCardProduct } from "./gift-card-shop";
-import { SHOP_GIFT_CARDS_HREF, SHOP_TOPUPS_HREF } from "../components/eldorado/data/faCopy";
+import { discountLabel, formatTomanPrice, productHref } from "./format-toman";
+import { storefrontGroupHref, storefrontProductHref } from "./gift-card-shop";
+import { SHOP_GIFT_CARDS_HREF } from "../components/eldorado/data/faCopy";
 
 const CURRENCY_GROUP_SLUG = "game-topup";
 const CURRENCY_CTA = "خرید";
@@ -57,16 +57,11 @@ function homeProductHref(item, groupSlug = "") {
   const rec = enrichHomeProduct(item, groupSlug);
   const handle = asString(rec.handle);
   if (!handle) return "";
-  if (asString(rec.categorySlug) === "gift-card" || isGiftCardProduct(rec)) {
-    return giftShopHrefFromProduct(rec) || productHref(handle);
-  }
-  return productHref(handle);
+  return storefrontProductHref(rec) || productHref(handle);
 }
 
 function groupHref(slug) {
-  if (slug === "game-topup") return SHOP_TOPUPS_HREF;
-  if (slug === "gift-card") return SHOP_GIFT_CARDS_HREF;
-  return categoryHref(slug);
+  return storefrontGroupHref(slug) || SHOP_GIFT_CARDS_HREF;
 }
 
 export async function getCatalogHome() {

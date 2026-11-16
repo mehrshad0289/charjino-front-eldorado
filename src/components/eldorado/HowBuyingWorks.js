@@ -1,28 +1,25 @@
 import { CONTACT_HREF } from "./data/faCopy";
 
-const GCS =
-  "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F";
-
 const STEPS = [
   {
     title: "یک پیشنهاد را انتخاب کنید",
     text: "از فروشنده‌ای با تعداد نظر و امتیاز بالا بخرید. همهٔ فروشنده‌ها قبل از ثبت آگهی مدارک هویتی می‌دهند.",
-    img: `${GCS}8ccff360b883d751d94331756ce41c14b98d3f9b.png?generation=1793718219565314&alt=media`,
+    img: "/home/how-purchasing/suggestion.webp",
   },
   {
     title: "ما پول را نگه می‌داریم",
     text: "پرداخت شما به شارژینو می‌رود. فروشنده تا وقتی تأیید نکنید که همه چیز درست است، پولی نمی‌گیرد.",
-    img: `${GCS}014b581c8d37987be1334df544b7ff49871d55a0.png?generation=1793718219573728&alt=media`,
+    img: "/home/how-purchasing/money.webp",
   },
   {
     title: "فروشنده تحویل می‌دهد",
     text: "برای هر فروشنده مهلت تحویل می‌گذاریم. اگر دیر شد یا مطابق پرداخت نبود، اختلاف ثبت کنید. ۹۵٪ سفارش‌ها هرگز به این مرحله نمی‌رسند.",
-    img: `${GCS}8e41a34806db347539f524cecc103f3fd4aefb52.png?generation=1793718219589161&alt=media`,
+    img: "/home/how-purchasing/seller.webp",
   },
   {
     title: "تا سه روز بررسی کنید",
     text: "سه روز فرصت دارید درست بودن را چک کنید و اگر نبود، پول برگردد. بعضی سفارش‌ها مدت بیشتری پوشش دارند.",
-    img: `${GCS}a490a1a475d0cd28d8398a73d851479273f6f8ee.png?generation=1793718219583380&alt=media`,
+    img: "/home/how-purchasing/review.webp",
   },
 ];
 

@@ -97,6 +97,39 @@ export function playstationHubTabs() {
   return giftShopBannerTabs("playstation", "/gift-card/playstation");
 }
 
+export function telegramShopFaq() {
+  return [
+    {
+      q: "یوزرنیم را چطور وارد کنم؟",
+      paragraphs: ["همان شناسه عمومی تلگرام، بدون فاصله و معمولاً بدون @."],
+    },
+    {
+      q: "رمز تلگرام می‌خواهید؟",
+      paragraphs: ["خیر. ورود به حساب شما از مسیر شارژینو انجام نمی‌شود."],
+    },
+    {
+      q: "تحویل چطور است؟",
+      paragraphs: ["تحویل دیجیتال است و پس از تأیید پرداخت روی همان یوزرنیم انجام می‌شود."],
+    },
+  ];
+}
+
+export function telegramShopSeo(name, description) {
+  const brand = name || "تلگرام";
+  const paragraphs = String(description || "")
+    .split(/\n+/)
+    .map((row) => row.replace(/\*\*/g, "").trim())
+    .filter(Boolean);
+  const blocks = paragraphs.length
+    ? paragraphs.map((p) => ({ p }))
+    : [
+        {
+          p: `${brand} برای تلگرام است و با تومان از شارژینو خریده می‌شود. معمولاً فقط یوزرنیم عمومی لازم است؛ رمز تلگرام گرفته نمی‌شود.`,
+        },
+      ];
+  return { title: `خرید ${brand}`, blocks };
+}
+
 export function giftShopFaq(name) {
   const brand = name || FA.giftCards;
   return [

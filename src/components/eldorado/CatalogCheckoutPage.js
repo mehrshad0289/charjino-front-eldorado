@@ -1,5 +1,6 @@
 import { connection } from "next/server";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { getSessionUser } from "../../actions/auth.actions";
 import { loadCatalogCheckout } from "../../lib/catalog-checkout";
 import { formatTomanInWords } from "../../lib/price";
@@ -28,9 +29,9 @@ export default async function CatalogCheckoutPage({ skuId, handle, couponCode, f
   return (
     <div className="flex min-h-screen flex-col bg-page text-ink">
       <header className="flex min-h-[72px] items-center bg-white px-4 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px]">
-        <a href="/" aria-label="شارژینو" className="flex items-center">
+        <Link href="/" prefetch aria-label="شارژینو" className="flex items-center">
           <Logo color="#0A0A0A" />
-        </a>
+        </Link>
       </header>
       <main className="mx-auto grid w-full max-w-[1100px] gap-6 px-4 py-8 lg:grid-cols-[minmax(0,1fr)_420px]">
         <section className="rounded-lg bg-white p-6 shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px]">
@@ -56,9 +57,9 @@ export default async function CatalogCheckoutPage({ skuId, handle, couponCode, f
           ) : null}
           <p className="mt-2 text-[14px] leading-[22px] text-graytext">{GIFT_SHOP_CHROME.deliveryInstructionsBody}</p>
           {back ? (
-            <a href={back} className="mt-4 inline-flex text-[14px] font-bold text-linkblue">
+            <Link href={back} prefetch className="mt-4 inline-flex text-[14px] font-bold text-linkblue">
               بازگشت به فروشگاه
-            </a>
+            </Link>
           ) : null}
         </section>
         <CatalogCheckoutForm

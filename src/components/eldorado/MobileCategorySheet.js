@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { FA } from "./data/faCopy";
 import { GiftMegaEmpty, GiftNotSoldBanner, MegaSearchField, useMegaSearch } from "./GiftMegaSearch";
 import { ItemsPromo } from "./MegaMenu";
@@ -27,7 +28,7 @@ function GameRow({ game, fallbackHref, showCategory = false }) {
   const img = game.img || game.icon || "";
   const category = showCategory ? game.category : "";
   return (
-    <a href={href} aria-label={game.name} className="flex items-center gap-4 py-[11px] text-base text-ink">
+    <Link href={href || "/"} prefetch aria-label={game.name} className="flex items-center gap-4 py-[11px] text-base text-ink">
       {img ? (
         <span className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
           <img src={img} alt="" width="32" height="32" className="block h-8 w-8 object-cover align-middle" />
@@ -37,7 +38,7 @@ function GameRow({ game, fallbackHref, showCategory = false }) {
       )}
       <span className="min-w-0 flex-1 truncate">{game.name}</span>
       {category ? <span className="shrink-0 text-sm text-graytext">{category}</span> : null}
-    </a>
+    </Link>
   );
 }
 

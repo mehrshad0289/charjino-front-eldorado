@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { FA } from "./data/faCopy";
 
 const LOOP_MS = 42000;
@@ -8,8 +9,9 @@ const DRAG_THRESHOLD = 8;
 
 function OfferCard({ c, i }) {
   return (
-    <a
-      href={c.href}
+    <Link
+      href={c.href || "/"}
+      prefetch
       draggable={false}
       className="relative flex h-[336px] w-[272px] flex-col justify-end gap-2.5 overflow-hidden rounded-lg p-6 text-sm leading-[21px] text-white md:h-80"
     >
@@ -63,7 +65,7 @@ function OfferCard({ c, i }) {
           {FA.buyNow}
         </span>
       </div>
-    </a>
+    </Link>
   );
 }
 

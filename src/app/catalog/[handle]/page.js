@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import CategoryNav from "../../../components/eldorado/CategoryNav";
 import ProductTitleCard from "../../../components/eldorado/ProductTitleCard";
 import RecordRecentView from "../../../components/eldorado/RecordRecentView";
@@ -7,6 +7,8 @@ import ChatBubble from "../../../components/eldorado/ChatBubble";
 import { serverFetch, ApiError } from "../../../lib/server-fetcher";
 import { apiPaths } from "../../../lib/api-paths";
 import { formatTomanPrice, productHref } from "../../../lib/format-toman";
+import { storefrontProductHref } from "../../../lib/gift-card-shop";
+import { hrefWithSku } from "../../../lib/sku-query";
 import { FA } from "../../../components/eldorado/data/faCopy";
 
 export const instant = false;
@@ -31,6 +33,10 @@ export default async function CatalogProductPage({ params, searchParams }) {
     throw error;
   }
   if (!product?.title) notFound();
+  const shopHref = storefrontProductHref(product);
+  if (shopHref && shopHref !== productHref(handle)) {
+    redirect(hrefWithSku(shopHref, query.sku));
+  }
   const sku = selectedSku(product, query.sku);
   const price = sku?.price > 0 ? sku.price : product.minPrice;
   const canBuy = Boolean(product.isOrderable && sku?.id);

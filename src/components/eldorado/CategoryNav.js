@@ -160,10 +160,10 @@ export default function CategoryNav({ activeCategory = null }) {
         </ul>
 
         <div className="hidden items-center gap-2 text-sm lg:flex">
-          <a href="/support" className="flex h-10 items-center gap-2 px-[14px] text-navgray hover:text-brand">
+          <Link href="/support" className="flex h-10 items-center gap-2 px-[14px] text-navgray hover:text-brand">
             <HeadsetIcon />
             {FA.support}
-          </a>
+          </Link>
           <button type="button" className="flex h-10 items-center gap-2 px-1.5 text-navgray hover:text-brand">
             <GlobeIcon />
             <span>

@@ -1,8 +1,10 @@
 import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
-import { discountLabel, formatTomanPrice, shopTopupHref } from "./format-toman";
+import { discountLabel, formatTomanPrice, productHref, shopTopupHref } from "./format-toman";
 import { preferFaTitle } from "./catalog-region";
+import { consoleShopKey } from "./console-games";
 import { canonicalTopupHrefKey, pickTopupDisplayName, topupHubKey, topupHubKeyFromProduct, topupShopHref } from "./topup-hub";
+import { SHOP_GAMES_HREF, SHOP_GIFT_CARDS_HREF, SHOP_TOPUPS_HREF } from "../components/eldorado/data/faCopy";
 
 function asRecord(value) {
   return value && typeof value === "object" ? value : {};
@@ -35,6 +37,8 @@ export function giftHubPlatform(value) {
 }
 
 export function giftCardHubHref(platform) {
+  const telegramHref = telegramShopHref(platform);
+  if (telegramHref) return telegramHref;
   const hub = giftHubPlatform(platform);
   return hub ? `/gift-card/${encodeURIComponent(hub)}` : "";
 }
@@ -42,6 +46,8 @@ export function giftCardHubHref(platform) {
 export function giftShopHref(platform) {
   const id = normalizeGiftPlatform(platform);
   if (!id) return "";
+  const telegramHref = telegramShopHref(id);
+  if (telegramHref) return telegramHref;
   if (isPlayStationPlusPlatform(id)) return "/playstation-plus";
   if (isXboxGamePassPlatform(id)) return "/xbox-game-pass";
   return `/gift-card/${encodeURIComponent(id)}`;
@@ -51,17 +57,78 @@ function platformQueryIds(id) {
   return isPlayStationPlusPlatform(id) ? ["playstation-plus", "ps-plus"] : [id];
 }
 
+export function catalogGroupSlug(product) {
+  const rec = asRecord(product);
+  return asString(
+    rec.categorySlug || rec.product_type || asRecord(rec.category).slug || asRecord(rec.badge).category
+  ).toLowerCase();
+}
+
 export function isGiftCardProduct(product) {
   const rec = asRecord(product);
-  const slug = asString(rec.category?.slug || rec.categorySlug || rec.product_type).toLowerCase();
-  if (slug === "gift-card") return true;
+  if (catalogGroupSlug(rec) === "gift-card") return true;
   const name = `${asString(rec.categoryName)} ${asString(rec.group)}`;
   return /گیفت|gift\s*-?\s*card/i.test(name);
 }
 
+export function isTelegramDirectProduct(product) {
+  const rec = asRecord(product);
+  const fulfillment = asString(rec.fulfillmentType).toLowerCase();
+  if (fulfillment === "telegram-stars" || fulfillment === "telegram-premium") return true;
+  if (catalogGroupSlug(rec) === "telegram") return true;
+  return /^telegram-(stars|premium)/.test(asString(rec.handle).toLowerCase());
+}
+
+export function isSteamWalletProduct(product) {
+  const rec = asRecord(product);
+  const fulfillment = asString(rec.fulfillmentType).toLowerCase();
+  return catalogGroupSlug(rec) === "steam-wallet" || fulfillment === "steam-topup";
+}
+
+export function isSteamGiftsProduct(product) {
+  const rec = asRecord(product);
+  const fulfillment = asString(rec.fulfillmentType).toLowerCase();
+  return catalogGroupSlug(rec) === "steam-gifts" || fulfillment === "steam-gift";
+}
+
+export function isGameKeyProduct(product) {
+  const rec = asRecord(product);
+  const fulfillment = asString(rec.fulfillmentType).toLowerCase();
+  return catalogGroupSlug(rec) === "game-keys" || fulfillment === "gamekey";
+}
+
+export function isGiftShopProduct(product) {
+  return isGiftCardProduct(product) || isTelegramDirectProduct(product) || isSteamWalletProduct(product);
+}
+
+export function isTelegramShopId(value) {
+  const id = normalizeGiftPlatform(value);
+  return id === "telegram" || id === "telegram-stars" || id === "telegram-premium";
+}
+
+export function telegramShopHref(value) {
+  const id = normalizeGiftPlatform(value);
+  if (id === "telegram") return "/gift-card/telegram-stars";
+  return "";
+}
+
+function telegramFamilyShopId(product) {
+  const rec = asRecord(product);
+  const handle = normalizeGiftPlatform(rec.handle);
+  const fulfillment = asString(rec.fulfillmentType).toLowerCase();
+  const giftCode = fulfillment === "giftcard" || handle.startsWith("giftcard-");
+  if (fulfillment === "telegram-stars" || handle.includes("telegram-stars")) {
+    return giftCode ? handle || "giftcard-telegram-stars" : "telegram-stars";
+  }
+  if (fulfillment === "telegram-premium" || handle.includes("telegram-premium")) {
+    return giftCode ? handle || "giftcard-telegram-premium" : "telegram-premium";
+  }
+  return "";
+}
+
 export function isTopupProduct(product) {
   const rec = asRecord(product);
-  const slug = asString(rec.category?.slug || rec.categorySlug || rec.product_type).toLowerCase();
+  const slug = catalogGroupSlug(rec);
   if (slug === "game-topup" || slug === "topup") return true;
   if (asString(rec.fulfillmentType).toLowerCase() === "topup") return true;
   return /شارژ بازی/.test(`${asString(rec.categoryName)} ${asString(rec.group)}`);
@@ -72,13 +139,124 @@ export function shopTopupHrefFromProduct(product) {
   return hub ? shopTopupHref(hub) : "";
 }
 
+const GIFT_BRAND_PREFIXES = [
+  ["playstation-plus", "playstation-plus"],
+  ["ps-plus", "playstation-plus"],
+  ["xbox-game-pass", "xbox-game-pass"],
+  ["microsoft-windows", "microsoft-windows"],
+  ["app-store-itunes", "itunes"],
+  ["google-play", "google-play"],
+  ["steam-wallet", "steam"],
+  ["nintendo-switch", "nintendo"],
+  ["razer-gold", "razer-gold"],
+  ["riot-access-code", "riot"],
+  ["league-of-legends", "league-of-legends"],
+  ["garena-free-fire", "free-fire"],
+  ["garena-shells", "garena"],
+  ["apex-legends-mobile", "apex-legends"],
+  ["ea-gift-cards", "ea"],
+  ["battle-net", "battlenet"],
+  ["playstation", "playstation"],
+  ["pubg-battlegrounds", "pubg"],
+  ["pubg-mobile", "pubg-mobile"],
+  ["wild-rift", "wild-rift"],
+  ["free-fire", "free-fire"],
+  ["netease-pay", "netease"],
+  ["nintendo", "nintendo"],
+  ["microsoft", "xbox"],
+  ["amazon", "amazon"],
+  ["netflix", "netflix"],
+  ["roblox", "roblox"],
+  ["fortnite", "fortnite"],
+  ["valorant", "valorant"],
+  ["tiktok", "tiktok"],
+  ["tinder", "tinder"],
+  ["twitch", "twitch"],
+  ["airbnb", "airbnb"],
+  ["discord", "discord"],
+  ["telegram", "telegram"],
+  ["eneba", "eneba"],
+  ["kinguin", "kinguin"],
+  ["astropay", "astropay"],
+  ["itunes", "itunes"],
+  ["xbox", "xbox"],
+  ["steam", "steam"],
+  ["ea", "ea"],
+];
+
+function giftBrandFromHandle(handle) {
+  let id = normalizeGiftPlatform(handle);
+  if (id.startsWith("giftcard-")) id = id.slice("giftcard-".length);
+  const prefixes = [...GIFT_BRAND_PREFIXES].sort((a, b) => b[0].length - a[0].length);
+  for (const [prefix, brand] of prefixes) {
+    if (id === prefix || id.startsWith(`${prefix}-`)) return brand;
+  }
+  return "";
+}
+
 export function derivedGiftPlatform(product) {
   const rec = asRecord(product);
-  return normalizeGiftPlatform(rec.platform) || normalizeGiftPlatform(rec.handle);
+  return (
+    telegramFamilyShopId(rec) ||
+    normalizeGiftPlatform(rec.platform) ||
+    giftBrandFromHandle(rec.handle) ||
+    normalizeGiftPlatform(rec.handle)
+  );
+}
+
+export function giftShopGroupKey(product) {
+  const derived = derivedGiftPlatform(product);
+  if (derived.includes("telegram-stars")) return "telegram-stars";
+  if (derived.includes("telegram-premium")) return "telegram-premium";
+  return derived;
 }
 
 export function giftShopHrefFromProduct(product) {
   return giftShopHref(derivedGiftPlatform(product));
+}
+
+export function storefrontGroupHref(slug, platform) {
+  const id = asString(slug).toLowerCase();
+  const plat = asString(platform).toLowerCase();
+  if (id === "gift-card" || id === "steam-gifts") return SHOP_GIFT_CARDS_HREF;
+  if (id === "telegram") return "/gift-card/telegram-stars";
+  if (id === "game-topup") {
+    if (!plat) return SHOP_TOPUPS_HREF;
+    const hub = topupHubKey(plat) || plat;
+    return topupShopHref(hub) || SHOP_TOPUPS_HREF;
+  }
+  if (id === "game-keys") {
+    if (!plat) return SHOP_GAMES_HREF;
+    return `${SHOP_GAMES_HREF}/${encodeURIComponent(consoleShopKey(plat) || "pc")}`;
+  }
+  if (id === "steam-wallet") return giftShopHref("steam") || "/gift-card/steam";
+  return "";
+}
+
+export function storefrontProductHref(product) {
+  const rec = asRecord(product);
+  const handle = asString(rec.handle) || asString(rec.slug);
+  if (isSteamGiftsProduct(rec) || isGameKeyProduct(rec)) return handle ? productHref(handle) : "";
+  if (isGiftShopProduct(rec)) return giftShopHrefFromProduct(rec) || "";
+  if (isTopupProduct(rec)) return shopTopupHrefFromProduct(rec) || SHOP_TOPUPS_HREF;
+  return handle ? productHref(handle) : "";
+}
+
+export function storefrontEntityHref(row) {
+  const rec = asRecord(row);
+  const type = asString(rec.result_type);
+  const slug = asString(rec.slug);
+  const group = asString(rec.group);
+  if (type === "category" || type === "group") return storefrontGroupHref(slug) || asString(rec.href);
+  if (type === "platform") {
+    return `${SHOP_GAMES_HREF}/${encodeURIComponent(consoleShopKey(slug) || "pc")}`;
+  }
+  if (type === "brand") {
+    if (group === "game-keys") return `${SHOP_GAMES_HREF}/${encodeURIComponent(consoleShopKey(slug) || "pc")}`;
+    if (group === "game-topup") return topupShopHref(topupHubKey(slug) || slug) || SHOP_TOPUPS_HREF;
+    return giftShopHref(slug) || asString(rec.href);
+  }
+  return asString(rec.href);
 }
 
 function hrefQuery(href, key) {
@@ -87,29 +265,35 @@ function hrefQuery(href, key) {
 }
 
 function landingHref(current) {
-  if (current.includes("/catalog/category/gift-card")) {
-    const platform = hrefQuery(current, "platform");
-    return giftShopHref(platform) || "/shop/gift-cards";
+  const path = asString(current);
+  const platform = hrefQuery(path, "platform");
+  if (path.includes("/catalog/category/gift-card") || path.includes("/catalog/category/telegram") || path.includes("/catalog/category/steam-gifts")) {
+    return giftShopHref(platform) || SHOP_GIFT_CARDS_HREF;
   }
-  if (current.includes("/catalog/category/game-topup")) {
-    const platform = hrefQuery(current, "platform");
+  if (path.includes("/catalog/category/steam-wallet")) {
+    return giftShopHref(platform || "steam") || "/gift-card/steam";
+  }
+  if (path.includes("/catalog/category/game-topup")) {
     const hub = topupHubKey(platform);
-    return (hub ? topupShopHref(hub) : "") || "/shop/top-ups";
+    return (hub ? topupShopHref(hub) : "") || SHOP_TOPUPS_HREF;
   }
-  return current;
+  if (path.includes("/catalog/category/game-keys")) {
+    return platform ? `${SHOP_GAMES_HREF}/${encodeURIComponent(consoleShopKey(platform) || "pc")}` : SHOP_GAMES_HREF;
+  }
+  if (path.includes("/catalog/category/")) {
+    const slug = path.split("/catalog/category/")[1]?.split("?")[0] || "";
+    return storefrontGroupHref(decodeURIComponent(slug)) || path;
+  }
+  return path;
 }
 
 function storefrontSearchHref(row) {
   const rec = asRecord(row);
   const type = asString(rec.result_type) || "product";
   const current = asString(rec.href);
-  if (type === "product") {
-    if (isGiftCardProduct(rec)) return giftShopHrefFromProduct(rec) || current;
-    if (isTopupProduct(rec)) return shopTopupHrefFromProduct(rec) || current;
-    return current;
-  }
-  if (type === "tag") return current;
-  return landingHref(current);
+  if (type === "product") return storefrontProductHref(rec) || current;
+  if (type === "tag") return landingHref(current);
+  return storefrontEntityHref(rec) || landingHref(current);
 }
 
 export function rewriteGiftSearchItems(items) {
@@ -220,7 +404,7 @@ function skuLabel(brandLabel, skuName) {
 
 function belongsToShop(product, id) {
   const rec = asRecord(product);
-  if (!isGiftCardProduct(rec)) return false;
+  if (!isGiftShopProduct(rec)) return false;
   const aliases = platformQueryIds(id);
   const derived = derivedGiftPlatform(rec);
   const handle = normalizeGiftPlatform(rec.handle);
@@ -288,6 +472,8 @@ function emptyShop(id) {
     bannerIcon: "",
     buyerFieldsByHandle: {},
     shop: null,
+    heroProduct: null,
+    subtitle: "",
   };
 }
 
@@ -576,6 +762,14 @@ export async function loadGiftCardShop(platform, options = {}) {
     }
   }
 
+  if (id.startsWith("telegram")) {
+    try {
+      products = mergeGiftProducts([...products, ...(await fetchGiftProductPages({ category: "telegram", withSkus: true }))]);
+    } catch (error) {
+      if (!(error instanceof ApiError)) throw error;
+    }
+  }
+
   if (products.length === 0) {
     try {
       products = (await fetchGiftProductsByQuery(id)).filter((item) => belongsToShop(item, id));
@@ -584,7 +778,23 @@ export async function loadGiftCardShop(platform, options = {}) {
       products = [];
     }
   }
+  if (products.length === 0) {
+    try {
+      products = (await fetchGiftProductPages({ q: id, withSkus: true })).filter((item) => belongsToShop(item, id));
+    } catch (error) {
+      if (!(error instanceof ApiError)) throw error;
+    }
+  }
   products = products.filter((item) => belongsToShop(item, id) && matchesGiftDelivery(item, giftDelivery));
+  products.sort((left, right) => Number(isTelegramDirectProduct(right)) - Number(isTelegramDirectProduct(left)));
+
+  let buyerFieldsByHandle = {};
+  if (products.some(isTelegramDirectProduct)) {
+    const loaded = await loadCatalogProductDetails(products);
+    buyerFieldsByHandle = loaded.buyerFieldsByHandle;
+    const detailed = loaded.details.filter((row) => asString(row.handle) && belongsToShop(row, id));
+    if (detailed.length) products = detailed;
+  }
 
   const regions = [];
   const seenRegion = new Set();
@@ -643,6 +853,8 @@ export async function loadGiftCardShop(platform, options = {}) {
   regions.sort((a, b) => a.localeCompare(b, "fa"));
   amounts.sort((a, b) => a.sort - b.sort || a.label.localeCompare(b.label, "fa"));
 
+  const heroProduct = asRecord(products[0]);
+
   return {
     platform: id,
     gameName,
@@ -651,6 +863,9 @@ export async function loadGiftCardShop(platform, options = {}) {
     regions,
     amounts,
     bannerIcon,
+    buyerFieldsByHandle,
+    heroProduct,
+    subtitle: asString(heroProduct.subtitle) || asString(heroProduct.shortDescription),
   };
 }
 
@@ -658,13 +873,26 @@ function belongsToTopupShop(product, id) {
   const rec = asRecord(product);
   const want = canonicalTopupHrefKey(id) || normalizeGiftPlatform(id);
   if (!want) return false;
-  const platform = canonicalTopupHrefKey(rec.platform) || normalizeGiftPlatform(rec.platform);
+  const fulfillment = asString(rec.fulfillmentType).toLowerCase();
   const handle = canonicalTopupHrefKey(rec.handle) || normalizeGiftPlatform(rec.handle);
+  if (fulfillment === "giftcard" || handle.startsWith("giftcard-")) return false;
+  if (want === "telegram-stars" || want === "telegram") {
+    return fulfillment === "telegram-stars" || handle.includes("telegram-stars");
+  }
+  if (want === "telegram-premium") {
+    return fulfillment === "telegram-premium" || handle.includes("telegram-premium");
+  }
+  const platform = canonicalTopupHrefKey(rec.platform) || normalizeGiftPlatform(rec.platform);
   const hub = canonicalTopupHrefKey(topupHubKeyFromProduct(rec));
   return hub === want || platform === want || handle === want;
 }
 
 async function fetchTopupProductsByPlatform(platform) {
+  const id = canonicalTopupHrefKey(platform) || normalizeGiftPlatform(platform);
+  if (id === "telegram-stars" || id === "telegram-premium" || id === "telegram") {
+    const family = id === "telegram-premium" ? "telegram-premium" : "telegram-stars";
+    return fetchGiftProductPages({ q: family });
+  }
   return fetchGiftProductPages({ category: "game-topup", platform });
 }
 
@@ -687,7 +915,7 @@ function pickTopupShop(details) {
   return fallback;
 }
 
-async function loadTopupDetails(products) {
+async function loadCatalogProductDetails(products) {
   const handles = [];
   const seen = new Set();
   for (const item of products) {
@@ -713,6 +941,11 @@ async function loadTopupDetails(products) {
     if (!handle) continue;
     buyerFieldsByHandle[handle] = Array.isArray(detail.inputFields) ? detail.inputFields : [];
   }
+  return { details, buyerFieldsByHandle };
+}
+
+async function loadTopupDetails(products) {
+  const { details, buyerFieldsByHandle } = await loadCatalogProductDetails(products);
   return { buyerFieldsByHandle, shop: pickTopupShop(details) };
 }
 

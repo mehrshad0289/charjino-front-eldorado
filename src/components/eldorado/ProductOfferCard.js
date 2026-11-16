@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { PRODUCT, PRODUCT_PAYMENTS, PRODUCT_WARRANTY_TOOLTIP } from "./data/productData";
 import OfferPrice from "./OfferPrice";
 import { ShieldIcon, BoltIcon, SupportIcon, TrustRow } from "./TrustRows";
@@ -200,9 +201,9 @@ function BuyNow({ href, label }) {
   return (
     <div className="px-4 pb-1 lg:px-6 lg:pb-4">
       {href ? (
-        <a href={href} aria-label={text} className={className}>
+        <Link href={href} prefetch aria-label={text} className={className}>
           {text}
-        </a>
+        </Link>
       ) : (
         <button type="button" aria-label={text} className={className}>
           {text}

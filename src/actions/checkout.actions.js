@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { ApiError, serverFetch } from "@/lib/server-fetcher";
-import { getAccessToken } from "@/lib/auth-cookies";
+import { ensureAccessToken } from "@/lib/ensure-access-token";
 import { apiPaths } from "@/lib/api-paths";
 
 function toActionMessage(error) {
@@ -38,7 +38,7 @@ export async function createCheckoutOrder(skuId, requirements, idempotencyKey, q
   }
   const key = String(idempotencyKey || "").trim().slice(0, 80);
   if (!key) return { ok: false, message: "کلید سفارش نامعتبر است" };
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای ثبت سفارش وارد شوید" };
   const qty = Math.max(1, Math.min(100, Math.trunc(Number(quantity) || 1)));
   try {
@@ -64,7 +64,7 @@ export async function createCheckoutOrder(skuId, requirements, idempotencyKey, q
 export async function startOrderPayment(number, returnOrigin) {
   const normalized = String(number || "").trim();
   if (!normalized) return { ok: false, message: "شماره سفارش نامعتبر است" };
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای پرداخت وارد شوید" };
   try {
     const data = await serverFetch(apiPaths.payOrder(normalized), {
@@ -115,7 +115,7 @@ export async function verifyZibalPayment(input) {
 }
 
 export async function listMyCatalogOrders(page = 1, perPage = 20) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای دیدن سفارش‌ها وارد شوید" };
   const safePage = Math.max(1, Math.trunc(Number(page) || 1));
   const safePerPage = Math.max(1, Math.min(100, Math.trunc(Number(perPage) || 20)));
@@ -145,7 +145,7 @@ export async function listMyCatalogOrdersForDashboard() {
 export async function getMyCatalogOrder(number) {
   const normalized = String(number || "").trim();
   if (!normalized) return { ok: false, message: "شماره سفارش نامعتبر است", notFound: true };
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای دیدن این سفارش وارد شوید" };
   try {
     const data = await serverFetch(apiPaths.order(normalized), {
@@ -161,7 +161,7 @@ export async function getMyCatalogOrder(number) {
 }
 
 export async function revealOrderCodes(number) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای دیدن کد وارد شوید" };
   try {
     const data = await serverFetch(apiPaths.revealOrder(String(number || "").trim()), {

@@ -15,7 +15,25 @@ export default async function ShopCategoryPage({ params }) {
   const key = String(category || "").toLowerCase();
   if (!isStoreCategoryKey(key)) notFound();
   const row = await loadStoreCategory(key);
-  if (!row) notFound();
+  if (!row) {
+    if (key === "gift-cards") {
+      const telegram = await loadCatalogGroupCards("telegram", { gift: true });
+      const gift = await loadCatalogGroupCards("gift-card", { gift: true });
+      const seen = new Set();
+      const items = [];
+      for (const card of [...telegram, ...gift]) {
+        if (!card?.href || seen.has(card.href)) continue;
+        seen.add(card.href);
+        items.push(card);
+      }
+      return <DynamicShopPage activeCategory="Gift cards" title="گیفت کارت" items={items} />;
+    }
+    if (key === "top-ups") {
+      const items = await loadCatalogGroupCards("game-topup");
+      return <DynamicShopPage activeCategory="Top ups" title="شارژ بازی" items={items} />;
+    }
+    notFound();
+  }
   const hubCards = hubCardsFromCategory(row);
   const catalogCards =
     hubCards.length > 0

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { ApiError, serverFetch } from "@/lib/server-fetcher";
-import { getAccessToken } from "@/lib/auth-cookies";
+import { ensureAccessToken } from "@/lib/ensure-access-token";
 import { apiPaths } from "@/lib/api-paths";
 import { onlyDigits } from "@/lib/fa-digits";
 import { iranianNationalIdError } from "@/lib/national-id";
@@ -55,7 +55,7 @@ function revalidateSellerPaths() {
 }
 
 export async function getSellerMe() {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(apiPaths.marketSellerMe, {
@@ -68,7 +68,7 @@ export async function getSellerMe() {
 }
 
 export async function getKycMe() {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(apiPaths.marketKycMe, {
@@ -81,7 +81,7 @@ export async function getKycMe() {
 }
 
 export async function acceptSellerTerms() {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const data = await serverFetch(apiPaths.marketSellerAcceptTerms, {
@@ -125,7 +125,7 @@ async function uploadKycDocument(accessToken, kind, file) {
 }
 
 export async function submitKycLevel2(formData) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
 
   const fullName = String(formData.get("full_name") || "").trim();
@@ -170,7 +170,7 @@ export async function submitKycLevel2(formData) {
 }
 
 export async function saveSellerBank(formData) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
 
   const holderName = String(formData.get("holder_name") || "").trim();
@@ -288,7 +288,7 @@ export async function getPublicSellerReviews(sellerId, params = {}) {
 }
 
 export async function getSellerListings(offer) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const search = new URLSearchParams({ perPage: "60" });
@@ -303,7 +303,7 @@ export async function getSellerListings(offer) {
 }
 
 export async function getSellerListing(id) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(apiPaths.marketSellerListing(id), {
@@ -360,7 +360,7 @@ function listingPayload(formData) {
 }
 
 export async function createListing(formData) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   const body = listingPayload(formData);
   try {
@@ -377,7 +377,7 @@ export async function createListing(formData) {
 }
 
 export async function updateListing(id, formData) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   const body = listingPayload(formData);
   try {
@@ -394,7 +394,7 @@ export async function updateListing(id, formData) {
 }
 
 async function uploadMedia(path, formData) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const data = await serverFetch(path, {
@@ -418,7 +418,7 @@ export async function uploadListingImage(formData) {
 }
 
 export async function deleteListingImage(listingId, imageId) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const data = await serverFetch(apiPaths.marketListingImage(listingId, imageId), {
@@ -440,7 +440,7 @@ export async function uploadListingVideo(formData) {
 }
 
 export async function deleteListingVideo(listingId, videoId) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const data = await serverFetch(apiPaths.marketListingVideo(listingId, videoId), {
@@ -454,7 +454,7 @@ export async function deleteListingVideo(listingId, videoId) {
 }
 
 export async function placeListing(id) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const data = await serverFetch(apiPaths.marketListingPlace(id), {
@@ -469,7 +469,7 @@ export async function placeListing(id) {
 }
 
 export async function submitListing(id) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const data = await serverFetch(apiPaths.marketListingSubmit(id), {
@@ -496,7 +496,7 @@ export async function saveAndSubmitListing(formData) {
 }
 
 export async function pauseListing(id) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const data = await serverFetch(apiPaths.marketListingPause(id), {
@@ -511,7 +511,7 @@ export async function pauseListing(id) {
 }
 
 export async function submitBoostRequest(gameId, answers) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای ثبت درخواست وارد شو." };
   try {
     const data = await serverFetch(apiPaths.marketBoostRequests, {
@@ -552,7 +552,7 @@ function payRedirect(paid, orderNo, amount) {
 }
 
 export async function createMarketOrder(listingId, extra = {}) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای خرید وارد شوید." };
   try {
     const quantity = Number(extra.quantity);
@@ -586,7 +586,7 @@ export async function createMarketOrder(listingId, extra = {}) {
 }
 
 export async function startMarketPayment(orderNo) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای پرداخت وارد شوید." };
   try {
     const paid = await serverFetch(apiPaths.marketOrderPay(orderNo), {
@@ -602,8 +602,37 @@ export async function startMarketPayment(orderNo) {
   }
 }
 
+export async function verifyMarketPayment(gateway, payload = {}) {
+  const name = String(gateway || "").trim().toLowerCase();
+  const reference = String(payload.trackId || payload.reference || payload.authority || "").trim();
+  if (!name) return { ok: false, message: "درگاه پرداخت نامعتبر است." };
+  if (!reference) return { ok: false, message: "مرجع پرداخت نیست." };
+  try {
+    const verified = await serverFetch(apiPaths.marketPaymentVerify(name), {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: JSON.stringify({
+        trackId: payload.trackId || reference,
+        reference,
+        authority: payload.authority || "",
+      }),
+    });
+    const orderNo = verified?.order_no || "";
+    revalidateOrderPaths(orderNo);
+    return {
+      ok: true,
+      orderNo,
+      status: verified?.status || "",
+      outcome: verified?.outcome || "",
+      paid: verified?.outcome === "success" || verified?.status === "paid",
+    };
+  } catch (error) {
+    return fromMarketError(error);
+  }
+}
+
 export async function verifyTestPayment(reference) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای پرداخت وارد شوید." };
   const value = String(reference || "").trim();
   if (!value) return { ok: false, message: "مرجع پرداخت نیست." };
@@ -627,7 +656,7 @@ export async function verifyTestPayment(reference) {
 }
 
 export async function getBuyerOrders(filters = {}) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(`${apiPaths.marketOrders}?${orderListApiQuery(filters)}`, {
@@ -645,7 +674,7 @@ export async function getBuyerOrders(filters = {}) {
 }
 
 export async function getBuyerOrder(orderNo) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(apiPaths.marketOrder(orderNo), {
@@ -658,7 +687,7 @@ export async function getBuyerOrder(orderNo) {
 }
 
 export async function getSellerOrders(filters = {}) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(`${apiPaths.marketSellerOrders}?${orderListApiQuery(filters)}`, {
@@ -676,7 +705,7 @@ export async function getSellerOrders(filters = {}) {
 }
 
 export async function getSellerWallet() {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(apiPaths.marketSellerWallet, {
@@ -689,7 +718,7 @@ export async function getSellerWallet() {
 }
 
 export async function getSellerTransactions() {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(apiPaths.marketSellerTransactions, {
@@ -702,7 +731,7 @@ export async function getSellerTransactions() {
 }
 
 export async function getSellerOrder(orderNo) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(apiPaths.marketSellerOrder(orderNo), {
@@ -715,7 +744,7 @@ export async function getSellerOrder(orderNo) {
 }
 
 export async function deliverSellerOrder(orderNo, secret, instructions) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   const payload = String(secret || "").trim();
   if (!payload) return { ok: false, message: "مشخصات ورود را بنویس." };
@@ -746,7 +775,7 @@ export async function deliverSellerOrder(orderNo, secret, instructions) {
 }
 
 export async function revealBuyerOrder(orderNo) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const data = await serverFetch(apiPaths.marketOrderReveal(orderNo), {
@@ -762,7 +791,7 @@ export async function revealBuyerOrder(orderNo) {
 }
 
 export async function confirmBuyerOrder(orderNo) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const data = await serverFetch(apiPaths.marketOrderConfirm(orderNo), {
@@ -778,7 +807,7 @@ export async function confirmBuyerOrder(orderNo) {
 }
 
 export async function getMarketChats({ side, unreadOnly } = {}) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(apiPaths.marketChats({ side, unread: unreadOnly ? 1 : undefined }), {
@@ -791,7 +820,7 @@ export async function getMarketChats({ side, unreadOnly } = {}) {
 }
 
 export async function getOrderMessages(orderNo) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(apiPaths.marketOrderMessages(orderNo), {
@@ -804,7 +833,7 @@ export async function getOrderMessages(orderNo) {
 }
 
 export async function sendOrderMessage(orderNo, body) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   const text = String(body || "").trim();
   if (!text) return { ok: false, message: "متن پیام خالی است." };
@@ -826,7 +855,7 @@ function revalidateNotificationPaths() {
 }
 
 export async function getMarketNotifications() {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) {
     return { ok: false, unauthorized: true, items: [], meta: { unread: 0, action_required: 0 } };
   }
@@ -845,7 +874,7 @@ export async function getMarketNotifications() {
 }
 
 export async function getMarketNotificationsUnread() {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, unread: 0 };
   try {
     const data = await serverFetch(apiPaths.marketNotificationsUnread, {
@@ -859,7 +888,7 @@ export async function getMarketNotificationsUnread() {
 }
 
 export async function markMarketNotificationRead(id) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   const key = Number(id);
   if (!Number.isInteger(key) || key < 1) return { ok: false, message: "اعلان پیدا نشد." };
@@ -876,7 +905,7 @@ export async function markMarketNotificationRead(id) {
 }
 
 export async function markAllMarketNotificationsRead() {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true };
   try {
     const data = await serverFetch(apiPaths.marketNotificationsReadAll, {
@@ -891,7 +920,7 @@ export async function markAllMarketNotificationsRead() {
 }
 
 export async function resumeListing(id) {
-  const accessToken = await getAccessToken();
+  const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "وارد شوید." };
   try {
     const data = await serverFetch(apiPaths.marketListingResume(id), {

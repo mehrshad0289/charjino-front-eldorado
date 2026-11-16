@@ -1,17 +1,17 @@
-const CDN = "https://assetsdelivery.eldorado.gg/v7/_assets_/home-page/v4";
-
-function Card({ bg, image, imageAlt, title, text, buttonText, href, imgClass }) {
+function Card({ bg, imageSrc, imageAlt, title, text, buttonText, href, imgClass }) {
   return (
     <div
       className="flex items-center rounded-lg p-6 md:p-9"
       style={{ backgroundColor: bg }}
     >
-      <img
-        src={`${CDN}/${image}`}
-        alt={imageAlt}
-        loading="lazy"
-        className={`h-28 w-auto shrink-0 md:h-[154px] ${imgClass || ""}`}
-      />
+      {imageSrc ? (
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          loading="lazy"
+          className={`h-28 w-auto shrink-0 md:h-[154px] ${imgClass || ""}`}
+        />
+      ) : null}
       <div className="ms-5 md:ms-[43px]">
         <div className="mb-6">
           <h3 className="mb-3.5 text-2xl font-bold text-ink">{title}</h3>
@@ -36,8 +36,8 @@ export default function GuaranteeCards() {
           <div className="w-full">
             <Card
               bg="var(--color-guarantee)"
-              image="trade-shield.svg?q=40"
-              imageAlt="Trade shield"
+              imageSrc="/home/trade-shield.svg"
+              imageAlt="تضمین معامله"
               title="تضمین بازگشت پول"
               text="سفارش را دریافت می‌کنید یا پول برمی‌گردد. با پوشش کامل معامله، با خیال راحت بخرید."
               buttonText="بیشتر بدانید"
@@ -47,8 +47,8 @@ export default function GuaranteeCards() {
           <div className="w-full">
             <Card
               bg="var(--color-support)"
-              image="chat-support.svg"
-              imageAlt="24/7 live support"
+              imageSrc="/home/chat-support.svg"
+              imageAlt="پشتیبانی شارژینو"
               title="پشتیبانی شبانه‌روزی"
               text="پشتیبانی شارژینو همیشه در دسترس است. هر زمان پیام بدهید."
               buttonText="گفتگو"

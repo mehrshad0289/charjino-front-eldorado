@@ -14,6 +14,8 @@ import {
   GIFT_SHOP_CHROME,
   giftShopFaq,
   giftShopSeo,
+  telegramShopFaq,
+  telegramShopSeo,
 } from "./data/giftShopCopy";
 import RecordRecentView from "./RecordRecentView";
 import {
@@ -22,18 +24,22 @@ import {
   giftBrandPageSeo,
   giftHubPlatform,
   isPlayStationPlusPlatform,
+  isTelegramShopId,
   isXboxGamePassPlatform,
   loadGiftBrandPage,
   loadGiftCardShop,
   loadProductHub,
   normalizeGiftPlatform,
+  telegramShopHref,
 } from "../../lib/gift-card-shop";
 import { PS_PLUS_BANNER } from "./data/shopSubscriptionData";
 
-export default async function GiftCardShopPage({ platform }) {
+export default async function GiftCardShopPage({ platform, initialSkuId = null }) {
   await connection();
   const id = normalizeGiftPlatform(platform || "");
   if (!id) notFound();
+  const telegramHref = telegramShopHref(id);
+  if (telegramHref) redirect(telegramHref);
   if (isPlayStationPlusPlatform(id)) redirect("/playstation-plus");
   if (isXboxGamePassPlatform(id)) redirect("/xbox-game-pass");
   const [catalog, plus, brandPage, hub] = await Promise.all([
@@ -49,7 +55,11 @@ export default async function GiftCardShopPage({ platform }) {
     name = PS_PLUS_BANNER.gameName;
   }
   if (!name) notFound();
-  const seo = giftBrandPageSeo(brandPage, `خرید گیفت کارت ${name}`) || giftShopSeo(name);
+  const telegram = isTelegramShopId(id);
+  const seo =
+    giftBrandPageSeo(brandPage, `خرید ${name}`) ||
+    (telegram ? telegramShopSeo(name, catalog.heroProduct?.description) : giftShopSeo(name));
+  const faqItems = telegram ? telegramShopFaq() : giftShopFaq(name);
   const tabs = bannerTabsFromHub(hub);
   const activeTab = activeHubTabKey(tabs, href);
 
@@ -91,6 +101,8 @@ export default async function GiftCardShopPage({ platform }) {
                 regions={catalog.regions}
                 amounts={catalog.amounts}
                 productIcon={catalog.bannerIcon || plus?.bannerIcon || ""}
+                buyerFieldsByHandle={catalog?.buyerFieldsByHandle || {}}
+                initialSkuId={initialSkuId}
               />
             </div>
             <div className="mx-auto mt-10 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-16 lg:gap-[128px] lg:px-6">
@@ -100,7 +112,7 @@ export default async function GiftCardShopPage({ platform }) {
               />
             </div>
             <div className="mx-auto mt-12 w-full max-w-3xl px-4 lg:mt-0 lg:px-3.5">
-              <GiftCardFaq items={giftShopFaq(name)} title={GIFT_SHOP_CHROME.faqTitle} />
+              <GiftCardFaq items={faqItems} title={GIFT_SHOP_CHROME.faqTitle} />
               <GiftCardTrustCard
                 title={GIFT_SHOP_CHROME.trustTitle}
                 subtitle={GIFT_SHOP_CHROME.trustSubtitle}

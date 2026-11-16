@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { FA, SHOP_ACCOUNTS_HREF, SHOP_ITEMS_HREF } from "./data/faCopy";
 import { GiftMegaEmpty, GiftNotSoldBanner, MegaSearchField, useMegaSearch } from "./GiftMegaSearch";
 import { loadNavMega, peekNavMega } from "./nav-mega-client";
@@ -25,7 +26,7 @@ function GameRow({ game, fallbackHref, showCategory = false }) {
   const img = game.img || game.icon || "";
   const category = showCategory ? game.category : "";
   return (
-    <a href={href} aria-label={game.name} className="text-[14px] leading-[21px]">
+    <Link href={href} aria-label={game.name} className="text-[14px] leading-[21px]" prefetch>
       <div className="flex h-[42px] items-center gap-2 rounded-lg text-[16px] leading-[24px] hover:bg-page">
         {img ? (
           <div className="h-7 max-w-fit shrink-0 overflow-hidden rounded-sm">
@@ -39,7 +40,7 @@ function GameRow({ game, fallbackHref, showCategory = false }) {
         </span>
         {category ? <span className="shrink-0 text-[14px] leading-[21px] text-graytext">{category}</span> : null}
       </div>
-    </a>
+    </Link>
   );
 }
 
@@ -81,13 +82,14 @@ export function ItemsPromo() {
           </div>
         ))}
       </div>
-      <a
+      <Link
         href={SHOP_ITEMS_HREF}
+        prefetch
         aria-label={FA.priceHistory}
         className="inline-flex min-h-[42px] min-w-[70px] items-center justify-center gap-1.5 rounded-lg bg-brand px-4 py-2.5 text-[14px] font-bold leading-[16.8px] text-ink"
       >
         {FA.priceHistory}
-      </a>
+      </Link>
     </div>
   );
 }
@@ -148,7 +150,7 @@ export default function MegaMenu({ onClose, categoryKey, fallbackHref = SHOP_ACC
       ref={panelRef}
       className="absolute inset-x-0 top-full z-[1003] mx-5 hidden lg:block"
     >
-        <div className="flex max-w-[1070px] overflow-hidden rounded-[10px] bg-white text-ink shadow-[rgba(47,47,55,0.15)_0px_2px_4px_0px,rgba(47,47,55,0.1)_0px_24px_60px_0px,rgba(47,47,55,0.05)_0px_12px_24px_0px]">
+        <div className="flex min-h-[465px] max-w-[1070px] overflow-hidden rounded-[10px] bg-white text-ink shadow-[rgba(47,47,55,0.15)_0px_2px_4px_0px,rgba(47,47,55,0.1)_0px_24px_60px_0px,rgba(47,47,55,0.05)_0px_12px_24px_0px]">
           <div className="w-[63%]">
             <div className="flex flex-col gap-6 bg-white p-6">
               {/* {showPromo ? <ItemsPromo /> : null} */}

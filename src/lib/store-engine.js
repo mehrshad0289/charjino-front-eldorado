@@ -5,11 +5,10 @@ import { toFaDigits } from "./fa-digits";
 import { productHref } from "./format-toman";
 import { formatTomanInWords } from "./price";
 import {
-  giftShopHrefFromProduct,
-  isGiftCardProduct,
-  isTopupProduct,
+  giftShopGroupKey,
+  isGiftShopProduct,
   loadProductHub,
-  shopTopupHrefFromProduct,
+  storefrontProductHref,
   tabForStoreCategory,
 } from "./gift-card-shop";
 import { preferFaTitle } from "./catalog-region";
@@ -127,8 +126,11 @@ export function hubCardsFromCategory(category) {
     const hubKey = asString(row.hubKey);
     const title = asString(row.title) || hubKey;
     const item = asRecord(tabs[0]);
-    let href = asString(item.href);
-    if (categoryKey === "top-ups" && hubKey && href.startsWith("/shop/top-ups/")) {
+    const topupHref = tabs
+      .map((tab) => asString(asRecord(tab).href))
+      .find((path) => path.startsWith("/shop/top-ups/"));
+    let href = categoryKey === "top-ups" ? topupHref || asString(item.href) : asString(item.href);
+    if (categoryKey === "top-ups" && hubKey) {
       href = topupShopHref(hubKey) || href;
     }
     if (!href.startsWith("/") || seen.has(href)) continue;
@@ -192,12 +194,10 @@ export async function loadCatalogGroupCards(slug, { gift = false } = {}) {
       const handle = asString(rec.handle);
       const title = preferFaTitle(rec) || asString(rec.title);
       if (!handle || !title) continue;
-      const href = gift || isGiftCardProduct(rec)
-        ? giftShopHrefFromProduct(rec)
-        : isTopupProduct(rec)
-          ? shopTopupHrefFromProduct(rec)
-          : productHref(handle);
-      if (!href || seen.has(href)) continue;
+      const href = storefrontProductHref(rec) || productHref(handle);
+      const groupKey = gift || isGiftShopProduct(rec) ? giftShopGroupKey(rec) || href : href;
+      if (!href || seen.has(groupKey) || seen.has(href)) continue;
+      seen.add(groupKey);
       seen.add(href);
       items.push({
         key: href,

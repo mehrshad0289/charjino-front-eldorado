@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { PRODUCT_CAROUSEL } from "./data/productData";
 import OfferPrice from "./OfferPrice";
 
@@ -81,9 +82,9 @@ export default function ProductCarousel({ cards, allHref = "/efootball-accounts"
       <div className="flex items-center justify-between">
         <h2 className="text-[16px] font-bold leading-[24px] lg:text-[18px] lg:leading-[27px]">{heading}</h2>
         <div className="flex items-center">
-          <a href={allHref} className="text-[14px] leading-[21px] text-linkblue underline lg:hidden">
+          <Link href={allHref || "/"} prefetch className="text-[14px] leading-[21px] text-linkblue underline lg:hidden">
             {heading === "More like this" ? "All offers" : "همه آگهی‌ها"}
-          </a>
+          </Link>
           <div className="hidden items-center pl-[14px] lg:flex">
             <span className="mr-[10px] block text-[12px] leading-[16.8px] text-filtertext">Page {page} of {pageCount}</span>
             <ArrowButton dir="prev" label="Previous offers" onClick={() => scrollByPage(-1)} disabled={page === 1} />
@@ -104,7 +105,7 @@ export default function ProductCarousel({ cards, allHref = "/efootball-accounts"
           <article key={c.href || c.title} className="w-52 shrink-0 rounded-lg bg-white shadow-[rgba(9,9,11,0.05)_0px_2px_4px_0px,rgba(9,9,11,0.02)_0px_12px_8px_0px]">
             <div className="px-[10px] pb-[10px] pt-3">
               {c.href ? (
-                <a href={c.href} className="mb-[10px] flow-root h-[84px] overflow-hidden text-ellipsis text-[14px] leading-[21px]">{c.title}</a>
+                <Link href={c.href} prefetch className="mb-[10px] flow-root h-[84px] overflow-hidden text-ellipsis text-[14px] leading-[21px]">{c.title}</Link>
               ) : (
                 <h3 className="mb-[10px] flow-root h-[84px] overflow-hidden text-ellipsis text-[14px] leading-[21px]">{c.title}</h3>
               )}

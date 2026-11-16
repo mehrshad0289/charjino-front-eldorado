@@ -9,15 +9,20 @@ import { FA } from "./data/faCopy";
 import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
 import { useCheckoutPreview } from "./useCheckoutPreview";
 import { useCheckoutCoupon } from "./useCheckoutCoupon";
+import { amountForSku } from "../../lib/sku-query";
 
 export default function SubscriptionBuyFlow({
   regions = [],
   amounts = [],
   offerTitle = FA.subscription,
   productIcon = "",
+  initialSkuId = null,
 }) {
-  const [region, setRegion] = useState(regions[0] || null);
-  const [selectedKey, setSelectedKey] = useState(null);
+  const preset = amountForSku(amounts, initialSkuId);
+  const [region, setRegion] = useState(
+    preset?.region && (regions.length === 0 || regions.includes(preset.region)) ? preset.region : regions[0] || null,
+  );
+  const [selectedKey, setSelectedKey] = useState(preset?.key || null);
   const checkout = useCheckoutPreview();
 
   const visibleAmounts = useMemo(() => {

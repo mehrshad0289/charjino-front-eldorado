@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FA } from "./data/faCopy";
 import ShopNoResults from "./ShopNoResults";
 
@@ -28,9 +29,10 @@ export default function PopularGames({ items, title }) {
           ) : null}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {games.map((row) => (
-              <a
+              <Link
                 key={row.key || row.name}
-                href={row.href}
+                href={row.href || "/"}
+                prefetch
                 className={`flex min-w-0 items-center gap-3 rounded-lg bg-white p-6 text-sm leading-[21px] text-linkblue ${SHADOW}`}
               >
                 {row.img ? (
@@ -51,7 +53,7 @@ export default function PopularGames({ items, title }) {
                     <span className="block text-xs leading-[16.8px] text-graytext">{row.tag}</span>
                   ) : null}
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

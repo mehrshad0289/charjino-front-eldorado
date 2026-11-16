@@ -21,6 +21,11 @@ export default function RootLayout({ children }) {
        on body it resolved empty and every page silently fell back to the
        system font stack (found via the /blog session-12 font trace). */
     <html lang="fa" dir="rtl" className={`${lato.variable} light-theme`}>
+      <head>
+        <link rel="preload" href="/fonts/YekanBakh-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/YekanBakh-Medium.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/YekanBakh-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      </head>
       <body>
         <Suspense fallback={null}>
           <ShopChrome />

@@ -93,14 +93,15 @@ export default function Footer() {
             <ul key={i} className="flex flex-col gap-4">
               {col.links.map(([label, href]) => (
                 <li key={label}>
-                  <a
+                  <Link
                     href={href}
+                    prefetch
                     className={`text-sm leading-6 text-footlink hover:text-white ${
                       col.bold ? "font-bold" : ""
                     }`}
                   >
                     {label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -114,9 +115,9 @@ export default function Footer() {
           <ul className="flex flex-wrap items-center gap-6">
             {LEGAL_LINKS.map(([label, href]) => (
               <li key={label} className="list-none">
-                <a href={href} className="leading-[19.2px] hover:text-white">
+                <Link href={href} prefetch className="leading-[19.2px] hover:text-white">
                   {label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

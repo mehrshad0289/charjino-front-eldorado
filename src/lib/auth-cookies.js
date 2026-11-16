@@ -1,15 +1,16 @@
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "./constants";
+import {
+  ACCESS_TOKEN_MAX_AGE,
+  AUTH_COOKIE_BASE_OPTIONS,
+  REFRESH_TOKEN_MAX_AGE,
+} from "./auth-cookie-options";
 
-export const ACCESS_TOKEN_MAX_AGE = 30 * 60;
-export const REFRESH_TOKEN_MAX_AGE = 5 * 24 * 60 * 60;
-
-const AUTH_COOKIE_BASE_OPTIONS = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
-  path: "/",
-};
+export {
+  ACCESS_TOKEN_MAX_AGE,
+  AUTH_COOKIE_BASE_OPTIONS,
+  REFRESH_TOKEN_MAX_AGE,
+} from "./auth-cookie-options";
 
 export async function getAccessToken() {
   const store = await cookies();

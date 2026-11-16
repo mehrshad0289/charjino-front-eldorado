@@ -28,6 +28,7 @@ import {
   loadGiftCardShop,
   loadProductHub,
 } from "../../lib/gift-card-shop";
+import { skuIdFromQuery } from "../../lib/sku-query";
 
 export const instant = false;
 
@@ -47,8 +48,9 @@ export async function generateMetadata() {
   };
 }
 
-export default async function PlayStationPlusPage() {
+export default async function PlayStationPlusPage({ searchParams }) {
   await connection();
+  const query = searchParams ? await searchParams : {};
   const catalog = await loadGiftCardShop("playstation-plus");
   const gifts = catalog.gameName ? null : await loadGiftCardShop("playstation");
   const brandPage = await loadGiftBrandPage("playstation-plus");
@@ -98,6 +100,7 @@ export default async function PlayStationPlusPage() {
                 amounts={catalog.amounts}
                 offerTitle={FA.subscription}
                 productIcon={icon}
+                initialSkuId={skuIdFromQuery(query.sku)}
               />
             </div>
             <div className="mx-auto mt-12 flex w-full max-w-[1208px] flex-col gap-10 px-4 lg:mt-12 lg:gap-[128px] lg:px-6">

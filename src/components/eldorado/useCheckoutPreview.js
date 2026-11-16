@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { catalogCheckoutHref, saveCatalogCheckoutDraft } from "../../lib/catalog-checkout";
 
 export function useCheckoutPreview() {
+  const router = useRouter();
   const [ack, setAck] = useState(false);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
@@ -36,12 +38,14 @@ export function useCheckoutPreview() {
         handle: selected.handle || "",
         from,
       });
-      window.location.href = catalogCheckoutHref({
-        skuId,
-        handle: selected.handle,
-        couponCode,
-        from,
-      });
+      router.push(
+        catalogCheckoutHref({
+          skuId,
+          handle: selected.handle,
+          couponCode,
+          from,
+        }),
+      );
     } catch {
       setMessage("اتصال به سرور برقرار نشد.");
     } finally {

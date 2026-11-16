@@ -1,4 +1,4 @@
-import { giftShopHrefFromProduct, isGiftCardProduct, isTopupProduct, shopTopupHrefFromProduct } from "./gift-card-shop";
+import { isGiftShopProduct, isTopupProduct, storefrontProductHref } from "./gift-card-shop";
 import { pickTopupDisplayName, topupHubKeyFromProduct } from "./topup-hub";
 
 export const MEGA_OTHER_VERTICALS = ["Currency", "Accounts", "Top ups", "Items", "Boosting"];
@@ -148,8 +148,8 @@ export function mapSmartSearchItems(items, labels) {
 
 function searchItemToGame(item, category) {
   const rec = asRecord(item);
-  const giftHref = isGiftCardProduct(rec) ? giftShopHrefFromProduct(rec) : "";
-  const topupHref = !giftHref && isTopupProduct(rec) ? shopTopupHrefFromProduct(rec) : "";
+  const href = storefrontProductHref(rec) || asString(rec.href);
+  const topupHref = isTopupProduct(rec) ? href : "";
   const hub = topupHref ? topupHubKeyFromProduct(rec) : "";
   const name = hub
     ? pickTopupDisplayName({
@@ -163,7 +163,7 @@ function searchItemToGame(item, category) {
     name,
     nameEn: [rec.title_en, rec.titleEn, rec.name_en, rec.title, rec.name, hub].map(asString).filter(Boolean).join(" "),
     img: asString(rec.thumbnail) || asString(rec.image),
-    href: giftHref || topupHref || asString(rec.href),
+    href,
     category,
   };
 }
@@ -174,7 +174,7 @@ export function partitionSearchItems(items, labels) {
   for (const item of Array.isArray(items) ? items : []) {
     const rec = asRecord(item);
     if (asString(rec.result_type) && rec.result_type !== "product") continue;
-    if (isGiftCardProduct(rec)) gift.push(searchItemToGame(rec, labels.giftCards));
+    if (isGiftShopProduct(rec)) gift.push(searchItemToGame(rec, labels.giftCards));
     else other.push(searchItemToGame(rec, categoryLabel(rec, labels)));
   }
   return { gift: uniqueMegaGames(gift), other: uniqueMegaGames(other) };

@@ -1,6 +1,7 @@
 export const apiPaths = {
   authRequestOtp: "/auth/request-otp",
   authVerifyOtp: "/auth/verify-otp",
+  authRefresh: "/auth/refresh",
   authMe: "/auth/me",
   authLogout: "/auth/logout",
   authProfile: "/auth/profile",
