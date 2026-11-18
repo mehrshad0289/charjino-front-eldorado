@@ -5,10 +5,13 @@ import ChatBubble from "../../../components/eldorado/ChatBubble";
 import { FA } from "../../../components/eldorado/data/faCopy";
 import { CONSOLE_PLATFORMS } from "../../../lib/console-games";
 
-export const metadata = {
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
   title: "بازی — شارژینو",
   description: "کنسول را انتخاب کنید. دیسک، کارتریج، اکانت و راک آگهی کاربر است. گیفت و اشتراک را شارژینو می‌فروشد.",
-};
+  path: "/shop/games",
+});
 
 export default function GamesShopPage() {
   return (

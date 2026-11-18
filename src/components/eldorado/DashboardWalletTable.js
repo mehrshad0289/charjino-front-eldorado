@@ -5,6 +5,8 @@ import { formatToman } from "../../lib/listing";
 import { formatOrderDate } from "../../lib/order";
 import { DASHBOARD_WALLET_PAGE } from "./data/dashboardData";
 import EldSelect from "./EldSelect";
+import EmptyState from "./EmptyState";
+import { FA } from "./data/faCopy";
 
 const CARD_SHADOW =
   "shadow-[rgba(9,_9,_11,_0.05)_0px_2px_4px_0px,_rgba(9,_9,_11,_0.02)_0px_12px_8px_0px]";
@@ -79,7 +81,7 @@ export default function DashboardWalletTable({ balances, items }) {
         </div>
         <div className="h-px border-t-[0.8px] border-[rgb(231,_231,_231)]" />
         {rows.length === 0 ? (
-          <p className="px-5 py-8 text-[14px] text-graytext">{page.emptyText}</p>
+          <EmptyState title={FA.nothingFound} text={page.emptyText} />
         ) : (
           rows.map((row, index) => {
             const amount = Number(row.amount || 0);

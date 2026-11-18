@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { noIndexMetadata } from "@/lib/seo";
 import CategoryNav from "../../../../components/eldorado/CategoryNav";
 import ProductBanner from "../../../../components/eldorado/ProductBanner";
 import ProductBreadcrumb from "../../../../components/eldorado/ProductBreadcrumb";
@@ -32,11 +33,11 @@ export function generateStaticParams() {
   return [{ id: PRODUCT_ID }];
 }
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "[ ANDROID ] ACC 3000 COINS, 2.5M GP - Eldorado",
   description:
     "Buy eFootball accounts with full email access on Eldorado. Instant delivery from verified sellers, money-back guarantee protected by TradeShield and 24/7 live support.",
-};
+});
 
 export default async function ProductSinglePage({ params }) {
   const { id } = await params;

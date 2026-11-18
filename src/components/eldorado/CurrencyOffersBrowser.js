@@ -5,6 +5,8 @@ import { formatTomanInWords } from "../../lib/price";
 import { toFaDigits } from "../../lib/fa-digits";
 import { CURRENCY_LISTING_COPY } from "./data/listingData";
 import EldSelect from "./EldSelect";
+import ShopNoResults from "./ShopNoResults";
+import { FA } from "./data/faCopy";
 
 const SORTS = [
   { id: "recommended", label: "پیشنهادی" },
@@ -126,7 +128,7 @@ export default function CurrencyOffersBrowser({ offers = [], unitLabel = "", reg
             </a>
           </>
         ) : (
-          <p className="mt-4 text-[14px] text-graytext">برای این بازی هنوز آگهی ارز فعالی نیست.</p>
+          <ShopNoResults title={FA.nothingFound} text="برای این بازی هنوز آگهی ارز فعالی نیست." />
         )}
         <p className="mt-4 text-[13px] leading-[20px] text-graytext">{notice}</p>
       </section>
@@ -148,7 +150,7 @@ export default function CurrencyOffersBrowser({ offers = [], unitLabel = "", reg
           </div>
         </div>
         {visible.length === 0 ? (
-          <p className="mt-4 text-[14px] text-graytext">با این ریجن آگهی‌ای نیست.</p>
+          <ShopNoResults title={FA.nothingFound} text="با این ریجن آگهی‌ای نیست." />
         ) : (
           <ul className="mt-4 flex flex-col gap-2">
             {visible.map((row) => {

@@ -29,6 +29,9 @@ import {
   loadProductHub,
 } from "../../lib/gift-card-shop";
 import { skuIdFromQuery } from "../../lib/sku-query";
+import { buildMetadata } from "@/lib/seo";
+import JsonLd from "../../components/seo/json-ld";
+import { collectionPageJsonLd, faqFromShopItems, faqPageJsonLd, howToJsonLd } from "../../lib/json-ld";
 
 export const instant = false;
 
@@ -42,10 +45,11 @@ export async function generateMetadata() {
     description: `خرید ${name} با تومان؛ ریجن و مدت اشتراک از کاتالوگ، تحویل کد بعد از پرداخت.`,
   };
   const meta = giftBrandPageMeta(brandPage, fallback);
-  return {
+  return buildMetadata({
     title: meta.title || fallback.title,
     description: meta.description || fallback.description,
-  };
+    path: "/playstation-plus",
+  });
 }
 
 export default async function PlayStationPlusPage({ searchParams }) {
@@ -63,6 +67,9 @@ export default async function PlayStationPlusPage({ searchParams }) {
 
   return (
     <>
+      <JsonLd data={collectionPageJsonLd({ name: `خرید ${name}`, path: "/playstation-plus" })} />
+      <JsonLd data={faqPageJsonLd(faqFromShopItems(psPlusFaq()))} />
+      <JsonLd data={howToJsonLd({ name: GIFT_SHOP_CHROME.processTitle, steps: GIFT_SHOP_CHROME.processSteps })} />
       <CategoryNav activeCategory="Gift cards" />
       <RecordRecentView
         product={{

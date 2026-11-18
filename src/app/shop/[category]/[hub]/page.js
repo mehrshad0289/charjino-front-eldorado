@@ -40,13 +40,17 @@ import {
   isStoreCategoryKey,
   loadCurrencyOfferGames,
   ITEM_PRICE_PRESETS,
+  catalogNumberFacets,
   itemFacetsFromOffers,
   listingToOffer,
+  loadItemOfferGames,
   loadMarketFacets,
   loadMarketListings,
   loadStoreCategory,
+  mergeFacetFields,
   resolveMarketGame,
 } from "../../../../lib/store-engine";
+import { buildMetadata, SHOP_KIND_FA } from "@/lib/seo";
 
 export const instant = false;
 
@@ -63,13 +67,21 @@ async function loadBoostForm(gameId) {
 export async function generateMetadata({ params }) {
   const { category, hub } = await params;
   const key = String(category || "").toLowerCase();
-  if (key !== "accounts") return {};
-  const game = await resolveMarketGame(key, decodeURIComponent(String(hub || "")));
-  const name = game?.game_name_fa || game?.game_name || "بازی";
-  return {
-    title: `خرید اکانت ${name} | شارژینو`,
-    description: `مقایسه آگهی‌های اکانت ${name}. هر پیشنهاد عکس، مشخصات و قیمت دارد و پول تا تأیید تحویل نزد شارژینو می‌ماند.`,
-  };
+  if (!isStoreCategoryKey(key)) return {};
+  const raw = decodeURIComponent(String(hub || ""));
+  const kind = SHOP_KIND_FA[key] || "";
+  let name = raw;
+  if (["accounts", "items", "currency", "boosting"].includes(key)) {
+    const game = await resolveMarketGame(key, raw);
+    name = game?.game_name_fa || game?.game_name || raw;
+  }
+  return buildMetadata({
+    title: kind ? `خرید ${kind} ${name} | شارژینو` : `${name} | شارژینو`,
+    description: kind
+      ? `آگهی‌های ${kind} ${name} در شارژینو. مشخصات و قیمت همان صفحه است.`
+      : `صفحه ${name} در شارژینو.`,
+    path: `/shop/${key}/${encodeURIComponent(raw)}`,
+  });
 }
 
 export default async function ShopHubPage({ params, searchParams }) {
@@ -284,8 +296,16 @@ export default async function ShopHubPage({ params, searchParams }) {
   const gameName = game?.game_name || hubKey;
   const listings = await loadMarketListings(gameName, key === "items" ? "CustomItem" : undefined, key === "items" ? 60 : 24);
   const offers = listings.items.map((row) => listingToOffer(row, key)).filter(Boolean);
-  const facets =
-    key === "accounts" ? await loadMarketFacets(gameName) : key === "items" ? itemFacetsFromOffers(offers) : [];
+  let facets = [];
+  if (key === "accounts") {
+    facets = await loadMarketFacets(gameName);
+  } else if (key === "items") {
+    const catalogs = await loadItemOfferGames();
+    const setup = catalogs.find(
+      (row) => game && (String(row.id) === String(game.id) || row.game_name === game.game_name),
+    );
+    facets = mergeFacetFields(itemFacetsFromOffers(offers), catalogNumberFacets(setup));
+  }
   if (key === "accounts" || key === "items") {
     const title = game?.game_name_fa || game?.game_name || store.label;
     const hub = await loadHubByMarketGame(game?.id || gameName, game?.game_name || gameName);

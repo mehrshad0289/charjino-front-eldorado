@@ -52,6 +52,7 @@ export default function TopupShopPage({ catalog, tabs = [], activeTab = "top-up"
           category: { slug: "game-topup" },
         }}
         href={href}
+        price={Array.isArray(catalog?.amounts) ? catalog.amounts.find((row) => row?.from)?.from || "" : ""}
       />
       <main className="relative">
         <div aria-hidden="true" className="absolute left-0 top-0 z-0 h-[465px] w-full overflow-hidden">

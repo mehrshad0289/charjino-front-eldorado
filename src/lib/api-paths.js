@@ -54,6 +54,7 @@ export const apiPaths = {
   revealOrder: (number) => `/orders/${encodeURIComponent(number)}/reveal`,
   refreshOrder: (number) => `/orders/${encodeURIComponent(number)}/refresh`,
   paymentVerifyZibal: "/payments/verify/zibal",
+  paymentVerifyZarinpal: "/payments/verify/zarinpal",
   paymentCallbackMock: "/payments/callback/mock",
   catalogProducts: (params = {}) => {
     const search = new URLSearchParams();
@@ -80,6 +81,7 @@ export const apiPaths = {
     if (params.platform) search.set("platform", String(params.platform));
     if (params.format) search.set("format", String(params.format));
     if (params.q) search.set("q", String(params.q));
+    if (params.sort) search.set("sort", String(params.sort));
     if (params.page) search.set("page", String(params.page));
     if (params.perPage) search.set("perPage", String(params.perPage));
     const qs = search.toString();
@@ -87,6 +89,7 @@ export const apiPaths = {
   },
   marketListingFacets: (game) => `/market/listings/facets?game=${encodeURIComponent(game)}`,
   marketListing: (id) => `/market/listings/${encodeURIComponent(id)}`,
+  marketRecentlyViewed: "/market/recently-viewed",
   marketPublicProfile: (slug) => `/market/profiles/${encodeURIComponent(slug)}`,
   marketSellerPublicListings: (sellerId, params = {}) => {
     const search = new URLSearchParams();

@@ -2,6 +2,7 @@ import Footer from "../../components/eldorado/Footer";
 import { BLOG_ARTICLE_PAGES } from "../../components/eldorado/data/blogArticlesData";
 import { BLOG_CATEGORIES } from "../../components/eldorado/data/blogCategoriesData";
 import { PRODUCT_ID } from "../../components/eldorado/data/productData";
+import { noIndexMetadata } from "@/lib/seo";
 
 /* Utility index page (/pagelist) — session 14, user request: one page
    linking to every implemented page. No capture exists for it, so it
@@ -16,11 +17,9 @@ import { PRODUCT_ID } from "../../components/eldorado/data/productData";
    Boosting my-requests rows — user request: every implemented page
    listed here. */
 
-export const metadata = {
-  title: "Page List - Eldorado",
-  description:
-    "Index of every implemented page in the Eldorado clone: main pages, shop, blog guides, company pages and account.",
-};
+export const metadata = noIndexMetadata({
+  title: "فهرست صفحات — شارژینو",
+});
 
 const PRODUCT_HREF = `/efootball-accounts/oa/${PRODUCT_ID}`;
 

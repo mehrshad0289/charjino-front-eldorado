@@ -3,12 +3,13 @@ import { redirect } from "next/navigation";
 import { getSessionUser } from "@/actions/auth.actions";
 import { getSellerMe } from "@/actions/market.actions";
 import { sellBlockers } from "@/lib/listing";
+import { noIndexMetadata } from "@/lib/seo";
 
 export const instant = false;
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "فروش — شارژینو",
-};
+});
 
 export default async function SellEntryPage() {
   await connection();

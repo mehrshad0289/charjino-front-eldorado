@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getTicket, replyTicket } from "@/actions/tickets.actions";
 import { CONTACT_PAGE } from "./data/staticPagesData";
+import EmptyState from "./EmptyState";
+import { FA } from "./data/faCopy";
 import ContactTicketPhotos from "./ContactTicketPhotos";
 import { TICKET_INBOX, TICKET_NEW, ticketCategoryLabel, ticketHref, ticketLoginHref, ticketStatusLabel, ticketWhen } from "@/lib/tickets";
 
@@ -162,11 +164,12 @@ export default function ContactTicketsChat({ tickets = [], ticket = null }) {
       >
         {rows.length === 0 ? (
           <div className="px-4 py-8">
-            <p className="text-[15px] font-bold">{copy.emptyTitle}</p>
-            <p className="mt-2 text-[13px] leading-[20px] text-graytext">{copy.empty}</p>
-            <a href={TICKET_NEW} className="mt-4 inline-flex min-h-10 items-center rounded-lg bg-darkbtn px-4 text-[13px] font-bold text-white">
-              {copy.heading}
-            </a>
+            <EmptyState title={FA.nothingFound} text={copy.empty} />
+            <div className="flex justify-center">
+              <a href={TICKET_NEW} className="mt-2 inline-flex min-h-10 items-center rounded-lg bg-darkbtn px-4 text-[13px] font-bold text-white">
+                {copy.heading}
+              </a>
+            </div>
           </div>
         ) : (
           rows.map((row) => (

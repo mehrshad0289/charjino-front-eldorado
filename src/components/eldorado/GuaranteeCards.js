@@ -1,4 +1,13 @@
-function Card({ bg, imageSrc, imageAlt, title, text, buttonText, href, imgClass }) {
+function Card({
+  bg,
+  imageSrc,
+  imageAlt,
+  title,
+  text,
+  buttonText,
+  href,
+  imgClass,
+}) {
   return (
     <div
       className="flex items-center rounded-lg p-6 md:p-9"
@@ -38,9 +47,9 @@ export default function GuaranteeCards() {
               bg="var(--color-guarantee)"
               imageSrc="/home/trade-shield.svg"
               imageAlt="تضمین معامله"
-              title="تضمین بازگشت پول"
-              text="سفارش را دریافت می‌کنید یا پول برمی‌گردد. با پوشش کامل معامله، با خیال راحت بخرید."
-              buttonText="بیشتر بدانید"
+              title="ضمانت بازگشت وجه"
+              text="با اطمینان خرید کنید؛ اگر سفارش مطابق شرایط معامله تحویل داده نشود، شارژینو از حقوق شما محافظت می‌کند و امکان بازگشت وجه را فراهم می‌سازد."
+              buttonText="جزئیات بیشتر"
               href="/terms-of-service"
             />
           </div>
@@ -48,10 +57,11 @@ export default function GuaranteeCards() {
             <Card
               bg="var(--color-support)"
               imageSrc="/home/chat-support.svg"
-              imageAlt="پشتیبانی شارژینو"
+              imageAlt="پشتیبانی انسانی، همیشه در کنار شما"
               title="پشتیبانی شبانه‌روزی"
-              text="پشتیبانی شارژینو همیشه در دسترس است. هر زمان پیام بدهید."
-              buttonText="گفتگو"
+              text="
+در هر مرحله از خرید به راهنمایی نیاز داشتید، تیم پشتیبانی شارژینو آماده پاسخ‌گویی و پیگیری درخواست‌های شما در تمام ساعات شبانه‌روز است."
+              buttonText="ارتباط با پشتیبانی"
               href="/contact-us"
               imgClass="md:h-36"
             />

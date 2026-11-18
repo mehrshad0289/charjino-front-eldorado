@@ -7,8 +7,22 @@ import {
   loadMarketGameCards,
   loadStoreCategory,
 } from "../../../lib/store-engine";
+import { buildMetadata, SHOP_KIND_FA } from "@/lib/seo";
 
 export const instant = false;
+
+export async function generateMetadata({ params }) {
+  const { category } = await params;
+  const key = String(category || "").toLowerCase();
+  if (!isStoreCategoryKey(key)) return {};
+  const row = await loadStoreCategory(key);
+  const label = row?.label || SHOP_KIND_FA[key] || "فروشگاه";
+  return buildMetadata({
+    title: `${label} | شارژینو`,
+    description: `خرید ${label} از شارژینو. آگهی‌ها و محصولات واقعی همین صفحه است.`,
+    path: `/shop/${key}`,
+  });
+}
 
 export default async function ShopCategoryPage({ params }) {
   const { category } = await params;

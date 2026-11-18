@@ -12,13 +12,13 @@ export default function Hero() {
       aria-label="روبلاکس"
       className="absolute inset-x-0 top-0 z-0 hidden h-[465px] overflow-hidden md:block"
     >
-      <img
+      {/* <img
         src="/home/banner.webp"
         alt=""
         fetchPriority="high"
         className="absolute inset-0 h-full w-full object-cover"
         style={{ objectPosition: "50% 15%" }}
-      />
+      /> */}
       <div
         className="absolute inset-x-0 -bottom-px h-[140px] md:h-[340px]"
         style={{

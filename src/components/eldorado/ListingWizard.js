@@ -34,6 +34,7 @@ import PriceField from "./PriceField";
 import { LISTING_COPY } from "./data/listingData";
 import LoadingSpinner from "./LoadingSpinner";
 import EldSelect from "./EldSelect";
+import { OFFER_PLATFORM_KEY, offerPlatformSelectOptions } from "@/lib/offer-platforms";
 
 const inputClass =
   "block h-[42px] w-full rounded-lg border-2 border-[rgb(239,239,241)] bg-[rgb(239,239,241)] px-3 text-[14px] text-ink outline-none";
@@ -531,10 +532,17 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
                         setAttributes((current) => ({ ...current, [field.key]: value }));
                         clearIssue(field.key);
                       }}
-                      options={[
-                        { value: "", label: "انتخاب کن" },
-                        ...(field.options || []).map((option) => ({ value: option, label: option })),
-                      ]}
+                      options={
+                        field.option_groups?.length || field.key === OFFER_PLATFORM_KEY
+                          ? offerPlatformSelectOptions({
+                              options: field.options || [],
+                              groups: field.option_groups,
+                            })
+                          : [
+                              { value: "", label: "انتخاب کن" },
+                              ...(field.options || []).map((option) => ({ value: option, label: option })),
+                            ]
+                      }
                     />
                   ) : (
                     <input

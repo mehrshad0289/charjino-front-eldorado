@@ -60,7 +60,7 @@ function GameSection({ title, games, fallbackHref }) {
   );
 }
 
-export function ItemsPromo() {
+export function ItemsPromo({ onNavigate }) {
   return (
     <div className="flex items-center gap-4 rounded-lg bg-page p-5">
       <div className="flex grow basis-0 flex-col gap-1">
@@ -86,6 +86,7 @@ export function ItemsPromo() {
         href={SHOP_ITEMS_HREF}
         prefetch
         aria-label={FA.priceHistory}
+        onClick={onNavigate}
         className="inline-flex min-h-[42px] min-w-[70px] items-center justify-center gap-1.5 rounded-lg bg-brand px-4 py-2.5 text-[14px] font-bold leading-[16.8px] text-ink"
       >
         {FA.priceHistory}

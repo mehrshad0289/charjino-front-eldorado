@@ -100,6 +100,8 @@ export default function HeaderBar({
   }, [menuOpen, searchOpen, settingsOpen]);
 
   useEffect(() => {
+    setMenuOpen(false);
+    setSearchOpen(false);
     setSettingsOpen(false);
   }, [pathname]);
 

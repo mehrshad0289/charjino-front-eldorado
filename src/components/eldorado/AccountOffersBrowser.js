@@ -3,8 +3,10 @@
 import { useMemo, useState } from "react";
 import AccountOffersGrid from "./AccountOffersGrid";
 import { toFaDigits } from "../../lib/fa-digits";
+import { formatTomanNumber } from "../../lib/price";
+import { bandEdge, formatFacetNumber, rangeFromBounds } from "../../lib/numeric-facet";
 import EldSelect from "./EldSelect";
-import PriceField from "./PriceField";
+import DualRangeSlider from "./DualRangeSlider";
 import ShopBottomSheet from "./ShopBottomSheet";
 import { FA } from "./data/faCopy";
 
@@ -19,8 +21,20 @@ function priceValue(offer) {
   return Number.isFinite(amount) ? amount : 0;
 }
 
-function onlyDigits(value) {
-  return String(value || "").replace(/\D/g, "");
+function numericBounds(field, offers) {
+  const fromFieldMin = bandEdge(field?.min);
+  const fromFieldMax = bandEdge(field?.max);
+  const nums = (Array.isArray(offers) ? offers : [])
+    .map((offer) => bandEdge(offer.attributes?.[field.key]))
+    .filter((value) => value != null);
+  const fromOffersMin = nums.length ? Math.min(...nums) : null;
+  const fromOffersMax = nums.length ? Math.max(...nums) : null;
+  const observedMin = fromFieldMin != null ? fromFieldMin : fromOffersMin;
+  const observedMax = fromFieldMax != null ? fromFieldMax : fromOffersMax;
+  if (observedMin == null || observedMax == null) return null;
+  const lo = observedMin >= 0 ? 0 : observedMin;
+  const hi = Math.max(observedMax, lo);
+  return { min: lo, max: hi };
 }
 
 function offerText(offer) {
@@ -103,9 +117,22 @@ export default function AccountOffersBrowser({
     });
   }
 
-  function setBand(key, edge, value) {
-    setNumberBand((current) => ({ ...current, [key]: { ...current[key], [edge]: value } }));
-  }
+  const priceExtent = useMemo(() => {
+    const amounts = offers.map(priceValue).filter((value) => Number.isFinite(value) && value > 0);
+    if (!amounts.length) return null;
+    return { min: 0, max: Math.max(...amounts) };
+  }, [offers]);
+
+  const numberExtents = useMemo(() => {
+    const map = {};
+    for (const field of facets) {
+      if (field.type !== "number") continue;
+      const bounds = numericBounds(field, offers);
+      if (bounds && bounds.max > bounds.min) map[field.key] = bounds;
+      else map[field.key] = { min: 0, max: 1000 };
+    }
+    return map;
+  }, [facets, offers]);
 
   function applyPreset(preset) {
     if (pricePreset === preset.id) {
@@ -119,21 +146,11 @@ export default function AccountOffersBrowser({
     setPriceMax(preset.max != null ? String(preset.max) : "");
   }
 
-  function changePriceMin(value) {
-    setPricePreset("");
-    setPriceMin(value);
-  }
-
-  function changePriceMax(value) {
-    setPricePreset("");
-    setPriceMax(value);
-  }
-
   const chips = useMemo(() => {
     const rows = [];
     if (priceMin || priceMax) {
-      const from = priceMin ? toFaDigits(priceMin) : "۰";
-      const to = priceMax ? toFaDigits(priceMax) : "∞";
+      const from = priceMin ? formatTomanNumber(priceMin) : "۰";
+      const to = priceMax ? formatTomanNumber(priceMax) : "∞";
       rows.push({
         id: "price",
         label: `قیمت ${from} تا ${to}`,
@@ -153,10 +170,14 @@ export default function AccountOffersBrowser({
         });
       }
       const band = numberBand[field.key];
-      if (band?.min || band?.max) {
+      const bandMin = bandEdge(band?.min);
+      const bandMax = bandEdge(band?.max);
+      if (bandMin != null || bandMax != null) {
+        const from = bandMin != null ? formatFacetNumber(bandMin) : "۰";
+        const to = bandMax != null ? formatFacetNumber(bandMax) : "∞";
         rows.push({
           id: `${field.key}-band`,
-          label: `${field.label_fa} ${band.min || "۰"}–${band.max || "∞"}`,
+          label: `${field.label_fa} ${from} تا ${to}`,
           clear: () => setNumberBand((current) => ({ ...current, [field.key]: {} })),
         });
       }
@@ -225,9 +246,11 @@ export default function AccountOffersBrowser({
         if (!values.includes(String(offer.attributes?.[key] ?? ""))) return false;
       }
       for (const [key, band] of Object.entries(numberBand)) {
-        const raw = Number(offer.attributes?.[key]);
-        if (band?.min && (!Number.isFinite(raw) || raw < Number(band.min))) return false;
-        if (band?.max && (!Number.isFinite(raw) || raw > Number(band.max))) return false;
+        const raw = bandEdge(offer.attributes?.[key]);
+        const min = bandEdge(band?.min);
+        const max = bandEdge(band?.max);
+        if (min != null && (raw == null || raw < min)) return false;
+        if (max != null && (raw == null || raw > max)) return false;
       }
       return true;
     });
@@ -239,7 +262,7 @@ export default function AccountOffersBrowser({
   const countText = [toFaDigits(rows.length), countLabel, foundSuffix].filter(Boolean).join(" ");
   const sortLabel = SORTS.find((item) => item.id === sort)?.label || FA.sortRecommended;
 
-  function FilterFields({ idPrefix = "desk", source = null, onChange = null }) {
+  function renderFilters(idPrefix = "desk", source = null, onChange = null) {
     const usingDraft = Boolean(source && onChange);
     const priceMinValue = usingDraft ? source.priceMin : priceMin;
     const priceMaxValue = usingDraft ? source.priceMax : priceMax;
@@ -248,10 +271,6 @@ export default function AccountOffersBrowser({
     const numberBandValue = usingDraft ? source.numberBand : numberBand;
     const facetQueryValue = usingDraft ? source.facetQuery : facetQuery;
     const patch = (partial) => onChange((current) => ({ ...current, ...partial }));
-    const onPriceMin = (value) =>
-      usingDraft ? patch({ priceMin: value, pricePreset: "" }) : changePriceMin(value);
-    const onPriceMax = (value) =>
-      usingDraft ? patch({ priceMax: value, pricePreset: "" }) : changePriceMax(value);
     const onPreset = (preset) => {
       if (!usingDraft) {
         applyPreset(preset);
@@ -276,14 +295,24 @@ export default function AccountOffersBrowser({
       const next = list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
       patch({ picked: { ...source.picked, [key]: next } });
     };
-    const onBand = (key, edge, value) => {
-      if (!usingDraft) {
-        setBand(key, edge, value);
+    const onPriceRange = ({ min, max }) => {
+      if (!priceExtent) return;
+      const next = rangeFromBounds(min, max, priceExtent);
+      if (usingDraft) {
+        patch({ priceMin: next.min, priceMax: next.max, pricePreset: "" });
         return;
       }
-      patch({
-        numberBand: { ...source.numberBand, [key]: { ...source.numberBand[key], [edge]: onlyDigits(value) } },
-      });
+      setPricePreset("");
+      setPriceMin(next.min);
+      setPriceMax(next.max);
+    };
+    const onBandRange = (key, bounds, { min, max }) => {
+      const next = rangeFromBounds(min, max, bounds);
+      if (!usingDraft) {
+        setNumberBand((current) => ({ ...current, [key]: next }));
+        return;
+      }
+      patch({ numberBand: { ...source.numberBand, [key]: next } });
     };
     const onFacetSearch = (key, value) => {
       if (!usingDraft) {
@@ -302,23 +331,19 @@ export default function AccountOffersBrowser({
           </span>
         </summary>
         <div className="mt-3">
-          <div className="mb-4 flex items-center gap-2">
-            <PriceField
-              label=""
-              placeholder="از"
-              ariaLabel="حداقل قیمت"
-              value={priceMinValue}
-              onChange={onPriceMin}
-            />
-            <span className="text-graytext">تا</span>
-            <PriceField
-              label=""
-              placeholder="تا"
-              ariaLabel="حداکثر قیمت"
-              value={priceMaxValue}
-              onChange={onPriceMax}
-            />
-          </div>
+          {priceExtent ? (
+            <div className="mb-4">
+              <DualRangeSlider
+                label="قیمت (تومان)"
+                min={priceExtent.min}
+                max={priceExtent.max}
+                valueMin={bandEdge(priceMinValue) ?? priceExtent.min}
+                valueMax={bandEdge(priceMaxValue) ?? priceExtent.max}
+                onChange={onPriceRange}
+                formatValue={(value) => formatTomanNumber(String(Math.round(value)))}
+              />
+            </div>
+          ) : null}
           {pricePresets.length > 0 ? (
             <div className="flex flex-col gap-3">
               {pricePresets.map((preset) => (
@@ -337,6 +362,7 @@ export default function AccountOffersBrowser({
         </div>
       </details>
       {facets.map((field) => {
+        if (field.type === "number" && !numberExtents[field.key]) return null;
         const options = field.options || [];
         const search = (facetQueryValue[field.key] || "").trim();
         const visible = search
@@ -352,25 +378,14 @@ export default function AccountOffersBrowser({
             </summary>
             <div className="mt-3">
               {field.type === "number" ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    inputMode="numeric"
-                    value={numberBandValue[field.key]?.min || ""}
-                    onChange={(event) => onBand(field.key, "min", event.target.value)}
-                    placeholder={field.min != null ? String(field.min) : "از"}
-                    aria-label={`${field.label_fa} از`}
-                    className="h-[42px] w-full rounded-lg bg-inputgray px-3"
-                  />
-                  <span className="text-graytext">تا</span>
-                  <input
-                    inputMode="numeric"
-                    value={numberBandValue[field.key]?.max || ""}
-                    onChange={(event) => onBand(field.key, "max", event.target.value)}
-                    placeholder={field.max != null ? String(field.max) : "تا"}
-                    aria-label={`${field.label_fa} تا`}
-                    className="h-[42px] w-full rounded-lg bg-inputgray px-3"
-                  />
-                </div>
+                <DualRangeSlider
+                  label={field.label_fa}
+                  min={numberExtents[field.key].min}
+                  max={numberExtents[field.key].max}
+                  valueMin={bandEdge(numberBandValue[field.key]?.min) ?? numberExtents[field.key].min}
+                  valueMax={bandEdge(numberBandValue[field.key]?.max) ?? numberExtents[field.key].max}
+                  onChange={(range) => onBandRange(field.key, numberExtents[field.key], range)}
+                />
               ) : (
                 <>
                   {options.length > 6 ? (
@@ -427,7 +442,7 @@ export default function AccountOffersBrowser({
           </button>
         ) : null}
       </div>
-      <FilterFields idPrefix="desk" />
+      {renderFilters("desk")}
     </div>
   );
 
@@ -551,7 +566,7 @@ export default function AccountOffersBrowser({
           </div>
         }
       >
-        {draft ? <FilterFields idPrefix="sheet" source={draft} onChange={setDraft} /> : null}
+        {draft ? renderFilters("sheet", draft, setDraft) : null}
       </ShopBottomSheet>
 
       <ShopBottomSheet open={sortOpen} title={FA.sortBy} onClose={() => setSortOpen(false)}>

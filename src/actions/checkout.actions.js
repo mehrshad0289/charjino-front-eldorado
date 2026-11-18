@@ -114,6 +114,24 @@ export async function verifyZibalPayment(input) {
   }
 }
 
+export async function verifyZarinpalPayment(input) {
+  const authority = String(input?.authority || "").trim();
+  if (!authority) return { ok: false, message: "شناسه تراکنش نامعتبر است." };
+  try {
+    const data = await serverFetch(apiPaths.paymentVerifyZarinpal, {
+      method: "POST",
+      body: JSON.stringify({
+        authority,
+        status: input?.status ?? "",
+      }),
+    });
+    revalidateCatalogOrder(data?.number);
+    return { ok: true, data };
+  } catch (error) {
+    return { ok: false, message: toActionMessage(error) };
+  }
+}
+
 export async function listMyCatalogOrders(page = 1, perPage = 20) {
   const accessToken = await ensureAccessToken();
   if (!accessToken) return { ok: false, unauthorized: true, message: "برای دیدن سفارش‌ها وارد شوید" };
@@ -171,5 +189,20 @@ export async function revealOrderCodes(number) {
     return { ok: true, data };
   } catch (error) {
     return fromAuthError(error, "برای دیدن کد وارد شوید");
+  }
+}
+
+export async function refreshCatalogOrderStatus(number) {
+  const accessToken = await ensureAccessToken();
+  if (!accessToken) return { ok: false, unauthorized: true, message: "برای بررسی سفارش وارد شوید" };
+  try {
+    await serverFetch(apiPaths.refreshOrder(String(number || "").trim()), {
+      method: "POST",
+      headers: bearerHeaders(accessToken),
+    });
+    revalidateCatalogOrder(String(number || "").trim());
+    return { ok: true };
+  } catch (error) {
+    return fromAuthError(error, "برای بررسی سفارش وارد شوید");
   }
 }

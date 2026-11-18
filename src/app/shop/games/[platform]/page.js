@@ -21,13 +21,19 @@ import { apiPaths } from "../../../../lib/api-paths";
 import { formatTomanPrice, productHref } from "../../../../lib/format-toman";
 import { preferFaTitle } from "../../../../lib/catalog-region";
 import { listingToOffer, loadPlatformListings } from "../../../../lib/store-engine";
+import { buildMetadata } from "@/lib/seo";
 
 export const instant = false;
 
 export async function generateMetadata({ params }) {
   const { platform } = await params;
-  const row = consolePlatform(consoleShopKey(platform));
-  return { title: row ? `${row.title} — بازی — شارژینو` : "بازی — شارژینو" };
+  const key = consoleShopKey(platform);
+  const row = consolePlatform(key);
+  return buildMetadata({
+    title: row ? `${row.title} — بازی — شارژینو` : "بازی — شارژینو",
+    description: row?.text || "خرید بازی کنسول از آگهی‌های شارژینو.",
+    path: `/shop/games/${key || String(platform || "")}`,
+  });
 }
 
 export default async function ConsolePlatformPage({ params, searchParams }) {

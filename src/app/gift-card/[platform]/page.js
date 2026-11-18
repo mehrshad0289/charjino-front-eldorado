@@ -10,6 +10,7 @@ import {
   telegramShopHref,
 } from "../../../lib/gift-card-shop";
 import { hrefWithSku, skuIdFromQuery } from "../../../lib/sku-query";
+import { buildMetadata } from "@/lib/seo";
 
 export const instant = false;
 
@@ -34,10 +35,11 @@ export async function generateMetadata({ params, searchParams }) {
         description: `خرید گیفت کارت ${name} با تومان؛ ریجن و مبلغ از کاتالوگ، تحویل کد بعد از پرداخت.`,
       };
   const meta = giftBrandPageMeta(brandPage, fallback);
-  return {
+  return buildMetadata({
     title: meta.title || fallback.title,
     description: meta.description || fallback.description,
-  };
+    path: `/gift-card/${id}`,
+  });
 }
 
 export default async function GiftCardPlatformPage({ params, searchParams }) {

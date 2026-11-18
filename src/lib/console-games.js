@@ -196,7 +196,17 @@ export function schemaConsoleFacets(fields, offers) {
     .filter((field) => field?.filterable)
     .map((field) => {
       if (field.type === "number") {
-        return { key: field.key, label_fa: field.label_fa, type: "number" };
+        const nums = rows
+          .map((offer) => Number(offer.attributes?.[field.key]))
+          .filter((value) => Number.isFinite(value));
+        return {
+          key: field.key,
+          label_fa: field.label_fa,
+          type: "number",
+          min: nums.length ? Math.min(...nums) : null,
+          max: nums.length ? Math.max(...nums) : null,
+          count: nums.length,
+        };
       }
       if (!Array.isArray(field.options) || !field.options.length) return null;
       return {

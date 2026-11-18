@@ -1,10 +1,10 @@
-/* Become a Seller — layout/assets from the Eldorado capture; copy is Charjino. */
+/* Become a Seller — layout from the Eldorado capture; copy and art are Charjino. */
 
-export const BS_HERO_BG =
-  "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F820ff512df32ad51034a1a113e08a3077e7872ee.png?generation=1793806941549999&alt=media";
+import { ILLUSTRATIONS } from "./illustrations";
 
-export const BS_HERO_IMG =
-  "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F023d80dc3050ae3f6083e6d4fee26897a25f32d4.svg?generation=1793806941552033&alt=media";
+export const BS_HERO_BG = ILLUSTRATIONS.becomeSellerBg;
+
+export const BS_HERO_IMG = ILLUSTRATIONS.becomeSellerDragon;
 
 export const BS_H1 = "از فروش اکانت درآمد بگیر";
 export const BS_SUB = "خریدار واقعی، پرداخت ریالی، پول تا تأیید تحویل نزد شارژینو می‌ماند.";

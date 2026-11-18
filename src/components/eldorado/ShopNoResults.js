@@ -1,23 +1,35 @@
-import { SHOP_SUBSCRIPTION_IMAGES } from "./data/shopSubscriptionData";
+import { FA } from "./data/faCopy";
+import { ILLUSTRATIONS } from "./data/illustrations";
 
-/* "Nothing found" block inside the amount card (psplus .make capture —
-   the page's no-offers state): centered 100px illustration, bold 24/36
-   title, gray subtitle, max-w-600, 12px gaps, 48px vertical padding. */
+/* Shared empty list/shop block: concerned dragon + «چیزی پیدا نشد». */
 
-export default function ShopNoResults({ title, text }) {
+export default function ShopNoResults({
+  title = FA.nothingFound,
+  text = FA.nothingFoundHint,
+  compact = false,
+  tone = "light",
+}) {
+  const size = compact ? 72 : 100;
+  const titleClass = compact
+    ? "text-center text-[16px] font-bold leading-[24px]"
+    : "text-center text-[24px] font-bold leading-[36px]";
+  const titleColor = tone === "dark" ? "text-white" : "text-ink";
+  const hintColor = tone === "dark" ? "text-navgray" : "text-graytext";
   return (
-    <div aria-label="No results" className="flex justify-center">
-      <div className="py-12">
+    <div aria-label={FA.nothingFound} className="flex justify-center">
+      <div className={compact ? "py-4" : "py-12"}>
         <div className="flex flex-col items-center gap-3">
-          <div className="h-[100px] shrink-0 overflow-hidden">
+          <div className="shrink-0 overflow-hidden" style={{ height: size }}>
             <img
-              alt="No results found"
-              src={SHOP_SUBSCRIPTION_IMAGES.noResults}
-              className="block size-[100px] object-cover align-middle"
+              alt={FA.nothingFound}
+              src={ILLUSTRATIONS.emptyDragon}
+              className="block object-contain align-middle"
+              width={size}
+              height={size}
             />
           </div>
-          <div className="text-center text-[24px] font-bold leading-[36px]">{title}</div>
-          <div className="pt-1 text-center text-graytext">{text}</div>
+          <div className={`${titleClass} ${titleColor}`}>{title}</div>
+          {text ? <div className={`pt-1 text-center ${hintColor}`}>{text}</div> : null}
         </div>
       </div>
     </div>

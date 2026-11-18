@@ -6,6 +6,8 @@ import {
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/lib/constants";
 import { needsAccessRefresh } from "@/lib/jwt-exp";
 import { RefreshAuthError, requestNewAccessToken } from "@/lib/request-access-token";
+import { isPublicCachePath, isSitemapPath, PAGE_CACHE_CONTROL } from "@/lib/page-cache";
+import { isIndexableSeoHost, seoHostFromRequest } from "@/lib/seo-host";
 
 function buildRequestHeadersWithAccessToken(request, accessToken) {
   const headers = new Headers(request.headers);
@@ -26,20 +28,46 @@ function isRefreshAuthError(error) {
   );
 }
 
+function applySeoHeaders(request, response) {
+  const pathname = request.nextUrl.pathname;
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set("X-DNS-Prefetch-Control", "on");
+  const indexable = isIndexableSeoHost(seoHostFromRequest(request));
+  if (!indexable) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
+  const authed = Boolean(request.cookies.get(ACCESS_TOKEN_COOKIE)?.value);
+  if (
+    request.method === "GET" &&
+    !authed &&
+    indexable &&
+    isPublicCachePath(pathname) &&
+    !isSitemapPath(pathname)
+  ) {
+    response.headers.set("Cache-Control", PAGE_CACHE_CONTROL);
+  }
+  return response;
+}
+
+function next(request, init) {
+  return applySeoHeaders(request, NextResponse.next(init));
+}
+
 export async function proxy(request) {
   const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE)?.value;
   if (!refreshToken) {
-    return NextResponse.next();
+    return next(request);
   }
 
   const accessToken = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
   if (!needsAccessRefresh(accessToken)) {
-    return NextResponse.next();
+    return next(request);
   }
 
   try {
     const nextAccessToken = await requestNewAccessToken(refreshToken);
-    const response = NextResponse.next({
+    const response = next(request, {
       request: {
         headers: buildRequestHeadersWithAccessToken(request, nextAccessToken),
       },
@@ -53,10 +81,10 @@ export async function proxy(request) {
     return response;
   } catch (error) {
     if (!isRefreshAuthError(error)) {
-      return NextResponse.next();
+      return next(request);
     }
 
-    const response = NextResponse.next();
+    const response = next(request);
     response.cookies.delete({ name: ACCESS_TOKEN_COOKIE, path: "/" });
     response.cookies.delete({ name: REFRESH_TOKEN_COOKIE, path: "/" });
     return response;
@@ -65,6 +93,6 @@ export async function proxy(request) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|fonts/|home/|image/|icons/|storage/).*)",
+    "/((?!_next/static|_next/image|favicon.ico|fonts/|home/|image/|icons/|illustrations/|storage/).*)",
   ],
 };

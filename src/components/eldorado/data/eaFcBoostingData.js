@@ -1,3 +1,5 @@
+import { EASY_BUY_STEP_ART } from "./illustrations";
+
 /* EA FC 27 Boosting page data (session 22/23: two user-pushed captures
    of /ea-fc-boosting/b/142-4 — Division Rivals default + Champions
    Finals variant in BOOST_VARIANTS below, rendered interactively by
@@ -228,23 +230,17 @@ export const BOOST_RANKUP = {
       desc: "Select the boosting service and customize it to fit your needs",
     },
     {
-      img: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fb165ae643f2a9138d0fdb2e1e31af77fc5d3afc3.svg?generation=1788944034691575&alt=media",
-      w: 117,
-      h: 105,
+      ...EASY_BUY_STEP_ART[0],
       title: "2. Choose an offer",
       desc: "Select the best offer from a top-rated seller",
     },
     {
-      img: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F19e9e8ec354d191e71580f1b0decc4bafd21b71b.svg?generation=1788944034713536&alt=media",
-      w: 120,
-      h: 120,
+      ...EASY_BUY_STEP_ART[1],
       title: "3. Complete payment",
       desc: "Choose a convenient payment method",
     },
     {
-      img: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F793beea2e27a2e306e8436dc53bbed90dfd32a5d.svg?generation=1788944034688355&alt=media",
-      w: 126,
-      h: 117,
+      ...EASY_BUY_STEP_ART[2],
       title: "4. Rank Up",
       desc: "Enjoy the rewards of a ranked account!",
     },

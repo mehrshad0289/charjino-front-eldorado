@@ -13,6 +13,7 @@ import {
   notificationTime,
 } from "@/lib/notifications";
 import { FA } from "./data/faCopy";
+import EmptyState from "./EmptyState";
 import DashboardIcon from "./DashboardIcons";
 
 function NotificationGlyph({ kind }) {
@@ -117,8 +118,11 @@ export default function DashboardNotificationsPanel({ items = [], meta = null })
           );
         })}
         {visible.length === 0 && (
-          <li className="px-4 py-10 text-center text-[14px] text-graytext">
-            {rows.length === 0 ? FA.noNotifications : FA.noNotificationsInTab}
+          <li>
+            <EmptyState
+              title={FA.nothingFound}
+              text={rows.length === 0 ? FA.noNotifications : FA.noNotificationsInTab}
+            />
           </li>
         )}
       </ul>

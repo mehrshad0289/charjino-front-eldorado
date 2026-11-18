@@ -1,16 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { catalogOrderHref } from "../../lib/catalog-checkout";
-import { revealOrderCodes, startOrderPayment, completeMockPayment } from "../../actions/checkout.actions";
+import {
+  completeMockPayment,
+  getMyCatalogOrder,
+  refreshCatalogOrderStatus,
+  revealOrderCodes,
+  startOrderPayment,
+} from "../../actions/checkout.actions";
 import { formatTomanInWords } from "../../lib/price";
 import { formatOrderDate } from "../../lib/order";
 import { toFaDigits } from "../../lib/fa-digits";
 import LoadingSpinner from "./LoadingSpinner";
 
 const PAYABLE = new Set(["draft", "awaiting_payment", "pending_payment"]);
+const LIVE = new Set(["paid", "submitting", "submitted", "processing", "fulfilling"]);
 
-export default function CatalogOrderPanel({ order, payment = "" }) {
+export default function CatalogOrderPanel({ order: initial, payment = "" }) {
+  const [order, setOrder] = useState(initial);
   const [codes, setCodes] = useState(null);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState("");
@@ -20,6 +28,56 @@ export default function CatalogOrderPanel({ order, payment = "" }) {
   const canReveal =
     Number(delivery.itemCount || 0) > 0 &&
     ["completed", "needs_review", "delivered", "partial"].includes(status);
+  const live = LIVE.has(status) && Number(order?.pollHintSeconds) > 0;
+
+  useEffect(() => {
+    setOrder(initial);
+  }, [initial]);
+
+  useEffect(() => {
+    const seconds = Number(order?.pollHintSeconds);
+    const number = String(order?.number || "");
+    if (!number || !seconds || !LIVE.has(String(order?.status || ""))) return undefined;
+    const started = Date.now();
+    let timer;
+
+    function tick() {
+      if (typeof document !== "undefined" && document.hidden) return;
+      if (Date.now() - started > 10 * 60 * 1000) return;
+      void getMyCatalogOrder(number).then((result) => {
+        if (result.ok && result.data) setOrder(result.data);
+      });
+    }
+
+    function onVisibility() {
+      if (!document.hidden) tick();
+    }
+
+    timer = window.setInterval(tick, seconds * 1000);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [order?.number, order?.pollHintSeconds, order?.status]);
+
+  async function refresh() {
+    setBusy("refresh");
+    setMessage("");
+    const queued = await refreshCatalogOrderStatus(order.number);
+    if (queued.unauthorized) {
+      window.location.href = `/login?next=${encodeURIComponent(catalogOrderHref(order.number))}`;
+      return;
+    }
+    if (!queued.ok) {
+      setBusy("");
+      setMessage(queued.message || "وضعیت تازه نشد.");
+      return;
+    }
+    const fresh = await getMyCatalogOrder(order.number);
+    if (fresh.ok && fresh.data) setOrder(fresh.data);
+    setBusy("");
+  }
 
   async function pay() {
     setBusy("pay");
@@ -109,7 +167,22 @@ export default function CatalogOrderPanel({ order, payment = "" }) {
       </dl>
       {order.customerMessage ? <p className="mt-4 text-[14px] text-red-600">{order.customerMessage}</p> : null}
       {delivery.summary ? <p className="mt-4 text-[14px] leading-[22px] text-graytext">{delivery.summary}</p> : null}
+      {live ? (
+        <p className="mt-4 text-[14px] leading-[22px] text-graytext">
+          سفارش در حال انجام است. همین صفحه را باز بگذار؛ کد به‌محض آماده شدن اینجا می‌آید.
+        </p>
+      ) : null}
       {message ? <p className="mt-4 text-[14px] text-graytext">{message}</p> : null}
+      {live ? (
+        <button
+          type="button"
+          disabled={Boolean(busy)}
+          onClick={() => void refresh()}
+          className="mt-5 block w-full rounded-lg border border-cardborder bg-white py-3 text-[16px] font-bold text-ink disabled:opacity-60"
+        >
+          {busy === "refresh" ? <LoadingSpinner variant="inline" /> : "بررسی دوباره"}
+        </button>
+      ) : null}
       {canPay ? (
         <button
           type="button"

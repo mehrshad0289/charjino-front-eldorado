@@ -100,28 +100,35 @@ export default function EldSelect({
           aria-multiselectable="false"
           className="absolute inset-x-0 z-30 mt-1 max-h-[200px] overflow-x-hidden overflow-y-auto rounded-lg bg-white py-1 shadow-[0_8px_24px_rgba(9,9,11,0.12),0_0_0_1px_rgba(9,9,11,0.06)]"
         >
-          {options.map((item) => {
+          {options.map((item, index) => {
             const isSelected = String(item.value) === String(selected?.value ?? "");
+            const group = item.group || "";
+            const prevGroup = options[index - 1]?.group || "";
+            const showGroup = Boolean(group) && group !== prevGroup;
             return (
-              <div
-                key={String(item.value)}
-                role="option"
-                id={`${listId}-option-${String(item.value)}`}
-                tabIndex={-1}
-                aria-selected={isSelected}
-                onClick={() => pick(item.value)}
-                className={`mx-[6px] my-[2px] flex cursor-pointer items-center justify-between gap-3 overflow-hidden rounded-md px-2 py-2 text-[14px] leading-[20px] ${
-                  isSelected ? "bg-brand text-ink" : "text-ink hover:bg-badgebg"
-                }`}
-              >
-                <span className="min-w-0 flex-1 truncate">{item.label}</span>
-                {isSelected ? (
-                  <span className="shrink-0 text-ink" aria-hidden="true">
-                    <CheckIcon />
-                  </span>
-                ) : (
-                  <span className="inline-block size-[18px] shrink-0" aria-hidden="true" />
-                )}
+              <div key={`${group}-${String(item.value)}`}>
+                {showGroup ? (
+                  <p className="px-3 pt-2 pb-1 text-[11px] font-bold text-graytext">{group}</p>
+                ) : null}
+                <div
+                  role="option"
+                  id={`${listId}-option-${String(item.value)}`}
+                  tabIndex={-1}
+                  aria-selected={isSelected}
+                  onClick={() => pick(item.value)}
+                  className={`mx-[6px] my-[2px] flex cursor-pointer items-center justify-between gap-3 overflow-hidden rounded-md px-2 py-2 text-[14px] leading-[20px] ${
+                    isSelected ? "bg-brand text-ink" : "text-ink hover:bg-badgebg"
+                  }`}
+                >
+                  <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                  {isSelected ? (
+                    <span className="shrink-0 text-ink" aria-hidden="true">
+                      <CheckIcon />
+                    </span>
+                  ) : (
+                    <span className="inline-block size-[18px] shrink-0" aria-hidden="true" />
+                  )}
+                </div>
               </div>
             );
           })}

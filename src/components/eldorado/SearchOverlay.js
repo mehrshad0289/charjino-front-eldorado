@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FA } from "./data/faCopy";
 import { mapSmartSearchItems } from "../../lib/mega-gift-search";
+import ShopNoResults from "./ShopNoResults";
 
 function SearchGlyph({ stroke }) {
   return (
@@ -145,7 +146,7 @@ export default function SearchOverlay({ onClose }) {
         <div className="mb-1 mt-6">
           {results === null ? <OverlayLabel /> : null}
           {results && results.length === 0 ? (
-            <p className="py-6 text-center text-sm text-graytext">{FA.nothingFound}</p>
+            <ShopNoResults title={FA.nothingFound} text={FA.nothingFoundHint} compact />
           ) : null}
         </div>
 
@@ -175,7 +176,7 @@ export default function SearchOverlay({ onClose }) {
           <div className="mb-4 mt-2 max-h-[440px] overflow-auto px-6">
             {results === null ? <OverlayLabel /> : null}
             {results && results.length === 0 ? (
-              <p className="py-6 text-center text-sm text-navgray">{FA.nothingFound}</p>
+              <ShopNoResults title={FA.nothingFound} text={FA.nothingFoundHint} compact tone="dark" />
             ) : null}
             <div className="flex flex-col gap-2">
               <ResultRows items={list} desktop onSelect={onClose} />

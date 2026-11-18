@@ -68,6 +68,7 @@ export const FA = {
   games: "بازی",
   popular: "محبوب",
   popularGames: "بازی‌های محبوب",
+  recentlyViewed: "بازدیدهای اخیر",
   recentlyViewedGames: "بازی‌های اخیراً دیده‌شده",
   allGames: "همهٔ بازی‌ها",
   searchForGame: "جستجوی بازی",

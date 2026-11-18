@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import SellerListingsTable from "./SellerListingsTable";
 import { ITEM_LISTING_COPY } from "./data/listingData";
 import EldSelect from "./EldSelect";
+import ShopNoResults from "./ShopNoResults";
+import { FA } from "./data/faCopy";
 
 const DELIVERY = {
   in_game_trade: "ترید داخل بازی",
@@ -58,7 +60,7 @@ export default function ItemOffersShelf({ items = [], editBase = "/dashboard/off
         </label>
       </div>
       {visible.length === 0 ? (
-        <p className="text-[14px] text-graytext">با این جستجو آگهی‌ای نیست.</p>
+        <ShopNoResults title={FA.nothingFound} text="با این جستجو آگهی‌ای نیست." />
       ) : (
         <SellerListingsTable items={visible} editBase={editBase} />
       )}

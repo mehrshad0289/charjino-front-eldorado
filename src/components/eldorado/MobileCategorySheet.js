@@ -23,12 +23,18 @@ function BackChevron() {
   );
 }
 
-function GameRow({ game, fallbackHref, showCategory = false }) {
+function GameRow({ game, fallbackHref, showCategory = false, onNavigate }) {
   const href = game.href || fallbackHref;
   const img = game.img || game.icon || "";
   const category = showCategory ? game.category : "";
   return (
-    <Link href={href || "/"} prefetch aria-label={game.name} className="flex items-center gap-4 py-[11px] text-base text-ink">
+    <Link
+      href={href || "/"}
+      prefetch
+      aria-label={game.name}
+      onClick={onNavigate}
+      className="flex items-center gap-4 py-[11px] text-base text-ink"
+    >
       {img ? (
         <span className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
           <img src={img} alt="" width="32" height="32" className="block h-8 w-8 object-cover align-middle" />
@@ -42,7 +48,7 @@ function GameRow({ game, fallbackHref, showCategory = false }) {
   );
 }
 
-function GameList({ title, games, fallbackHref, showCategory = false }) {
+function GameList({ title, games, fallbackHref, showCategory = false, onNavigate }) {
   if (!games.length) return null;
   return (
     <div className="pt-6">
@@ -50,7 +56,7 @@ function GameList({ title, games, fallbackHref, showCategory = false }) {
       <ul>
         {games.map((game) => (
           <li key={`${game.category || ""}:${game.href || ""}:${game.name}`}>
-            <GameRow game={game} fallbackHref={fallbackHref} showCategory={showCategory} />
+            <GameRow game={game} fallbackHref={fallbackHref} showCategory={showCategory} onNavigate={onNavigate} />
           </li>
         ))}
       </ul>
@@ -157,18 +163,28 @@ export default function MobileCategorySheet({ category, onBack, onClose }) {
               </div>
             ) : null}
             {search.kind === "pending" ? null : (
-              <GameList games={filtered} fallbackHref={category.href} showCategory={showCategory} />
+              <GameList
+                games={filtered}
+                fallbackHref={category.href}
+                showCategory={showCategory}
+                onNavigate={onClose}
+              />
             )}
           </>
         ) : (
           <>
             {showPromo ? (
               <div className="pt-6">
-                <ItemsPromo />
+                <ItemsPromo onNavigate={onClose} />
               </div>
             ) : null}
-            <GameList title={FA.popularGames} games={popular.slice(0, 12)} fallbackHref={category.href} />
-            <GameList title={FA.allGames} games={filtered} fallbackHref={category.href} />
+            <GameList
+              title={FA.popularGames}
+              games={popular.slice(0, 12)}
+              fallbackHref={category.href}
+              onNavigate={onClose}
+            />
+            <GameList title={FA.allGames} games={filtered} fallbackHref={category.href} onNavigate={onClose} />
           </>
         )}
       </div>

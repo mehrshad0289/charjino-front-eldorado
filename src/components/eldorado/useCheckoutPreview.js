@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { catalogCheckoutHref, saveCatalogCheckoutDraft } from "../../lib/catalog-checkout";
+import { TOPUP_SHOP_CHROME } from "./data/giftShopCopy";
 
 export function useCheckoutPreview() {
   const router = useRouter();
   const [ack, setAck] = useState(false);
+  const [idAck, setIdAck] = useState(false);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -16,10 +18,16 @@ export function useCheckoutPreview() {
       setMessage("پیشنهاد معتبری انتخاب نشده است.");
       return;
     }
+    if (selected?.needsIdAck && !idAck) {
+      setMessage(TOPUP_SHOP_CHROME.idAckRequired);
+      return;
+    }
     setMessage("");
     setBusy(true);
     try {
-      const fields = { instantUseAck: ack, ...extraFields };
+      const fields = { ...extraFields };
+      if (selected?.instantUse) fields.instantUseAck = ack;
+      if (selected?.needsIdAck) fields.id_ack = "1";
       const response = await fetch("/api/checkout-preview", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -53,5 +61,5 @@ export function useCheckoutPreview() {
     }
   }
 
-  return { ack, setAck, message, preview, busy };
+  return { ack, setAck, idAck, setIdAck, message, setMessage, preview, busy };
 }

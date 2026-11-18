@@ -1,3 +1,6 @@
+import { EASY_BUY_STEP_ART } from "./illustrations";
+import { GIFT_SHOP_CHROME } from "./giftShopCopy";
+
 // Data for the Xbox gift card shop page, extracted from the decoded captures
 // "ui ux/extracted/snapshots/giftcard-1920px-light-1.tsx" (+ duplicate -2).
 // Amount names, order and "From" prices are verbatim from the capture
@@ -71,32 +74,10 @@ export const GIFT_CARD_AMOUNTS = [
 // Live mobile reference collapses the grid to the first 8 rows + "View more".
 export const GIFT_CARD_MOBILE_PREVIEW_COUNT = 8;
 
-export const GIFT_CARD_PROCESS_STEPS = [
-  {
-    title: "1. Choose an offer",
-    text: "Select the best offer from a top-rated seller.",
-    img: `${GCS}b165ae643f2a9138d0fdb2e1e31af77fc5d3afc3.svg?generation=1788944034691575&alt=media`,
-    w: 117,
-    h: 105,
-    alt: "Cursor over a list showing offer selection",
-  },
-  {
-    title: "2. Complete payment",
-    text: "Choose a convenient payment method.",
-    img: `${GCS}19e9e8ec354d191e71580f1b0decc4bafd21b71b.svg?generation=1788944034713536&alt=media`,
-    w: 120,
-    h: 120,
-    alt: "Credit card and payment chip icons representing secure payment",
-  },
-  {
-    title: "3. Order ready",
-    text: "Collect your order and jump into the game.",
-    img: `${GCS}793beea2e27a2e306e8436dc53bbed90dfd32a5d.svg?generation=1788944034688355&alt=media`,
-    w: 126,
-    h: 117,
-    alt: "Hero pose indicating successful order completion",
-  },
-];
+export const GIFT_CARD_PROCESS_STEPS = GIFT_SHOP_CHROME.processSteps.map((step, index) => ({
+  ...step,
+  ...EASY_BUY_STEP_ART[index],
+}));
 
 // Answers scraped live 2026-11-04 from eldorado.gg/xbox-gift-card/v/103.
 // questions array: string paragraphs; when steps is set it renders as an

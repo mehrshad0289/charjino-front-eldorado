@@ -21,7 +21,9 @@ import {
 } from "./ListingWizardChrome";
 import LoadingSpinner from "./LoadingSpinner";
 import EldSelect from "./EldSelect";
+import OfferPlatformField, { offerPlatformReady } from "./OfferPlatformField";
 import PriceField from "./PriceField";
+import { OFFER_PLATFORM_KEY } from "@/lib/offer-platforms";
 
 function initialPhotos(listing) {
   const next = {};
@@ -40,6 +42,7 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
   const [query, setQuery] = useState("");
   const [game, setGame] = useState(initialGame);
   const [region, setRegion] = useState(listing?.attributes?.region || initialGame?.regions?.[0] || "");
+  const [platform, setPlatform] = useState(listing?.attributes?.[OFFER_PLATFORM_KEY] || "");
   const [delivery, setDelivery] = useState(listing?.delivery_method || initialGame?.delivery_methods?.[0]?.value || "");
   const [minutes, setMinutes] = useState(listing?.delivery_minutes ? String(listing.delivery_minutes) : "20");
   const [title, setTitle] = useState(listing?.title || "");
@@ -80,7 +83,8 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
     Boolean(delivery) &&
     minuteValue >= 5 &&
     minuteValue <= 1440 &&
-    ((game?.regions || []).length === 0 || Boolean(region));
+    ((game?.regions || []).length === 0 || Boolean(region)) &&
+    offerPlatformReady(game?.offer_platforms, platform);
   const checks = [
     { id: "listing-game", label: "بازی", ok: Boolean(game) },
     { id: "listing-details", label: "مشخصات", ok: detailsReady },
@@ -104,6 +108,7 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
   function pickGame(row) {
     setGame(row);
     setRegion(row.regions?.[0] || "");
+    setPlatform("");
     setDelivery(row.delivery_methods?.[0]?.value || "");
     setIssues({});
     window.setTimeout(() => {
@@ -143,6 +148,7 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
     const next = {};
     if (!game) next.game = "بازی را انتخاب کن.";
     if ((game?.regions || []).length > 0 && !region) next.region = "ریجن را انتخاب کن.";
+    if (!offerPlatformReady(game?.offer_platforms, platform)) next.platform = "پلتفرم را انتخاب کن.";
     if (!delivery) next.delivery = "روش تحویل را انتخاب کن.";
     if (minuteValue < 5 || minuteValue > 1440) next.minutes = CURRENCY_LISTING_COPY.minutesHint;
     if (title.trim().length < LISTING_TITLE_MIN) next.title = "عنوان را کامل‌تر بنویس.";
@@ -154,6 +160,7 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
 
   function firstIssueTarget(next) {
     if (next.game) return { section: "listing-game", fieldId: "listing-game-search" };
+    if (next.platform) return { section: "listing-details", fieldId: "listing-offer-platform" };
     if (next.region) return { section: "listing-details", fieldId: "listing-region" };
     if (next.delivery) return { section: "listing-details", fieldId: "listing-delivery" };
     if (next.minutes) return { section: "listing-details", fieldId: "listing-minutes" };
@@ -167,7 +174,7 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
   function sectionIssueText(id) {
     if (id === "listing-game") return issues.game || "";
     if (id === "listing-details") {
-      return [issues.region, issues.delivery, issues.minutes, issues.title].filter(Boolean).join(" · ");
+      return [issues.platform, issues.region, issues.delivery, issues.minutes, issues.title].filter(Boolean).join(" · ");
     }
     if (id === "listing-media") return issues.photo || "";
     if (id === "listing-price") return [issues.stock, issues.price].filter(Boolean).join(" · ");
@@ -186,7 +193,10 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
     payload.set("stock", String(parseToman(stock) || ""));
     payload.set("min_quantity", String(parseToman(minQuantity) || ""));
     payload.set("price_amount", String(parseToman(price)));
-    payload.set("attributes", JSON.stringify(region ? { region } : {}));
+    const attrs = {};
+    if (region) attrs.region = region;
+    if (platform) attrs[OFFER_PLATFORM_KEY] = platform;
+    payload.set("attributes", JSON.stringify(attrs));
     return payload;
   }
 
@@ -332,6 +342,17 @@ export default function CurrencyListingWizard({ games = [], listing = null, bloc
 
         <ListingSection id="listing-details" title="مشخصات" hint={CURRENCY_LISTING_COPY.detailsHint}>
           <div className="flex flex-col gap-4">
+            <OfferPlatformField
+              payload={game?.offer_platforms}
+              value={platform}
+              invalid={Boolean(issues.platform)}
+              error={issues.platform}
+              disabled={!game}
+              onChange={(value) => {
+                setPlatform(value);
+                clearIssue("platform");
+              }}
+            />
             {(game?.regions || []).length > 0 ? (
               <label className="text-[14px] font-bold" htmlFor="listing-region">
                 {CURRENCY_LISTING_COPY.region}

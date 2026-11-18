@@ -21,7 +21,9 @@ import {
 } from "./ListingWizardChrome";
 import LoadingSpinner from "./LoadingSpinner";
 import EldSelect from "./EldSelect";
+import OfferPlatformField, { offerPlatformReady } from "./OfferPlatformField";
 import PriceField from "./PriceField";
+import { OFFER_PLATFORM_KEY } from "@/lib/offer-platforms";
 
 function initialPhotos(listing) {
   const next = {};
@@ -75,7 +77,8 @@ export default function ItemListingWizard({ games = [], listing = null, blockers
   const minValue = Number(parseToman(minQuantity) || 0);
   const stockReady = stockValue >= 1 && minValue >= 1 && minValue <= stockValue;
   const filtersReady = filters.every((filter) => !filter.required || String(attributes[filter.key] || "").trim());
-  const detailsReady = Boolean(type) && titleReady && filtersReady;
+  const platformReady = offerPlatformReady(game?.offer_platforms, attributes[OFFER_PLATFORM_KEY]);
+  const detailsReady = Boolean(type) && titleReady && filtersReady && platformReady;
   const checks = [
     { id: "listing-game", label: "بازی", ok: Boolean(game) },
     { id: "listing-details", label: "مشخصات", ok: detailsReady },
@@ -138,6 +141,7 @@ export default function ItemListingWizard({ games = [], listing = null, blockers
     const next = {};
     if (!game || !type) next.game = "بازی و نوع آیتم را انتخاب کن.";
     if (title.trim().length < LISTING_TITLE_MIN) next.title = "عنوان را کامل‌تر بنویس.";
+    if (!offerPlatformReady(game?.offer_platforms, attributes[OFFER_PLATFORM_KEY])) next[OFFER_PLATFORM_KEY] = "پلتفرم را انتخاب کن.";
     for (const filter of filters) {
       if (filter.required && !String(attributes[filter.key] || "").trim()) next[filter.key] = `${filter.name} را انتخاب کن.`;
     }
@@ -150,6 +154,7 @@ export default function ItemListingWizard({ games = [], listing = null, blockers
   function firstIssueTarget(next) {
     if (next.game) return { section: "listing-game", fieldId: "listing-game-search" };
     if (next.title) return { section: "listing-details", fieldId: "listing-title" };
+    if (next[OFFER_PLATFORM_KEY]) return { section: "listing-details", fieldId: "listing-offer-platform" };
     for (const filter of filters) {
       if (next[filter.key]) return { section: "listing-details", fieldId: `item-${filter.key}` };
     }
@@ -162,7 +167,7 @@ export default function ItemListingWizard({ games = [], listing = null, blockers
   function sectionIssueText(id) {
     if (id === "listing-game") return issues.game || "";
     if (id === "listing-details") {
-      return [issues.title, ...filters.map((filter) => issues[filter.key])].filter(Boolean).join(" · ");
+      return [issues.title, issues[OFFER_PLATFORM_KEY], ...filters.map((filter) => issues[filter.key])].filter(Boolean).join(" · ");
     }
     if (id === "listing-media") return issues.photo || "";
     if (id === "listing-price") return [issues.stock, issues.price].filter(Boolean).join(" · ");
@@ -342,6 +347,17 @@ export default function ItemListingWizard({ games = [], listing = null, blockers
               <span className="font-bold">{ITEM_LISTING_COPY.delivery}: </span>
               {type?.delivery_label || "بعد از انتخاب نوع"}
             </p>
+            <OfferPlatformField
+              payload={game?.offer_platforms}
+              value={attributes[OFFER_PLATFORM_KEY] || ""}
+              invalid={Boolean(issues[OFFER_PLATFORM_KEY])}
+              error={issues[OFFER_PLATFORM_KEY]}
+              disabled={!game}
+              onChange={(value) => {
+                setAttributes((current) => ({ ...current, [OFFER_PLATFORM_KEY]: value }));
+                clearIssue(OFFER_PLATFORM_KEY);
+              }}
+            />
             <label className="text-[14px] font-bold" htmlFor="listing-title">
               {LISTING_COPY.accountTitle}
               <input

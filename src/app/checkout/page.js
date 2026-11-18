@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { noIndexMetadata } from "@/lib/seo";
 import AccountCheckoutPage from "../../components/eldorado/AccountCheckoutPage";
 import CatalogCheckoutPage from "../../components/eldorado/CatalogCheckoutPage";
 import Logo from "../../components/eldorado/Logo";
@@ -52,19 +53,10 @@ import {
 
 export const instant = false;
 
-export async function generateMetadata({ searchParams }) {
-  const query = searchParams ? await searchParams : {};
-  if (query.listing || query.sku) {
-    return {
-      title: "تسویه امن — شارژینو",
-      description: "پرداخت امن سفارش شارژینو.",
-    };
-  }
-  return {
-    title: "Checkout - Eldorado",
-    description: "Secure checkout — complete your Eldorado order.",
-  };
-}
+export const metadata = noIndexMetadata({
+  title: "پرداخت — شارژینو",
+  description: "پرداخت امن سفارش شارژینو.",
+});
 
 function LockIcon() {
   return (

@@ -1,4 +1,5 @@
 import { onlyDigits, toFaDigits } from "./fa-digits";
+import { defaultOfferPlatforms } from "./offer-platforms";
 import { formatTomanInWords } from "./price";
 
 export const LISTING_PRICE_MIN = 10_000;
@@ -47,8 +48,17 @@ export const LISTING_SECTIONS = [
   { id: "listing-price", label: "قیمت" },
 ];
 
+const defaultPlatform = defaultOfferPlatforms();
+
 export const GENERIC_LISTING_FIELDS = [
-  { key: "platform", label_fa: "پلتفرم", type: "text", required: false },
+  {
+    key: defaultPlatform.key,
+    label_fa: defaultPlatform.label_fa,
+    type: "select",
+    options: defaultPlatform.options,
+    option_groups: defaultPlatform.groups,
+    required: false,
+  },
   { key: "region", label_fa: "سرور / ریجن", type: "text", required: false },
   { key: "rank", label_fa: "رنک", type: "text", required: false },
   { key: "level", label_fa: "لول", type: "text", required: false },

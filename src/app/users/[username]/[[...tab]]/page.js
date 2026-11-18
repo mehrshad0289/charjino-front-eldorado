@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { getSessionUser } from "@/actions/auth.actions";
 import UserProfilePage from "../../../../components/eldorado/UserProfilePage";
 import { listingToShopCard, loadPublicProfile, loadSellerPublicListings, loadSellerPublicReviews } from "@/lib/store-engine";
+import { buildMetadata } from "@/lib/seo";
 
 export const instant = false;
 
@@ -20,12 +21,14 @@ function decodeSlug(value) {
 
 export async function generateMetadata({ params }) {
   const { username } = await params;
-  const profile = await loadPublicProfile(decodeSlug(username));
-  if (!profile) return { title: "فروشنده پیدا نشد — شارژینو" };
-  return {
+  const slug = decodeSlug(username);
+  const profile = await loadPublicProfile(slug);
+  if (!profile) return buildMetadata({ title: "فروشنده پیدا نشد — شارژینو", noIndex: true });
+  return buildMetadata({
     title: `${profile.name} — شارژینو`,
     description: `فروشگاه، نظرات و درباره ${profile.name} در شارژینو.`,
-  };
+    path: `/users/${encodeURIComponent(slug)}`,
+  });
 }
 
 export default async function UserProfileRoute({ params, searchParams }) {

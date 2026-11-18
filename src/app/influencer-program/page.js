@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { noIndexMetadata } from "@/lib/seo";
 import Footer from "../../components/eldorado/Footer";
 import InfluencerFaq from "../../components/eldorado/InfluencerFaq";
 import {
@@ -39,11 +40,11 @@ import {
    SVG paths — no icomoon font in the project; FAQ answers scraped from
    live (closed in the capture); CTA buttons scroll to the form. */
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "Influencer Program | Eldorado.gg",
   description:
     "Share the best deals in gaming with your community and get paid generously. Join the Eldorado.gg influencer program.",
-};
+});
 
 function ChipIcon({ name }) {
   const paths = {

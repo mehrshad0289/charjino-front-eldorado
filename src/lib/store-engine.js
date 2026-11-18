@@ -1,5 +1,6 @@
 import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
+import { ensureAccessToken } from "./ensure-access-token";
 import { getBackendUrl } from "./env";
 import { toFaDigits } from "./fa-digits";
 import { productHref } from "./format-toman";
@@ -13,6 +14,7 @@ import {
 } from "./gift-card-shop";
 import { preferFaTitle } from "./catalog-region";
 import { humanizeTopupHub, joinTopupSearchText, pickTopupDisplayName, topupShopHref } from "./topup-hub";
+import { looksLikeNumericRange, numericExtent } from "./numeric-facet";
 
 export const STORE_CATEGORY_KEYS = ["currency", "accounts", "top-ups", "items", "boosting", "games", "gift-cards"];
 
@@ -169,6 +171,41 @@ export async function loadCurrencyOfferGames() {
     if (error instanceof ApiError) return [];
     throw error;
   }
+}
+
+export async function loadItemOfferGames() {
+  try {
+    const payload = await serverFetch(apiPaths.marketItemOfferGames);
+    return Array.isArray(payload?.items) ? payload.items : [];
+  } catch (error) {
+    if (error instanceof ApiError) return [];
+    throw error;
+  }
+}
+
+export function catalogNumberFacets(setup) {
+  const seen = new Set();
+  const fields = [];
+  for (const type of Array.isArray(setup?.types) ? setup.types : []) {
+    for (const filter of Array.isArray(type.filters) ? type.filters : []) {
+      const key = asString(filter.key);
+      if (asString(filter.input_type) !== "number" || !key || seen.has(key)) continue;
+      seen.add(key);
+      fields.push({ key, label_fa: asString(filter.name) || key.split("|").pop() || key, type: "number" });
+    }
+  }
+  return fields;
+}
+
+export function mergeFacetFields(fields, extra) {
+  const out = [...(Array.isArray(fields) ? fields : [])];
+  const keys = new Set(out.map((field) => field.key));
+  for (const field of Array.isArray(extra) ? extra : []) {
+    if (!field?.key || keys.has(field.key)) continue;
+    keys.add(field.key);
+    out.push(field);
+  }
+  return out;
 }
 
 export async function currencyHubKeyForMarket(raw) {
@@ -353,7 +390,9 @@ export async function loadMarketListing(id) {
   const listingId = String(id || "").trim();
   if (!listingId) return null;
   try {
-    return asRecord(await serverFetch(apiPaths.marketListing(listingId)));
+    const accessToken = await ensureAccessToken();
+    const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+    return asRecord(await serverFetch(apiPaths.marketListing(listingId), { headers }));
   } catch (error) {
     if (error instanceof ApiError && error.statusCode === 404) return null;
     throw error;
@@ -513,6 +552,21 @@ export function itemFacetsFromOffers(offers) {
   }
   for (const [key, counts] of extra) {
     if (counts.size < 1) continue;
+    const values = [...counts.keys()];
+    if (looksLikeNumericRange(values)) {
+      const extent = numericExtent(values);
+      if (extent && extent.max > extent.min) {
+        fields.push({
+          key,
+          label_fa: asString(labels[key]) || key.split("|").pop() || key,
+          type: "number",
+          min: extent.min,
+          max: extent.max,
+          count: [...counts.values()].reduce((sum, count) => sum + count, 0),
+        });
+        continue;
+      }
+    }
     const unique = [...counts.values()].every((count) => count === 1);
     if (unique && counts.size > 8) continue;
     fields.push({

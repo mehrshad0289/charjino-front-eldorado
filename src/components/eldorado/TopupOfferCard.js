@@ -6,6 +6,7 @@ import { FA } from "./data/faCopy";
 import { TOPUP_SHOP_CHROME } from "./data/giftShopCopy";
 import { catalogRegionLabel } from "../../lib/catalog-region";
 import { formatTomanPrice } from "../../lib/format-toman";
+import CatalogBuyerFields from "./CatalogBuyerFields";
 import CheckoutCouponField from "./CheckoutCouponField";
 import LoadingSpinner from "./LoadingSpinner";
 import { BoltIcon, ShieldIcon, SupportIcon, TrustRow } from "./TrustRows";
@@ -36,27 +37,6 @@ function PayBadge({ src, alt }) {
   );
 }
 
-function fieldInputType(field) {
-  const type = String(field.type || "text").toLowerCase();
-  if (type === "password") return "password";
-  if (type === "email") return "email";
-  return "text";
-}
-
-function isSecretField(field) {
-  const type = String(field.type || "").toLowerCase();
-  const name = String(field.name || field.key || "").toLowerCase();
-  return (
-    type === "password" ||
-    type === "email" ||
-    name === "email" ||
-    name === "account_password" ||
-    name === "backup_code" ||
-    name === "ea_id" ||
-    name === "psn_id"
-  );
-}
-
 export default function TopupOfferCard({
   selected = null,
   showRegion = false,
@@ -66,6 +46,8 @@ export default function TopupOfferCard({
   deliverySteps = [],
   ack = false,
   onAckChange,
+  idAck = false,
+  onIdAckChange,
   message = "",
   onBuy,
   buyerFields = [],
@@ -148,34 +130,12 @@ export default function TopupOfferCard({
       </div>
 
       {fields.length > 0 ? (
-        <div className="flex flex-col gap-3 border-b border-cardborder px-4 py-3 lg:px-6">
-          {fields.map((raw) => {
-            const field = raw && typeof raw === "object" ? raw : {};
-            const name = String(field.name || field.key || "").trim();
-            if (!name) return null;
-            const label = String(field.label || name);
-            const help = String(field.help || "").trim();
-            const secret = isSecretField(field);
-            return (
-              <label key={name} className="block text-sm text-graytext">
-                <span className="mb-1 block font-bold text-nav">{label}</span>
-                <input
-                  type={fieldInputType(field)}
-                  name={name}
-                  autoComplete="off"
-                  autoCapitalize="none"
-                  spellCheck={false}
-                  dir={secret ? "ltr" : undefined}
-                  required={field.required !== false}
-                  value={buyerValues?.[name] || ""}
-                  onChange={(event) => onBuyerFieldChange?.(name, event.target.value)}
-                  className={`min-h-10 w-full rounded-md border border-cardborder bg-white px-3 py-2 text-sm text-nav ${secret ? "text-left" : ""}`}
-                />
-                {help ? <span className="mt-1 block text-[12px] leading-[18px]">{help}</span> : null}
-              </label>
-            );
-          })}
-        </div>
+        <CatalogBuyerFields
+          fields={fields}
+          values={buyerValues}
+          onChange={onBuyerFieldChange}
+          className="flex flex-col gap-3 border-b border-cardborder px-4 py-3 lg:px-6"
+        />
       ) : null}
 
       <div className="flex flex-col items-start gap-1 px-4 py-3 lg:flex-row lg:items-end lg:justify-between lg:px-6">
@@ -209,6 +169,17 @@ export default function TopupOfferCard({
       </div>
 
       <div className="flex flex-col gap-2 px-4 pb-4 lg:px-6">
+        {selected?.needsIdAck ? (
+          <label className="flex items-start gap-2 text-sm text-graytext">
+            <input
+              type="checkbox"
+              className="mt-1"
+              checked={Boolean(idAck)}
+              onChange={(event) => onIdAckChange?.(event.target.checked)}
+            />
+            <span>{TOPUP_SHOP_CHROME.idAckLabel}</span>
+          </label>
+        ) : null}
         {selected?.instantUse ? (
           <label className="flex items-start gap-2 text-sm text-graytext">
             <input

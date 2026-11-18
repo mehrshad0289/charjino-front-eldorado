@@ -1,4 +1,5 @@
 import CategoryNav from "../../../components/eldorado/CategoryNav";
+import { noIndexMetadata } from "@/lib/seo";
 import Footer from "../../../components/eldorado/Footer";
 import {
   ROBLOX_PRICE_IMAGES,
@@ -51,11 +52,11 @@ function Caret() {
   );
 }
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "Roblox items price history - Garama and Madundung - Eldorado",
   description:
     "See how a Roblox items price changes over time and find the lowest current price. Track the Garama and Madundung 90-day daily price, high, low and buy from verified sellers.",
-};
+});
 
 export default function RobloxPriceHistoryPage() {
   const d = ROBLOX_PRICE_PAGE;

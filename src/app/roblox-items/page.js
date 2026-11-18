@@ -1,4 +1,5 @@
 import CategoryNav from "../../components/eldorado/CategoryNav";
+import { noIndexMetadata } from "@/lib/seo";
 import ShopItemSubNav from "../../components/eldorado/ShopItemSubNav";
 import ShopItemPageContent from "../../components/eldorado/ShopItemPageContent";
 import Footer from "../../components/eldorado/Footer";
@@ -16,11 +17,11 @@ import ChatBubble from "../../components/eldorado/ChatBubble";
    this clone). Capture is 1920-only — below lg the sidebar stacks
    (documented). */
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "Roblox Items For Sale - Eldorado",
   description:
     "Buy Roblox items from verified sellers: limiteds, game items and more with fast delivery and TradeShield protection.",
-};
+});
 
 export default function RobloxItemsPage() {
   return (

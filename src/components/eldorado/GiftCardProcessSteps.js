@@ -1,11 +1,9 @@
 import { GIFT_CARD_PROCESS_STEPS } from "./data/giftCardData";
+import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
 
-/* "Effortless buying process" (giftcard .make capture): centered title and
-   a 3-column grid of illustrated steps (icon, bold title, gray text).
-   Mobile (live @390): the columns stack vertically. Illustrations are the
-   capture's own SVG assets. */
+/* 3-step easy-buy band. Art is local Charjino SVGs (check-list / payments / enter). */
 
-export default function GiftCardProcessSteps({ title = "Effortless buying process", steps }) {
+export default function GiftCardProcessSteps({ title = GIFT_SHOP_CHROME.processTitle, steps }) {
   const items = (Array.isArray(steps) && steps.length > 0 ? steps : GIFT_CARD_PROCESS_STEPS).map((step, index) => {
     const art = GIFT_CARD_PROCESS_STEPS[index] || GIFT_CARD_PROCESS_STEPS[0];
     return {
@@ -35,7 +33,7 @@ export default function GiftCardProcessSteps({ title = "Effortless buying proces
                   <img
                     alt={step.alt}
                     src={step.img}
-                    className="block align-middle"
+                    className="block size-[125px] object-contain align-middle"
                     width={step.w}
                     height={step.h}
                   />

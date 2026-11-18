@@ -22,6 +22,9 @@ import {
   loadProductHub,
 } from "../../lib/gift-card-shop";
 import { skuIdFromQuery } from "../../lib/sku-query";
+import { buildMetadata } from "@/lib/seo";
+import JsonLd from "../../components/seo/json-ld";
+import { collectionPageJsonLd, howToJsonLd } from "../../lib/json-ld";
 
 export const instant = false;
 
@@ -35,10 +38,11 @@ export async function generateMetadata() {
     description: `خرید ${name} با تومان؛ ریجن و مدت اشتراک از کاتالوگ.`,
   };
   const meta = giftBrandPageMeta(brandPage, fallback);
-  return {
+  return buildMetadata({
     title: meta.title || fallback.title,
     description: meta.description || fallback.description,
-  };
+    path: "/xbox-game-pass",
+  });
 }
 
 export default async function XboxGamePassPage({ searchParams }) {
@@ -54,6 +58,8 @@ export default async function XboxGamePassPage({ searchParams }) {
 
   return (
     <>
+      <JsonLd data={collectionPageJsonLd({ name: `خرید ${name}`, path: "/xbox-game-pass" })} />
+      <JsonLd data={howToJsonLd({ name: GIFT_SHOP_CHROME.processTitle, steps: GIFT_SHOP_CHROME.processSteps })} />
       <CategoryNav activeCategory="Gift cards" />
       <RecordRecentView
         product={{

@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { FA } from "./data/faCopy";
 
-const LOOP_MS = 42000;
-const DRAG_THRESHOLD = 8;
-
 function OfferCard({ c, i }) {
+  const href = String(c.href || "").trim();
+  if (!href) return null;
   return (
     <Link
-      href={c.href || "/"}
+      href={href}
       prefetch
       draggable={false}
       className="relative flex h-[336px] w-[272px] flex-col justify-end gap-2.5 overflow-hidden rounded-lg p-6 text-sm leading-[21px] text-white md:h-80"
@@ -25,7 +24,7 @@ function OfferCard({ c, i }) {
         />
       ) : null}
       <div
-        className="absolute inset-0"
+        className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage: "linear-gradient(rgba(30, 31, 40, 0) 50%, rgb(30, 31, 40) 92.5%)",
         }}
@@ -69,202 +68,51 @@ function OfferCard({ c, i }) {
   );
 }
 
-function wrapOffset(value, width) {
-  if (width <= 0) return 0;
-  let next = value % width;
-  if (next < 0) next += width;
-  return next;
-}
-
 export default function PopularCards({ items, title }) {
-  const viewportRef = useRef(null);
   const trackRef = useRef(null);
-  const offsetRef = useRef(0);
-  const setWidthRef = useRef(0);
-  const draggingRef = useRef(false);
-  const trackingRef = useRef(false);
-  const hoverPauseRef = useRef(false);
-  const reduceMotionRef = useRef(false);
-  const suppressClickRef = useRef(false);
-  const pointerIdRef = useRef(null);
-  const startXRef = useRef(0);
-  const startYRef = useRef(0);
-  const startOffsetRef = useRef(0);
-  const lastTimeRef = useRef(0);
-  const cards = Array.isArray(items) ? items : [];
-  const looping = cards.length > 1;
-  const [grabbing, setGrabbing] = useState(false);
+  const [active, setActive] = useState(0);
+  const cards = Array.isArray(items) ? items.filter((row) => String(row?.href || "").trim()) : [];
 
-  const loop = useMemo(() => {
-    if (cards.length === 0) return [];
-    if (!looping) return cards;
-    return [...cards, ...cards, ...cards];
-  }, [cards, looping]);
-
-  const applyTransform = () => {
-    const track = trackRef.current;
-    if (!track) return;
-    track.style.transform = `translate3d(${offsetRef.current}px, 0, 0)`;
-  };
-
-  useLayoutEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const copies = looping ? 3 : 1;
-    const measure = () => {
-      setWidthRef.current = copies > 1 ? track.scrollWidth / copies : 0;
-      offsetRef.current = wrapOffset(offsetRef.current, setWidthRef.current || 1);
-      applyTransform();
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(track);
-    return () => ro.disconnect();
-  }, [loop, looping]);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const apply = () => {
-      reduceMotionRef.current = mq.matches;
-    };
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-
-  useEffect(() => {
-    if (!looping) return undefined;
-    lastTimeRef.current = performance.now();
-    let frame = 0;
-    const tick = (now) => {
-      const dt = Math.min(48, now - lastTimeRef.current);
-      lastTimeRef.current = now;
-      const width = setWidthRef.current;
-      if (
-        width > 0 &&
-        !draggingRef.current &&
-        !hoverPauseRef.current &&
-        !reduceMotionRef.current
-      ) {
-        offsetRef.current = wrapOffset(offsetRef.current + (width / LOOP_MS) * dt, width);
-        applyTransform();
-      }
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [looping]);
-
-  const stopTracking = (event) => {
-    trackingRef.current = false;
-    draggingRef.current = false;
-    pointerIdRef.current = null;
-    setGrabbing(false);
-    const node = viewportRef.current;
-    if (node && event?.pointerId != null) {
-      try {
-        node.releasePointerCapture(event.pointerId);
-      } catch {
-        /* already released */
-      }
-    }
-  };
-
-  const onPointerDown = (event) => {
-    if (!looping || event.button != null && event.button !== 0) return;
-    trackingRef.current = true;
-    draggingRef.current = false;
-    suppressClickRef.current = false;
-    pointerIdRef.current = event.pointerId;
-    startXRef.current = event.clientX;
-    startYRef.current = event.clientY;
-    startOffsetRef.current = offsetRef.current;
-    if (event.pointerType === "mouse" || event.pointerType === "pen") {
-      try {
-        event.currentTarget.setPointerCapture(event.pointerId);
-      } catch {
-        /* synthetic / already captured */
-      }
-    }
-  };
-
-  const onPointerMove = (event) => {
-    if (!trackingRef.current || pointerIdRef.current !== event.pointerId) return;
-    const dx = event.clientX - startXRef.current;
-    const dy = event.clientY - startYRef.current;
-
-    if (!draggingRef.current) {
-      const passed = Math.abs(dx) >= DRAG_THRESHOLD || Math.abs(dy) >= DRAG_THRESHOLD;
-      if (!passed) return;
-      if (event.pointerType === "touch" && Math.abs(dy) > Math.abs(dx)) {
-        stopTracking(event);
-        return;
-      }
-      if (Math.abs(dx) < DRAG_THRESHOLD) return;
-      draggingRef.current = true;
-      suppressClickRef.current = true;
-      setGrabbing(true);
-      try {
-        if (!event.currentTarget.hasPointerCapture(event.pointerId)) {
-          event.currentTarget.setPointerCapture(event.pointerId);
-        }
-      } catch {
-        /* synthetic / already captured */
-      }
-    }
-
-    event.preventDefault();
-    offsetRef.current = wrapOffset(startOffsetRef.current + dx, setWidthRef.current);
-    applyTransform();
-  };
-
-  const onPointerUp = (event) => {
-    if (pointerIdRef.current !== event.pointerId && pointerIdRef.current != null) return;
-    stopTracking(event);
-  };
-
-  const onClickCapture = (event) => {
-    if (!suppressClickRef.current) return;
-    event.preventDefault();
-    event.stopPropagation();
-    suppressClickRef.current = false;
-  };
-
-  const onPointerEnter = (event) => {
-    if (event.pointerType === "mouse") hoverPauseRef.current = true;
-  };
-
-  const onPointerLeave = (event) => {
-    if (event.pointerType === "mouse" && !draggingRef.current) hoverPauseRef.current = false;
+  const onTrackScroll = () => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.querySelector("a");
+    const step = card ? card.offsetWidth + 24 : 1;
+    const max = Math.max(1, el.scrollWidth - el.clientWidth);
+    const pos = Math.min(max, Math.max(0, Math.abs(el.scrollLeft)));
+    setActive(Math.min(cards.length - 1, Math.max(0, Math.round(pos / step))));
   };
 
   if (cards.length === 0) return null;
 
   return (
-    <section className="relative z-10 mb-6 mb-12 pt-6">
+    <section className="relative z-10 mb-12 pt-6">
       <div className="mx-auto max-w-[1208px] px-4 md:px-6">
         <span className="block text-lg font-bold leading-[27px]">{title || FA.popular}</span>
-        <div
-          ref={viewportRef}
-          className={`popular-cards-viewport mt-4 overflow-hidden ${grabbing ? "is-grabbing" : ""}`}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={onPointerUp}
-          onLostPointerCapture={onPointerUp}
-          onPointerEnter={onPointerEnter}
-          onPointerLeave={onPointerLeave}
-          onClickCapture={onClickCapture}
-          onDragStart={(event) => event.preventDefault()}
-        >
-          <div ref={trackRef} className="popular-cards-track flex w-max gap-6 whitespace-nowrap">
-            {loop.map((c, i) => (
-              <div key={`${c.key || c.item}-${i}`} className="shrink-0">
+        <div className="mt-4 flex overflow-hidden">
+          <div
+            ref={trackRef}
+            onScroll={onTrackScroll}
+            onDragStart={(event) => event.preventDefault()}
+            className="popular-cards-scroller flex w-full overflow-x-auto overflow-y-hidden whitespace-nowrap"
+          >
+            {cards.map((c, i) => (
+              <div key={c.key || c.item} className={`shrink-0 ${i > 0 ? "ps-6" : ""}`}>
                 <OfferCard c={c} i={i} />
               </div>
             ))}
           </div>
         </div>
+        {cards.length > 1 ? (
+          <div className="mt-3 flex justify-center gap-1.5 md:hidden">
+            {cards.map((c, i) => (
+              <span
+                key={c.key || c.item}
+                className={`h-1.5 w-1.5 rounded-full ${i === active ? "bg-ink" : "bg-cardborder"}`}
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
     </section>
   );

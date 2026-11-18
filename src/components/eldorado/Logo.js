@@ -17,7 +17,7 @@ function onLightSurface(color) {
 }
 
 function Mark({ transform }) {
-  return <path d={MARK} fill="#00E5FF" transform={transform} />;
+  return <path d={MARK} fill="#ffb600" transform={transform} />;
 }
 
 export default function Logo({ className = "", color = "#14131A", iconOnly = false, size = 34 }) {

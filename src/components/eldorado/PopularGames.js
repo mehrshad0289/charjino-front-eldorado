@@ -27,7 +27,7 @@ export default function PopularGames({ items, title }) {
           {heading ? (
             <span className="block text-lg font-bold leading-[27px]">{heading}</span>
           ) : null}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {games.map((row) => (
               <Link
                 key={row.key || row.name}

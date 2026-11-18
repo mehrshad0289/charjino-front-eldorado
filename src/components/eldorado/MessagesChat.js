@@ -5,6 +5,8 @@ import { listingMediaUrl } from "@/lib/listing";
 import { formatOrderDate, orderStatusMeta } from "@/lib/order";
 import { toFaDigits } from "@/lib/fa-digits";
 import { ChatListSkeleton, ChatThreadSkeleton } from "./Skeleton";
+import EmptyState from "./EmptyState";
+import { FA } from "./data/faCopy";
 
 function ClientTime({ iso }) {
   const [label, setLabel] = useState("");
@@ -111,10 +113,7 @@ export default function MessagesChat({
         ) : error ? (
           <p className="px-4 py-6 text-[14px] text-[rgb(232,27,22)]">{error}</p>
         ) : empty ? (
-          <div className="px-4 py-8">
-            <p className="text-[15px] font-bold">{copy.emptyTitle}</p>
-            <p className="mt-2 text-[13px] leading-[20px] text-graytext">{copy.emptyText}</p>
-          </div>
+          <EmptyState title={FA.nothingFound} text={copy.emptyText} />
         ) : (
           conversations.map((conversation) => (
             <button

@@ -5,12 +5,13 @@ import Logo from "../../../../../components/eldorado/Logo";
 import Footer from "../../../../../components/eldorado/Footer";
 import MarketZibalVerifyScreen from "../../../../../components/eldorado/MarketZibalVerifyScreen";
 import LoadingSpinner from "../../../../../components/eldorado/LoadingSpinner";
+import { noIndexMetadata } from "@/lib/seo";
 
 export const instant = false;
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "تأیید پرداخت بازارچه — شارژینو",
-};
+});
 
 const GATEWAYS = new Set(["zibal", "zarinpal", "fake"]);
 

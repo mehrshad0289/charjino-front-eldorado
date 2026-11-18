@@ -1,4 +1,5 @@
 import CategoryNav from "../../components/eldorado/CategoryNav";
+import { noIndexMetadata } from "@/lib/seo";
 import GiftCardBanner from "../../components/eldorado/GiftCardBanner";
 import ShopAmountCards from "../../components/eldorado/ShopAmountCards";
 import ShopFeaturedOffer from "../../components/eldorado/ShopFeaturedOffer";
@@ -44,11 +45,11 @@ function Disclaimer({ className }) {
   );
 }
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "Buy Amazon Prime Subscription Cheap | Amazon Subscription from $1.27 for Prime Video - 1 Month",
   description:
     "Top up your Amazon Prime Video balance at Eldorado.gg and start streaming your favorite movies and series in seconds. No long-term subscriptions, just fast and flexible access from verified sellers.",
-};
+});
 
 export default function AmazonPrimePage() {
   return (

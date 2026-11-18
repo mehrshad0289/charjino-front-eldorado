@@ -10,6 +10,7 @@ import { FA } from "./data/faCopy";
 import { TOPUP_SHOP_CHROME } from "./data/giftShopCopy";
 import { useCheckoutPreview } from "./useCheckoutPreview";
 import { useCheckoutCoupon } from "./useCheckoutCoupon";
+import { missingRequiredCatalogField } from "../../lib/catalog-checkout";
 import { amountForSku } from "../../lib/sku-query";
 
 function asShop(value) {
@@ -178,18 +179,25 @@ export default function TopupBuyFlow({
       deliverySteps={selectedDevice?.deliveryInstructions || []}
       ack={checkout.ack}
       onAckChange={checkout.setAck}
+      idAck={checkout.idAck}
+      onIdAckChange={checkout.setIdAck}
       message={checkout.message}
       buyerFields={buyerFields}
       buyerValues={buyerValues}
       onBuyerFieldChange={(name, value) => setBuyerValues((prev) => ({ ...prev, [name]: value }))}
       coupon={coupon}
       busy={checkout.busy}
-      onBuy={() =>
+      onBuy={() => {
+        const missing = missingRequiredCatalogField(buyerFields, buyerValues);
+        if (missing) {
+          checkout.setMessage(`${missing} را وارد کن.`);
+          return;
+        }
         checkout.preview(selected, checkoutFields(), {
           couponCode: coupon.quote?.code || "",
           from: typeof window !== "undefined" ? window.location.pathname : "",
-        })
-      }
+        });
+      }}
     />
   );
 

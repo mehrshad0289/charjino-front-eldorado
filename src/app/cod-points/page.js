@@ -1,4 +1,5 @@
 import CategoryNav from "../../components/eldorado/CategoryNav";
+import { noIndexMetadata } from "@/lib/seo";
 import GiftCardBanner from "../../components/eldorado/GiftCardBanner";
 import GamePassRegionChips from "../../components/eldorado/GamePassRegionChips";
 import ShopAmountCards from "../../components/eldorado/ShopAmountCards";
@@ -47,11 +48,11 @@ function Disclaimer({ className }) {
   );
 }
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "Buy CoD Points Cheap | Call of Duty Points from $5.41 for 2400 CP - Xbox",
   description:
     "Buy CoD Points cheap on Eldorado — Call of Duty Points for Warzone, Black Ops 7 and MW3 from verified sellers. Operator packs, bundles and Battle Pass tiers with fast delivery and buyer protection.",
-};
+});
 
 export default function CodPointsPage() {
   return (

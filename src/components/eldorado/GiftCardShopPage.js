@@ -18,6 +18,8 @@ import {
   telegramShopSeo,
 } from "./data/giftShopCopy";
 import RecordRecentView from "./RecordRecentView";
+import JsonLd from "../seo/json-ld";
+import { collectionPageJsonLd, faqFromShopItems, faqPageJsonLd, howToJsonLd } from "../../lib/json-ld";
 import {
   activeHubTabKey,
   bannerTabsFromHub,
@@ -65,6 +67,9 @@ export default async function GiftCardShopPage({ platform, initialSkuId = null }
 
   return (
     <>
+      <JsonLd data={collectionPageJsonLd({ name: `خرید ${name}`, path: href })} />
+      <JsonLd data={faqPageJsonLd(faqFromShopItems(faqItems))} />
+      <JsonLd data={howToJsonLd({ name: GIFT_SHOP_CHROME.processTitle, steps: GIFT_SHOP_CHROME.processSteps })} />
       <CategoryNav activeCategory="Gift cards" />
       <RecordRecentView
         product={{
@@ -73,6 +78,7 @@ export default async function GiftCardShopPage({ platform, initialSkuId = null }
           category: { slug: "gift-card" },
         }}
         href={href}
+        price={Array.isArray(catalog.amounts) ? catalog.amounts.find((row) => row?.from)?.from || "" : ""}
       />
       <main className="relative">
         <div

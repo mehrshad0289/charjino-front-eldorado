@@ -1,4 +1,5 @@
 import CategoryNav from "../../../../components/eldorado/CategoryNav";
+import { noIndexMetadata } from "@/lib/seo";
 import Footer from "../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../components/eldorado/ChatBubble";
 import ShopItemSubNav from "../../../../components/eldorado/ShopItemSubNav";
@@ -65,11 +66,11 @@ import {
    (hidden md:flex), banner/deals title full width. Static state per
    capture: comboboxes closed, Solo active, switches off. */
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "Buy EA Sports FC 27 Boosting Services | Eldorado.gg",
   description:
     "Get deals from expert EA FC 27 boosters in under 2 minutes. Division Rivals boosting with TradeShield protection and a money-back guarantee.",
-};
+});
 
 /* Yellow seal badge behind the 98% / 4.9 ratings — icomoon glyph empty
    in the capture → inline SVG (documented assumption). */
@@ -170,7 +171,7 @@ export default function EaFcBoostingPage() {
                       <img
                         alt="Rank up step"
                         src={step.img}
-                        className="block object-cover text-center align-middle"
+                        className="block object-contain text-center align-middle"
                         style={{ width: step.w, height: step.h }}
                       />
                     </div>

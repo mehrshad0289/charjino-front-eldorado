@@ -24,6 +24,9 @@ import {
   BS_CTA_TITLE,
   BS_CTA_SUB,
 } from "../../components/eldorado/data/becomeSellerData";
+import { buildMetadata } from "@/lib/seo";
+import JsonLd from "../../components/seo/json-ld";
+import { faqPageJsonLd } from "../../lib/json-ld";
 
 /* Become a Seller page (/become-seller) — session 19, per the user-pushed
    capture `ui ux/become-seller/
@@ -52,10 +55,11 @@ import {
 
 export const instant = false;
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "فروشنده شو — شارژینو",
   description: "فروش اکانت را از احراز هویت شروع کن.",
-};
+  path: "/become-seller",
+});
 
 /* icomoon substitutes (documented assumption — no icomoon font). */
 function ToolIcon({ name }) {
@@ -130,12 +134,13 @@ export default async function BecomeSellerPage() {
   const ctaHref = user ? BS_CTA_HREF : `/login?next=${encodeURIComponent(BS_CTA_HREF)}`;
   return (
     <div className="min-h-screen bg-page text-ink">
+      <JsonLd data={faqPageJsonLd(BS_FAQS)} />
       <CategoryNav />
       <main className="isolate relative">
         {/* bg band (capture: bg-repeat-x absolute h-975 z-0) */}
         <div
           aria-hidden="true"
-          className="absolute left-0 top-0 z-0 h-[975px] w-full bg-repeat-x"
+          className="absolute inset-x-0 top-0 z-0 h-[975px] w-full bg-repeat"
           style={{ backgroundImage: `url("${BS_HERO_BG}")` }}
         />
         <div className="relative z-[1] flex flex-col gap-10 lg:gap-[144px]">

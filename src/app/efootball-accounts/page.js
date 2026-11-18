@@ -1,4 +1,5 @@
 import CategoryNav from "../../components/eldorado/CategoryNav";
+import { noIndexMetadata } from "@/lib/seo";
 import GameBanner from "../../components/eldorado/GameBanner";
 import AccountsToolbar from "../../components/eldorado/AccountsToolbar";
 import AccountOffersGrid from "../../components/eldorado/AccountOffersGrid";
@@ -13,11 +14,11 @@ import ChatBubble from "../../components/eldorado/ChatBubble";
 const BANNER_IMG =
   "https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v8/4-percent-city-banner-desktop.png";
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "eFootball Accounts For Sale - Eldorado",
   description:
     "Buy eFootball accounts with high collective strength, delivered instantly with full access. Compare offers from verified sellers.",
-};
+});
 
 export default function EFootballAccountsPage() {
   return (

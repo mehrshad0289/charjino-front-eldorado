@@ -1,5 +1,6 @@
 import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
+import { catalogNeedsIdAck } from "./catalog-checkout";
 import { discountLabel, formatTomanPrice, productHref, shopTopupHref } from "./format-toman";
 import { preferFaTitle } from "./catalog-region";
 import { consoleShopKey } from "./console-games";
@@ -936,17 +937,19 @@ async function loadCatalogProductDetails(products) {
     }),
   );
   const buyerFieldsByHandle = {};
+  const ackModeByHandle = {};
   for (const detail of details) {
     const handle = asString(detail.handle);
     if (!handle) continue;
     buyerFieldsByHandle[handle] = Array.isArray(detail.inputFields) ? detail.inputFields : [];
+    ackModeByHandle[handle] = catalogNeedsIdAck(detail);
   }
-  return { details, buyerFieldsByHandle };
+  return { details, buyerFieldsByHandle, ackModeByHandle };
 }
 
 async function loadTopupDetails(products) {
-  const { details, buyerFieldsByHandle } = await loadCatalogProductDetails(products);
-  return { buyerFieldsByHandle, shop: pickTopupShop(details) };
+  const { details, buyerFieldsByHandle, ackModeByHandle } = await loadCatalogProductDetails(products);
+  return { buyerFieldsByHandle, ackModeByHandle, shop: pickTopupShop(details) };
 }
 
 export async function loadTopupShop(platform) {
@@ -1035,9 +1038,12 @@ export async function loadTopupShop(platform) {
   });
   const popularIndex = uniqueAmounts.length >= 3 ? Math.min(2, uniqueAmounts.length - 1) : 0;
   if (uniqueAmounts[popularIndex]) uniqueAmounts[popularIndex].popular = true;
-  const { buyerFieldsByHandle, shop } = await loadTopupDetails(products);
+  const { buyerFieldsByHandle, ackModeByHandle, shop } = await loadTopupDetails(products);
   const configuredDevices = Array.isArray(shop?.devices) ? shop.devices.filter((item) => asString(item?.key)) : [];
   const pickerRegions = configuredDevices.length > 0 ? [] : pickerRegionsForTopup(regions);
+  for (const row of uniqueAmounts) {
+    row.needsIdAck = Boolean(ackModeByHandle[row.handle]);
+  }
 
   return {
     platform: id,

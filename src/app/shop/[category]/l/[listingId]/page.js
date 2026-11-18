@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import GiftCardBanner from "../../../../../components/eldorado/GiftCardBanner";
+import RecordRecentView from "../../../../../components/eldorado/RecordRecentView";
 import ProductBanner from "../../../../../components/eldorado/ProductBanner";
 import ProductBreadcrumb from "../../../../../components/eldorado/ProductBreadcrumb";
 import ProductTitleCard from "../../../../../components/eldorado/ProductTitleCard";
@@ -26,6 +27,9 @@ import {
   loadStoreCategory,
   mediaUrl,
 } from "../../../../../lib/store-engine";
+import { buildMetadata, SHOP_KIND_FA } from "@/lib/seo";
+import JsonLd from "../../../../../components/seo/json-ld";
+import { breadcrumbJsonLd, listingProductJsonLd } from "../../../../../lib/json-ld";
 
 export const instant = false;
 
@@ -44,8 +48,11 @@ function categoryForOffer(offer) {
 }
 
 export async function generateMetadata({ params }) {
-  const { listingId } = await params;
+  const { category, listingId } = await params;
   const listing = await loadMarketListing(listingId);
+  if (!listing) {
+    return buildMetadata({ title: "آگهی پیدا نشد | شارژینو", noIndex: true });
+  }
   const kind = offerKind(listing?.offer_type);
   const title = listing?.title || `آگهی ${kind}`;
   const game = listing?.game_name || "";
@@ -53,10 +60,15 @@ export async function generateMetadata({ params }) {
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, 160);
-  return {
+  const cover = mediaUrl(listing?.cover_image?.url || listing?.images?.[0]?.url);
+  const canonical = categoryForOffer(listing?.offer_type);
+  const path = `/shop/${canonical || String(category || "")}/l/${encodeURIComponent(String(listingId))}`;
+  return buildMetadata({
     title: game ? `${title} | ${kind} ${game} | شارژینو` : `${title} | شارژینو`,
     description: description || `خرید ${title}${game ? ` برای ${game}` : ""}. مشخصات، عکس و قیمت در همین صفحه است.`,
-  };
+    path,
+    image: cover || undefined,
+  });
 }
 
 const PROTECT = [
@@ -254,8 +266,24 @@ export default async function ShopListingPage({ params }) {
     .filter(Boolean)
     .join("\n\n");
 
+  const path = `/shop/${canonical}/l/${encodeURIComponent(String(listing.id))}`;
   return (
     <>
+      <JsonLd
+        data={listingProductJsonLd({
+          listing,
+          path,
+          images,
+          kind: offerKind(offer),
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "شارژینو", path: "/" },
+          { name: store.label || SHOP_KIND_FA[key] || "فروشگاه", path: `/shop/${key}` },
+          { name: title, path },
+        ])}
+      />
       <main className="min-h-[1200px]">
         {hubTabs.length > 0 ? (
           <GiftCardBanner active={tabKey} iconAlt={game} gameName={game} gameIcon={images[0]?.url || ""} tabs={hubTabs} />

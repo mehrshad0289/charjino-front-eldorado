@@ -4,12 +4,13 @@ import Logo from "../../../components/eldorado/Logo";
 import Footer from "../../../components/eldorado/Footer";
 import ZibalVerifyScreen from "../../../components/eldorado/ZibalVerifyScreen";
 import LoadingSpinner from "../../../components/eldorado/LoadingSpinner";
+import { noIndexMetadata } from "@/lib/seo";
 
 export const instant = false;
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "تأیید پرداخت — شارژینو",
-};
+});
 
 export default async function ZibalPaymentReturnPage() {
   await connection();

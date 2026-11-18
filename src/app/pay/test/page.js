@@ -1,4 +1,5 @@
 import { connection } from "next/server";
+import { noIndexMetadata } from "@/lib/seo";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/actions/auth.actions";
 import { getBuyerOrder } from "@/actions/market.actions";
@@ -6,9 +7,9 @@ import TestBankGateway from "../../../components/eldorado/TestBankGateway";
 
 export const instant = false;
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "درگاه پرداخت آزمایشی — شارژینو",
-};
+});
 
 export default async function TestPayPage({ searchParams }) {
   await connection();

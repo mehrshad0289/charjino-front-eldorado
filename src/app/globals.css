@@ -79,6 +79,22 @@ body {
   }
 }
 
+/* Login is a full-viewport card (clone). On mobile 100vh is taller than the
+   visible area, so the page rubber-bands. Lock the document to dvh. */
+@media (max-width: 767px) {
+  html:has(.login-page) {
+    height: 100dvh;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  html:has(.login-page) body {
+    min-height: 0;
+    height: 100dvh;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+}
+
 /* Assassin sits on the right of the source PNG (English LTR). In RTL the
    sidebar occupies that side, so mirror the art onto the content column. */
 html[dir="rtl"] img.dashboard-assassin {
@@ -124,18 +140,24 @@ html[dir="rtl"] img.dashboard-assassin {
   animation: shop-backdrop-in 280ms ease-out;
 }
 
-.popular-cards-viewport {
-  cursor: grab;
+.popular-cards-scroller {
+  touch-action: pan-x;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.recent-cards-scroller {
   touch-action: pan-y;
-  user-select: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior-x: contain;
 }
 
-.popular-cards-viewport.is-grabbing {
-  cursor: grabbing;
-}
-
-.popular-cards-track {
-  will-change: transform;
+.popular-cards-scroller::-webkit-scrollbar,
+.recent-cards-scroller::-webkit-scrollbar {
+  display: none;
 }
 
 .shop-hub-tabs {

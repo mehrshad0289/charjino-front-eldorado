@@ -61,7 +61,7 @@ export const VERIFY_KYC = {
   shebaPendingSubtitle: "فروش باز نیست تا ادمین شبا و نام صاحب حساب را تأیید کند.",
   shebaHolder: "نام صاحب حساب",
   shebaNumber: "شماره شبا",
-  shebaHint: "شبا باید با IR و ۲۴ رقم باشد. رقم کنترل همان لحظه چک می‌شود؛ استعلام بانک نیست.",
+  shebaHint: "شبا باید با IR  ۲۴ رقم باشد. رقم کنترل همان لحظه چک می‌شود؛ .",
   shebaSubmit: "ثبت شبا",
   shebaSavedTitle: "شبا ثبت شد",
   shebaSavedSubtitle: "تسویه به این شبا می‌رود. شماره کامل اینجا نشان داده نمی‌شود.",

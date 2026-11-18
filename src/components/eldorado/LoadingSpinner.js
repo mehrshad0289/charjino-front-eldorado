@@ -23,7 +23,7 @@ export default function LoadingSpinner({ variant = "block", size, className = ""
 
   if (variant === "inline") {
     return (
-      <span className={`inline-flex items-center justify-center ${className}`.trim()} role="status" aria-live="polite">
+      <span className={`inline-flex items-center justify-center  ${className}`.trim()} role="status" aria-live="polite">
         <Spinner size={spinnerSize} />
         <span className="sr-only">بارگذاری</span>
       </span>

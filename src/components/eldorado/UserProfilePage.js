@@ -15,6 +15,7 @@ import {
   PROFILE_TABS,
 } from "./data/profileData";
 import { FA } from "./data/faCopy";
+import EmptyState from "./EmptyState";
 import { NO_SET_PROFILE_SRC } from "@/lib/account-display";
 import { listingMediaUrl } from "@/lib/listing";
 import { toFaDigits } from "@/lib/fa-digits";
@@ -72,17 +73,6 @@ function Chip({ icon, label, count = null, active = false }) {
       <div className="flex gap-1 text-center text-[14px] font-normal leading-[19.6px]">
         <span className="block text-center">{label}</span>
         {count !== null && <span className="block text-center">({toFaDigits(count)})</span>}
-      </div>
-    </div>
-  );
-}
-
-function EmptyState({ title, text }) {
-  return (
-    <div className="flex justify-center px-[30px] pt-10">
-      <div className="flex max-w-[600px] flex-col items-center gap-3">
-        <div className="text-center text-[24px] font-bold leading-[36px]">{title}</div>
-        {text ? <div className="pt-1 text-center text-[rgb(106,102,123)]">{text}</div> : null}
       </div>
     </div>
   );

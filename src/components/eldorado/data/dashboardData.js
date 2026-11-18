@@ -10,6 +10,7 @@
    are documented assumptions. */
 
 import { FA } from "./faCopy";
+import { ILLUSTRATIONS } from "./illustrations";
 
 const ASSET = "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F";
 
@@ -99,10 +100,10 @@ export const DASHBOARD_OFFERS_PAGE = {
     sortLabel: "Recommended",
   },
   emptyState: {
-    image: `${ASSET}91671a13bded2708951c70c98c7f9d8f11e1ed60.svg?generation=1793785993043728&alt=media`,
-    imageAlt: "No results found",
-    title: "Nothing found",
-    text: "Try to adjust filters to find what you are looking for or create a new offer",
+    image: ILLUSTRATIONS.emptyDragon,
+    imageAlt: FA.nothingFound,
+    title: FA.nothingFound,
+    text: "فیلتر را عوض کنید یا آگهی تازه بسازید.",
   },
 };
 
@@ -192,9 +193,9 @@ export const DASHBOARD_FEEDBACK_PAGE = {
   ],
   filters: ["All", "Positive", "Negative"],
   emptyState: {
-    image: DASHBOARD_OFFERS_PAGE.emptyState.image,
-    imageAlt: "No results found",
-    title: "Nothing found",
+    image: ILLUSTRATIONS.emptyDragon,
+    imageAlt: FA.nothingFound,
+    title: FA.nothingFound,
     text: "",
   },
 };

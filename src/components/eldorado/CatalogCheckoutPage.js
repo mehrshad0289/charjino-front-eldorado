@@ -4,7 +4,7 @@ import Link from "next/link";
 import { getSessionUser } from "../../actions/auth.actions";
 import { loadCatalogCheckout } from "../../lib/catalog-checkout";
 import { formatTomanInWords } from "../../lib/price";
-import { GIFT_SHOP_CHROME } from "./data/giftShopCopy";
+import { GIFT_SHOP_CHROME, TOPUP_SHOP_CHROME } from "./data/giftShopCopy";
 import CatalogCheckoutForm from "./CatalogCheckoutForm";
 import Footer from "./Footer";
 import Logo from "./Logo";
@@ -25,6 +25,12 @@ export default async function CatalogCheckoutPage({ skuId, handle, couponCode, f
   if (from) nextSearch.set("from", String(from));
   const next = `/checkout?${nextSearch.toString()}`;
   const back = from && from.startsWith("/") ? from : "";
+  const isTopup = loaded.fulfillmentType === "topup";
+  const deliveryBody = isTopup
+    ? loaded.inputFields.length
+      ? TOPUP_SHOP_CHROME.deliveryInstructionsWithId
+      : TOPUP_SHOP_CHROME.deliveryInstructionsBody
+    : GIFT_SHOP_CHROME.deliveryInstructionsBody;
 
   return (
     <div className="flex min-h-screen flex-col bg-page text-ink">
@@ -50,12 +56,13 @@ export default async function CatalogCheckoutPage({ skuId, handle, couponCode, f
                   {GIFT_SHOP_CHROME.region}: {loaded.region}
                 </p>
               ) : null}
+              {loaded.regionNote ? <p className="mt-1 text-[14px] text-graytext">{loaded.regionNote}</p> : null}
             </div>
           </div>
           {loaded.price > 0 ? (
             <p className="mt-6 text-[24px] font-bold">{formatTomanInWords(loaded.price)}</p>
           ) : null}
-          <p className="mt-2 text-[14px] leading-[22px] text-graytext">{GIFT_SHOP_CHROME.deliveryInstructionsBody}</p>
+          <p className="mt-2 text-[14px] leading-[22px] text-graytext">{deliveryBody}</p>
           {back ? (
             <Link href={back} prefetch className="mt-4 inline-flex text-[14px] font-bold text-linkblue">
               بازگشت به فروشگاه
@@ -68,6 +75,8 @@ export default async function CatalogCheckoutPage({ skuId, handle, couponCode, f
           next={next}
           price={loaded.price}
           couponCode={couponCode}
+          needsIdAck={loaded.needsIdAck}
+          inputFields={loaded.inputFields}
         />
       </main>
       <Footer />

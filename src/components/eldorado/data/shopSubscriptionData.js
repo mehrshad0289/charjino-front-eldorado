@@ -13,6 +13,8 @@
 // 5 rows — the capture's 6th "Why trust Eldorado?" row is the trust-card
 // heading that follows, verified by probe scripts/probe_shop_faq_live5.js).
 
+import { ILLUSTRATIONS } from "./illustrations";
+
 const GCS = "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F";
 
 export const SHOP_SUBSCRIPTION_IMAGES = {
@@ -22,7 +24,7 @@ export const SHOP_SUBSCRIPTION_IMAGES = {
   primeIcon: `${GCS}70ccbdc368dd9ef46b4462e1a8aca895945c4cdf.png?generation=1793815585714529&alt=media`,
   playstationIcon: `${GCS}3b549a3861e42e71f5c94447b3f47f7bb07db8ac.png?generation=1793815808492379&alt=media`,
   codIcon: `${GCS}dfea878801121e376d97473662470868fd500d16.png?generation=1793816217552242&alt=media`,
-  noResults: `${GCS}91671a13bded2708951c70c98c7f9d8f11e1ed60.svg?generation=1793785993043728&alt=media`,
+  noResults: ILLUSTRATIONS.emptyDragon,
   // same payment badges as the gamepass/giftcard pages (verbatim URLs in the captures)
   applePay: `${GCS}dd6e842fcce7d583e70dddf074d9307e29d69a8e.svg?generation=1793768744578617&alt=media`,
   googlePay: `${GCS}8916ddaefd4ac6e1dfdec635acab443637130fa2.svg?generation=1793768744565450&alt=media`,

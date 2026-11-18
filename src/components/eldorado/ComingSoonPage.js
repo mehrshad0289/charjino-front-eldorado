@@ -1,12 +1,13 @@
 import CategoryNav from "./CategoryNav";
 import ChatBubble from "./ChatBubble";
 import Footer from "./Footer";
+import { noIndexMetadata } from "@/lib/seo";
 
 export function comingSoonMetadata(title) {
-  return {
+  return noIndexMetadata({
     title: `${title} | شارژینو`,
     description: "این صفحه به‌زودی آماده می‌شود.",
-  };
+  });
 }
 
 export default function ComingSoonPage({ title }) {

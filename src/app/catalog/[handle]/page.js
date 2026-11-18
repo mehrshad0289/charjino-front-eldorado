@@ -11,7 +11,31 @@ import { storefrontProductHref } from "../../../lib/gift-card-shop";
 import { hrefWithSku } from "../../../lib/sku-query";
 import { FA } from "../../../components/eldorado/data/faCopy";
 
+import { buildMetadata } from "@/lib/seo";
+
 export const instant = false;
+
+export async function generateMetadata({ params }) {
+  const { handle } = await params;
+  try {
+    const product = await serverFetch(apiPaths.catalogProduct(handle));
+    if (!product?.title) return {};
+    const shopHref = storefrontProductHref(product);
+    const path = shopHref || productHref(handle);
+    const description = String(product.description || product.subtitle || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 160);
+    return buildMetadata({
+      title: `${product.title} | شارژینو`,
+      description: description || `خرید ${product.title} از شارژینو.`,
+      path,
+      image: product.thumbnail || product.image || undefined,
+    });
+  } catch {
+    return {};
+  }
+}
 
 function selectedSku(product, raw) {
   const id = Number(Array.isArray(raw) ? raw[0] : raw);
@@ -44,7 +68,11 @@ export default async function CatalogProductPage({ params, searchParams }) {
   return (
     <>
       <CategoryNav />
-      <RecordRecentView product={product} href={productHref(handle)} />
+      <RecordRecentView
+        product={product}
+        href={productHref(handle)}
+        price={price ? formatTomanPrice(price) : ""}
+      />
       <main className="relative mx-auto max-w-[1208px] px-4 py-8 md:px-6">
         <ProductTitleCard product={{ title: product.title, image: product.thumbnail }} />
         {sku?.name ? <p className="mt-4 text-base text-secondary">{sku.name}</p> : null}

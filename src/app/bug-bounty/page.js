@@ -1,4 +1,5 @@
 import CategoryNav from "../../components/eldorado/CategoryNav";
+import { noIndexMetadata } from "@/lib/seo";
 import FaqAccordion from "../../components/eldorado/FaqAccordion";
 import Footer from "../../components/eldorado/Footer";
 import ChatBubble from "../../components/eldorado/ChatBubble";
@@ -12,11 +13,11 @@ import { BUG_BOUNTY_PAGE } from "../../components/eldorado/data/staticPagesData"
    Known Issues accordion — collapsed rows only, the capture has no bodies
    for them (nothing invented). */
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "Bug Bounty - Eldorado",
   description:
     "Report bugs and vulnerabilities on Eldorado and earn cash rewards — from $10 for minor issues to over $5,000 for critical flaws.",
-};
+});
 
 export default function BugBountyPage() {
   const { hero, title, sections, steps, knownIssues } = BUG_BOUNTY_PAGE;

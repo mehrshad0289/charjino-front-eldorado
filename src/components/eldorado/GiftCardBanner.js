@@ -33,7 +33,7 @@ function BannerTab({ href, children }) {
   return (
     <a
       href={href}
-      className="mx-1 flex h-full items-center justify-center whitespace-nowrap py-2 leading-6 text-navgray"
+      className="mx-1 flex h-full items-center justify-center whitespace-nowrap py-2 mt-[3px] lg:mt-[6px]  leading-6 text-navgray"
     >
       <span className="block">{children}</span>
     </a>

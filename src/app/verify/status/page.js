@@ -10,13 +10,14 @@ import VerifyShebaForm from "../../../components/eldorado/VerifyShebaForm";
 import VerifyTermsForm from "../../../components/eldorado/VerifyTermsForm";
 import { WizardStepPills } from "../../../components/eldorado/ListingWizardChrome";
 import { VERIFY_BANNER, VERIFY_KYC, VERIFY_STATUS } from "../../../components/eldorado/data/verifyData";
+import { noIndexMetadata } from "@/lib/seo";
 
 export const instant = false;
 
-export const metadata = {
+export const metadata = noIndexMetadata({
   title: "احراز فروشنده — شارژینو",
   description: "برای فروش اکانت، احراز هویت را شروع کن.",
-};
+});
 
 function InfoIcon() {
   return (
