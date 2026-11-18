@@ -16,12 +16,16 @@ export default function PageHero({
 }) {
   return (
     <div className="relative flex flex-col bg-page pt-24 pb-16">
-      <img
-        alt={image.alt}
-        src={image.src}
-        style={{ opacity: imageOpacity }}
-        className="pointer-events-none absolute left-0 top-0 block size-full max-w-full object-cover object-top align-middle"
-      />
+      <picture className="pointer-events-none absolute inset-0 z-0 block size-full max-w-full">
+        {image.mobileSrc ? <source media="(max-width: 599px)" srcSet={image.mobileSrc} /> : null}
+        <img
+          alt={image.alt}
+          src={image.src}
+          fetchPriority="high"
+          style={{ opacity: imageOpacity }}
+          className="block size-full max-w-full object-cover object-top align-middle"
+        />
+      </picture>
       <div
         aria-hidden="true"
         className="absolute bottom-0 left-0 right-0 top-1/2 z-[1]"

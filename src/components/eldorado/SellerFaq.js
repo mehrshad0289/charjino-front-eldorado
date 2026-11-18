@@ -60,7 +60,7 @@ export default function SellerFaq({ items }) {
     });
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full">
       {items.map((item, i) => {
         const isOpen = open.has(i);
         return (

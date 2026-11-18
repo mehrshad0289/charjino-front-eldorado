@@ -6,7 +6,7 @@ export const BS_HERO_BG = ILLUSTRATIONS.becomeSellerBg;
 
 export const BS_HERO_IMG = ILLUSTRATIONS.becomeSellerDragon;
 
-export const BS_H1 = "از فروش اکانت درآمد بگیر";
+export const BS_H1 = "از فروش اکانت و آیتم و ارز درآمد بگیر";
 export const BS_SUB = "خریدار واقعی، پرداخت ریالی، پول تا تأیید تحویل نزد شارژینو می‌ماند.";
 export const BS_CTA_HREF = "/verify/status";
 export const BS_CTA_LABEL = "شروع احراز هویت";

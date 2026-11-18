@@ -263,7 +263,7 @@ export const TOPUP_SHOP_CHROME = {
   liveSupport: GIFT_SHOP_CHROME.liveSupport,
   liveSupportNote: GIFT_SHOP_CHROME.liveSupportNote,
   disclaimer:
-    "قیمت‌ها از کاتالوگ شارژینو است و برای مقایسه با فروشگاه داخل بازی نیست. مبلغ نهایی در پرداخت مشخص می‌شود.",
+    "",
   faqTitle: GIFT_SHOP_CHROME.faqTitle,
   trustTitle: GIFT_SHOP_CHROME.trustTitle,
   trustSubtitle: "از انتخاب بسته تا شارژ حساب، خرید تحت نظارت شارژینو است",

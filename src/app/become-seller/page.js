@@ -222,11 +222,11 @@ export default async function BecomeSellerPage() {
               <h2 className="text-center text-[24px] font-bold leading-[28.8px] lg:text-[48px] lg:leading-[52.8px]">
                 {BS_TOOLS_TITLE}
               </h2>
-              <div className="grid w-full grid-cols-2 gap-x-6 gap-y-1">
+              <div className="grid w-full grid-cols-2 gap-x-6 gap-y-1  ">
                 {BS_TOOLS.map((tool) => (
                   <div
                     key={tool.title}
-                    className="flex content-start flex-wrap items-start gap-1 max-w-sm rounded-2xl p-4 lg:p-8"
+                    className="flex  self-center content-center flex-wrap items-center gap-1 max-w-sm rounded-2xl p-4 lg:p-8"
                   >
                     <div className="flex grow basis-[0%] flex-col items-center gap-6 lg:gap-[24px]">
                       <div

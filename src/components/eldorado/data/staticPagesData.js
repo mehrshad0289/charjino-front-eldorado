@@ -13,7 +13,8 @@
 const ASSET = "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F";
 
 export const CONTACT_BANNER = {
-  src: `${ASSET}8cf9d3d1040f082339213601b200fe6d2689e101.png?generation=1793787093293454&alt=media`,
+  src: "/static-pages/v2/about-us-banner-desktop.png",
+  mobileSrc: "/static-pages/v2/about-us-banner-mobile.png",
   alt: "Contact Us Page Banner Image",
 };
 
