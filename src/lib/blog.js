@@ -25,6 +25,8 @@ function emptyHub() {
     games: [],
     codes: [],
     allGames: [],
+    gamesLabel: "بازی‌ها",
+    codesLabel: "کدها",
     gamesAllHref: "/blog",
     codesAllHref: "/blog",
     featured: null,
@@ -174,6 +176,8 @@ export function splitBlogNav(categories) {
     games,
     codes,
     allGames: games,
+    gamesLabel: gamesRoot?.title || "بازی‌ها",
+    codesLabel: codesRoot?.title || "کدها",
     gamesAllHref: gamesRoot ? blogCategoryPath(gamesRoot.slug) : "/blog",
     codesAllHref: codesRoot ? blogCategoryPath(codesRoot.slug) : "/blog",
   };

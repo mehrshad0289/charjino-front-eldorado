@@ -82,7 +82,7 @@ function NavLink({ href, children, className, onNavigate }) {
   );
 }
 
-function DesktopNavPanel({ items, allHref, onNavigate, accent }) {
+function DesktopNavPanel({ items, allHref, allLabel, onNavigate, accent }) {
   return (
     <div
       className="absolute start-0 top-full z-[40] mt-2 hidden max-h-[70vh] w-[min(92vw,540px)] overflow-y-auto rounded-xl border bg-headerdark px-6 py-5 shadow-2xl lg:block"
@@ -95,7 +95,7 @@ function DesktopNavPanel({ items, allHref, onNavigate, accent }) {
             onNavigate={onNavigate}
             className="block py-[10px] text-[16px] font-semibold leading-[22px] text-[rgb(138,134,157)]"
           >
-            {FA.allGames}
+            {allLabel || FA.allGames}
           </NavLink>
         </li>
         {items.map((item) => (
@@ -114,7 +114,7 @@ function DesktopNavPanel({ items, allHref, onNavigate, accent }) {
   );
 }
 
-function MobileNavList({ items, allHref, onNavigate }) {
+function MobileNavList({ items, allHref, allLabel, onNavigate }) {
   return (
     <div className="px-6 pb-10 pt-4">
       <NavLink
@@ -122,7 +122,7 @@ function MobileNavList({ items, allHref, onNavigate }) {
         onNavigate={onNavigate}
         className="block py-[18px] text-[18px] font-semibold leading-[24px] text-[rgb(138,134,157)]"
       >
-        {FA.allGames}
+        {allLabel || FA.allGames}
       </NavLink>
       <ul>
         {items.map((item) => (
@@ -170,11 +170,15 @@ export default function BlogHeader({
   games = [],
   codes = [],
   allGames = [],
+  gamesLabel,
+  codesLabel,
   gamesAllHref = "/blog",
   codesAllHref = "/blog",
 }) {
   const gameRows = Array.isArray(games) && games.length ? games : Array.isArray(allGames) ? allGames : [];
   const codeRows = Array.isArray(codes) ? codes : [];
+  const gamesName = gamesLabel || FA.blogGames;
+  const codesName = codesLabel || FA.blogCodes;
   const [open, setOpen] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [fromMenu, setFromMenu] = useState(false);
@@ -239,7 +243,7 @@ export default function BlogHeader({
   }, [open]);
 
   const overlayIsList = open === "games" || open === "codes";
-  const overlayLabel = open === "codes" ? "Codes" : "Games";
+  const overlayLabel = open === "codes" ? codesName : gamesName;
   const overlayItems = open === "codes" ? codeRows : gameRows;
   const overlayAllHref = open === "codes" ? codesAllHref : gamesAllHref;
   const showMobileOverlay = open === "menu" || overlayIsList;
@@ -257,7 +261,7 @@ export default function BlogHeader({
               </div>
               <div className="relative mt-[10px] flex items-center">
                 <GroupButton
-                  label="Games"
+                  label={gamesName}
                   color={GAMES_COLOR}
                   open={open === "games"}
                   onClick={() => openPanel("games")}
@@ -266,6 +270,7 @@ export default function BlogHeader({
                   <DesktopNavPanel
                     items={gameRows}
                     allHref={gamesAllHref}
+                    allLabel={FA.allGames}
                     onNavigate={goTo}
                     accent={GAMES_COLOR}
                   />
@@ -273,7 +278,7 @@ export default function BlogHeader({
               </div>
               <div className="relative mt-[10px] flex items-center">
                 <GroupButton
-                  label="Codes"
+                  label={codesName}
                   color={CODES_COLOR}
                   open={open === "codes"}
                   onClick={() => openPanel("codes")}
@@ -282,6 +287,7 @@ export default function BlogHeader({
                   <DesktopNavPanel
                     items={codeRows}
                     allHref={codesAllHref}
+                    allLabel={FA.allCodes}
                     onNavigate={goTo}
                     accent={CODES_COLOR}
                   />
@@ -324,14 +330,14 @@ export default function BlogHeader({
       >
         <GroupButton
           compact
-          label="Games"
+          label={gamesName}
           color={GAMES_COLOR}
           open={open === "games"}
           onClick={() => openPanel("games")}
         />
         <GroupButton
           compact
-          label="Codes"
+          label={codesName}
           color={CODES_COLOR}
           open={open === "codes"}
           onClick={() => openPanel("codes")}
@@ -383,7 +389,7 @@ export default function BlogHeader({
                   style={{ color: GAMES_COLOR }}
                   type="button"
                 >
-                  Games
+                  {gamesName}
                 </button>
                 <button
                   className="blog-display text-[18px] font-extrabold"
@@ -391,7 +397,7 @@ export default function BlogHeader({
                   style={{ color: CODES_COLOR }}
                   type="button"
                 >
-                  Codes
+                  {codesName}
                 </button>
               </div>
             ) : null}
@@ -404,7 +410,7 @@ export default function BlogHeader({
                 onClick={() => openPanel("games", true)}
                 type="button"
               >
-                <span className="blog-display text-[20px] font-extrabold">Games</span>
+                <span className="blog-display text-[20px] font-extrabold">{gamesName}</span>
                 <ForwardChevron />
               </button>
               <button
@@ -412,12 +418,17 @@ export default function BlogHeader({
                 onClick={() => openPanel("codes", true)}
                 type="button"
               >
-                <span className="blog-display text-[20px] font-extrabold">Codes</span>
+                <span className="blog-display text-[20px] font-extrabold">{codesName}</span>
                 <ForwardChevron />
               </button>
             </nav>
           ) : (
-            <MobileNavList items={overlayItems} allHref={overlayAllHref} onNavigate={goTo} />
+            <MobileNavList
+              items={overlayItems}
+              allHref={overlayAllHref}
+              allLabel={open === "codes" ? FA.allCodes : FA.allGames}
+              onNavigate={goTo}
+            />
           )}
         </div>
       ) : null}

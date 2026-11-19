@@ -97,6 +97,8 @@ export default async function BlogArticlePage({ params }) {
         games={nav.games}
         codes={nav.codes}
         allGames={nav.allGames}
+        gamesLabel={nav.gamesLabel}
+        codesLabel={nav.codesLabel}
         gamesAllHref={nav.gamesAllHref}
         codesAllHref={nav.codesAllHref}
       />

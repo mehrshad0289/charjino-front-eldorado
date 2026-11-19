@@ -50,6 +50,8 @@ export default async function BlogPage({ searchParams }) {
         games={hub.games}
         codes={hub.codes}
         allGames={hub.allGames}
+        gamesLabel={hub.gamesLabel}
+        codesLabel={hub.codesLabel}
         gamesAllHref={hub.gamesAllHref}
         codesAllHref={hub.codesAllHref}
       />
