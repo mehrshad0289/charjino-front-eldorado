@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
    fill span — live it tracks scroll depth, verified at scrollY 2500).
    Header heights: 149px mobile (two rows) → 71px desktop (lg). */
 
-export default function BlogReadingProgress() {
+export default function BlogReadingProgress({ twoRow = true }) {
   const [pct, setPct] = useState(0);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function BlogReadingProgress() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 right-0 top-[149px] z-[499] h-2 bg-[rgb(30,31,40)] lg:top-[71px]"
+      className={`pointer-events-none fixed inset-x-0 z-[499] h-2 bg-[rgb(30,31,40)] lg:top-[71px] ${twoRow ? "top-[149px]" : "top-[71px]"}`}
     >
       <span
         className="block h-full bg-[rgb(255,201,80)]"

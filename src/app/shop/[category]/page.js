@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import DynamicShopPage from "../../../components/eldorado/DynamicShopPage";
 import {
+  dedupeShopGameCards,
   hubCardsFromCategory,
   isStoreCategoryKey,
   loadCatalogGroupCards,
@@ -40,11 +41,13 @@ export default async function ShopCategoryPage({ params }) {
         seen.add(card.href);
         items.push(card);
       }
-      return <DynamicShopPage activeCategory="Gift cards" title="گیفت کارت" items={items} />;
+      return (
+        <DynamicShopPage activeCategory="Gift cards" title="گیفت کارت" items={items} searchable categoryKey="gift-cards" />
+      );
     }
     if (key === "top-ups") {
       const items = await loadCatalogGroupCards("game-topup");
-      return <DynamicShopPage activeCategory="Top ups" title="شارژ بازی" items={items} />;
+      return <DynamicShopPage activeCategory="Top ups" title="شارژ بازی" items={items} searchable categoryKey="top-ups" />;
     }
     notFound();
   }
@@ -66,12 +69,14 @@ export default async function ShopCategoryPage({ params }) {
   const marketCards = (row.marketOffer ? await loadMarketGameCards(row.marketOffer, key) : []).filter(
     (card) => !boundMarketIds.has(String(card.key)),
   );
-  const items = [...hubCards, ...catalogCards, ...marketCards];
+  const items = dedupeShopGameCards([...hubCards, ...catalogCards, ...marketCards]);
   return (
     <DynamicShopPage
       activeCategory={row.navKey || row.label}
       title={row.label}
       items={items}
+      searchable
+      categoryKey={key}
     />
   );
 }

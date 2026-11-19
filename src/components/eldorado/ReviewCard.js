@@ -12,7 +12,7 @@ export default function ReviewCard({ review }) {
           {review.initials}
         </span>
         <div className="flex flex-col justify-center">
-          <span className="block truncate text-[14px] font-bold leading-[19.6px]">{review.name}</span>
+          <span className="block truncate text-[14px] font-bold leading-[19.6px]" dir="auto">{review.name}</span>
           <span className="block truncate text-[12px] leading-[16.8px] text-graytext">{review.date}</span>
         </div>
       </div>

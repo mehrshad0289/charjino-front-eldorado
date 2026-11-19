@@ -81,6 +81,44 @@ function compactHubLabel(value) {
     .replace(/[\s\u200c\-_·]+/g, "");
 }
 
+function preferShopGameCard(current, next) {
+  const currentTitle = asString(current.gameTitle) || asString(current.name);
+  const nextTitle = asString(next.gameTitle) || asString(next.name);
+  const currentSpaced = /\s/.test(currentTitle);
+  const nextSpaced = /\s/.test(nextTitle);
+  if (currentSpaced !== nextSpaced) return currentSpaced ? next : current;
+  const currentKey = asString(current.gameKey) || asString(current.key);
+  const nextKey = asString(next.gameKey) || asString(next.key);
+  if (currentKey.length !== nextKey.length) return currentKey.length <= nextKey.length ? current : next;
+  return current;
+}
+
+export function dedupeShopGameCards(cards) {
+  const rows = Array.isArray(cards) ? cards : [];
+  const winners = new Map();
+  for (const card of rows) {
+    const key =
+      compactHubLabel(card.gameTitle) || compactHubLabel(card.gameTitleFa) || compactHubLabel(card.name);
+    if (!key) continue;
+    const previous = winners.get(key);
+    winners.set(key, previous ? preferShopGameCard(previous, card) : card);
+  }
+  const emitted = new Set();
+  const out = [];
+  for (const card of rows) {
+    const key =
+      compactHubLabel(card.gameTitle) || compactHubLabel(card.gameTitleFa) || compactHubLabel(card.name);
+    if (!key) {
+      out.push(card);
+      continue;
+    }
+    if (emitted.has(key)) continue;
+    emitted.add(key);
+    out.push(winners.get(key) || card);
+  }
+  return out;
+}
+
 function parentGameGroupKey(card) {
   const id = asString(card.gameKey) || asString(card.gameId);
   if (id) return `id:${id}`;
@@ -142,21 +180,24 @@ export function hubCardsFromCategory(category) {
     cards.push({
       key: hubKey || href,
       name: gameTitleFa || gameTitle || title,
+      nameEn: gameTitle,
       gameKey: asString(row.gameKey),
       gameId: row.gameId != null ? String(row.gameId) : "",
       gameTitle,
       gameTitleFa,
       tag: asString(item.label),
       hubTitle: title,
-      img: "",
+      img: gameCoverUrl(row),
       href,
     });
   }
   if (categoryKey === "top-ups") return labelTopupHubCards(cards);
-  return cards.map((card) => ({
-    ...card,
-    name: card.gameTitleFa || card.gameTitle || card.name,
-  }));
+  return dedupeShopGameCards(
+    cards.map((card) => ({
+      ...card,
+      name: card.gameTitleFa || card.gameTitle || card.name,
+    })),
+  );
 }
 
 function normShopName(value) {
@@ -265,10 +306,13 @@ export async function loadMarketGameCards(offer, categoryKey) {
         return {
           key: id,
           name,
+          nameEn: asString(rec.game_name),
           tag: asString(rec.publisher),
-          img: "",
+          img: gameCoverUrl(rec),
           href: `/shop/${categoryKey}/${encodeURIComponent(id)}`,
           gameName: asString(rec.game_name),
+          gameTitle: asString(rec.game_name),
+          gameTitleFa: asString(rec.game_name_fa),
         };
       })
       .filter(Boolean);
@@ -416,6 +460,21 @@ export function mediaUrl(url) {
   if (value.startsWith("/storage/")) return value;
   const origin = getBackendUrl().replace(/\/api\/?$/, "");
   return `${origin}${value.startsWith("/") ? value : `/${value}`}`;
+}
+
+export function gameCoverUrl(row) {
+  const rec = asRecord(row);
+  return mediaUrl(asString(rec.imageUrl) || asString(rec.image_url) || asString(rec.img));
+}
+
+export function storeHubCover(store, hubKey, ...fallbacks) {
+  const key = asString(hubKey);
+  const row = (Array.isArray(store?.hubs) ? store.hubs : []).find((item) => asString(asRecord(item).hubKey) === key);
+  for (const item of [row, ...fallbacks]) {
+    const url = gameCoverUrl(item);
+    if (url) return url;
+  }
+  return "";
 }
 
 function listingChips(rec) {

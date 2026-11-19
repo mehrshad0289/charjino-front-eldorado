@@ -28,7 +28,7 @@ export default function PageHero({
       </picture>
       <div
         aria-hidden="true"
-        className="absolute bottom-0 left-0 right-0 top-1/2 z-[1]"
+        className="absolute inset-x-0 top-1/2 bottom-0 z-[1]"
         style={{ backgroundImage: HERO_FADE }}
       />
       <div className="relative z-[2] mx-auto flex w-full max-w-[1440px] flex-col">
@@ -37,7 +37,7 @@ export default function PageHero({
             {breadcrumb.map((item, i) => (
               <span key={item.label} className="flex items-center">
                 {i > 0 && (
-                  <span aria-hidden="true" className="p-1 text-graytext">
+                  <span aria-hidden="true" className="p-1 text-graytext rtl:rotate-180">
                     <ChevronRight />
                   </span>
                 )}

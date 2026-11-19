@@ -9,7 +9,7 @@ import {
   storefrontProductHref,
 } from "./gift-card-shop";
 import { preferFaTitle } from "./catalog-region";
-import { hubCardsFromCategory, loadStoreCategory } from "./store-engine";
+import { gameCoverUrl, hubCardsFromCategory, loadStoreCategory } from "./store-engine";
 import {
   canonicalTopupHrefKey,
   cleanTopupGameTitle,
@@ -349,7 +349,7 @@ function mapMarketMega(items, offer, shopKey) {
       return {
         name,
         nameEn: asString(rec.game_name),
-        img: iconFor(rec.game_name) || iconFor(name),
+        img: gameCoverUrl(rec) || iconFor(rec.game_name) || iconFor(name),
         href,
         popular: offers.includes(offer),
         sort: Number(rec.sort_order) || 0,
@@ -378,6 +378,7 @@ async function overlayCatalogHubs(mapped, shopKey) {
     cards = [];
   }
   const hrefByName = new Map();
+  const imgByName = new Map();
   const catalogRows = [];
   for (const card of cards) {
     const href = asString(card.href);
@@ -392,12 +393,19 @@ async function overlayCatalogHubs(mapped, shopKey) {
     catalogRows.push(row);
     for (const label of [row.name, card.gameTitle, card.gameTitleFa, card.name]) {
       const key = normMegaName(label);
-      if (key) hrefByName.set(key, href);
+      if (!key) continue;
+      hrefByName.set(key, href);
+      if (row.img) imgByName.set(key, row.img);
     }
   }
   const rewrite = (row) => {
     const href = hrefByName.get(normMegaName(row.name)) || hrefByName.get(normMegaName(row.nameEn));
-    return href ? { ...row, href } : row;
+    const img = row.img || imgByName.get(normMegaName(row.name)) || imgByName.get(normMegaName(row.nameEn)) || "";
+    return {
+      ...row,
+      ...(href ? { href } : {}),
+      ...(img ? { img } : {}),
+    };
   };
   const rewritten = mapped.all.map(rewrite);
   const seen = new Set(rewritten.map((row) => row.href));

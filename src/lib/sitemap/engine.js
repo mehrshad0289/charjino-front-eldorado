@@ -18,6 +18,7 @@ const STATIC_PATHS = [
   ...STORE_CATEGORY_KEYS.map((key) => `/shop/${key}`),
   ...CONSOLE_PLATFORMS.map((row) => `/shop/games/${row.key}`),
   "/become-seller",
+  "/about-us",
   "/contact-us",
   "/playstation-plus",
   "/xbox-game-pass",

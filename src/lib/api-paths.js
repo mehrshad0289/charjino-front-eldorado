@@ -164,4 +164,30 @@ export const apiPaths = {
     if (params.region) search.set("region", String(params.region));
     return `/catalog/smart-search?${search.toString()}`;
   },
+  blogHub: (params = {}) => {
+    const search = new URLSearchParams();
+    if (params.page && params.page > 1) search.set("page", String(params.page));
+    if (params.perPage) search.set("perPage", String(params.perPage));
+    const qs = search.toString();
+    return qs ? `/blog?${qs}` : "/blog";
+  },
+  blogPosts: (params = {}) => {
+    const search = new URLSearchParams();
+    if (params.q?.trim()) search.set("q", String(params.q).trim().slice(0, 100));
+    if (params.category?.trim()) search.set("category", String(params.category).trim());
+    if (params.page && params.page > 1) search.set("page", String(params.page));
+    if (params.perPage && params.perPage > 0) search.set("perPage", String(params.perPage));
+    const qs = search.toString();
+    return qs ? `/blog/posts?${qs}` : "/blog/posts";
+  },
+  blogPost: (slug) => `/blog/posts/${encodeURIComponent(slug)}`,
+  blogCategories: "/blog/categories",
+  blogCategory: (slug, params = {}) => {
+    const search = new URLSearchParams();
+    if (params.page && params.page > 1) search.set("page", String(params.page));
+    if (params.perPage && params.perPage > 0) search.set("perPage", String(params.perPage));
+    if (params.offset != null && Number(params.offset) >= 0) search.set("offset", String(params.offset));
+    const qs = search.toString();
+    return `/blog/categories/${encodeURIComponent(slug)}${qs ? `?${qs}` : ""}`;
+  },
 };

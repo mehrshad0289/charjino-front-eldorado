@@ -1,193 +1,238 @@
-/* About Us page (/about-us) data — verbatim from the user-pushed capture
-   (session 12): ui ux/About-us/www_eldorado_gg_about-us_1920w_390w_1536w_default.make
-   → decoded snapshots/about-1920px-light-1.tsx (1920-only).
-   All asset URLs verified HTTP 200 on 2026-11-04 (scripts/verify_session12_assets.py).
-   The capture's icomoon glyphs decode empty (project-wide pattern) — chevron /
-   arrow / star icons map to inline SVGs in the components. The capture's copy
-   keeps its dropped apostrophes ("Lets team up", "Its a safe place") verbatim. */
+/* About Us (/about-us) — layout from Eldorado about capture
+   (ui ux/About-us + www_eldorado_gg_about-us_1440w_390w_default.make).
+   Copy is Persian for شارژینو. Team photos are the capture assets
+   until the owner replaces them. No eldorado.gg hrefs. */
 
 const ASSET = "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F";
 
 export const ABOUT_BANNER = {
-  src: `${ASSET}8cf9d3d1040f082339213601b200fe6d2689e101.png?generation=1793787093293454&alt=media`,
-  alt: "About Us Page Banner Image",
+  src: "/static-pages/v2/about-us-banner-desktop.png",
+  mobileSrc: "/static-pages/v2/about-us-banner-mobile.png",
+  alt: "بنر صفحه درباره ما",
 };
 
 export const ABOUT_BREADCRUMB = [
-  { label: "Home", href: "https://www.eldorado.gg/", bold: false },
-  { label: "About Us", href: "https://www.eldorado.gg/about-us", bold: true },
+  { label: "خانه", href: "/" },
+  { label: "درباره ما", href: "/about-us", bold: true },
 ];
 
 export const ABOUT_WHATIS = {
-  title: "What is Eldorado.gg?",
-  mission: { label: "Our mission", text: "Make in-game trading mainstream" },
-  vision: { label: "Our vision", text: "A world where gaming belongs to gamers" },
-  body: "Eldorado.gg is an online marketplace for gamers to buy and sell virtual in-game items (Roblox brainrots, ARC Raiders blueprints), currency (PoE Orbs, OSRS Gold), top-ups (Valorant Points, Fortnite V-Bucks), accounts, and boosting services. As a middleman, we connect gamers with verified sellers offering goods across 400+ popular titles and provide payment protection for both sides of every trade. Its a safe place to trade without getting scammed, ghosted, or ripped off.",
+  title: "شارژینو چیست؟",
+  mission: { label: "ماموریت", text: "معاملهٔ داخل بازی را برای همه عادی کنیم" },
+  vision: { label: "چشم‌انداز", text: "جهانی که بازی مال گیمرها باشد" },
+  body: "شارژینو بازارچه‌ای است برای خرید و فروش کالای داخل بازی: گیفت‌کارت، شارژ بازی، کلید، ارز، اکانت و بوست. به‌عنوان واسط، خریدار را به فروشندهٔ احرازشده وصل می‌کنیم و تا تأیید تحویل، پول را نگه می‌داریم. پرداخت ریالی است؛ جای امنی برای معامله بدون کلاهبرداری و ناپدید شدن فروشنده.",
   stats: [
-    { value: "#1", label: "Marketplace in the world" },
-    { value: "12 M+", label: "Monthly visitors" },
-    { value: "400+", label: "Games supported" },
-    { value: "15", label: "Years of experience" },
+    { value: "ریالی", label: "پرداخت با تومان" },
+    { value: "بازارچه", label: "خرید و فروش امن" },
+    { value: "کاتالوگ", label: "گیفت، شارژ و کلید" },
+    { value: "گارانتی", label: "حفاظت خریدار" },
   ],
 };
 
 export const ABOUT_PLAY = {
-  title: "Shape the way you play with Eldorado.gg",
-  body: "Decide how you experience games, instead of letting time and grind decide for you.",
+  title: "با شارژینو بازی را همان‌طور که می‌خواهی پیش ببر",
+  body: "تو تصمیم بگیر چطور بازی کنی؛ وقت و گریند به‌جایت تصمیم نگیرند.",
   cards: [
-    { title: "Skip the grind", iconBg: "rgb(255,153,64)", item: "Load endgame account" },
-    { title: "Break RNG", iconBg: "rgb(218,138,234)", item: "Use some gold" },
-    { title: "Save time", iconBg: "rgb(254,169,0)", item: "Top up extra points" },
-    { title: "Level up", iconBg: "rgb(167,204,88)", item: "Get boosted" },
-    { title: "Be a hero", iconBg: "rgb(160,149,253)", item: "Equip rare items" },
+    { title: "از گریند رد شو", icon: "/icons/about-us/account.svg", iconBg: "rgb(255,153,64)", item: "اکانت آماده" },
+    { title: "شانس را بشکن", icon: "/icons/about-us/rng.svg", iconBg: "rgb(218,138,234)", item: "ارز بازی بخر" },
+    { title: "وقت بخر", icon: "/icons/about-us/points.svg", iconBg: "rgb(254,169,0)", item: "شارژ اضافه کن" },
+    { title: "ارتقا بده", icon: "/icons/about-us/levelup.svg", iconBg: "rgb(167,204,88)", item: "بوست بگیر" },
+    { title: "قهرمان باش", icon: "/icons/about-us/hero.svg", iconBg: "rgb(160,149,253)", item: "آیتم کمیاب بپوش" },
   ],
   empower: {
-    lead: "We empower players to ",
-    accent: "OWN",
-    tail: " their gaming experience both in and outside the game through gameplay freedom and secure trading.",
+    lead: "به بازیکن کمک می‌کنیم ",
+    accent: "مالک",
+    tail: " تجربهٔ بازی‌اش باشد؛ هم داخل بازی، هم بیرون از آن — با آزادی گیم‌پلی و معاملهٔ امن.",
     cards: [
-      { icon: `${ASSET}af793303dbe30ca2f7e5435223092b24b961c552.svg?generation=1793787230232676&alt=media`, accent: "Own", text: " your identity" },
-      { icon: `${ASSET}67967b17cc87f08f702e5d4c56b9a4264c454cb0.svg?generation=1793787230256048&alt=media`, accent: "Own", text: " your assets" },
-      { icon: `${ASSET}d92cb47ab37042798401df804d5daebe143584db.svg?generation=1793787230241907&alt=media`, accent: "Own", text: " your playstyle" },
-      { icon: `${ASSET}8fb59c58e88db39781d4f83203c15c9935ffc0a5.svg?generation=1793787230265885&alt=media`, accent: "Own", text: " your security" },
+      { icon: `${ASSET}af793303dbe30ca2f7e5435223092b24b961c552.svg?generation=1793787230232676&alt=media`, accent: "مالک", text: " هویتت" },
+      { icon: `${ASSET}67967b17cc87f08f702e5d4c56b9a4264c454cb0.svg?generation=1793787230256048&alt=media`, accent: "مالک", text: " دارایی‌ات" },
+      { icon: `${ASSET}d92cb47ab37042798401df804d5daebe143584db.svg?generation=1793787230241907&alt=media`, accent: "مالک", text: " سبک بازی‌ات" },
+      { icon: `${ASSET}8fb59c58e88db39781d4f83203c15c9935ffc0a5.svg?generation=1793787230265885&alt=media`, accent: "مالک", text: " امنیتت" },
     ],
   },
 };
 
 export const ABOUT_TEAM = {
-  title: "Meet the team",
-  body: "We never thought it possible, but our love for video games brought us to a place where we can help shape the future of gaming. Our team of 200+ enthusiasts has a rock-solid understanding of MMO economies and extensive industry experience. We maintain a lively work environment filled with memes and video game references, far removed from bland corporate politics and mundane meetings.",
+  title: "تیم را بشناس",
+  body: "علاقه به بازی ما را به جایی رساند که بتوانیم آیندهٔ معاملهٔ داخل بازی را شکل بدهیم. محیط کار پر از میم و ارجاع بازی است؛ نه سیاست اداری خشک و جلسهٔ بی‌خود.",
   founders: [
     {
-      name: "Vladas Jurkeviius",
-      role: "Co-founder & CEO",
-      tagline: "Gaming, rally, and cycling enthusiast",
-      bio: "A mechanical engineering graduate of the University of Cambridge, Vladas began selling OSRS Gold while at university in 2011. Outside of business, Vladas won the 2024 Lithuanian Rally Championship and made his Dakar Rally debut the same year. In 2026, he shifted his sporting focus to cycling, becoming Lithuanias national gravel cycling champion.",
+      name: "Vladas Jurkevičius",
+      role: "هم‌بنیان‌گذار و مدیرعامل",
+      tagline: "علاقه‌مند به بازی، رالی و دوچرخه‌سواری",
+      bio: "فارغ‌التحصیل مهندسی مکانیک از کمبریج. از ۲۰۱۱ هنگام دانشگاه طلای OSRS می‌فروخت. بیرون از کار، قهرمان رالی لیتوانی ۲۰۲۴ شد و همان سال در داکار شرکت کرد. در ۲۰۲۶ روی دوچرخه‌سواری گراول متمرکز شد و قهرمان ملی شد.",
       photo: `${ASSET}d8dec0a371f7c14914024487f2dae8b2d8c0fd8a.png?generation=1793787230255937&alt=media`,
-      photoAlt: "Portrait of Vladas Jurkeviius, Eldorado.gg co-founder and CEO.",
+      photoAlt: "پرترهٔ هم‌بنیان‌گذار و مدیرعامل",
     },
     {
       name: "Lukas Deksnys",
-      role: "Co-founder & COO",
-      tagline: "Gaming, chess, and tennis enthusiast",
-      bio: "A University of Glasgow graduate with a background in mathematics and statistics, Lukas joined forces with his high school friend Vladas in 2017 to build ventures in gaming, e- commerce, and cryptocurrency trading. In April 2026, he became CEO of Humbility, leading the algorithmic cryptocurrency trading firm while Vladas focuses entirely on Eldorado.gg.",
+      role: "هم‌بنیان‌گذار و مدیر عملیات",
+      tagline: "علاقه‌مند به بازی، شطرنج و تنیس",
+      bio: "فارغ‌التحصیل ریاضی و آمار از گلاسگو. از ۲۰۱۷ با دوست دبیرستانی‌اش روی پروژه‌های بازی، فروش آنلاین و رمزارز کار کرد. در آوریل ۲۰۲۶ مدیرعامل Humbility شد تا معاملهٔ الگوریتمی رمزارز را جلو ببرد.",
       photo: `${ASSET}b97eb6d24976c918cce40beb1906432d9516e5be.png?generation=1793787230310788&alt=media`,
-      photoAlt: "Portrait of Lukas Deksnys, Eldorado.gg co-founder and COO.",
+      photoAlt: "پرترهٔ هم‌بنیان‌گذار و مدیر عملیات",
     },
   ],
   photos: [
-    { src: `${ASSET}e5052afc49ad39bc9af237b9da58407c10666bc3.jpg?generation=1793787230267758&alt=media`, alt: "Eldorado team members posing for a group picture dressed up in costumes." },
-    { src: `${ASSET}87ae24af0069f92a5a8a4c95a826c363a33e340e.jpg?generation=1793787230268285&alt=media`, alt: "Eldorado team members playing volleyball on a sunny day." },
-    { src: `${ASSET}6765224134c82f4c18f12bbc07042161e051b91d.jpg?generation=1793787230286750&alt=media`, alt: "Eldorado team members posing for a group picture with red kayaks and paddles on a sunny day outdoors." },
+    { src: `${ASSET}e5052afc49ad39bc9af237b9da58407c10666bc3.jpg?generation=1793787230267758&alt=media`, alt: "اعضای تیم با لباس جشن" },
+    { src: `${ASSET}87ae24af0069f92a5a8a4c95a826c363a33e340e.jpg?generation=1793787230268285&alt=media`, alt: "اعضای تیم در حال والیبال" },
+    { src: `${ASSET}6765224134c82f4c18f12bbc07042161e051b91d.jpg?generation=1793787230286750&alt=media`, alt: "اعضای تیم با کایاک در فضای باز" },
   ],
 };
 
 export const ABOUT_STORY = {
-  title: "Our story: how did we get here?",
-  body: "Just after finishing high school, our co-founder, Vladas, realized that one of his favorite games, Old School RuneScape (OSRS), and its in-game currency, Gold, could be traded for real money.",
+  title: "داستان ما: چطور به اینجا رسیدیم؟",
+  body: "درست بعد از دبیرستان، هم‌بنیان‌گذار فهمید طلای بازی موردعلاقه‌اش، Old School RuneScape، را می‌شود با پول واقعی معامله کرد.",
   milestones: [
-    { year: "2025", title: "Global leader", text: "Eldorado.gg became the largest in-game items marketplace with 10+ million monthly platform visits. Nine-digit value traded annually became the norm." },
-    { year: "2019", title: "Platform launch", text: "A real struggle at first, with no payment providers and reluctant sellers. Over time, trust grew, traction followed, and Eldorado.gg became a major player." },
-    { year: "2018", title: "Eldorado.gg is founded", text: "An idea of a marketplace was born. A platform that manages and secures trades between buyers and sellers without making any actual trades itself." },
-    { year: "2014", title: "First e-shop", text: "Vladas launched his first e-shop. Gold bought from OSRS farmers was sold to gamers who wanted to skip the grind." },
-    { year: "2013", title: "Growing confidence", text: "Vladas hired his first assistant to help handle trading, primarily via Skype." },
-    { year: "2011", title: "Humble beginnings", text: "While in university, to make some extra cash, Vladas began selling his own OSRS Gold. At first, to his friends or through Facebook groups." },
+    { year: "۲۰۲۵", title: "پیشرو در بازار", text: "بازارچه کالای داخل بازی در مقیاس بزرگ ایستاد و معاملهٔ سالانه روی پلتفرم عادی شد." },
+    { year: "۲۰۱۹", title: "راه‌اندازی پلتفرم", text: "اول سخت بود: درگاه نبود و فروشنده‌ها مردد بودند. کم‌کم اعتماد آمد، کشش آمد، و بازارچه بازیکن جدی شد." },
+    { year: "۲۰۱۸", title: "تأسیس بازارچه", text: "ایدهٔ بازاری که معامله را مدیریت و امن کند، بدون اینکه خودش طرف معامله باشد." },
+    { year: "۲۰۱۴", title: "اولین فروشگاه", text: "اولین فروشگاه آنلاین: طلای خریده‌شده از فارمرهای OSRS به گیمرهایی که می‌خواستند گریند را رد کنند." },
+    { year: "۲۰۱۳", title: "اولین کمک", text: "اولین دستیار برای معامله، عمدتاً از اسکایپ." },
+    { year: "۲۰۱۱", title: "شروع کوچک", text: "سر دانشگاه، برای پولِ اضافه، طلای OSRS خودش را به دوست‌ها یا گروه‌های فیسبوک می‌فروخت." },
   ],
 };
 
 export const ABOUT_TRUST = {
-  title: "Trusted by millions of gamers",
-  rating: "Excellent",
+  title: "مورد اعتماد گیمرها",
+  rating: "عالی",
   reviews: [
     {
       initials: "JW",
       name: "James Wagner",
-      date: "2 days ago",
+      date: "۲ روز پیش",
       stars: { full: 4, half: 1 },
-      title: "Successful",
-      text: "The seller was not only calm, nice, patient but also trust worthy. The worked with me to giving access.",
+      title: "موفق",
+      text: "فروشنده آرام، مودب، صبور و قابل اعتماد بود. برای دادن دسترسی همراهم آمد.",
     },
     {
       initials: "T",
       name: "Triczyz",
-      date: "5 days ago",
+      date: "۵ روز پیش",
       stars: { full: 5, half: 0 },
-      title: "HUGE rainbow hatched NM dilo!",
-      text: "purchased a rainbow hatched NM dilo, and it was the CHEAPEST and largest on the market across multiple platforms! Super fast delivery and affordable prices! ",
+      title: "دیلوی رنگین‌کمانی بزرگ!",
+      text: "یک دیلوی NM رنگین‌کمانی خریدم؛ ارزان‌ترین و بزرگ‌ترین در چند پلتفرم. تحویل سریع و قیمت مناسب.",
     },
     {
       initials: "CG",
       name: "Cyrus Graesslin",
-      date: "2 weeks ago",
+      date: "۲ هفته پیش",
       stars: { full: 4, half: 0 },
-      title: "The Best Platform, Bar None!",
-      text: "I hesitated at first, concerned about being scammed, but i've had nothing but positive experiences.",
+      title: "بهترین پلتفرم، بی‌رقیب",
+      text: "اول تردید داشتم که کلاهبردار نباشند؛ تا امروز فقط تجربهٔ مثبت داشتم.",
     },
     {
       initials: "T",
       name: "Triczyz",
-      date: "5 days ago",
+      date: "۵ روز پیش",
       stars: { full: 5, half: 0 },
-      title: "HUGE rainbow hatched NM dilo!",
-      text: "purchased a rainbow hatched NM dilo, and it was the CHEAPEST!!",
+      title: "دیلوی رنگین‌کمانی بزرگ!",
+      text: "دیلوی NM رنگین‌کمانی خریدم؛ ارزان‌ترین بود!",
     },
   ],
 };
 
 export const ABOUT_TEAMUP = {
-  title: "Lets team up",
-  body: "El Drago guards the marketplace and gazes upon you, visitor, as your curiosity about Eldorado.gg brings you here.",
-  bubble: "Are you a gamer, seller, partner, or maybe a new colleague? We shall see. ",
+  title: "با هم پیش برویم",
+  body: "اژدها از بازارچه پاسداری می‌کند و به تو نگاه می‌کند؛ کنجکاوی‌ات نسبت به شارژینو تو را تا اینجا آورده.",
+  bubble: "گیمری، فروشنده‌ای، شریک، یا همکار تازه؟ الان می‌فهمیم.",
   bubbleArrow: `${ASSET}556c956b34429913e2316880061ea207ab569cdf.svg?generation=1793787230420963&alt=media`,
   mascot: `${ASSET}e1909cc07a4273df71de6aca6dc53715e562712f.svg?generation=1793787230441212&alt=media`,
-  mascotAlt: "El Drago proud pose",
+  mascotAlt: "اژدهای شارژینو",
   cards: [
     {
-      title: "Join the team",
-      text: "We are looking for bold ideas and strategic thinking. Excellent English skills, open communication, data-driven reasoning, and strong math skills are also helpful. We promise a fun and laid-back work environment. No corporate politics, no boring meetings. Lots of memes and video games.",
-      action: { label: "Open positions", href: "https://careers.eldorado.gg/", ariaLabel: "Open positions" },
+      title: "به تیم بپیوند",
+      text: "ایدهٔ جسور و فکر استراتژیک می‌خواهیم. ارتباط باز، استدلال با داده و ریاضی قوی کمک می‌کند. محیط راحت است؛ سیاست اداری و جلسهٔ خسته‌کننده نیست. میم و بازی زیاد است.",
+      action: { label: "موقعیت‌ها", href: "/contact-us", ariaLabel: "موقعیت‌ها" },
     },
     {
-      title: "Become a seller",
-      text: "Reach millions of gamers who buy gaming goods daily from sellers like you. Register, complete verification, and begin listing offers in minutes. You can automate listings, pricing, and delivery workflows via the API and upload in bulk. Earn money, knowing that payment risks are handled professionally and fairly.",
-      action: { label: "Start verification", href: "https://www.eldorado.gg/become-seller", ariaLabel: "Start verification" },
+      title: "فروشنده شو",
+      text: "خریدار واقعی، پرداخت ریالی، پول تا تأیید تحویل نزد شارژینو می‌ماند. ثبت‌نام کن، احراز هویت را تمام کن و آگهی بگذار.",
+      action: { label: "شروع احراز هویت", href: "/become-seller", ariaLabel: "شروع احراز هویت" },
     },
     {
-      title: "Become an affiliate",
-      text: "If you are a blogger, website owner, community leader, Reddit mod, Discord server owner, guild manager, or newsletter editor and want to promote Eldorado.gg to your audience, we would love to hear from you. Lets discuss!",
-      action: { label: "Reach out", href: "https://affiliates.eldorado.gg/", ariaLabel: "Reach out" },
+      title: "همکار تبلیغاتی شو",
+      text: "اگر وبلاگ، سایت، جامعه، دیسکورد یا خبرنامه داری و می‌خواهی شارژینو را به مخاطبت معرفی کنی، دوست داریم حرف بزنیم.",
+      action: { label: "پیام بده", href: "/contact-us", ariaLabel: "پیام بده" },
     },
     {
-      title: "Join the influencer program",
-      text: "If you are a content creator or own a gaming channel (YouTube, Twitch, TikTok), we would love to forge a partnership. Dont hesitate to reach out if you have any doubts about the nature of your content. Lets chat it through!",
-      action: { label: "Let's talk", href: "https://www.eldorado.gg/influencer-program", ariaLabel: "Let's talk" },
+      title: "برنامهٔ اینفلوئنسر",
+      text: "اگر محتوا می‌سازی یا کانال بازی داری (یوتیوب، توییچ، تیک‌تاک)، برای همکاری آماده‌ایم. اگر دربارهٔ نوع محتوا شک داری، همان را بگو.",
+      action: { label: "حرف بزنیم", href: "/influencer-program", ariaLabel: "حرف بزنیم" },
     },
   ],
 };
 
-/* FAQ: verbatim questions. Only "How to find the best deal on Eldorado.gg?"
-   carries accordion content in the capture (rendered expanded, chevron
-   rotated 180°); the other rows are collapsed with no body — the capture
-   contains no answers for them, so none are invented. */
 export const ABOUT_FAQ = {
-  title: "FAQ",
+  title: "پرسش‌های پرتکرار",
   items: [
-    { q: "Who founded Eldorado.gg?" },
-    { q: "When was Eldorado.gg founded?" },
-    { q: "Where was Eldorado.gg founded?" },
-    { q: "Is Eldorado.gg legit?" },
-    { q: "Is Eldorado.gg safe to use?" },
-    { q: "How does TradeShield work?" },
-    { q: "What is the official Reddit page of Eldorado.gg?" },
-    { q: "Are there Eldorado.gg discount codes?" },
-    { q: "Does Eldorado.gg have a bug bounty?" },
-    { q: "How to buy on Eldorado.gg?" },
     {
-      q: "How to find the best deal on Eldorado.gg?",
-      a: "PriceFor currencies and top-ups, offers are ranked to ensure the top offer provides the best price. Of course, you are free to select any seller to order from by scrolling down.For accounts and items, you can sort offers by price.For boosting, you'll receive personalized offers after you choose your preferences.Ratings and ordersOn Eldorado.gg, each seller has their own review rating indicated by a feedback score and order count under their name.Order count indicates the quantity of successful orders that a particular seller has completed.Feedback score indicates the percentage of orders for which a customer was satisfied with the service. In both instances, the higher the better in general, though you should also factor in other aspects of the offer, such as its unique selling points, availability, delivery time, delivery method, and, of course, the price.NOTE: As a company policy, we do not remove negative feedback and do not offer sellers any options to curate feedback. You can rest assured that all feedback on our platform is genuine, and a high feedback score is earned through going above and beyond to provide excellent service.",
+      q: "بنیان‌گذار شارژینو کیست؟",
+      a: "هم‌بنیان‌گذاران در بخش «تیم را بشناس» همین صفحه معرفی شده‌اند.",
+    },
+    {
+      q: "شارژینو کی تأسیس شد؟",
+      a: "خط زمانی بازارچه در بخش «داستان ما» همین صفحه آمده است.",
+    },
+    {
+      q: "شارژینو کجا شکل گرفت؟",
+      a: "داستان شروع از معاملهٔ طلای بازی در دانشگاه است؛ جزئیات در بخش تیم و داستان همین صفحه است.",
+    },
+    {
+      q: "شارژینو معتبر است؟",
+      a: "پرداخت روی خود فروشگاه انجام می‌شود. تا تأیید تحویل، پول نزد شارژینو می‌ماند. پشتیبانی با شمارهٔ سفارش جواب می‌دهد.",
+    },
+    {
+      q: "خرید از شارژینو امن است؟",
+      a: "پول تا تکمیل سفارش نگه داشته می‌شود. اگر کالا نرسید یا مطابق آگهی نبود، از صفحهٔ سفارش اختلاف باز کن.",
+      href: "/support/buyer-protection",
+      linkLabel: "حفاظت خریدار",
+    },
+    {
+      q: "TradeShield چطور کار می‌کند؟",
+      a: [
+        "پرداخت می‌کنی؛ شارژینو پول را نگه می‌دارد.",
+        "فروشنده تحویل می‌دهد و وضعیت Delivered می‌شود.",
+        "سه روز فرصت داری داخل بازی چک کنی. اگر ایراد دارد اختلاف باز کن؛ وگرنه بعد از سه روز Received می‌شود.",
+        "بعد از Received هم بیشتر سفارش‌ها چند روز دیگر پوشش دارند. وقتی حفاظت تمام شد، Completed می‌شود و پول فروشنده آزاد می‌شود.",
+      ],
+      href: "/support/buyer-protection",
+      linkLabel: "حفاظت خریدار",
+    },
+    {
+      q: "صفحهٔ رسمی در شبکه‌های اجتماعی کدام است؟",
+      a: "اینستاگرام و تلگرام رسمی @charjino_24 است. لینک‌ها در فوتر همین سایت هستند.",
+    },
+    {
+      q: "کد تخفیف دارید؟",
+      a: "اگر کدی فعال باشد، در تسویه همان سفارش وارد می‌شود. فقط کد معتبر همان خرید را بزن.",
+    },
+    {
+      q: "برنامهٔ باگ‌بانتی دارید؟",
+      a: "گزارش اشکال امنیتی از صفحهٔ باگ‌بانتی فرستاده می‌شود.",
+      href: "/bug-bounty",
+      linkLabel: "صفحهٔ باگ‌بانتی",
+    },
+    {
+      q: "چطور در شارژینو بخرم؟",
+      a: "کالا را از کاتالوگ یا بازارچه انتخاب کن، اگر لازم است وارد شو، پرداخت ریالی را تمام کن و وضعیت را از سفارش دنبال کن. گیفت‌کارت و کلید بعد از پرداخت روی سفارش می‌آیند؛ اکانت و بوست از گفتگوی سفارش تحویل می‌شوند.",
+    },
+    {
+      q: "چطور بهترین پیشنهاد را پیدا کنم؟",
+      a: [
+        "قیمت: برای ارز و شارژ، پیشنهادها طوری چیده می‌شوند که بالاترین ردیف معمولاً بهترین قیمت باشد. می‌توانی پایین‌تر هم بروی و فروشندهٔ دیگری را انتخاب کنی. برای اکانت و آیتم می‌توانی روی قیمت مرتب کنی. برای بوست، بعد از انتخاب ترجیحت پیشنهاد شخصی می‌گیری.",
+        "امتیاز و سفارش: هر فروشنده امتیاز بازخورد و تعداد سفارش موفق زیر نامش دارد. تعداد سفارش یعنی چند معاملهٔ تمام‌شده. امتیاز یعنی چند درصد خریدار راضی بوده‌اند. معمولاً بالاتر بهتر است؛ نقطهٔ فروش، موجودی، زمان و روش تحویل و قیمت را هم ببین.",
+        "نکته: بازخورد منفی را به‌عنوان سیاست شرکت پاک نمی‌کنیم و به فروشنده ابزار ویرایش بازخورد نمی‌دهیم. امتیاز بالا از خدمت واقعی می‌آید.",
+      ],
       open: true,
     },
-    { q: "Where can I find reviews of the Eldorado.gg marketplace?" },
-    { q: "Does Eldorado.gg have a mobile app?" },
+    {
+      q: "نظرها را کجا ببینم؟",
+      a: "روی کارت هر فروشنده امتیاز و تعداد سفارش هست. بعد از خرید می‌توانی برای همان سفارش بازخورد بدهی.",
+    },
+    {
+      q: "اپلیکیشن موبایل دارید؟",
+      a: "فروشگاه برای موبایل در مرورگر باز می‌شود. اپ جدا معرفی نشده است.",
+    },
   ],
 };

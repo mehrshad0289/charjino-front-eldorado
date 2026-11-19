@@ -140,18 +140,11 @@ html[dir="rtl"] img.dashboard-assassin {
   animation: shop-backdrop-in 280ms ease-out;
 }
 
-.popular-cards-scroller {
-  touch-action: pan-x;
+.popular-cards-scroller,
+.recent-cards-scroller {
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-}
-
-.recent-cards-scroller {
-  touch-action: pan-y;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
   overscroll-behavior-x: contain;
 }
 
@@ -219,6 +212,12 @@ html[dir="rtl"] img.dashboard-assassin {
   font-weight: 900;
   src: url("https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F898d9808304dc157f5dcb18ca169ec6e2b96b3d7.woff2?generation=1778150791171972&alt=media")
     format("woff2");
+}
+
+/* interstate is Latin-only. Persian blog headings (e.g. «راهنمای شارژینو»)
+   must fall through to Yekan Bakh — never skip it for Lato. */
+.blog-display {
+  font-family: interstate, "Yekan Bakh", "Yekan Bakh Fallback", "Lato Eldorado", sans-serif;
 }
 
 /* interstate — blog headings/buttons font (800/900 woff2 URLs verbatim from
@@ -289,6 +288,7 @@ html[dir="rtl"] img.dashboard-assassin {
   font-weight: 700;
   line-height: 38.4px;
   color: #fff;
+  font-family: interstate, "Yekan Bakh", "Yekan Bakh Fallback", "Lato Eldorado", sans-serif;
 }
 .entry h3 {
   margin: 48px 0 16px;
@@ -296,6 +296,7 @@ html[dir="rtl"] img.dashboard-assassin {
   font-weight: 700;
   line-height: 28.8px;
   color: #fff;
+  font-family: interstate, "Yekan Bakh", "Yekan Bakh Fallback", "Lato Eldorado", sans-serif;
 }
 .entry h4 {
   margin: 48px 0 12px;
@@ -303,6 +304,7 @@ html[dir="rtl"] img.dashboard-assassin {
   font-weight: 700;
   line-height: 26.4px;
   color: #fff;
+  font-family: interstate, "Yekan Bakh", "Yekan Bakh Fallback", "Lato Eldorado", sans-serif;
 }
 .entry a {
   color: rgb(255, 201, 80);
@@ -324,7 +326,7 @@ html[dir="rtl"] img.dashboard-assassin {
 .entry ul > li {
   position: relative;
   margin: 0 0 6px;
-  padding-left: 24px;
+  padding-inline-start: 24px;
   font-size: 18px;
   line-height: 36px;
   color: rgb(191, 187, 212);
@@ -333,7 +335,7 @@ html[dir="rtl"] img.dashboard-assassin {
 .entry ul > li::before {
   content: "";
   position: absolute;
-  left: 4px;
+  inset-inline-start: 4px;
   top: 16px;
   width: 5px;
   height: 5px;
@@ -347,12 +349,12 @@ html[dir="rtl"] img.dashboard-assassin {
 .entry ol > li {
   position: relative;
   margin: 0 0 6px;
-  padding-left: 8px;
+  padding-inline-start: 8px;
+  margin-inline-start: 16px;
   font-size: 18px;
   line-height: 36px;
   color: rgb(191, 187, 212);
   list-style: decimal;
-  margin-left: 16px;
 }
 .entry ol > li::marker {
   color: rgb(138, 134, 157);
@@ -541,9 +543,20 @@ html[dir="rtl"] img.dashboard-assassin {
   background: rgb(30, 31, 40);
   border-radius: 12px;
 }
-/* anchored headings must clear the fixed header */
-.entry [id] {
-  scroll-margin-top: 110px;
+/* anchored headings must clear the fixed header + progress strip */
+.entry [id],
+.entry h2[id],
+.entry h3[id],
+.entry h4[id] {
+  scroll-margin-top: 170px;
+}
+@media (min-width: 1024px) {
+  .entry [id],
+  .entry h2[id],
+  .entry h3[id],
+  .entry h4[id] {
+    scroll-margin-top: 96px;
+  }
 }
 
 /* TOC link rows (desktop box) */
@@ -579,4 +592,39 @@ html[dir="rtl"] img.dashboard-assassin {
   color: rgb(191, 187, 212);
   text-align: start;
   margin: 0 0 8px;
+}
+
+.entry mark {
+  border-radius: 4px;
+  padding: 0 0.2em;
+  color: inherit;
+}
+
+.entry sub,
+.entry sup {
+  font-size: 0.75em;
+}
+
+.entry .blog-callout {
+  margin: 24px 0;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid rgb(50, 49, 65);
+  background: rgb(30, 31, 40);
+}
+
+.entry .blog-callout-info {
+  border-color: #9684ff;
+}
+
+.entry .blog-callout-warning {
+  border-color: #ffb600;
+}
+
+.entry .blog-callout-success {
+  border-color: #12b76a;
+}
+
+.entry [data-youtube-video] {
+  margin: 24px 0;
 }

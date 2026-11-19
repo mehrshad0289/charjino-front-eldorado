@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FA } from "./data/faCopy";
 import { readHomeRecent } from "./nav-recent";
@@ -88,49 +88,8 @@ function RecentCard({ card, index }) {
   );
 }
 
-function useHorizontalFingerScroll(ref, active) {
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || !active) return undefined;
-    let startX = 0;
-    let startY = 0;
-    let startLeft = 0;
-    let axis = "";
-
-    const onStart = (event) => {
-      if (event.touches.length !== 1) return;
-      startX = event.touches[0].clientX;
-      startY = event.touches[0].clientY;
-      startLeft = el.scrollLeft;
-      axis = "";
-    };
-
-    const onMove = (event) => {
-      if (event.touches.length !== 1) return;
-      const dx = event.touches[0].clientX - startX;
-      const dy = event.touches[0].clientY - startY;
-      if (!axis) {
-        if (Math.hypot(dx, dy) < 8) return;
-        axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
-      }
-      if (axis !== "x") return;
-      if (event.cancelable) event.preventDefault();
-      el.scrollLeft = startLeft - dx;
-    };
-
-    el.addEventListener("touchstart", onStart, { passive: true });
-    el.addEventListener("touchmove", onMove, { passive: false });
-    return () => {
-      el.removeEventListener("touchstart", onStart);
-      el.removeEventListener("touchmove", onMove);
-    };
-  }, [ref, active]);
-}
-
 export default function RecentlyViewed({ items }) {
-  const scrollerRef = useRef(null);
   const [cards, setCards] = useState(() => mergeCards(items, []));
-  useHorizontalFingerScroll(scrollerRef, cards.length > 0);
 
   useEffect(() => {
     setCards(mergeCards(items, readHomeRecent()));
@@ -145,11 +104,8 @@ export default function RecentlyViewed({ items }) {
           <div className="flex items-center justify-between">
             <span className="block text-lg font-bold leading-[27px]">{FA.recentlyViewed}</span>
           </div>
-          <div className="w-full">
-            <div
-              ref={scrollerRef}
-              className="recent-cards-scroller flex w-full overflow-x-auto overflow-y-hidden whitespace-nowrap"
-            >
+          <div className="flex overflow-hidden">
+            <div className="recent-cards-scroller flex w-full overflow-x-auto overflow-y-hidden whitespace-nowrap">
               {cards.map((card, index) => (
                 <RecentCard key={card.key || card.href} card={card} index={index} />
               ))}

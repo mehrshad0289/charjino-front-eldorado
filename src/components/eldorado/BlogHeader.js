@@ -1,23 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Logo from "./Logo";
+import { FA } from "./data/faCopy";
 
-function Caret({ color = "currentColor", className = "ml-[3px] inline-block h-6 w-[20.5px] align-middle" }) {
-  /* The capture's chevron glyph (icomoon) decodes empty — filled-triangle
-     SVG stand-in per the project-wide pattern (live zoom shows a solid
-     ▼ after Games/Codes/EN on both breakpoints). ml-[3px]: live text→caret
-     gap is 9px at BOTH breakpoints (probed @1920: Games 314→caret 323;
-     @390 Codes 296→305) — with the 20.5px box the old ml-[7px] rendered
-     a 13px gap (session-14 pixel scan). The mobile Games/Codes row passes
-     a compact w-[14.7px] caret (live caret box ≈ 11px wide there). */
+const GAMES_COLOR = "rgb(255, 182, 0)";
+const CODES_COLOR = "rgb(152, 126, 251)";
+const HAIRLINE = { borderBottomColor: "rgb(42, 42, 48)" };
+
+const SHOP_BTN =
+  "blog-display inline-flex h-10 min-h-10 min-w-[84px] items-center justify-center whitespace-nowrap rounded-lg bg-[rgb(255,182,0)] p-0 ps-[14px] pe-[14px] text-[18px] font-extrabold leading-[21.6px] text-[rgb(20,19,26)]";
+const CAT_BTN =
+  "blog-display inline-flex items-center border-[0.8px] border-black/0 bg-black/0 p-2 ps-[9px] pe-[9px] text-center text-[20px] font-extrabold leading-[20px]";
+
+function Caret({ color = "currentColor", className = "ms-[3px] inline-block h-6 w-[20.5px] align-middle" }) {
   return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      fill={color}
-      viewBox="0 0 24 24"
-    >
+    <svg aria-hidden="true" className={className} fill={color} viewBox="0 0 24 24">
       <path d="M12 19.2 3.4 6h17.2L12 19.2Z" />
     </svg>
   );
@@ -31,213 +30,397 @@ function BurgerIcon() {
   );
 }
 
-/* Blog landing header (blog .make capture @1920 + live /blog mobile
-   reference, pixel-measured): standalone blog bar — logo, Games (yellow) +
-   Codes (purple) dropdown buttons, EN language button, yellow SHOP button.
-   Unlike the marketplace HeaderBar there is no search / sign-in / category
-   strip. Fixed bar over rgb(14,13,18) page.
-   Mobile/tablet <1024 (live @390 pixels): row 1 = logo icon (-ml-2) THEN
-   burger, right EN▾ (caret <1024) + SHOP, container px-4, 70px + hairline;
-   row 2 = centered Games/Codes 16px in 55px buttons + hairline (header
-   totals 149px, hairlines y=70/148). The header stays FIXED at every
-   width (session-12 origin model, live-probed); the featured card clears
-   it via the section padding (pt-147 <640 → card top ≈201px like live,
-   pt-20 @640-1023 → ≈135px, pt-[90px] lg+ → ≈145px). */
-export default function BlogHeader() {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+function CloseIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5 5l14 14M19 5 5 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function BackChevron() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M14.5 5.5 8 12l6.5 6.5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ForwardChevron() {
+  return (
+    <svg className="h-5 w-5 rtl:rotate-180" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M9.5 5.5 16 12l-6.5 6.5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function NavLink({ href, children, className, onNavigate }) {
+  return (
+    <a
+      href={href}
+      onClick={(event) => {
+        event.preventDefault();
+        onNavigate(href);
+      }}
+      className={className}
+      dir="auto"
+    >
+      {children}
+    </a>
+  );
+}
+
+function DesktopNavPanel({ items, allHref, onNavigate, accent }) {
+  return (
+    <div
+      className="absolute start-0 top-full z-[40] mt-2 hidden max-h-[70vh] w-[min(92vw,540px)] overflow-y-auto rounded-xl border bg-headerdark px-6 py-5 shadow-2xl lg:block"
+      style={{ borderColor: accent }}
+    >
+      <ul className="columns-2 gap-x-10">
+        <li className="break-inside-avoid">
+          <NavLink
+            href={allHref}
+            onNavigate={onNavigate}
+            className="block py-[10px] text-[16px] font-semibold leading-[22px] text-[rgb(138,134,157)]"
+          >
+            {FA.allGames}
+          </NavLink>
+        </li>
+        {items.map((item) => (
+          <li key={item.slug} className="break-inside-avoid">
+            <NavLink
+              href={item.href}
+              onNavigate={onNavigate}
+              className="block py-[10px] text-[16px] font-semibold leading-[22px] text-white"
+            >
+              {item.title}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function MobileNavList({ items, allHref, onNavigate }) {
+  return (
+    <div className="px-6 pb-10 pt-4">
+      <NavLink
+        href={allHref}
+        onNavigate={onNavigate}
+        className="block py-[18px] text-[18px] font-semibold leading-[24px] text-[rgb(138,134,157)]"
+      >
+        {FA.allGames}
+      </NavLink>
+      <ul>
+        {items.map((item) => (
+          <li key={item.slug}>
+            <NavLink
+              href={item.href}
+              onNavigate={onNavigate}
+              className="block py-[18px] text-[18px] font-semibold leading-[24px] text-white"
+            >
+              {item.title}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function GroupButton({ label, color, open, onClick, compact }) {
+  return (
+    <button
+      aria-expanded={open}
+      aria-haspopup="true"
+      className={`${CAT_BTN} ${compact ? "min-h-[55px]" : "ms-[8px]"}`}
+      onClick={onClick}
+      style={{ color }}
+      type="button"
+    >
+      <span className="text-center" dir="auto">
+        {label}
+      </span>
+      <Caret
+        color={color}
+        className={
+          compact
+            ? "ms-[7px] inline-block h-6 w-[14.7px] align-middle"
+            : "ms-[3px] inline-block h-6 w-[20.5px] align-middle"
+        }
+      />
+    </button>
+  );
+}
+
+export default function BlogHeader({
+  games = [],
+  codes = [],
+  allGames = [],
+  gamesAllHref = "/blog",
+  codesAllHref = "/blog",
+}) {
+  const gameRows = Array.isArray(games) && games.length ? games : Array.isArray(allGames) ? allGames : [];
+  const codeRows = Array.isArray(codes) ? codes : [];
+  const [open, setOpen] = useState(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [fromMenu, setFromMenu] = useState(false);
+  const rootRef = useRef(null);
+  const router = useRouter();
+
+  function openPanel(panel, menu = false) {
+    setOpen((current) => (current === panel && !menu ? null : panel));
+    setFromMenu(menu);
+    setPickerOpen(false);
+  }
+
+  function closePanel() {
+    setOpen(null);
+    setPickerOpen(false);
+    setFromMenu(false);
+  }
+
+  function goTo(href) {
+    closePanel();
+    if (href) router.push(href);
+  }
+
+  function onBack() {
+    if (fromMenu && (open === "games" || open === "codes")) {
+      setOpen("menu");
+      setPickerOpen(false);
+      return;
+    }
+    closePanel();
+  }
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (event) => {
+      if (event.key === "Escape") closePanel();
+    };
+    const onDown = (event) => {
+      if (typeof window !== "undefined" && window.innerWidth < 1024) return;
+      if (rootRef.current && !rootRef.current.contains(event.target)) closePanel();
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onDown);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const previous = document.body.style.overflow;
+    const lock = () => {
+      if (window.innerWidth < 1024) document.body.style.overflow = "hidden";
+    };
+    lock();
+    window.addEventListener("resize", lock);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("resize", lock);
+    };
+  }, [open]);
+
+  const overlayIsList = open === "games" || open === "codes";
+  const overlayLabel = open === "codes" ? "Codes" : "Games";
+  const overlayItems = open === "codes" ? codeRows : gameRows;
+  const overlayAllHref = open === "codes" ? codesAllHref : gamesAllHref;
+  const showMobileOverlay = open === "menu" || overlayIsList;
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-[500] w-full">
-      <div className="relative z-[22] border-b-[0.8px] bg-headerdark" style={{ borderBottomColor: "rgb(42, 42, 48)" }}>
-        <div className="relative z-[10] mx-auto w-full max-w-full pl-6 pr-6 max-sm:pl-4 max-sm:pr-4">
-          {/* Desktop row */}
+    <header ref={rootRef} className="fixed inset-x-0 top-0 z-[500] w-full">
+      <div className="relative z-[22] border-b-[0.8px] bg-headerdark" style={HAIRLINE}>
+        <div className="relative z-[10] mx-auto w-full max-w-full ps-6 pe-6 max-sm:ps-4 max-sm:pe-4">
           <div className="hidden items-center justify-between lg:flex">
             <div className="flex items-center">
-              <div className="flex items-center">
-                <div className="mr-[8px]">
-                  <a
-                    aria-label="شارژینو"
-                    className="flex min-h-[70px] items-center"
-                    href="https://www.eldorado.gg/blog/"
-                  >
-                    <Logo color="#ffffff" />
-                  </a>
-                </div>
+              <div className="me-[8px]">
+                <a aria-label="شارژینو" className="flex min-h-[70px] items-center" href="/blog">
+                  <Logo color="#ffffff" />
+                </a>
               </div>
               <div className="relative mt-[10px] flex items-center">
-                <button
-                  aria-haspopup="true"
-                  className="ml-[8px] border-[0.8px] border-black/0 bg-black/0 p-2 pl-[9px] pr-[9px] text-center text-[20px] font-extrabold leading-[20px] text-[rgb(255,182,0)]"
-                  style={{ fontFamily: "interstate, Lato, sans-serif" }}
-                  type="button"
-                >
-                  <span className="text-center">Games</span>
-                  <Caret color="rgb(255, 182, 0)" />
-                </button>
-              </div>
-              <div className="relative mt-[10px] flex items-center">
-                <button
-                  aria-haspopup="true"
-                  className="ml-[8px] border-[0.8px] border-black/0 bg-black/0 p-2 pl-[9px] pr-[9px] text-center text-[20px] font-extrabold leading-[20px] text-[rgb(152,126,251)]"
-                  style={{ fontFamily: "interstate, Lato, sans-serif" }}
-                  type="button"
-                >
-                  <span className="text-center">Codes</span>
-                  <Caret color="rgb(152, 126, 251)" />
-                </button>
-              </div>
-            </div>
-            <div className="relative ml-auto mr-[8px] flex items-center gap-[8px]">
-              <button
-                className="flex items-center justify-start rounded-md border-[0.8px] border-black/0 bg-black/0 p-2 pl-[7px] pr-[7px] text-[14px] font-semibold uppercase leading-[14px] tracking-normal text-white"
-                type="button"
-              >
-                {/* Globe icon — data URI verbatim from the capture */}
-                <span
-                  aria-hidden="true"
-                  className="h-[18px] w-[18px] shrink-0 bg-center bg-contain bg-no-repeat"
-                  style={{
-                    backgroundImage:
-                      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cline x1='3' y1='12' x2='21' y2='12'/%3E%3Cpath d='M12 3a14 14 0 0 1 3.5 9 14 14 0 0 1-3.5 9 14 14 0 0 1-3.5-9A14 14 0 0 1 12 3z'/%3E%3C/svg%3E\")",
-                  }}
+                <GroupButton
+                  label="Games"
+                  color={GAMES_COLOR}
+                  open={open === "games"}
+                  onClick={() => openPanel("games")}
                 />
-                <span className="block uppercase">EN</span>
-              </button>
+                {open === "games" ? (
+                  <DesktopNavPanel
+                    items={gameRows}
+                    allHref={gamesAllHref}
+                    onNavigate={goTo}
+                    accent={GAMES_COLOR}
+                  />
+                ) : null}
+              </div>
+              <div className="relative mt-[10px] flex items-center">
+                <GroupButton
+                  label="Codes"
+                  color={CODES_COLOR}
+                  open={open === "codes"}
+                  onClick={() => openPanel("codes")}
+                />
+                {open === "codes" ? (
+                  <DesktopNavPanel
+                    items={codeRows}
+                    allHref={codesAllHref}
+                    onNavigate={goTo}
+                    accent={CODES_COLOR}
+                  />
+                ) : null}
+              </div>
             </div>
             <div>
-              <a
-                className="inline-flex h-10 min-h-10 min-w-[84px] items-center justify-center whitespace-nowrap rounded-lg bg-[rgb(255,182,0)] p-0 pl-[14px] pr-[14px] text-[18px] font-extrabold leading-[21.6px] text-[rgb(20,19,26)]"
-                href="https://www.eldorado.gg/"
-                style={{ fontFamily: "interstate, Lato, sans-serif" }}
-              >
-                SHOP
+              <a className={SHOP_BTN} href="/">
+                فروشگاه
               </a>
             </div>
           </div>
 
-          {/* Mobile (live /blog @390, pixel-measured): row 1 = logo icon
-              (-ml-2) THEN burger, right EN▾ + SHOP; container px-4;
-              70px row + hairline (live y=0..71) */}
           <div className="flex items-center justify-between lg:hidden">
             <div className="flex items-center">
-              <a aria-label="شارژینو" className="-ml-2 flex items-center" href="https://www.eldorado.gg/blog/">
+              <a aria-label="شارژینو" className="-ms-2 flex items-center" href="/blog">
                 <Logo color="#ffffff" iconOnly size={40} />
               </a>
               <button
-                aria-label="Open menu"
+                aria-label="باز کردن منو"
                 className="flex h-[70px] w-10 items-center justify-center text-white"
-                onClick={() => setDrawerOpen(true)}
+                onClick={() => openPanel("menu", true)}
                 type="button"
               >
                 <BurgerIcon />
               </button>
             </div>
             <div className="flex items-center gap-[8px]">
-              <button
-                className="flex items-center justify-start rounded-md border-[0.8px] border-black/0 bg-black/0 p-2 pl-[7px] pr-[7px] text-[14px] font-semibold uppercase leading-[14px] text-white"
-                type="button"
-              >
-                {/* live mobile language switcher is a dropdown — "EN ▾" with
-                    NO globe icon @390 (globe shows ≥1024 only); caret <1024
-                    only (the 1920 capture EN button has none) */}
-                <span className="block uppercase">EN</span>
-                <Caret
-                  className="ml-[2px] inline-block h-[11px] w-[11px] align-middle"
-                  color="currentColor"
-                />
-              </button>
-              <a
-                className="inline-flex h-10 min-h-10 min-w-[84px] items-center justify-center whitespace-nowrap rounded-lg bg-[rgb(255,182,0)] p-0 pl-[14px] pr-[14px] text-[18px] font-extrabold leading-[21.6px] text-[rgb(20,19,26)]"
-                href="https://www.eldorado.gg/"
-                style={{ fontFamily: "interstate, Lato, sans-serif" }}
-              >
-                SHOP
+              <a className={SHOP_BTN} href="/">
+                فروشگاه
               </a>
             </div>
           </div>
         </div>
       </div>
-      {/* Secondary nav row — live /blog @390: centered Games (yellow) +
-          Codes (purple) at 20px (same as desktop; text rows y=102-114,
-          "Games" ≈62px wide) in 55px buttons, row y=72..148 (76px) with its
-          own hairline; header totals 149px (probe headerH=149, hairlines at
-          y=70-71 and y=148). Same row 640-1023 (fixed header, content slides
-          under — live featTop=135 @640); hidden ≥1024 (live headerH=71). */}
+
       <div
-        className="flex items-center justify-center gap-[60px] border-b-[0.8px] bg-headerdark py-[10px] pl-[9px] lg:hidden"
-        style={{ borderBottomColor: "rgb(42, 42, 48)" }}
+        className="flex flex-wrap items-center justify-center gap-[60px] border-b-[0.8px] bg-headerdark py-[10px] ps-[9px] lg:hidden"
+        style={HAIRLINE}
       >
-        <button
-          aria-haspopup="true"
-          className="flex min-h-[55px] items-center border-[0.8px] border-black/0 bg-black/0 p-2 pl-[9px] pr-[9px] text-center text-[20px] font-extrabold leading-[20px] text-[rgb(255,182,0)]"
-          style={{ fontFamily: "interstate, Lato, sans-serif" }}
-          type="button"
-        >
-          <span className="text-center">Games</span>
-          <Caret
-            color="rgb(255, 182, 0)"
-            className="ml-[7px] inline-block h-6 w-[14.7px] align-middle"
-          />
-        </button>
-        <button
-          aria-haspopup="true"
-          className="flex min-h-[55px] items-center border-[0.8px] border-black/0 bg-black/0 p-2 pl-[9px] pr-[9px] text-center text-[20px] font-extrabold leading-[20px] text-[rgb(152,126,251)]"
-          style={{ fontFamily: "interstate, Lato, sans-serif" }}
-          type="button"
-        >
-          <span className="text-center">Codes</span>
-          <Caret
-            color="rgb(152, 126, 251)"
-            className="ml-[7px] inline-block h-6 w-[14.7px] align-middle"
-          />
-        </button>
+        <GroupButton
+          compact
+          label="Games"
+          color={GAMES_COLOR}
+          open={open === "games"}
+          onClick={() => openPanel("games")}
+        />
+        <GroupButton
+          compact
+          label="Codes"
+          color={CODES_COLOR}
+          open={open === "codes"}
+          onClick={() => openPanel("codes")}
+        />
       </div>
 
-      {/* Mobile drawer — live /blog shows a hamburger popup with Games/Codes
-          links (hamburger-popup__menu); no capture reference for more content
-          → minimal drawer, documented approximation */}
-      {drawerOpen && (
-        <div className="fixed inset-0 z-[600] bg-headerdark lg:hidden">
-          <div className="flex items-center justify-between px-4 py-[15px]">
-            <button
-              aria-label="Close menu"
-              className="flex h-10 w-10 items-center justify-center text-2xl text-white"
-              onClick={() => setDrawerOpen(false)}
-              type="button"
-            >
-              ×
-            </button>
-            <a aria-label="شارژینو" className="flex items-center" href="https://www.eldorado.gg/blog/">
-              <Logo color="#ffffff" iconOnly size={40} />
-            </a>
-            <a
-              className="inline-flex h-10 min-h-10 min-w-[84px] items-center justify-center whitespace-nowrap rounded-lg bg-[rgb(255,182,0)] p-0 pl-[14px] pr-[14px] text-[18px] font-extrabold leading-[21.6px] text-[rgb(20,19,26)]"
-              href="https://www.eldorado.gg/"
-              style={{ fontFamily: "interstate, Lato, sans-serif" }}
-            >
-              SHOP
-            </a>
+      {showMobileOverlay ? (
+        <div className="fixed inset-0 z-[600] overflow-y-auto bg-headerdark lg:hidden" role="dialog" aria-modal="true">
+          <div className="sticky top-0 z-10 bg-headerdark">
+            <div className="relative flex h-14 items-center justify-between px-2">
+              <button
+                aria-label="بازگشت"
+                className="flex h-10 w-10 items-center justify-center text-white"
+                onClick={onBack}
+                type="button"
+              >
+                <span className="rtl:rotate-180">
+                  <BackChevron />
+                </span>
+              </button>
+              {overlayIsList ? (
+                <div className="absolute inset-x-12 flex justify-center">
+                  <button
+                    aria-expanded={pickerOpen}
+                    aria-haspopup="listbox"
+                    className="blog-display inline-flex items-center text-[20px] font-extrabold leading-[20px] text-white"
+                    onClick={() => setPickerOpen((value) => !value)}
+                    type="button"
+                  >
+                    <span dir="auto">{overlayLabel}</span>
+                    <Caret color="currentColor" />
+                  </button>
+                </div>
+              ) : null}
+              <button
+                aria-label="بستن منو"
+                className="flex h-10 w-10 items-center justify-center text-white"
+                onClick={closePanel}
+                type="button"
+              >
+                <CloseIcon />
+              </button>
+            </div>
+            {overlayIsList && pickerOpen ? (
+              <div className="flex flex-col items-center gap-3 border-b border-[rgb(42,42,48)] pb-4">
+                <button
+                  className="blog-display text-[18px] font-extrabold"
+                  onClick={() => openPanel("games", fromMenu)}
+                  style={{ color: GAMES_COLOR }}
+                  type="button"
+                >
+                  Games
+                </button>
+                <button
+                  className="blog-display text-[18px] font-extrabold"
+                  onClick={() => openPanel("codes", fromMenu)}
+                  style={{ color: CODES_COLOR }}
+                  type="button"
+                >
+                  Codes
+                </button>
+              </div>
+            ) : null}
           </div>
-          <nav className="flex flex-col items-center gap-6 pt-10">
-            <a
-              className="text-[20px] font-extrabold text-[rgb(255,182,0)]"
-              href="https://www.eldorado.gg/"
-              onClick={() => setDrawerOpen(false)}
-              style={{ fontFamily: "interstate, Lato, sans-serif" }}
-            >
-              Games
-            </a>
-            <a
-              className="text-[20px] font-extrabold text-[rgb(152,126,251)]"
-              href="https://www.eldorado.gg/"
-              onClick={() => setDrawerOpen(false)}
-              style={{ fontFamily: "interstate, Lato, sans-serif" }}
-            >
-              Codes
-            </a>
-          </nav>
+
+          {open === "menu" ? (
+            <nav className="flex flex-col gap-3 px-4 pt-4">
+              <button
+                className="flex min-h-[56px] items-center justify-between rounded-2xl bg-[rgb(38,38,42)] px-4 text-white"
+                onClick={() => openPanel("games", true)}
+                type="button"
+              >
+                <span className="blog-display text-[20px] font-extrabold">Games</span>
+                <ForwardChevron />
+              </button>
+              <button
+                className="flex min-h-[56px] items-center justify-between rounded-2xl bg-[rgb(38,38,42)] px-4 text-white"
+                onClick={() => openPanel("codes", true)}
+                type="button"
+              >
+                <span className="blog-display text-[20px] font-extrabold">Codes</span>
+                <ForwardChevron />
+              </button>
+            </nav>
+          ) : (
+            <MobileNavList items={overlayItems} allHref={overlayAllHref} onNavigate={goTo} />
+          )}
         </div>
-      )}
+      ) : null}
     </header>
   );
 }

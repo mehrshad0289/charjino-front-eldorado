@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 /* Accordion rows from the about FAQ / bug-bounty Known Issues captures:
@@ -16,7 +17,8 @@ export default function FaqAccordion({ items, static: staticMode = false }) {
   return (
     <div className="flex flex-col gap-2">
       {items.map((item, i) => {
-        const interactive = !staticMode && Boolean(item.a);
+        const paragraphs = Array.isArray(item.a) ? item.a : item.a ? [item.a] : [];
+        const interactive = !staticMode && paragraphs.length > 0;
         const isOpen = interactive && openIndex === i;
         return (
           <div key={item.q} className="flex w-full flex-col rounded-lg bg-card px-[14px] py-3">
@@ -25,7 +27,7 @@ export default function FaqAccordion({ items, static: staticMode = false }) {
                 type="button"
                 aria-expanded={isOpen}
                 onClick={() => setOpenIndex(isOpen ? -1 : i)}
-                className="flex items-center justify-between gap-1.5 text-left font-bold"
+                className="flex items-center justify-between gap-1.5 text-start font-bold"
               >
                 <span>{item.q}</span>
                 <span className={`text-graytext transition-transform ${isOpen ? "rotate-180" : ""}`}>
@@ -41,8 +43,17 @@ export default function FaqAccordion({ items, static: staticMode = false }) {
               </div>
             )}
             {isOpen && (
-              <div className="pt-6">
-                <p className="text-graytext leading-[22px]">{item.a}</p>
+              <div className="flex flex-col gap-3 pt-6">
+                {paragraphs.map((text) => (
+                  <p key={text.slice(0, 48)} className="text-start leading-[22px] text-graytext">
+                    {text}
+                  </p>
+                ))}
+                {item.href ? (
+                  <Link href={item.href} className="font-bold text-linkblue">
+                    {item.linkLabel || "ادامه"}
+                  </Link>
+                ) : null}
               </div>
             )}
           </div>

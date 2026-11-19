@@ -49,6 +49,7 @@ import {
   loadStoreCategory,
   mergeFacetFields,
   resolveMarketGame,
+  storeHubCover,
 } from "../../../../lib/store-engine";
 import { buildMetadata, SHOP_KIND_FA } from "@/lib/seo";
 
@@ -238,7 +239,7 @@ export default async function ShopHubPage({ params, searchParams }) {
                 active={activeHubTabKey(tabs, href, "currency")}
                 iconAlt={title}
                 gameName={title}
-                gameIcon=""
+                gameIcon={storeHubCover(store, hubKey, hubRecord, game, setup)}
                 tabs={tabs}
               />
               <AccountOffersBrowser
@@ -281,7 +282,7 @@ export default async function ShopHubPage({ params, searchParams }) {
             active={activeHubTabKey(tabs, href, "boosting")}
             iconAlt={title}
             gameName={title}
-            gameIcon=""
+            gameIcon={storeHubCover(store, hubKey, hub, game)}
             tabs={tabs}
           />
           <BoostingRequest gameId={game?.id} gameName={title} form={await loadBoostForm(game?.id)} />
@@ -329,7 +330,7 @@ export default async function ShopHubPage({ params, searchParams }) {
               active={activeHubTabKey(tabs, href, tabKey)}
               iconAlt={title}
               gameName={title}
-              gameIcon=""
+              gameIcon={storeHubCover(store, hubKey, hub, game)}
               tabs={tabs}
             />
             <AccountOffersBrowser

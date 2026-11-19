@@ -80,6 +80,36 @@ export function howToJsonLd({ name, steps }) {
   };
 }
 
+export function blogPostJsonLd({
+  title,
+  description,
+  path,
+  image,
+  datePublished,
+  dateModified,
+  authorName,
+} = {}) {
+  if (!title || !path) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description: description || undefined,
+    url: absoluteUrl(path),
+    image: image ? absoluteUrl(image) : undefined,
+    datePublished: datePublished || undefined,
+    dateModified: dateModified || datePublished || undefined,
+    inLanguage: "fa-IR",
+    author: {
+      "@type": "Organization",
+      name: authorName || APP_NAME,
+      url: absoluteUrl("/about-us"),
+    },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    mainEntityOfPage: absoluteUrl(path),
+  };
+}
+
 export function faqPageJsonLd(items) {
   const list = (Array.isArray(items) ? items : []).filter((item) => item?.q && item?.a);
   if (!list.length) return null;
@@ -91,7 +121,7 @@ export function faqPageJsonLd(items) {
       name: item.q,
       acceptedAnswer: {
         "@type": "Answer",
-        text: item.a,
+        text: Array.isArray(item.a) ? item.a.join(" ") : item.a,
       },
     })),
   };

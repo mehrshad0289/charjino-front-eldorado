@@ -38,7 +38,7 @@ function LoggedInActions({
       <Link
         href="/dashboard/notifications"
         aria-label={FA.notifications}
-        className="relative hidden h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white lg:flex"
+        className="relative flex h-[42px] w-[42px] items-center justify-center rounded-[0.625rem] text-navgray hover:text-white"
       >
         <DashboardIcon name="notifications" size={24} />
         {notiCount != null && Number(notiCount) > 0 && (

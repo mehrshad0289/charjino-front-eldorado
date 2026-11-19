@@ -4,6 +4,7 @@ import AccountOffersGrid from "./AccountOffersGrid";
 import ShopNoResults from "./ShopNoResults";
 import Footer from "./Footer";
 import ChatBubble from "./ChatBubble";
+import ShopGamesToolbar from "./ShopGamesToolbar";
 import { FA } from "./data/faCopy";
 
 export default function DynamicShopPage({
@@ -11,6 +12,8 @@ export default function DynamicShopPage({
   title,
   items = null,
   offers = null,
+  searchable = false,
+  categoryKey = "",
 }) {
   const hasItems = Array.isArray(items) && items.length > 0;
   const hasOffers = Array.isArray(offers) && offers.length > 0;
@@ -24,7 +27,8 @@ export default function DynamicShopPage({
           <h1 className="mb-6 text-2xl font-bold">{title}</h1>
         </div>
         {hasOffers ? <AccountOffersGrid offers={offers} /> : null}
-        {hasItems ? <PopularGames items={items} title={null} /> : null}
+        {hasItems && searchable ? <ShopGamesToolbar items={items} categoryKey={categoryKey} /> : null}
+        {hasItems && !searchable ? <PopularGames items={items} title={null} /> : null}
         {empty ? (
           <div className="mx-auto max-w-[1208px] px-4 md:px-6">
             <ShopNoResults title={FA.nothingFound} text={FA.shopEmpty} />
