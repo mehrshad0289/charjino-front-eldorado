@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Lato } from "next/font/google";
 import ShopChrome from "../components/eldorado/ShopChrome";
+import NavProgress from "../components/eldorado/NavProgress";
 import "./globals.css";
 import JsonLd from "../components/seo/json-ld";
 import { GoogleAnalytics } from "../components/seo/google-analytics";
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
         <JsonLd data={websiteJsonLd()} />
         <Suspense fallback={null}>
           <ShopChrome />
+          <NavProgress />
         </Suspense>
         {children}
         <GoogleAnalytics />

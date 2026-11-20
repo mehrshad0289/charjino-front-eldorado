@@ -1,3 +1,20 @@
+function encodeBlogPathSegment(value) {
+  const raw = String(value ?? "").trim();
+  if (!raw) return "";
+  let current = raw;
+  for (let i = 0; i < 3; i += 1) {
+    try {
+      const next = decodeURIComponent(current);
+      if (next === current) break;
+      current = next;
+    } catch {
+      break;
+    }
+  }
+  current = current.replace(/[\u200c\u200d]/g, "").trim();
+  return encodeURIComponent(current || raw);
+}
+
 export const apiPaths = {
   authRequestOtp: "/auth/request-otp",
   authVerifyOtp: "/auth/verify-otp",
@@ -180,7 +197,15 @@ export const apiPaths = {
     const qs = search.toString();
     return qs ? `/blog/posts?${qs}` : "/blog/posts";
   },
-  blogPost: (slug) => `/blog/posts/${encodeURIComponent(slug)}`,
+  blogPost: (slug) => `/blog/posts/${encodeBlogPathSegment(slug)}`,
+  blogPostComments: (slug, params = {}) => {
+    const search = new URLSearchParams();
+    if (params.page && params.page > 1) search.set("page", String(params.page));
+    if (params.perPage && params.perPage > 0) search.set("perPage", String(params.perPage));
+    const qs = search.toString();
+    return `/blog/posts/${encodeBlogPathSegment(slug)}/comments${qs ? `?${qs}` : ""}`;
+  },
+  blogCommentLike: (id) => `/blog/comments/${encodeURIComponent(id)}/like`,
   blogCategories: "/blog/categories",
   blogCategory: (slug, params = {}) => {
     const search = new URLSearchParams();
@@ -188,6 +213,6 @@ export const apiPaths = {
     if (params.perPage && params.perPage > 0) search.set("perPage", String(params.perPage));
     if (params.offset != null && Number(params.offset) >= 0) search.set("offset", String(params.offset));
     const qs = search.toString();
-    return `/blog/categories/${encodeURIComponent(slug)}${qs ? `?${qs}` : ""}`;
+    return `/blog/categories/${encodeBlogPathSegment(slug)}${qs ? `?${qs}` : ""}`;
   },
 };

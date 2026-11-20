@@ -202,13 +202,13 @@ function TeamSection() {
           </div>
         ))}
       </div>
-      <div className="mt-16 flex w-full gap-6 max-md:flex-col max-lg:items-center lg:flex-row">
+      {/* <div className="mt-16 flex w-full gap-6 max-md:flex-col max-lg:items-center lg:flex-row">
         {photos.map((photo) => (
           <div key={photo.src} className="relative aspect-square w-full max-w-[420px] overflow-hidden rounded-3xl lg:w-[calc(33.3333%-16px)]">
             <img alt={photo.alt} src={photo.src} loading="lazy" className="block size-full object-cover align-middle" />
           </div>
         ))}
-      </div>
+      </div> */}
     </section>
   );
 }
@@ -224,7 +224,7 @@ function StorySection() {
       <ol className="mt-16 ms-2 flex w-full max-w-[674px] flex-col gap-12 border-s-2 border-cardborder">
         {milestones.map((item) => (
           <li key={item.year} className="relative flex flex-col items-start ps-8">
-            <span aria-hidden="true" className="absolute start-0 top-0 size-4 rounded-full bg-brand" />
+            <span aria-hidden="true" className="absolute start-[-9px] top-0 size-4 rounded-full bg-brand" />
             <time className="mb-3 block rounded-full border-[0.8px] border-brand bg-white px-3 py-[2px] text-[14px] font-bold leading-[19.6px]">
               {item.year}
             </time>

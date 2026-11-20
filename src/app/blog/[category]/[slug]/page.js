@@ -1,4 +1,5 @@
-import { notFound } from "next/navigation";
+import { connection } from "next/server";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import BlogHeader from "../../../../components/eldorado/BlogHeader";
 import BlogReadingProgress from "../../../../components/eldorado/BlogReadingProgress";
@@ -6,6 +7,7 @@ import BlogArticleToc from "../../../../components/eldorado/BlogArticleToc";
 import BlogArticleFaq from "../../../../components/eldorado/BlogArticleFaq";
 import BlogArticleShare from "../../../../components/eldorado/BlogArticleShare";
 import BlogArticleRelated from "../../../../components/eldorado/BlogArticleRelated";
+import BlogArticleComments from "../../../../components/eldorado/BlogArticleComments";
 import Footer from "../../../../components/eldorado/Footer";
 import ChatBubble from "../../../../components/eldorado/ChatBubble";
 import { BlogBreadChevron } from "../../../../components/eldorado/BlogBreadcrumb";
@@ -16,6 +18,8 @@ import {
   blogPostPath,
   formatBlogDate,
   formatReadingMinutes,
+  decodeBlogSlug,
+  loadBlogComments,
   loadBlogNav,
   loadBlogPost,
   mapBlogFaq,
@@ -34,7 +38,9 @@ import { buildMetadata } from "@/lib/seo";
 export const instant = false;
 
 export async function generateMetadata({ params }) {
-  const { category, slug } = await params;
+  const raw = await params;
+  const category = decodeBlogSlug(raw.category);
+  const slug = decodeBlogSlug(raw.slug);
   const data = await loadBlogPost(slug);
   const post = data?.post;
   if (!post || post.category?.slug !== category) return {};
@@ -50,10 +56,21 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BlogArticlePage({ params }) {
-  const { category, slug } = await params;
-  const [nav, data] = await Promise.all([loadBlogNav(), loadBlogPost(slug)]);
+  await connection();
+  const raw = await params;
+  const category = decodeBlogSlug(raw.category);
+  const slug = decodeBlogSlug(raw.slug);
+  const [nav, data, comments] = await Promise.all([
+    loadBlogNav(),
+    loadBlogPost(slug),
+    loadBlogComments(slug),
+  ]);
   const post = data?.post;
-  if (!post || post.category?.slug !== category) notFound();
+  if (!post) notFound();
+  if (post.category?.slug && post.category.slug !== category) {
+    redirect(blogPostPath(post.category.slug, post.slug));
+  }
+  if (post.category?.slug !== category) notFound();
 
   const path = blogPostPath(post.category.slug, post.slug);
   const shareUrl = absoluteUrl(path);
@@ -217,6 +234,12 @@ export default async function BlogArticlePage({ params }) {
                 <div className="lg:pe-[7px]">
                   <BlogArticleFaq items={faq} />
                   <BlogArticleRelated items={data.related || []} />
+                  <BlogArticleComments
+                    slug={post.slug}
+                    path={path}
+                    initialItems={comments.items}
+                    initialMeta={comments.meta}
+                  />
                 </div>
               </div>
 

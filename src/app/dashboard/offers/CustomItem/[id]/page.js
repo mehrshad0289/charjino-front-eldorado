@@ -5,7 +5,7 @@ import { getItemOfferGames, getSellerListing, getSellerMe } from "@/actions/mark
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
 import ItemListingWizard from "../../../../../components/eldorado/ItemListingWizard";
 import { ITEM_LISTING_COPY, LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
-import { listingStatusMeta, sellBlockers } from "@/lib/listing";
+import { listingSellGate, listingStatusMeta, SELL_VERIFY_PATH } from "@/lib/listing";
 import { formatTomanInWords } from "@/lib/price";
 
 export const instant = false;
@@ -29,6 +29,7 @@ export default async function EditItemOfferPage({ params }) {
   const row = listing.data;
   const editable = row.status === "draft";
   const status = listingStatusMeta(row.status);
+  const gate = listingSellGate(seller);
 
   return (
     <>
@@ -39,7 +40,13 @@ export default async function EditItemOfferPage({ params }) {
       />
       <div className="mt-1 w-full px-6 pb-[50px]">
             {editable ? (
-              <ItemListingWizard games={games.ok ? games.items : []} listing={row} blockers={sellBlockers(seller)} />
+              <ItemListingWizard
+                games={games.ok ? games.items : []}
+                listing={row}
+                blockers={gate.blockers}
+                gateHref={gate.href || SELL_VERIFY_PATH}
+                gateLabel={gate.label}
+              />
             ) : (
               <div className="rounded-xl bg-white p-6">
                 <span className="inline-flex rounded-lg px-3 py-1 text-[13px] font-bold text-white" style={{ backgroundColor: status.bg }}>

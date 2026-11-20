@@ -24,7 +24,7 @@ import {
   loadMarketListing,
   loadMarketListings,
   loadPlatformListings,
-  loadStoreCategory,
+  loadStoreCategoryMeta,
   mediaUrl,
 } from "../../../../../lib/store-engine";
 import { buildMetadata, SHOP_KIND_FA } from "@/lib/seo";
@@ -185,8 +185,10 @@ export default async function ShopListingPage({ params }) {
   const { category, listingId } = await params;
   const key = String(category || "").toLowerCase();
   if (!isStoreCategoryKey(key)) notFound();
-  const store = await loadStoreCategory(key);
-  const listing = await loadMarketListing(listingId);
+  const [store, listing] = await Promise.all([
+    loadStoreCategoryMeta(key),
+    loadMarketListing(listingId),
+  ]);
   if (!store || !listing) notFound();
   const offer = listing.offer_type || "Account";
   const canonical = categoryForOffer(offer);

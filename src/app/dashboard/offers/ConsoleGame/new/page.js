@@ -5,7 +5,7 @@ import { getSellerMe } from "@/actions/market.actions";
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
 import ConsoleGameForm from "../../../../../components/eldorado/ConsoleGameForm";
 import { GAME_LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
-import { sellBlockers } from "@/lib/listing";
+import { listingSellGate, SELL_INTRO_PATH, SELL_VERIFY_PATH } from "@/lib/listing";
 
 export const instant = false;
 
@@ -21,6 +21,8 @@ export default async function NewConsoleGamePage({ searchParams }) {
   if (seller.unauthorized) redirect("/login?next=/dashboard/offers/ConsoleGame/new");
   const query = await searchParams;
   const platform = typeof query.platform === "string" ? query.platform : "playstation";
+  const gate = listingSellGate(seller);
+  if (gate.href === SELL_INTRO_PATH) redirect(gate.href);
 
   return (
     <>
@@ -30,7 +32,12 @@ export default async function NewConsoleGamePage({ searchParams }) {
         action={{ label: GAME_LISTING_COPY.title, href: "/dashboard/offers/ConsoleGame", ariaLabel: GAME_LISTING_COPY.title }}
       />
       <div className="mt-1 w-full px-6 pb-[50px]">
-        <ConsoleGameForm platform={platform} blockers={sellBlockers(seller)} />
+        <ConsoleGameForm
+          platform={platform}
+          blockers={gate.blockers}
+          gateHref={gate.href || SELL_VERIFY_PATH}
+          gateLabel={gate.label}
+        />
       </div>
     </>
   );

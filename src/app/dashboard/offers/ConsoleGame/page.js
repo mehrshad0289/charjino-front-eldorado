@@ -8,7 +8,7 @@ import EmptyState from "../../../../components/eldorado/EmptyState";
 import SellerListingsTable from "../../../../components/eldorado/SellerListingsTable";
 import { DASHBOARD_OFFERS_PAGE } from "../../../../components/eldorado/data/dashboardData";
 import { GAME_LISTING_COPY } from "../../../../components/eldorado/data/listingData";
-import { sellBlockers } from "@/lib/listing";
+import { listingSellGate } from "@/lib/listing";
 
 export const instant = false;
 
@@ -23,7 +23,8 @@ export default async function DashboardConsoleGamesPage() {
   if (!user) redirect("/login?next=/dashboard/offers/ConsoleGame");
   const [seller, listings] = await Promise.all([getSellerMe(), getSellerListings("ConsoleGame")]);
   if (seller.unauthorized || listings.unauthorized) redirect("/login?next=/dashboard/offers/ConsoleGame");
-  const blockers = sellBlockers(seller);
+  const gate = listingSellGate(seller);
+  const blockers = gate.blockers;
   const items = listings.ok ? listings.items : [];
 
   return (
@@ -43,6 +44,9 @@ export default async function DashboardConsoleGamesPage() {
             {blockers.map((line) => (
               <p key={line} className="text-[14px] text-[rgb(232,27,22)]">{line}</p>
             ))}
+            <a href={gate.href} className="mt-4 inline-flex min-h-[42px] items-center rounded-lg bg-ink px-4 text-[14px] font-bold text-white">
+              {gate.label}
+            </a>
           </div>
         ) : null}
         {!listings.ok ? (

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { serverFetch, ApiError } from "./server-fetcher";
 import { apiPaths } from "./api-paths";
 import { ensureAccessToken } from "./ensure-access-token";
@@ -34,7 +35,7 @@ export function isStoreCategoryKey(value) {
   return STORE_CATEGORY_KEYS.includes(asString(value).toLowerCase());
 }
 
-export async function loadStoreCategories() {
+export const loadStoreCategories = cache(async () => {
   try {
     const data = await serverFetch(apiPaths.catalogStoreCategories);
     return Array.isArray(data?.items) ? data.items : [];
@@ -42,9 +43,22 @@ export async function loadStoreCategories() {
     if (error instanceof ApiError && error.statusCode === 404) return [];
     throw error;
   }
+});
+
+export async function loadStoreCategoryMeta(key) {
+  const id = asString(key).toLowerCase();
+  if (!isStoreCategoryKey(id)) return null;
+  try {
+    const items = await loadStoreCategories();
+    const row = items.find((item) => asString(asRecord(item).key).toLowerCase() === id);
+    return row ? asRecord(row) : null;
+  } catch (error) {
+    if (error instanceof ApiError && (error.statusCode === 404 || error.statusCode === 503)) return null;
+    throw error;
+  }
 }
 
-export async function loadStoreCategory(key) {
+export const loadStoreCategory = cache(async (key) => {
   const id = asString(key).toLowerCase();
   if (!isStoreCategoryKey(id)) return null;
   try {
@@ -53,7 +67,7 @@ export async function loadStoreCategory(key) {
     if (error instanceof ApiError && (error.statusCode === 404 || error.statusCode === 503)) return null;
     throw error;
   }
-}
+});
 
 function tabMatchesStoreCategory(tab, categoryKey) {
   const item = asRecord(tab);

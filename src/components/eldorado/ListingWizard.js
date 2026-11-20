@@ -101,7 +101,13 @@ function Section({ id, title, hint, children }) {
   );
 }
 
-export default function ListingWizard({ games = [], listing = null, blockers = [] }) {
+export default function ListingWizard({
+  games = [],
+  listing = null,
+  blockers = [],
+  gateHref = "/verify/status",
+  gateLabel = LISTING_COPY.gateContinueCta,
+}) {
   const router = useRouter();
   const blocked = blockers.length > 0;
   const initialGame = listing && games.find((row) => row.game_name === listing.game_name) ? listing.game_name : "";
@@ -375,7 +381,7 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
         return;
       }
       if (draft.blocked) {
-        router.push("/verify/status");
+        router.push(gateHref);
         return;
       }
       setIssues({ form: draft.message || "ثبت آگهی انجام نشد." });
@@ -411,8 +417,8 @@ export default function ListingWizard({ games = [], listing = null, blockers = [
             <li key={item}>{item}</li>
           ))}
         </ul>
-        <Link href="/verify/status" className="mt-5 inline-flex min-h-[42px] items-center rounded-lg bg-ink px-4 text-[14px] font-bold text-white">
-          ادامه احراز / شبا
+        <Link href={gateHref} className="mt-5 inline-flex min-h-[42px] items-center rounded-lg bg-ink px-4 text-[14px] font-bold text-white">
+          {gateLabel}
         </Link>
       </div>
     );

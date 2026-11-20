@@ -79,6 +79,46 @@ body {
   }
 }
 
+/* Client-navigation progress (YouTube/GitHub). Not the blog reading strip.
+   Yellow = --color-brand. Grows from inline-start (right in RTL). */
+#charjino-nav-progress {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 10050;
+  height: 3px;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+#charjino-nav-progress.is-on {
+  opacity: 1;
+}
+#charjino-nav-progress .charjino-nav-progress-peg {
+  position: relative;
+  height: 100%;
+  width: 0;
+  background: var(--color-brand);
+  box-shadow: 0 0 8px var(--color-brand), 0 0 4px var(--color-brand);
+  transition: width 200ms ease;
+}
+#charjino-nav-progress .charjino-nav-progress-peg::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 0;
+  top: 0;
+  width: 80px;
+  height: 100%;
+  box-shadow: 0 0 10px var(--color-brand), 0 0 5px var(--color-brand);
+  opacity: 0.9;
+}
+@media (prefers-reduced-motion: reduce) {
+  #charjino-nav-progress,
+  #charjino-nav-progress .charjino-nav-progress-peg {
+    transition: none;
+  }
+}
+
 /* Login is a full-viewport card (clone). On mobile 100vh is taller than the
    visible area, so the page rubber-bands. Lock the document to dvh. */
 @media (max-width: 767px) {

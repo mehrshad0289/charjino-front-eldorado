@@ -5,7 +5,7 @@ import { getSellerListing, getSellerMe } from "@/actions/market.actions";
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
 import ConsoleGameForm from "../../../../../components/eldorado/ConsoleGameForm";
 import { GAME_LISTING_COPY, LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
-import { listingStatusMeta, sellBlockers } from "@/lib/listing";
+import { listingSellGate, listingStatusMeta, SELL_VERIFY_PATH } from "@/lib/listing";
 import { formatTomanInWords } from "@/lib/price";
 
 export const instant = false;
@@ -29,6 +29,7 @@ export default async function ConsoleGameDraftPage({ params }) {
   const row = listing.data;
   const editable = row.status === "draft";
   const status = listingStatusMeta(row.status);
+  const gate = listingSellGate(seller);
 
   return (
     <>
@@ -39,7 +40,12 @@ export default async function ConsoleGameDraftPage({ params }) {
       />
       <div className="mt-1 w-full px-6 pb-[50px]">
         {editable ? (
-          <ConsoleGameForm listing={row} blockers={sellBlockers(seller)} />
+          <ConsoleGameForm
+            listing={row}
+            blockers={gate.blockers}
+            gateHref={gate.href || SELL_VERIFY_PATH}
+            gateLabel={gate.label}
+          />
         ) : (
           <div className="rounded-xl bg-white p-6">
             <span className="inline-flex rounded-lg px-3 py-1 text-[13px] font-bold text-white" style={{ backgroundColor: status.bg }}>

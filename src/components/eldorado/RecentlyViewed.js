@@ -99,7 +99,7 @@ export default function RecentlyViewed({ items }) {
 
   return (
     <section className="relative z-10 mb-12">
-      <div className="mx-auto max-w-[1208px] px-4 md:px-6">
+      <div className="mx-auto max-w-[1208px] md:px-6">
         <div className="flex flex-col gap-5">
           <div className="flex items-center justify-between">
             <span className="block text-lg font-bold leading-[27px]">{FA.recentlyViewed}</span>

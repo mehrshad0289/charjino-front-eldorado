@@ -46,7 +46,7 @@ import {
   loadItemOfferGames,
   loadMarketFacets,
   loadMarketListings,
-  loadStoreCategory,
+  loadStoreCategoryMeta,
   mergeFacetFields,
   resolveMarketGame,
   storeHubCover,
@@ -97,10 +97,11 @@ export default async function ShopHubPage({ params, searchParams }) {
   if (isPlayStationPlusPlatform(hubKey)) redirect(hrefWithSku("/playstation-plus", query.sku));
   if (isXboxGamePassPlatform(hubKey)) redirect(hrefWithSku("/xbox-game-pass", query.sku));
 
-  const store = await loadStoreCategory(key);
+  const [store, catalogHub] = await Promise.all([
+    loadStoreCategoryMeta(key),
+    loadProductHub(giftHubPlatform(hubKey) || hubKey),
+  ]);
   if (!store) notFound();
-
-  const catalogHub = await loadProductHub(giftHubPlatform(hubKey) || hubKey);
   if (key === "top-ups" && String(catalogHub?.storeCategoryKey || "").toLowerCase() === "currency") {
     redirect(`/shop/currency/${encodeURIComponent(hubKey)}`);
   }

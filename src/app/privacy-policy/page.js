@@ -1,8 +1,26 @@
-import ComingSoonPage, { comingSoonMetadata } from "../../components/eldorado/ComingSoonPage";
+import PrivacyPolicyDoc from "../../components/eldorado/PrivacyPolicyDoc";
+import JsonLd from "../../components/seo/json-ld";
+import { breadcrumbJsonLd } from "@/lib/json-ld";
+import { buildMetadata } from "@/lib/seo";
 
 export const instant = false;
-export const metadata = comingSoonMetadata("حریم خصوصی");
+
+export const metadata = buildMetadata({
+  title: "حریم خصوصی — شارژینو",
+  description: "سیاست نگهداری و استفاده از دادهٔ شخصی در فروشگاه شارژینو.",
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPolicyPage() {
-  return <ComingSoonPage title="حریم خصوصی" />;
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "خانه", path: "/" },
+          { name: "حریم خصوصی", path: "/privacy-policy" },
+        ])}
+      />
+      <PrivacyPolicyDoc />
+    </>
+  );
 }

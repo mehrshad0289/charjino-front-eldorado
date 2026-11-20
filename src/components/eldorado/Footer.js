@@ -48,7 +48,7 @@ const LEGAL_LINKS = [
   ["شرایط استفاده", "/terms-of-service"],
   ["حریم خصوصی", "/privacy-policy"],
   ["قانون حق نشر", "/dmca"],
-  ["قانون خدمات دیجیتال", "/dsa"],
+  // ["قانون خدمات دیجیتال", "/dsa"],
 ];
 
 const SOCIALS = [

@@ -59,8 +59,8 @@ const SELLING_LINKS = [
 const LEGAL_LINKS = [
   ["شرایط استفاده", "/terms-of-service"],
   ["حریم خصوصی", "/privacy-policy"],
-  ["DMCA", "/dmca"],
-  ["DSA", "/dsa"],
+  ["قانون حق نشر", "/dmca"],
+  ["قانون خدمات دیجیتال", "/dsa"],
 ];
 
 function LinkColumn({ links, bold }) {

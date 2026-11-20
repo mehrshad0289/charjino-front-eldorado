@@ -1,18 +1,19 @@
-import { DASHBOARD_USER } from "./data/dashboardData";
+import Link from "next/link";
+import CategoryNav from "./CategoryNav";
+import ChatBubble from "./ChatBubble";
+import Footer from "./Footer";
 
-/* DMCA page content from the user-pushed capture
-   `ui ux/DMCA/…dmca…make` (session 18, decoded snapshots/
-   dmca-1920px-light-1.tsx, 1920-only): full-width 128px preview-photo
-   banner, max-w-3xl column (mt-30 mb-80) with the 48px title pulled up
-   over the banner (relative top-[-67px] mt-[-30px], w-[870px] per
-   capture), an 18px lede with a blue mailto link, two gray role=status
-   info boxes (bg rgb(239,239,241), border rgb(231,231,231), rounded-lg,
-   24px icon + bold lead + ul pl-5) and the 18px "Where possible" section.
-   The capture's icomoon info glyphs decode empty — inline SVG circle-i
-   replacements (documented assumption, project pattern). */
-
-const BANNER =
-  "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fb7ca8a720db0d893e8464e5b0ef627431a7346b4.png?generation=1793803303629559&alt=media";
+/* قانون حق نشر /dmca — layout from the Eldorado DMCA capture
+   (`ui ux/DMCA/…dmca…make`, extracted snapshots/dmca-1920px-light-1.tsx,
+   plus the 1440/390 make). Full-width 128px yellow band, max-w-3xl
+   column (mt-30 mb-80), 48px title pulled up over the band
+   (relative top-[-67px] mt-[-30px]), 18px lede with a blue contact
+   link, two gray role=status info boxes (inputgray / cardborder,
+   rounded-lg, 24px icon + bold lead + ul ps-5) and the 18px official-email
+   paragraph. Banner image from the owner (`عکس el/dmca (1).webp`).
+   Icomoon info glyphs decode empty in the capture — inline SVG circle-i
+   (documented assumption, project pattern). Copy is the capture flow
+   in Persian for شارژینو; contact is /contact-us (no invented inbox). */
 
 const INFO_ICON = (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -26,13 +27,13 @@ function InfoBox({ lead, items }) {
   return (
     <div
       role="status"
-      className="flex gap-3 rounded-lg border-[0.8px] border-[rgb(231,231,231)] bg-[rgb(239,239,241)] px-4 pb-3 pt-3 text-ink"
+      className="flex gap-3 rounded-lg border-[0.8px] border-cardborder bg-inputgray px-4 pt-3 pb-3 text-ink"
     >
       <div className="shrink-0 text-ink">{INFO_ICON}</div>
       <div className="flex flex-col gap-2">
         <span className="block font-bold">{lead}</span>
         <div className="text-[14px] leading-[19.6px]">
-          <ul className="list-disc pl-5">
+          <ul className="list-disc ps-5">
             {items.map((li) => (
               <li key={li.slice(0, 32)}>{li}</li>
             ))}
@@ -45,56 +46,58 @@ function InfoBox({ lead, items }) {
 
 export default function DmcaDoc() {
   return (
-    <div>
-      <div className="mb-[50px] h-32 overflow-hidden">
-        <img
-          alt="Preview photo"
-          src={BANNER}
-          className="block h-32 w-full object-cover align-middle"
-        />
-      </div>
-      <div className="mx-auto mb-[80px] mt-[30px] w-full max-w-3xl px-6">
-        <h2 className="relative top-[-67px] -mt-[30px] text-[48px] font-bold leading-[normal]">
-          DMCA Copyright Notice
-        </h2>
-        <div className="w-full">
-          <p className="mb-[30px] text-[18px] leading-[21px]">
-            Have your copyrighted works been posted on Eldorado without your
-            permission? Please email{" "}
-            <a href="mailto:ip-dmca@eldorado.gg" className="text-[rgb(45,94,173)]">
-              ip- dmca@eldorado.gg
-            </a>{" "}
-            with the subject line &quot;Copyright Claim&quot; and we will
-            investigate.
-          </p>
+    <div className="min-h-screen bg-page text-ink">
+      <CategoryNav />
+      <main className="isolate">
+        <div className="mb-[50px] h-32 overflow-hidden">
+          <img
+            alt=""
+            src="/static-pages/v2/dmca-banner.webp"
+            className="block h-32 w-full object-cover align-middle"
+          />
         </div>
-        <InfoBox
-          lead="In your email, please include the following information:"
-          items={[
-            "URL of infringing material on Eldorado.gg",
-            "Description of the infringement",
-            "Documentation proving either a) you are the copyright holder OR b) that you are acting as an authorized agent of the copyright holder",
-            "Your full legal name",
-            "Your company name",
-            "Your address",
-          ]}
-        />
-        <div className="mt-[30px] w-full">
-          <p className="mb-[30px] text-[18px] leading-[21px]">
-            Where possible, please use your official company email. For
-            example, we would submit the request from an @eldorado.gg email
-            address.
-          </p>
+        <div className="mx-auto mt-[30px] mb-[80px] w-full max-w-3xl px-6">
+          <h1 className="relative top-[-67px] -mt-[30px] w-full max-w-[870px] text-[48px] font-bold leading-normal">
+            قانون حق نشر
+          </h1>
+          <div className="w-full">
+            <p className="mb-[30px] text-[18px] leading-[21px]">
+              آثار دارای حق نشر شما بدون اجازه‌تان در شارژینو منتشر شده؟ لطفاً از صفحهٔ{" "}
+              <Link href="/contact-us" className="text-linkblue">
+                تماس با ما
+              </Link>{" "}
+              با موضوع «ادعای حق نشر» پیام بفرستید تا بررسی کنیم.
+            </p>
+          </div>
+          <InfoBox
+            lead="در پیام این اطلاعات را بنویسید:"
+            items={[
+              "نشانی اینترنتی محتوای ناقض حق نشر در charjino.ir",
+              "شرح نقض",
+              "مدرک مالکیت حق نشر، یا مدرک نمایندگی قانونی مالک",
+              "نام و نام خانوادگی قانونی",
+              "نام شرکت",
+              "نشانی",
+            ]}
+          />
+          <div className="mt-[30px] w-full">
+            <p className="mb-[30px] text-[18px] leading-[21px]">
+              در صورت امکان از ایمیل رسمی شرکت استفاده کنید. برای مثال، ما درخواست را از نشانی دامنهٔ{" "}
+              <span dir="auto">@charjino.ir</span> می‌فرستیم.
+            </p>
+          </div>
+          <InfoBox
+            lead="با ارسال ادعای حق نشر تأیید می‌کنید که:"
+            items={[
+              "با حسن‌نیت معتقدید استفاده از این اثر در شکل مورد اعتراض، بدون اجازهٔ مالک حق نشر، نمایندهٔ او یا قانون است.",
+              "اعلام می‌کنید اطلاعات درخواست درست است و مجازید از طرف مالک حق نشر اقدام کنید.",
+              "می‌دانید اگر آگاهانه گزارش خلاف واقع بدهید، ممکن است مسئول خسارت، هزینه و حق‌الوکاله شوید.",
+            ]}
+          />
         </div>
-        <InfoBox
-          lead="By submitting a DMCA claim, you confirm that:"
-          items={[
-            "You have good faith belief that use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law.",
-            "UNDER PENALTY OF PERJURY, you declare that the information in your request is accurate and that you are authorized to act on behalf of the copyright owner.",
-            "You understand that under 17 U.S.C. 512(f), you may be liable for any damages, including costs and attorneys' fees, if you knowingly materially misrepresent that reported material or activity is infringing.",
-          ]}
-        />
-      </div>
+      </main>
+      <Footer />
+      <ChatBubble />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { getCurrencyOfferGames, getSellerMe } from "@/actions/market.actions";
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
 import CurrencyListingWizard from "../../../../../components/eldorado/CurrencyListingWizard";
 import { CURRENCY_LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
-import { sellBlockers } from "@/lib/listing";
+import { listingSellGate, SELL_INTRO_PATH, SELL_VERIFY_PATH } from "@/lib/listing";
 
 export const instant = false;
 
@@ -22,6 +22,9 @@ export default async function NewCurrencyOfferPage() {
   const [seller, games] = await Promise.all([getSellerMe(), getCurrencyOfferGames()]);
   if (seller.unauthorized) redirect("/login?next=/dashboard/offers/Currency/new");
 
+  const gate = listingSellGate(seller);
+  if (gate.href === SELL_INTRO_PATH) redirect(gate.href);
+
   return (
     <>
       <DashboardPageHeader
@@ -30,7 +33,12 @@ export default async function NewCurrencyOfferPage() {
         action={{ label: CURRENCY_LISTING_COPY.title, href: "/dashboard/offers/Currency", ariaLabel: CURRENCY_LISTING_COPY.title }}
       />
       <div className="mt-1 w-full px-6 pb-[50px]">
-        <CurrencyListingWizard games={games.ok ? games.items : []} blockers={sellBlockers(seller)} />
+        <CurrencyListingWizard
+          games={games.ok ? games.items : []}
+          blockers={gate.blockers}
+          gateHref={gate.href || SELL_VERIFY_PATH}
+          gateLabel={gate.label}
+        />
       </div>
     </>
   );

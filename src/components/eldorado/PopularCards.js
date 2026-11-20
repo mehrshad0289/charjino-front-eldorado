@@ -87,7 +87,7 @@ export default function PopularCards({ items, title }) {
 
   return (
     <section className="relative z-10 mb-12 pt-6">
-      <div className="mx-auto max-w-[1208px] px-4 md:px-6">
+      <div className="mx-auto max-w-[1208px] md:px-6">
         <span className="block text-lg font-bold leading-[27px]">{title || FA.popular}</span>
         <div className="mt-4 flex overflow-hidden">
           <div

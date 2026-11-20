@@ -62,9 +62,9 @@ function BannerIcon({ alt, src }) {
 function TabNav({ tabs, active, className }) {
   return (
     <nav className={className}>
-      <div className="shop-hub-tabs flex h-full flex-nowrap items-stretch overflow-x-auto">
+      <div className="shop-hub-tabs flex h-full flex-nowrap items-stretch overflow-x-auto ">
         {tabs.map((tab) => (
-          <span key={tab.key} className="flex h-full shrink-0 items-stretch">
+          <span key={tab.key} className="flex h-full shrink-0 items-stretch px-2 ">
             {tab.key === active ? (
               <ActiveTab href={tab.href}>{tab.label || tab.key}</ActiveTab>
             ) : (

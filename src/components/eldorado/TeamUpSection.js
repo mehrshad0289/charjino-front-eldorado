@@ -7,29 +7,57 @@ import Link from "next/link";
 export default function TeamUpSection({ data }) {
   return (
     <section className="flex flex-col items-center" aria-label={data.title}>
-      <h2 className="text-center text-[32px] font-bold leading-[36px] lg:text-[48px] lg:leading-[52.8px]">{data.title}</h2>
-      <p className="mt-5 max-w-[860px] text-center text-graytext">{data.body}</p>
+      <h2 className="text-center text-[32px] font-bold leading-[36px] lg:text-[48px] lg:leading-[52.8px]">
+        {data.title}
+      </h2>
+      <p className="mt-5 max-w-[860px] text-center text-graytext">
+        {data.body}
+      </p>
 
-      <div className="mt-[38px] flex w-full justify-end lg:pe-[278px]">
-        <div className="relative me-[62px] max-w-[421px] rounded-3xl bg-card py-3 ps-[17px] pe-7 max-lg:me-6">
-          <p className=" text-center z-10 text-[14px] font-bold leading-[19.6px]">{data.bubble}</p>
-          {/* tail arrow sits 62px outside the bubble (per the capture) —
-              hidden below lg where it would overflow the viewport. Eager:
-              lazy-loading mid-page decorations missed the paint window. */}
-          <img
-            src={data.bubbleArrow}
-            alt=""
-            width="90"
+
+      <div class="mt-6 flex w-full pr-31 sm:mt-9.5 sm:pr-69.5">
+        <div class="bg-card relative mr-5.5 max-w-105.25 rounded-xl py-2 pr-2.5 pl-2 sm:mr-15.5 sm:rounded-3xl sm:py-3 sm:pr-7 sm:pl-4.25">
+          <p class="text-center text-xs font-bold sm:text-sm">
+            {" "}
+            {data.bubble}
+          </p>
+          <svg
+            fill="none"
             height="25"
-            className="absolute z bottom-0 right-[-65px]  h-[25px] w-[90px] lg:block rtl:scale-x-100"
-          />
+            viewBox="0 0 90 25"
+            width="90"
+            xmlns="http://www.w3.org/2000/svg"
+            class="absolute -right-15.5 bottom-0 hidden sm:block"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M0 0V25H3C9.47792 24.9999 15.3803 22.5359 19.8213 18.4941C34.6648 21.2833 59.2719 24.064 89.2021 22.5918C81.6156 21.7122 31.2796 16.2027 27.2422 6.12793C27.7363 4.16706 28 2.11428 28 0H0Z"
+              fill-rule="evenodd"
+              class="fill-card"
+            ></path>
+          </svg>
+          <svg
+            fill="none"
+            height="25"
+            viewBox="0 0 32 25"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+            class="absolute -right-5.5 bottom-0 sm:hidden"
+          >
+            <path
+              d="M0 0V25C3.94645 24.9999 7.35963 22.7231 9.00195 19.4121C14.4097 21.8453 22.449 23.9014 32 22.5918C29.3933 21.7493 12.7199 16.6599 10.0439 7.37988V0H0Z"
+              fill-rule="evenodd"
+              class="fill-card"
+            ></path>
+          </svg>
         </div>
-        <div className="hidden max-w-[26px] grow basis-0 lg:block" />
+        <div class="max-w-6.5 flex-1"></div>
       </div>
-      
+
+
 
       <div className="relative mt-24 grid w-full gap-6 lg:mt-32 lg:grid-cols-2">
-        <div className="absolute start-0 top-[-120px]  h-[100px] lg:h-[259px] pe-[19px] lg:block">
+        <div className="absolute start-0 top-[-114px] lg:top-[-200px]  h-[100px] lg:h-[259px] pe-[19px] lg:block">
           <img
             src={data.mascot}
             alt={data.mascotAlt}
@@ -41,11 +69,18 @@ export default function TeamUpSection({ data }) {
         {data.cards.map((card) => (
           <div
             key={card.title}
-            className="flex flex-col gap-6 rounded-2xl border-[0.8px] border-cardborder px-6 pt-12 pb-8 max-lg:pt-8"
-            style={{ backgroundImage: "linear-gradient(rgb(255,255,255) 14%, rgb(239,239,241) 100%)" }}
+            className="flex flex-col gap-6 rounded-2xl border-[0.8px] border-cardborder px-6 pt-14 pb-8 max-lg:pt-8"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgb(255,255,255) 14%, rgb(239,239,241) 100%)",
+            }}
           >
-            <h3 className="mb-[10px] text-[24px] font-bold leading-[28.8px]">{card.title}</h3>
-            <p className="grow basis-0 text-[14px] leading-[19.6px] text-graytext">{card.text}</p>
+            <h3 className="mb-[10px] text-[24px] font-bold leading-[28.8px]">
+              {card.title}
+            </h3>
+            <p className="grow basis-0 text-[14px] leading-[19.6px] text-graytext">
+              {card.text}
+            </p>
             <div>
               <Link
                 href={card.action.href}
@@ -67,8 +102,21 @@ export default function TeamUpSection({ data }) {
 
 function ArrowRight() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="rtl:rotate-180">
-      <path d="M4 12h15m0 0-6-6m6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className="rtl:rotate-180"
+    >
+      <path
+        d="M4 12h15m0 0-6-6m6 6-6 6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

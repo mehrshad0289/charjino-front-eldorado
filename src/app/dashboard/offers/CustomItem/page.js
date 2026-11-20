@@ -8,7 +8,7 @@ import EmptyState from "../../../../components/eldorado/EmptyState";
 import ItemOffersShelf from "../../../../components/eldorado/ItemOffersShelf";
 import { DASHBOARD_OFFERS_PAGE } from "../../../../components/eldorado/data/dashboardData";
 import { ITEM_LISTING_COPY, LISTING_COPY } from "../../../../components/eldorado/data/listingData";
-import { sellBlockers } from "@/lib/listing";
+import { listingSellGate } from "@/lib/listing";
 
 export const instant = false;
 
@@ -27,7 +27,8 @@ export default async function DashboardOffersCustomItemPage() {
     redirect("/login?next=/dashboard/offers/CustomItem");
   }
 
-  const blockers = sellBlockers(seller);
+  const gate = listingSellGate(seller);
+  const blockers = gate.blockers;
   const items = listings.ok ? listings.items : [];
   const action = {
     label: ITEM_LISTING_COPY.newOffer,
@@ -48,8 +49,8 @@ export default async function DashboardOffersCustomItemPage() {
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
-                <a href="/verify/status" className="mt-4 inline-flex min-h-[42px] items-center rounded-lg bg-ink px-4 text-[14px] font-bold text-white">
-                  ادامه احراز / شبا
+                <a href={gate.href} className="mt-4 inline-flex min-h-[42px] items-center rounded-lg bg-ink px-4 text-[14px] font-bold text-white">
+                  {gate.label}
                 </a>
               </div>
             ) : null}

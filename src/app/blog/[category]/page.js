@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import BlogHeader from "../../../components/eldorado/BlogHeader";
@@ -6,7 +7,7 @@ import BlogCategoryGrid from "../../../components/eldorado/BlogCategoryGrid";
 import Footer from "../../../components/eldorado/Footer";
 import { BlogBreadChevron } from "../../../components/eldorado/BlogBreadcrumb";
 import JsonLd from "../../../components/seo/json-ld";
-import { blogCategoryPath, loadBlogCategory, loadBlogNav } from "../../../lib/blog";
+import { blogCategoryPath, decodeBlogSlug, loadBlogCategory, loadBlogNav } from "../../../lib/blog";
 import { breadcrumbJsonLd, collectionPageJsonLd } from "../../../lib/json-ld";
 import { buildMetadata } from "@/lib/seo";
 
@@ -14,7 +15,7 @@ export const instant = false;
 
 export async function generateMetadata({ params }) {
   const { category } = await params;
-  const banner = await loadBlogCategory(category, 0, 1);
+  const banner = await loadBlogCategory(decodeBlogSlug(category), 0, 1);
   if (!banner || !banner.category) return {};
   const seo = banner.seo || {};
   const title = seo.title || `${banner.category.title} | بلاگ شارژینو`;
@@ -27,11 +28,13 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BlogCategoryPage({ params }) {
+  await connection();
   const { category } = await params;
+  const slug = decodeBlogSlug(category);
   const [nav, banner, rows] = await Promise.all([
     loadBlogNav(),
-    loadBlogCategory(category, 0, 1),
-    loadBlogCategory(category, 1, 8),
+    loadBlogCategory(slug, 0, 1),
+    loadBlogCategory(slug, 1, 8),
   ]);
   if (!banner || !banner.category) notFound();
 

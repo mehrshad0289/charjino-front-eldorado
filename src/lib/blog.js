@@ -1,7 +1,10 @@
 import { cache } from "react";
 import { apiPaths } from "./api-paths";
 import { ApiError, serverFetch } from "./server-fetcher";
+import { ensureAccessToken } from "./ensure-access-token";
 import { mediaUrl } from "./store-engine";
+
+export const BLOG_COMMENTS_PER_PAGE = 20;
 
 function asRecord(value) {
   return value && typeof value === "object" ? value : {};
@@ -9,6 +12,21 @@ function asRecord(value) {
 
 function asString(value) {
   return typeof value === "string" ? value.trim() : "";
+}
+
+export function decodeBlogSlug(value) {
+  let current = asString(value);
+  if (!current) return "";
+  for (let i = 0; i < 3; i += 1) {
+    try {
+      const next = decodeURIComponent(current);
+      if (next === current) break;
+      current = next;
+    } catch {
+      break;
+    }
+  }
+  return current.replace(/[\u200c\u200d]/g, "").trim();
 }
 
 function asArray(value) {
@@ -284,7 +302,7 @@ export const loadBlogNav = cache(async () => splitBlogNav(await loadBlogCategori
 
 export const loadBlogCategory = cache(async (slug, offset = 0, perPage = 8) => {
   try {
-    const data = await serverFetch(apiPaths.blogCategory(slug, { offset, perPage }));
+    const data = await serverFetch(apiPaths.blogCategory(decodeBlogSlug(slug) || slug, { offset, perPage }));
     const rec = asRecord(data);
     return {
       category: asRecord(rec.category),
@@ -300,7 +318,7 @@ export const loadBlogCategory = cache(async (slug, offset = 0, perPage = 8) => {
 
 export const loadBlogPost = cache(async (slug) => {
   try {
-    const data = await serverFetch(apiPaths.blogPost(slug));
+    const data = await serverFetch(apiPaths.blogPost(decodeBlogSlug(slug) || slug));
     const rec = asRecord(data);
     const post = asRecord(rec.post);
     if (!asString(post.slug)) return null;
@@ -313,3 +331,48 @@ export const loadBlogPost = cache(async (slug) => {
     throw error;
   }
 });
+
+export function mapBlogComment(row) {
+  const rec = asRecord(row);
+  const id = Number(rec.id);
+  if (!Number.isInteger(id) || id < 1) return null;
+  const author = asRecord(rec.author);
+  return {
+    id,
+    body: asString(rec.body),
+    status: asString(rec.status),
+    parentId: rec.parentId == null ? null : Number(rec.parentId),
+    likesCount: Number(rec.likesCount) || 0,
+    liked: Boolean(rec.liked),
+    createdAt: asString(rec.createdAt),
+    date: formatBlogDate(rec.createdAt),
+    authorName: asString(author.name) || "کاربر شارژینو",
+    replies: asArray(rec.replies).map(mapBlogComment).filter(Boolean),
+  };
+}
+
+export function emptyBlogComments(page = 1) {
+  return {
+    items: [],
+    meta: { page, perPage: BLOG_COMMENTS_PER_PAGE, total: 0, totalPages: 1, offset: null },
+  };
+}
+
+export async function loadBlogComments(slug, page = 1) {
+  const key = decodeBlogSlug(slug) || slug;
+  if (!asString(key)) return emptyBlogComments(page);
+  try {
+    const accessToken = await ensureAccessToken();
+    const data = await serverFetch(apiPaths.blogPostComments(key, { page, perPage: BLOG_COMMENTS_PER_PAGE }), {
+      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+    });
+    const rec = asRecord(data);
+    return {
+      items: asArray(rec.items).map(mapBlogComment).filter(Boolean),
+      meta: mapMeta({ ...rec.meta, perPage: rec.meta?.perPage || BLOG_COMMENTS_PER_PAGE }),
+    };
+  } catch (error) {
+    if (error instanceof ApiError && error.statusCode === 404) return emptyBlogComments(page);
+    return emptyBlogComments(page);
+  }
+}

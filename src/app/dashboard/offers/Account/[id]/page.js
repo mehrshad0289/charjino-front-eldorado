@@ -5,7 +5,7 @@ import { getMarketGames, getSellerListing, getSellerMe } from "@/actions/market.
 import DashboardPageHeader from "../../../../../components/eldorado/DashboardPageHeader";
 import ListingWizard from "../../../../../components/eldorado/ListingWizard";
 import { LISTING_COPY } from "../../../../../components/eldorado/data/listingData";
-import { listingStatusMeta, sellBlockers } from "@/lib/listing";
+import { listingSellGate, listingStatusMeta, SELL_VERIFY_PATH } from "@/lib/listing";
 import { formatTomanInWords } from "@/lib/price";
 
 export const instant = false;
@@ -29,6 +29,7 @@ export default async function EditAccountOfferPage({ params }) {
   const row = listing.data;
   const editable = row.status === "draft";
   const status = listingStatusMeta(row.status);
+  const gate = listingSellGate(seller);
 
   return (
     <>
@@ -42,7 +43,9 @@ export default async function EditAccountOfferPage({ params }) {
               <ListingWizard
                 games={games.ok ? games.items : []}
                 listing={row}
-                blockers={sellBlockers(seller)}
+                blockers={gate.blockers}
+                gateHref={gate.href || SELL_VERIFY_PATH}
+                gateLabel={gate.label}
               />
             ) : (
               <div className="rounded-xl bg-white p-6">

@@ -133,25 +133,25 @@ export const BLOG_HIGHLIGHTS = [
     title: "Community guides",
     text: "Tips on MMO economy, leveling, and current meta.",
     bg: "rgb(152, 126, 251)",
-    icon: `${ASSET}4b8c0d8077bd385eba3c368890334bb21dd324f6.svg?generation=1793788935023674&alt=media`,
+    icon: "/blog/highlights/community-guides.svg",
   },
   {
     title: "Redeem codes",
     text: "Active free promo codes to boost your progression.",
     bg: "rgb(193, 240, 124)",
-    icon: `${ASSET}368d0318f333542b6dc96e93b8c24ec14d76c128.svg?generation=1793788935027317&alt=media`,
+    icon: "/blog/highlights/redeem-codes.svg",
   },
   {
     title: "Tutorials & reviews",
     text: "How to play and trade safely in and outside the game, and is it any good?",
     bg: "rgb(0, 228, 201)",
-    icon: `${ASSET}abe4f78fdf57fdc8f95d1a521845de14acbab8af.svg?generation=1793788935042027&alt=media`,
+    icon: "/blog/highlights/tutorials-reviews.svg",
   },
   {
     title: "News & updates",
     text: "Timely coverage of patches, releases, events, and industry shifts.",
     bg: "rgb(244, 180, 0)",
-    icon: `${ASSET}8befab1e956916b11a7b5d55d022f3b000a4b726.svg?generation=1793788935039780&alt=media`,
+    icon: "/blog/highlights/news-updates.svg",
   },
 ];
 

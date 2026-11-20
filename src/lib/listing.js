@@ -191,3 +191,33 @@ export function sellBlockers(seller) {
   if (!seller?.ok) return ["وضعیت فروشنده خوانده نشد."];
   return Array.isArray(seller.data?.can_sell) ? seller.data.can_sell : [];
 }
+
+export const SELL_INTRO_PATH = "/become-seller";
+export const SELL_VERIFY_PATH = "/verify/status";
+
+export function sellerHasStartedKyc(seller) {
+  const profile = seller?.ok ? seller.data?.profile : null;
+  if (!profile || typeof profile !== "object") return false;
+  if (profile.terms_accepted_at) return true;
+  if (Number(profile.kyc_level ?? 0) >= 1) return true;
+  if (profile.sheba_set) return true;
+  return false;
+}
+
+export function sellerGatePath(seller) {
+  if (!sellBlockers(seller).length) return null;
+  return sellerHasStartedKyc(seller) ? SELL_VERIFY_PATH : SELL_INTRO_PATH;
+}
+
+export function sellerGateLabel(path) {
+  return path === SELL_INTRO_PATH ? "شروع احراز هویت" : "ادامه احراز / شبا";
+}
+
+export function listingSellGate(seller) {
+  const href = sellerGatePath(seller);
+  return {
+    blockers: sellBlockers(seller),
+    href,
+    label: sellerGateLabel(href),
+  };
+}
